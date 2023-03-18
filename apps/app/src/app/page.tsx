@@ -1,15 +1,10 @@
 import styles from "./page.module.css";
 
-async function fetchProperty(id: number) {
+async function fetchProperties() {
   try {
-    const res = await fetch(
-      `${process.env.API_URL}/properties/${id}?populate=*`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.API_TOKEN}`
-        }
-      }
-    );
+    const res = await fetch(`${process.env.API_URL}/properties`, {
+      headers: { Authorization: `Bearer ${process.env.API_TOKEN}` }
+    });
     return res.json();
   } catch (e) {
     console.log(e);
@@ -17,17 +12,11 @@ async function fetchProperty(id: number) {
 }
 
 export default async function Home() {
-  const property = await fetchProperty(1);
-
-  if (!property) {
-    return <span>Nope</span>;
-  }
-
-  property.Images;
+  const properties = await fetchProperties();
 
   return (
     <main className={styles.main}>
-      <pre>${JSON.stringify(property, null, 2)}</pre>
+      <pre>${JSON.stringify(properties, null, 2)}</pre>
     </main>
   );
 }

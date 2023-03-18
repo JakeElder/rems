@@ -3,11 +3,11 @@ import "./globals.css";
 
 export const metadata = {
   title: "JYO Property",
-  description: "Luxury Real Estate",
+  description: "Luxury Real Estate"
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
