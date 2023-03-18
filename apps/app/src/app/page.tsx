@@ -1,17 +1,33 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 
-export default function Home() {
+async function fetchProperty(id: number) {
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}/properties/${id}?populate=*`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.API_TOKEN}`
+        }
+      }
+    );
+    return res.json();
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export default async function Home() {
+  const property = await fetchProperty(1);
+
+  if (!property) {
+    return <span>Nope</span>;
+  }
+
+  property.Images;
+
   return (
     <main className={styles.main}>
-      <Image
-        className={styles.logo}
-        src="/logo.svg"
-        alt="JYO Property Logo"
-        width={158}
-        height={108}
-        priority
-      />
+      <pre>${JSON.stringify(property, null, 2)}</pre>
     </main>
   );
 }
