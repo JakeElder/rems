@@ -1,0 +1,10 @@
+{
+  "name": "rems",
+  "workspaces": [
+    "app",
+    "ui"
+  ],
+  "engines": {
+    "node": "18.14"
+  }
+}
