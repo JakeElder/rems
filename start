@@ -2,8 +2,8 @@
 
 packages=(
   .
-  packages/ui
-  packages/app
+  apps/ui
+  apps/app
 )
 
 for i in "${packages[@]}"
