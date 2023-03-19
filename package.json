@@ -7,5 +7,8 @@
   ],
   "engines": {
     "node": "18.14"
+  },
+  "scripts": {
+    "postinstall": "cd apps/cms && npm install && npm run build"
   }
 }

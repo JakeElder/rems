@@ -1,14 +1,10 @@
 import styles from "./page.module.css";
 
 async function fetchProperties() {
-  try {
-    const res = await fetch(`${process.env.API_URL}/properties`, {
-      headers: { Authorization: `Bearer ${process.env.API_TOKEN}` }
-    });
-    return res.json();
-  } catch (e) {
-    console.log(e);
-  }
+  const res = await fetch(`${process.env.API_URL}/properties`, {
+    headers: { Authorization: `Bearer ${process.env.API_TOKEN}` }
+  });
+  return res.json();
 }
 
 export default async function Home() {
