@@ -5,7 +5,7 @@ const get = {
   async properties(): Promise<Property[]> {
     const res = await fetch(`${process.env.API_URL}/properties`);
 
-    console.log(res.ok, res.body);
+    console.log(res.ok, res.statusText, res.status);
 
     return res.json();
   }
