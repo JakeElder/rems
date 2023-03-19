@@ -9,6 +9,7 @@
     "node": "18.14"
   },
   "scripts": {
-    "postinstall": "cd apps/cms && npm run build"
+    "postinstall": "cd apps/cms && npm run build",
+    "start": "cd apps/cms && npm run start"
   }
 }
