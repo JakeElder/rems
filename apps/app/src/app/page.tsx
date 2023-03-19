@@ -1,9 +1,10 @@
 import styles from "./page.module.css";
 
+export const revalidate = 10;
+
 async function fetchProperties() {
   const res = await fetch(`${process.env.API_URL}/properties`, {
-    headers: { Authorization: `Bearer ${process.env.API_TOKEN}` },
-    next: { revalidate: 10 }
+    headers: { Authorization: `Bearer ${process.env.API_TOKEN}` }
   });
   return res.json();
 }
