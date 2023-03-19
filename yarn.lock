@@ -2550,7 +2550,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rems/app@workspace:apps/app"
   dependencies:
-    "@rems/types": "*"
+    "@rems/types": "file:../../packages/types"
     "@types/node": 18.15.3
     "@types/react": 18.0.28
     "@types/react-dom": 18.0.11
@@ -2574,7 +2574,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rems/types@*, @rems/types@workspace:packages/types":
+"@rems/types@file:../../packages/types::locator=%40rems%2Fapp%40workspace%3Aapps%2Fapp":
+  version: 0.1.0
+  resolution: "@rems/types@file:../../packages/types#../../packages/types::hash=ad1e8c&locator=%40rems%2Fapp%40workspace%3Aapps%2Fapp"
+  dependencies:
+    typescript: ^5.0.2
+  checksum: 0b607c5798c657478dba23fde1fdd654fc971e9cdf858efeae14cad7b10add5e9663aaa47c6c06607784f01145fa2d135aeccb75ffd7e175b6c9abfc2b2d8057
+  languageName: node
+  linkType: hard
+
+"@rems/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@rems/types@workspace:packages/types"
   dependencies:
