@@ -10,7 +10,7 @@
     "node": "18.14"
   },
   "scripts": {
-    "postinstall": "if [ $NODE_ENV == \"production\" ]; then cd apps/cms && npm run build; fi",
-    "start": "cd apps/cms && npm run start"
+    "postinstall": "./postinstall",
+    "start": "cd apps/cms && yarn start"
   }
 }
