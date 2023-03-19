@@ -1,6 +1,5 @@
 {
   "name": "@rems/cms",
-  "types": "schemas.d.ts",
   "private": true,
   "version": "0.1.0",
   "description": "A Strapi application",
@@ -8,7 +7,8 @@
     "dev": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "generate-types": "strapi ts:generate-types --out-dir ../../packages/types --file cms.d.ts"
   },
   "dependencies": {
     "@strapi/plugin-i18n": "4.8.2",

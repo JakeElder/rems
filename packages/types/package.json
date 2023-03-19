@@ -1,0 +1,10 @@
+{
+  "name": "@rems/types",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "typescript": "^5.0.2"
+  }
+}

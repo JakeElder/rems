@@ -5,6 +5,7 @@ packages=(
   apps/ui
   apps/app
   apps/cms
+  packages/types
 )
 
 for i in "${packages[@]}"
