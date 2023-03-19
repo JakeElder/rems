@@ -7,7 +7,7 @@
     "packages/types"
   ],
   "engines": {
-    "node": "18.14"
+    "node": "18.15"
   },
   "scripts": {
     "postinstall": "./postinstall",

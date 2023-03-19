@@ -1,5 +1,5 @@
 import styles from "./page.module.css";
-import api from "../api";
+import api from '../api'
 
 export default async function Home() {
   const properties = await api.get.properties();
