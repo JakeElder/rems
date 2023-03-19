@@ -6,8 +6,9 @@ const get = {
     const res = await fetch(`${process.env.API_URL}/properties`);
 
     console.log(res.ok, res.statusText, res.status);
+    console.log(await res.text());
 
-    return res.json();
+    return [];
   }
 };
 
