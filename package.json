@@ -1,5 +1,6 @@
 {
   "name": "rems",
+  "private": true,
   "workspaces": [
     "apps/app",
     "apps/ui",
