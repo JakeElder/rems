@@ -4,7 +4,9 @@ import { Property } from "@rems/types";
 const get = {
   async properties(): Promise<Property[]> {
     const res = await fetch(`${process.env.API_URL}/properties`);
-    return res.json();
+    const properties = await res.json();
+    console.log(properties);
+    return properties;
   }
 };
 
