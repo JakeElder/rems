@@ -1,6 +1,5 @@
 {
   "name": "rems",
-  "private": true,
   "workspaces": [
     "apps/app",
     "apps/ui",
@@ -11,7 +10,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "postinstall": "./postinstall",
-    "start": "cd apps/cms && yarn start"
+    "postinstall": "if [[ $NODE_ENV == \"production\" ]]; then cd apps/cms && npm run build; fi",
+    "start": "cd apps/cms && npm run start"
   }
 }
