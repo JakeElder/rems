@@ -1,1 +1,1 @@
-cd apps/cms && npm run start
+web: cd apps/cms && npm run start
