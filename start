@@ -2,8 +2,8 @@
 
 packages=(
   .
-  apps/ui
   apps/app
+  apps/ui
   apps/cms
   packages/types
 )
