@@ -16,9 +16,7 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <FontLoader>
-        <div style={{ maxWidth: 360, margin: "auto", overflow: "hidden" }}>
-          <Story />
-        </div>
+        <Story />
       </FontLoader>
     )
   ]

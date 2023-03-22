@@ -1,18 +1,26 @@
 .root {
   height: 80vh;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: stretch;
 }
 
+.header-and-content,
 .img,
 .overlay {
   position: absolute;
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.header-and-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.header {
+  position: relative;
 }
 
 .img {

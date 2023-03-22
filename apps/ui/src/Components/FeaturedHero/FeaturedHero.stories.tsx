@@ -7,18 +7,26 @@ import img3 from "../../assets/hero-pics/3.jpeg";
 import img4 from "../../assets/hero-pics/4.jpeg";
 
 const meta: Meta<typeof FeaturedHero> = {
-  title: "Organisms/FeaturedHero",
+  title: "Components/FeaturedHero",
   component: FeaturedHero,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen"
+  },
+  argTypes: {
+    theme: {
+      options: ["dark", "light"]
+    }
   }
 };
 
 type Story = StoryObj<typeof FeaturedHero>;
 
 export const Default: Story = {
-  args: { images: [img1, img2, img3, img4] }
+  args: {
+    images: [img1, img2, img3, img4],
+    theme: "light"
+  }
 };
 
 export default meta;
