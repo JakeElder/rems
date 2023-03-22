@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from "react";
 import Header from "../Header";
 import { useTransition, animated } from "@react-spring/web";

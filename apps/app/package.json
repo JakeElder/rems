@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@rems/types": "file:../../packages/types",
+    "@rems/ui": "file:../ui",
     "@types/node": "18.15.3",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "next": "13.2.4",
+    "qs": "^6.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "the-new-css-reset": "^1.8.4",

@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "featured_property_lists",
+  "info": {
+    "singularName": "featured-property-list",
+    "pluralName": "featured-property-lists",
+    "displayName": "Featured Property List"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "properties": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::property.property"
+    }
+  }
+}

@@ -17,6 +17,7 @@ import {
   IntegerAttribute,
   DecimalAttribute,
   SetMinMax,
+  SingleTypeSchema,
   MediaAttribute
 } from "@strapi/strapi";
 
@@ -490,11 +491,46 @@ export interface PluginUploadFolder extends CollectionTypeSchema {
   };
 }
 
+export interface ApiFeaturedPropertyListFeaturedPropertyList
+  extends SingleTypeSchema {
+  info: {
+    singularName: "featured-property-list";
+    pluralName: "featured-property-lists";
+    displayName: "Featured Property List";
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    properties: RelationAttribute<
+      "api::featured-property-list.featured-property-list",
+      "oneToMany",
+      "api::property.property"
+    >;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    publishedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      "api::featured-property-list.featured-property-list",
+      "oneToOne",
+      "admin::user"
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      "api::featured-property-list.featured-property-list",
+      "oneToOne",
+      "admin::user"
+    > &
+      PrivateAttribute;
+  };
+}
+
 export interface ApiPropertyProperty extends CollectionTypeSchema {
   info: {
     singularName: "property";
     pluralName: "properties";
     displayName: "Property";
+    description: "";
   };
   options: {
     draftAndPublish: true;
@@ -502,6 +538,7 @@ export interface ApiPropertyProperty extends CollectionTypeSchema {
   attributes: {
     Title: StringAttribute & RequiredAttribute & UniqueAttribute;
     Images: MediaAttribute;
+    PurchasePrice: BigIntegerAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -532,6 +569,7 @@ declare global {
       "admin::transfer-token-permission": AdminTransferTokenPermission;
       "plugin::upload.file": PluginUploadFile;
       "plugin::upload.folder": PluginUploadFolder;
+      "api::featured-property-list.featured-property-list": ApiFeaturedPropertyListFeaturedPropertyList;
       "api::property.property": ApiPropertyProperty;
     }
   }
