@@ -13,7 +13,7 @@ const meta: Meta<typeof Header> = {
 type Story = StoryObj<typeof Header>;
 
 export const Default: Story = {
-  args: {}
+  args: { theme: "dark" }
 };
 
 export default meta;

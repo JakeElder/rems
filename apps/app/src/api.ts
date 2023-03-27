@@ -1,51 +1,41 @@
 import qs from "qs";
 import { fetch } from "./utils";
-import { PluginUploadFile } from "@rems/types/cms";
-
-type Pagination = {
-  page: number;
-  pageSize: number;
-  pageCount: number;
-  total: number;
-};
-
-type ResourceId = string;
-
-type QueryResponse = {
-  ids: ResourceId[];
-  pagination?: Pagination;
-};
-
-type CMSAttributes = {
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-};
-
-type Image = {
-  id: ResourceId;
-} & Omit<PluginUploadFile["attributes"], "formats"> & { formats: any };
-
-type Property = {
-  id: number;
-  title: string;
-  purchasePrice: number;
-  images: Image[];
-} & CMSAttributes;
+import { Property, QueryResponse, ResourceId } from "@rems/types";
 
 const adapters = {
   property(res: any): Property {
+    const {
+      title,
+      purchasePrice,
+      images,
+      latitude,
+      longitude,
+      bedrooms,
+      bathrooms,
+      area,
+      createdAt,
+      updatedAt,
+      publishedAt
+    } = res.data.attributes;
+
     return {
       id: res.data.id,
-      title: res.data.attributes.Title,
-      purchasePrice: res.data.attributes.PurchasePrice,
-      images: res.data.attributes.Images.data.map((d: any) => ({
+      title,
+      purchasePrice,
+      formattedPurchasePrice: `$${purchasePrice.toLocaleString()}`,
+      latitude,
+      longitude,
+      bedrooms,
+      bathrooms,
+      area,
+      images: (images.data || []).map((d: any) => ({
         id: d.id,
+        src: `${process.env.ASSET_URL}${d.attributes.url}`,
         ...d.attributes
       })),
-      createdAt: res.data.attributes.createdAt,
-      updatedAt: res.data.attributes.updatedAt,
-      publishedAt: res.data.attributes.publishedAt
+      createdAt,
+      updatedAt,
+      publishedAt
     };
   }
 };
@@ -84,7 +74,7 @@ const get = {
   async properties(...ids: ResourceId[]): Promise<Property[]> {
     const res = Promise.all(
       ids.map(async (id) => {
-        const q = qs.stringify({ populate: "Images" });
+        const q = qs.stringify({ populate: "images" });
         const url = `${process.env.API_URL}/properties/${id}?${q}`;
         const res = await fetch(url);
         return adapters.property(await res.json());

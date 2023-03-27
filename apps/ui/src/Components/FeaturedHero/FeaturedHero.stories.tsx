@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import FeaturedHero from "./FeaturedHero";
-
-import img1 from "../../assets/hero-pics/1.jpeg";
-import img2 from "../../assets/hero-pics/2.jpeg";
-import img3 from "../../assets/hero-pics/3.jpeg";
-import img4 from "../../assets/hero-pics/4.jpeg";
+import properties from "../../fixtures/properties.json";
+import { Property } from "@rems/types";
 
 const meta: Meta<typeof FeaturedHero> = {
   title: "Components/FeaturedHero",
@@ -24,7 +21,7 @@ type Story = StoryObj<typeof FeaturedHero>;
 
 export const Default: Story = {
   args: {
-    images: [img1, img2, img3, img4],
+    properties: properties as unknown as Property[],
     theme: "light"
   }
 };

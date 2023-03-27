@@ -7,6 +7,31 @@
 }
 
 .nav-icon {
+  display: none;
   position: relative;
   top: 2px;
+}
+
+.nav {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-inter);
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.light .nav {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.light .active {
+  color: white;
+}
+
+.dark .nav {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.dark .active {
+  color: black;
 }

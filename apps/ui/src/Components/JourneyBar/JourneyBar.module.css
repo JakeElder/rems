@@ -1,4 +1,4 @@
-.root {
+.bar {
   display: flex;
   gap: 6px;
 }
@@ -14,4 +14,36 @@
   width: 0;
   height: 2px;
   background: #fff;
+}
+
+.controls {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .root {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .bar {
+    flex: 1;
+  }
+
+  .controls {
+    color: #fff;
+    display: flex;
+    gap: 14px;
+  }
+
+  .arrow {
+    opacity: 0.8;
+    transition: transform 300ms ease;
+  }
+
+  .arrow:hover {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }

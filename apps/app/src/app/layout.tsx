@@ -1,5 +1,6 @@
-import "the-new-css-reset";
+import "the-new-css-reset/css/reset.css";
 import "./globals.css";
+import { FontLoader } from "@rems/ui";
 
 export const metadata = {
   title: "JYO Property",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <FontLoader>{children}</FontLoader>
+      </body>
     </html>
   );
 }

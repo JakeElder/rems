@@ -1,0 +1,326 @@
+[
+  {
+    "id": 4,
+    "title": "Apartment in Tromsø, Troms og Finnmark fylke, Norway",
+    "purchasePrice": 2477553,
+    "formattedPurchasePrice": "$2,477,553",
+    "latitude": 13.652173,
+    "longitude": 100.475501,
+    "bedrooms": 5,
+    "bathrooms": 3,
+    "area": 550,
+    "images": [
+      {
+        "id": 5,
+        "src": "http://127.0.0.1:3002/uploads/1_94754d36aa.jpeg",
+        "name": "1.jpeg",
+        "alternativeText": null,
+        "caption": null,
+        "width": 5476,
+        "height": 3714,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_1.jpeg",
+            "hash": "thumbnail_1_94754d36aa",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 230,
+            "height": 156,
+            "size": 9.14,
+            "url": "/uploads/thumbnail_1_94754d36aa.jpeg"
+          },
+          "small": {
+            "name": "small_1.jpeg",
+            "hash": "small_1_94754d36aa",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 500,
+            "height": 339,
+            "size": 33.8,
+            "url": "/uploads/small_1_94754d36aa.jpeg"
+          },
+          "large": {
+            "name": "large_1.jpeg",
+            "hash": "large_1_94754d36aa",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 1000,
+            "height": 678,
+            "size": 112.17,
+            "url": "/uploads/large_1_94754d36aa.jpeg"
+          },
+          "medium": {
+            "name": "medium_1.jpeg",
+            "hash": "medium_1_94754d36aa",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 750,
+            "height": 508,
+            "size": 68.62,
+            "url": "/uploads/medium_1_94754d36aa.jpeg"
+          }
+        },
+        "hash": "1_94754d36aa",
+        "ext": ".jpeg",
+        "mime": "image/jpeg",
+        "size": 2596.33,
+        "url": "/uploads/1_94754d36aa.jpeg",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-03-22T08:17:44.201Z",
+        "updatedAt": "2023-03-22T08:18:05.104Z"
+      }
+    ],
+    "createdAt": "2023-03-22T08:16:11.355Z",
+    "updatedAt": "2023-03-26T12:15:57.132Z",
+    "publishedAt": "2023-03-22T08:16:15.071Z"
+  },
+  {
+    "id": 3,
+    "title": "Villa in Dubai, Dubai, United Arab Emirates",
+    "purchasePrice": 28589827,
+    "formattedPurchasePrice": "$28,589,827",
+    "latitude": 13.781305,
+    "longitude": 100.367725,
+    "bedrooms": 5,
+    "bathrooms": 3,
+    "area": 460,
+    "images": [
+      {
+        "id": 3,
+        "src": "http://127.0.0.1:3002/uploads/3_236ce982f9.jpeg",
+        "name": "3.jpeg",
+        "alternativeText": null,
+        "caption": null,
+        "width": 4608,
+        "height": 3072,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_3.jpeg",
+            "hash": "thumbnail_3_236ce982f9",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 234,
+            "height": 156,
+            "size": 7.04,
+            "url": "/uploads/thumbnail_3_236ce982f9.jpeg"
+          },
+          "medium": {
+            "name": "medium_3.jpeg",
+            "hash": "medium_3_236ce982f9",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 750,
+            "height": 500,
+            "size": 53.02,
+            "url": "/uploads/medium_3_236ce982f9.jpeg"
+          },
+          "small": {
+            "name": "small_3.jpeg",
+            "hash": "small_3_236ce982f9",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 500,
+            "height": 333,
+            "size": 24.39,
+            "url": "/uploads/small_3_236ce982f9.jpeg"
+          },
+          "large": {
+            "name": "large_3.jpeg",
+            "hash": "large_3_236ce982f9",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 1000,
+            "height": 667,
+            "size": 97.24,
+            "url": "/uploads/large_3_236ce982f9.jpeg"
+          }
+        },
+        "hash": "3_236ce982f9",
+        "ext": ".jpeg",
+        "mime": "image/jpeg",
+        "size": 2493.63,
+        "url": "/uploads/3_236ce982f9.jpeg",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-03-22T08:13:32.107Z",
+        "updatedAt": "2023-03-22T08:13:32.107Z"
+      }
+    ],
+    "createdAt": "2023-03-22T08:13:35.529Z",
+    "updatedAt": "2023-03-26T12:17:02.230Z",
+    "publishedAt": "2023-03-22T08:13:36.359Z"
+  },
+  {
+    "id": 5,
+    "title": "House in Palm Beach, Florida, United States",
+    "purchasePrice": 218000000,
+    "formattedPurchasePrice": "$218,000,000",
+    "latitude": 13.623246,
+    "longitude": 100.689512,
+    "bedrooms": 3,
+    "bathrooms": 1,
+    "area": 220,
+    "images": [
+      {
+        "id": 4,
+        "src": "http://127.0.0.1:3002/uploads/2_5e3d04eef1.jpeg",
+        "name": "2.jpeg",
+        "alternativeText": null,
+        "caption": null,
+        "width": 5608,
+        "height": 3739,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_2.jpeg",
+            "hash": "thumbnail_2_5e3d04eef1",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 234,
+            "height": 156,
+            "size": 6.38,
+            "url": "/uploads/thumbnail_2_5e3d04eef1.jpeg"
+          },
+          "small": {
+            "name": "small_2.jpeg",
+            "hash": "small_2_5e3d04eef1",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 500,
+            "height": 333,
+            "size": 22.54,
+            "url": "/uploads/small_2_5e3d04eef1.jpeg"
+          },
+          "medium": {
+            "name": "medium_2.jpeg",
+            "hash": "medium_2_5e3d04eef1",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 750,
+            "height": 500,
+            "size": 46.5,
+            "url": "/uploads/medium_2_5e3d04eef1.jpeg"
+          },
+          "large": {
+            "name": "large_2.jpeg",
+            "hash": "large_2_5e3d04eef1",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 1000,
+            "height": 666,
+            "size": 75.67,
+            "url": "/uploads/large_2_5e3d04eef1.jpeg"
+          }
+        },
+        "hash": "2_5e3d04eef1",
+        "ext": ".jpeg",
+        "mime": "image/jpeg",
+        "size": 1446.53,
+        "url": "/uploads/2_5e3d04eef1.jpeg",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-03-22T08:15:59.818Z",
+        "updatedAt": "2023-03-22T08:15:59.818Z"
+      }
+    ],
+    "createdAt": "2023-03-22T08:18:26.071Z",
+    "updatedAt": "2023-03-26T12:16:26.201Z",
+    "publishedAt": "2023-03-22T08:18:26.857Z"
+  },
+  {
+    "id": 2,
+    "title": "Apartment in Sotogrande, Andalusia, Spain",
+    "purchasePrice": 1359423,
+    "formattedPurchasePrice": "$1,359,423",
+    "latitude": 13.775324,
+    "longitude": 100.546324,
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "area": 340,
+    "images": [
+      {
+        "id": 6,
+        "src": "http://127.0.0.1:3002/uploads/Adobe_Stock_357430337_e7f0164880.jpeg",
+        "name": "AdobeStock_357430337.jpeg",
+        "alternativeText": null,
+        "caption": null,
+        "width": 6451,
+        "height": 4301,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_AdobeStock_357430337.jpeg",
+            "hash": "thumbnail_Adobe_Stock_357430337_e7f0164880",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 234,
+            "height": 156,
+            "size": 6.51,
+            "url": "/uploads/thumbnail_Adobe_Stock_357430337_e7f0164880.jpeg"
+          },
+          "medium": {
+            "name": "medium_AdobeStock_357430337.jpeg",
+            "hash": "medium_Adobe_Stock_357430337_e7f0164880",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 750,
+            "height": 500,
+            "size": 48.34,
+            "url": "/uploads/medium_Adobe_Stock_357430337_e7f0164880.jpeg"
+          },
+          "small": {
+            "name": "small_AdobeStock_357430337.jpeg",
+            "hash": "small_Adobe_Stock_357430337_e7f0164880",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 500,
+            "height": 333,
+            "size": 23.77,
+            "url": "/uploads/small_Adobe_Stock_357430337_e7f0164880.jpeg"
+          },
+          "large": {
+            "name": "large_AdobeStock_357430337.jpeg",
+            "hash": "large_Adobe_Stock_357430337_e7f0164880",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 1000,
+            "height": 667,
+            "size": 79.62,
+            "url": "/uploads/large_Adobe_Stock_357430337_e7f0164880.jpeg"
+          }
+        },
+        "hash": "Adobe_Stock_357430337_e7f0164880",
+        "ext": ".jpeg",
+        "mime": "image/jpeg",
+        "size": 1737.46,
+        "url": "/uploads/Adobe_Stock_357430337_e7f0164880.jpeg",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-03-22T08:18:20.082Z",
+        "updatedAt": "2023-03-26T02:24:25.873Z"
+      }
+    ],
+    "createdAt": "2023-03-22T08:12:10.503Z",
+    "updatedAt": "2023-03-26T12:15:16.270Z",
+    "publishedAt": "2023-03-22T08:12:24.692Z"
+  }
+]
