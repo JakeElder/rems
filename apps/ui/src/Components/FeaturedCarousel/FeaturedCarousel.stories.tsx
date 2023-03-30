@@ -1,28 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import FeaturedHero from "./FeaturedHero";
+import FeaturedCarousel from "./FeaturedCarousel";
 import properties from "../../fixtures/properties.json";
 import { Property } from "@rems/types";
 
-const meta: Meta<typeof FeaturedHero> = {
+const meta: Meta<typeof FeaturedCarousel> = {
   title: "Components/FeaturedHero",
-  component: FeaturedHero,
+  component: FeaturedCarousel,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen"
-  },
-  argTypes: {
-    theme: {
-      options: ["dark", "light"]
-    }
   }
 };
 
-type Story = StoryObj<typeof FeaturedHero>;
+type Story = StoryObj<typeof FeaturedCarousel>;
 
 export const Default: Story = {
   args: {
-    properties: properties as unknown as Property[],
-    theme: "light"
+    properties: properties as unknown as Property[]
   }
 };
 

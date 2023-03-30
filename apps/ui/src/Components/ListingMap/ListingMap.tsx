@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef } from "react";
-import Header from "../Header";
 import "mapbox-gl/dist/mapbox-gl.css";
-import css from "./MapHero.module.css";
+import css from "./ListingMap.module.css";
 import mapbox from "mapbox-gl";
 import { Property } from "@rems/types";
 import MapPropertyMarker from "../MapPropertyMarker/MapPropertyMarker";
@@ -12,11 +11,10 @@ mapbox.accessToken =
   "pk.eyJ1IjoiamFrZS1lbGRlciIsImEiOiJjbGZtbm12d28wZGp3M3JyemlrNnp1cmRvIn0.ovmQBkbXdCh-w_rUJ82GZA";
 
 type Props = {
-  theme: "dark" | "light";
   properties: Property[];
 };
 
-const MapHero = ({ theme, properties }: Props) => {
+const ListingMap = ({ properties }: Props) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapbox.Map | null>(null);
 
@@ -45,28 +43,23 @@ const MapHero = ({ theme, properties }: Props) => {
 
   return (
     <div className={css["root"]}>
-      <div className={css["header-and-content"]}>
-        <div className={css["header"]}>
-          <Header theme={theme} />
+      <div className={css["overlay"]} />
+      <div className={css["content"]}>
+        <div className={css["markers"]}>
+          {properties.map((p) => {
+            return (
+              <MapPropertyMarker
+                key={p.id}
+                property={p}
+                ref={(r) => r && domRefs.set(p, r)}
+              />
+            );
+          })}
         </div>
-        <div className={css["overlay"]} />
-        <div className={css["content"]}>
-          <div className={css["markers"]}>
-            {properties.map((p) => {
-              return (
-                <MapPropertyMarker
-                  key={p.id}
-                  property={p}
-                  ref={(r) => r && domRefs.set(p, r)}
-                />
-              );
-            })}
-          </div>
-          <div className={css["map-container"]} ref={mapContainer} />
-        </div>
+        <div className={css["map-container"]} ref={mapContainer} />
       </div>
     </div>
   );
 };
 
-export default MapHero;
+export default ListingMap;

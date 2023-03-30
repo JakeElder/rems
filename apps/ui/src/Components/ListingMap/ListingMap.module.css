@@ -1,22 +1,15 @@
 .root {
-  height: 80vh;
-  position: relative;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-.header-and-content,
 .overlay {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-}
-
-.header-and-content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 .overlay {
@@ -29,15 +22,10 @@
   pointer-events: none;
 }
 
-.header {
-  position: relative;
-  z-index: 2;
-}
-
 .map-container {
   position: absolute;
   width: 100%;
-  height: 80vh;
+  height: 100%;
   top: 0;
   left: 0;
 }

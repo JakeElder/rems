@@ -1,22 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import MapHero from "./MapHero";
+import ListingMap from "./ListingMap";
 import properties from "../../fixtures/properties.json";
 import { Property } from "@rems/types";
 
-const meta: Meta<typeof MapHero> = {
-  title: "Components/MapHero",
-  component: MapHero,
+const meta: Meta<typeof ListingMap> = {
+  title: "Components/ListingMap",
+  component: ListingMap,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen"
   }
 };
 
-type Story = StoryObj<typeof MapHero>;
+type Story = StoryObj<typeof ListingMap>;
 
 export const Default: Story = {
   args: {
-    theme: "light",
     properties: properties as unknown as Property[]
   }
 };
