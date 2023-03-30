@@ -7,7 +7,6 @@ import { Property } from "@rems/types";
 const meta: Meta<typeof MapPropertyMarker> = {
   title: "Components/MapPropertyMarker",
   component: MapPropertyMarker,
-  tags: ["autodocs"],
   parameters: {
     layout: "fullscreen"
   },

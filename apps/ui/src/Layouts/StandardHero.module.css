@@ -1,0 +1,10 @@
+.hero {
+  height: 80vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.hero > * {
+  flex: 1;
+}
