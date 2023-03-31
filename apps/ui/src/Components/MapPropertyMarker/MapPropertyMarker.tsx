@@ -18,7 +18,7 @@ const MapPropertyMarker = forwardRef<HTMLDivElement, Props>(
     const [popupOpen, setPopupOpen] = useState(false);
 
     const { outlineWidth } = useSpring(
-      mouseOver ? { outlineWidth: 4 } : { outlineWidth: 0 }
+      mouseOver ? { outlineWidth: 8 } : { outlineWidth: 0 }
     );
 
     const transition = useTransition(mouseOver, {

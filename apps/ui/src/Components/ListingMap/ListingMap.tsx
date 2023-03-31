@@ -32,8 +32,6 @@ const ListingMap = ({ properties }: Props) => {
       zoom: 9
     });
 
-    map.current.getCanvas().style.cursor = "default";
-
     properties.forEach((p) => {
       new mapbox.Marker(domRefs.get(p))
         .setLngLat([p.location!.lng, p.location!.lat])

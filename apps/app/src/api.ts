@@ -21,7 +21,7 @@ const adapters = {
       id: res.data.id,
       title,
       purchasePrice,
-      location,
+      location: JSON.parse(location),
       formattedPurchasePrice: `$${purchasePrice.toLocaleString()}`,
       bedrooms,
       bathrooms,

@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import StandardHero from "./StandardHero";
+import StandardHeroLayout from "./StandardHeroLayout";
 
-const meta: Meta<typeof StandardHero> = {
+const meta: Meta<typeof StandardHeroLayout> = {
   title: "Layouts/StandardHero",
-  component: StandardHero,
+  component: StandardHeroLayout,
   parameters: {
     layout: "fullscreen"
   }
 };
 
-type Story = StoryObj<typeof StandardHero>;
+type Story = StoryObj<typeof StandardHeroLayout>;
 
 export const Default: Story = {
   args: {

@@ -25,11 +25,13 @@
 }
 
 .popup-container {
+  line-height: 1.4;
+  cursor: default;
   position: absolute;
   transform-origin: bottom center;
   left: calc(-1 * (var(--popup-width) / 2) + calc(var(--marker-size) / 2));
   bottom: 100%;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
 }
 
 .popup {
