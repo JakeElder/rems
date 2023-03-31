@@ -3,9 +3,11 @@
     "id": 4,
     "title": "Apartment in Tromsø, Troms og Finnmark fylke, Norway",
     "purchasePrice": 2477553,
+    "location": {
+      "lat": 13.656086052118855,
+      "lng": 100.50261121215134
+    },
     "formattedPurchasePrice": "$2,477,553",
-    "latitude": 13.652173,
-    "longitude": 100.475501,
     "bedrooms": 5,
     "bathrooms": 3,
     "area": 550,
@@ -74,19 +76,86 @@
         "provider_metadata": null,
         "createdAt": "2023-03-22T08:17:44.201Z",
         "updatedAt": "2023-03-22T08:18:05.104Z"
+      },
+      {
+        "id": 7,
+        "src": "http://127.0.0.1:3002/uploads/2200xxs_3c6b015f32.webp",
+        "name": "2200xxs.webp",
+        "alternativeText": null,
+        "caption": null,
+        "width": 2200,
+        "height": 1320,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_2200xxs.webp",
+            "hash": "thumbnail_2200xxs_3c6b015f32",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 245,
+            "height": 147,
+            "size": 10.16,
+            "url": "/uploads/thumbnail_2200xxs_3c6b015f32.webp"
+          },
+          "small": {
+            "name": "small_2200xxs.webp",
+            "hash": "small_2200xxs_3c6b015f32",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 500,
+            "height": 300,
+            "size": 31.4,
+            "url": "/uploads/small_2200xxs_3c6b015f32.webp"
+          },
+          "medium": {
+            "name": "medium_2200xxs.webp",
+            "hash": "medium_2200xxs_3c6b015f32",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 750,
+            "height": 450,
+            "size": 58.87,
+            "url": "/uploads/medium_2200xxs_3c6b015f32.webp"
+          },
+          "large": {
+            "name": "large_2200xxs.webp",
+            "hash": "large_2200xxs_3c6b015f32",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 1000,
+            "height": 600,
+            "size": 92.34,
+            "url": "/uploads/large_2200xxs_3c6b015f32.webp"
+          }
+        },
+        "hash": "2200xxs_3c6b015f32",
+        "ext": ".webp",
+        "mime": "image/webp",
+        "size": 344.59,
+        "url": "/uploads/2200xxs_3c6b015f32.webp",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-03-28T08:50:14.436Z",
+        "updatedAt": "2023-03-28T08:50:14.436Z"
       }
     ],
     "createdAt": "2023-03-22T08:16:11.355Z",
-    "updatedAt": "2023-03-26T12:15:57.132Z",
+    "updatedAt": "2023-03-31T02:04:47.684Z",
     "publishedAt": "2023-03-22T08:16:15.071Z"
   },
   {
     "id": 3,
     "title": "Villa in Dubai, Dubai, United Arab Emirates",
     "purchasePrice": 28589827,
+    "location": {
+      "lat": 13.636782607623335,
+      "lng": 100.48360389404299
+    },
     "formattedPurchasePrice": "$28,589,827",
-    "latitude": 13.781305,
-    "longitude": 100.367725,
     "bedrooms": 5,
     "bathrooms": 3,
     "area": 460,
@@ -158,16 +227,18 @@
       }
     ],
     "createdAt": "2023-03-22T08:13:35.529Z",
-    "updatedAt": "2023-03-26T12:17:02.230Z",
+    "updatedAt": "2023-03-31T02:05:05.491Z",
     "publishedAt": "2023-03-22T08:13:36.359Z"
   },
   {
     "id": 5,
     "title": "House in Palm Beach, Florida, United States",
     "purchasePrice": 218000000,
+    "location": {
+      "lat": 13.755530076794498,
+      "lng": 100.72118323974611
+    },
     "formattedPurchasePrice": "$218,000,000",
-    "latitude": 13.623246,
-    "longitude": 100.689512,
     "bedrooms": 3,
     "bathrooms": 1,
     "area": 220,
@@ -239,16 +310,18 @@
       }
     ],
     "createdAt": "2023-03-22T08:18:26.071Z",
-    "updatedAt": "2023-03-26T12:16:26.201Z",
+    "updatedAt": "2023-03-31T02:04:53.371Z",
     "publishedAt": "2023-03-22T08:18:26.857Z"
   },
   {
     "id": 2,
     "title": "Apartment in Sotogrande, Andalusia, Spain",
     "purchasePrice": 1359423,
+    "location": {
+      "lat": 13.711807270614983,
+      "lng": 100.5100965499878
+    },
     "formattedPurchasePrice": "$1,359,423",
-    "latitude": 13.775324,
-    "longitude": 100.546324,
     "bedrooms": 4,
     "bathrooms": 3,
     "area": 340,
@@ -320,7 +393,7 @@
       }
     ],
     "createdAt": "2023-03-22T08:12:10.503Z",
-    "updatedAt": "2023-03-26T12:15:16.270Z",
+    "updatedAt": "2023-03-31T01:51:03.284Z",
     "publishedAt": "2023-03-22T08:12:24.692Z"
   }
 ]

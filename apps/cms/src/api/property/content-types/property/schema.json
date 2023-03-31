@@ -28,12 +28,6 @@
     "purchasePrice": {
       "type": "integer"
     },
-    "longitude": {
-      "type": "float"
-    },
-    "latitude": {
-      "type": "float"
-    },
     "bedrooms": {
       "type": "integer"
     },
@@ -42,6 +36,10 @@
     },
     "area": {
       "type": "integer"
+    },
+    "location": {
+      "type": "customField",
+      "customField": "plugin::google-map-picker.place"
     }
   }
 }

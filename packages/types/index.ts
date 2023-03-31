@@ -40,4 +40,8 @@ export type Property = {
   bathrooms?: number;
   area?: number;
   images: Image[];
+  location: null | {
+    lng: number;
+    lat: number;
+  };
 } & CMSAttributes;

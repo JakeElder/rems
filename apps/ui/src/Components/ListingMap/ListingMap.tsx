@@ -36,7 +36,7 @@ const ListingMap = ({ properties }: Props) => {
 
     properties.forEach((p) => {
       new mapbox.Marker(domRefs.get(p))
-        .setLngLat([p.longitude!, p.latitude!])
+        .setLngLat([p.location!.lng, p.location!.lat])
         .addTo(map.current!);
     });
   }, []);
