@@ -20,14 +20,15 @@ type CMSAttributes = {
   publishedAt: string;
 };
 
-type Image = {
+type Image = Partial<
+  Omit<PluginUploadFile["attributes"], "width" | "height">
+> & {
   id: ResourceId;
-} & Omit<PluginUploadFile["attributes"], "formats" | "width" | "height"> & {
-    formats: any;
-    width: number;
-    height: number;
-    src: string;
-  };
+  width: number;
+  height: number;
+  src: string;
+  formats?: any;
+};
 
 export type Property = {
   id: number;
@@ -45,3 +46,10 @@ export type Property = {
     lat: number;
   };
 } & CMSAttributes;
+
+export type EntryCard = {
+  title: string;
+  caption: string;
+  url: string;
+  image: Image;
+};

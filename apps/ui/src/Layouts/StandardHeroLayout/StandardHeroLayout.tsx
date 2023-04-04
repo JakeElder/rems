@@ -11,7 +11,7 @@ const StandardHeroLayout = ({ hero, children }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["header"]}>
-        <Header theme="light" />
+        <Header mode="hero" />
       </div>
       <div className={css["hero"]}>{hero}</div>
       <div className={css["content"]}>{children}</div>

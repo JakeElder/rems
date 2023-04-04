@@ -6,10 +6,6 @@ import css from "./FeaturedCarousel.module.css";
 import JourneyBar from "../JourneyBar";
 import { Property } from "@rems/types";
 import Image from "next/image";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-
-library.add(fas);
 
 function mod(n: number, m: number) {
   return ((n % m) + m) % m;

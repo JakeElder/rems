@@ -2,6 +2,7 @@ import React from "react";
 import "the-new-css-reset";
 import type { Preview } from "@storybook/react";
 import FontLoader from "../src/Utils/FontLoader";
+import IconLoader from "../src/Utils/IconLoader";
 
 const preview: Preview = {
   parameters: {
@@ -16,7 +17,9 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <FontLoader>
-        <Story />
+        <IconLoader>
+          <Story />
+        </IconLoader>
       </FontLoader>
     )
   ]

@@ -5,7 +5,7 @@ import { Property } from "@rems/types";
 import StoryPad from "../../Utils/StoryPad";
 
 const meta: Meta<typeof FeaturedCarousel> = {
-  title: "Components/FeaturedHero",
+  title: "Components/FeaturedCarousel",
   component: FeaturedCarousel,
   parameters: {
     layout: "fullscreen"

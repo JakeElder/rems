@@ -1,58 +1,77 @@
 "use client";
 
-import React from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Logo from "../../Elements/Logo";
 import NavIcon from "../../Elements/NavIcon";
 import css from "./Header.module.css";
 import { animated, useSpring } from "@react-spring/web";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import cn from "classnames";
 
 type Props = {
-  theme: "dark" | "light";
+  mode: "standard" | "hero";
 };
 
-const Header = ({ theme }: Props) => {
+const L = animated(Link);
+
+const A = ({
+  href,
+  style,
+  children
+}: {
+  href: string;
+  children: ReactNode;
+  style: "transparent" | "opaque";
+}) => {
+  const active = usePathname() === href;
+  const opacity = active ? "1" : "0.7";
   const styles = useSpring(
-    theme === "light"
+    style === "transparent"
+      ? { color: `rgba(255, 255, 255, ${opacity})` }
+      : { color: `rgba(0, 0, 0, ${opacity})` }
+  );
+  return <L href={href} children={children} style={styles} />;
+};
+
+const Header = ({ mode }: Props) => {
+  const [hasScrollY, setHasScrollY] = useState(false);
+  const style = mode === "hero" && !hasScrollY ? "transparent" : "opaque";
+
+  const styles = useSpring(
+    style === "transparent"
       ? {
           background: "rgba(255, 255, 255, 0)",
-          fill: "#fff",
+          color: "rgba(255, 255, 255, 0.7)",
+          fill: "rgba(255, 255, 255, 1)",
           borderBottomColor: "rgba(255, 255, 255, 0.2)"
         }
       : {
           background: "rgba(255, 255, 255, 1)",
-          fill: "#333",
-          borderBottomColor: "#EAEAEA"
+          color: "rgba(0, 0, 0, 0.7)",
+          fill: "rgba(0, 0, 0, 1)",
+          borderBottomColor: "rgb(234, 234, 234, 1)"
         }
   );
 
-  const pathname = usePathname();
+  useEffect(() => {
+    const onScroll = () => setHasScrollY(window.pageYOffset > 0);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <animated.div className={cn(css["root"], css[theme])} style={styles}>
+    <animated.div className={css["root"]} style={styles}>
       <Logo />
       <nav className={css["nav"]}>
-        <Link
-          href="/"
-          className={cn({
-            [css["active"]]: pathname === "/"
-          })}
-        >
+        <A href="/" style={style}>
           Home
-        </Link>
-        <Link
-          href="/real-estate"
-          className={cn({
-            [css["active"]]: pathname === "/real-estate"
-          })}
-        >
+        </A>
+        <A href="/real-estate" style={style}>
           Real Estate
-        </Link>
+        </A>
       </nav>
       <div className={css["nav-icon"]}>
-        <NavIcon theme={theme} />
+        <NavIcon color={styles.fill} />
       </div>
     </animated.div>
   );
