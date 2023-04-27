@@ -2,6 +2,10 @@ import React from "react";
 import css from "./JourneyBar.module.css";
 import Step from "./Step";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowLeftLong,
+  faArrowRightLong
+} from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   steps: number;
@@ -16,9 +20,9 @@ const JourneyBar = ({
   steps,
   step,
   duration,
-  onStepComplete = () => {},
-  onNextRequest = () => {},
-  onPrevRequest = () => {}
+  onStepComplete = () => { },
+  onNextRequest = () => { },
+  onPrevRequest = () => { }
 }: Props) => {
   return (
     <div className={css["root"]}>
@@ -34,13 +38,13 @@ const JourneyBar = ({
       </div>
       <div className={css["controls"]}>
         <FontAwesomeIcon
-          icon="arrow-left-long"
+          icon={faArrowLeftLong}
           size="lg"
           onClick={onPrevRequest}
           className={css["arrow"]}
         />
         <FontAwesomeIcon
-          icon="arrow-right-long"
+          icon={faArrowRightLong}
           size="lg"
           onClick={onNextRequest}
           className={css["arrow"]}

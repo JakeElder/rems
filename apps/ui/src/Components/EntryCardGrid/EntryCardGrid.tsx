@@ -5,6 +5,7 @@ import css from "./EntryCardGrid.module.css";
 import { EntryCard } from "@rems/types";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   cards: EntryCard[];
@@ -20,7 +21,7 @@ const Item = ({ card }: { card: EntryCard }) => {
         <div className={css["title"]}>{card.title}</div>
         <div className={css["caption-and-icon"]}>
           <div className={css["caption"]}>{card.caption}</div>
-          <FontAwesomeIcon icon="arrow-right-long" />
+          <FontAwesomeIcon icon={faArrowRightLong} />
         </div>
       </div>
       <Image

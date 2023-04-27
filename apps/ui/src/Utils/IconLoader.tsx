@@ -1,10 +1,9 @@
-import { ReactNode } from "react";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
 
-library.add(fas);
+config.autoAddCss = false;
 
-type Props = { children: ReactNode };
+type Props = { children: React.ReactNode };
 
 const IconLoader = ({ children }: Props) => {
   return <>{children}</>;
