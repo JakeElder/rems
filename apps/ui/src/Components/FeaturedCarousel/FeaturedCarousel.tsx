@@ -6,6 +6,7 @@ import css from "./FeaturedCarousel.module.css";
 import JourneyBar from "../JourneyBar";
 import { Property } from "@rems/types";
 import Image from "next/image";
+import Container from "../../Elements/Container/Container";
 
 function mod(n: number, m: number) {
   return ((n % m) + m) % m;
@@ -45,43 +46,45 @@ const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
       })}
       <div className={css["overlay"]} />
       <div className={css["content"]}>
-        <div className={css["intro-and-journey-description"]}>
-          <div className={css["intro"]}>
-            <h1 className={css["h1"]}>
-              Bangkoks #1 Luxury Real Estate Marketplace
-            </h1>
-            <p className={css["strapline"]}></p>
-          </div>
-          <div className={css["journey-and-description"]}>
-            <div className={css["journey-bar"]}>
-              <JourneyBar
-                steps={properties.length}
-                step={step}
-                duration={duration}
-                onStepComplete={() => {
-                  set((step) => mod(step + 1, properties.length));
-                }}
-                onNextRequest={() => {
-                  set((step) => mod(step + 1, properties.length));
-                }}
-                onPrevRequest={() => {
-                  set((step) => mod(step - 1, properties.length));
-                }}
-              />
+        <Container>
+          <div className={css["intro-and-journey-description"]}>
+            <div className={css["intro"]}>
+              <h1 className={css["h1"]}>
+                Bangkoks #1 Luxury Real Estate Marketplace
+              </h1>
+              <p className={css["strapline"]}></p>
             </div>
-            <div className={css["description-container"]}>
-              {transitions((style, i) => {
-                return (
-                  <animated.span style={style} className={css["description"]}>
-                    {properties[i].title}
-                    <span className={css["separator"]}>&bull;</span>
-                    {properties[i].formattedPurchasePrice}
-                  </animated.span>
-                );
-              })}
+            <div className={css["journey-and-description"]}>
+              <div className={css["journey-bar"]}>
+                <JourneyBar
+                  steps={properties.length}
+                  step={step}
+                  duration={duration}
+                  onStepComplete={() => {
+                    set((step) => mod(step + 1, properties.length));
+                  }}
+                  onNextRequest={() => {
+                    set((step) => mod(step + 1, properties.length));
+                  }}
+                  onPrevRequest={() => {
+                    set((step) => mod(step - 1, properties.length));
+                  }}
+                />
+              </div>
+              <div className={css["description-container"]}>
+                {transitions((style, i) => {
+                  return (
+                    <animated.span style={style} className={css["description"]}>
+                      {properties[i].title}
+                      <span className={css["separator"]}>&bull;</span>
+                      {properties[i].formattedPurchasePrice}
+                    </animated.span>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
     </div>
   );

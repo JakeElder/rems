@@ -1,9 +1,12 @@
 .root {
+  border-bottom: 1px solid;
+}
+
+.container {
   display: flex;
   align-items: center;
-  padding: 18px 26px 18px 20px;
+  padding: 18px 0;
   justify-content: space-between;
-  border-bottom: 1px solid;
 }
 
 .nav-icon {
