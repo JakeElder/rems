@@ -5,7 +5,10 @@ const nextConfig = {
   },
   transpilePackages: ["@rems/ui"],
   images: {
-    remotePatterns: [{ hostname: "127.0.0.1" }]
+    remotePatterns: [
+      { hostname: "127.0.0.1" },
+      { hostname: "https://cms.stage.jyo.mindfulstudio.io/" }
+    ]
   }
 };
 
