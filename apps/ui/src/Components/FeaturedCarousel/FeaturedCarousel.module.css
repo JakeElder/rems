@@ -7,6 +7,7 @@
 }
 
 .image,
+.image img,
 .overlay {
   position: absolute;
   left: 0;
@@ -15,7 +16,6 @@
 }
 
 .image img {
-  display: block;
   object-fit: cover;
 }
 
