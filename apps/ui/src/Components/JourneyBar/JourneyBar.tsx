@@ -20,9 +20,9 @@ const JourneyBar = ({
   steps,
   step,
   duration,
-  onStepComplete = () => { },
-  onNextRequest = () => { },
-  onPrevRequest = () => { }
+  onStepComplete = () => {},
+  onNextRequest = () => {},
+  onPrevRequest = () => {}
 }: Props) => {
   return (
     <div className={css["root"]}>
@@ -37,18 +37,22 @@ const JourneyBar = ({
         ))}
       </div>
       <div className={css["controls"]}>
-        <FontAwesomeIcon
-          icon={faArrowLeftLong}
-          size="lg"
-          onClick={onPrevRequest}
-          className={css["arrow"]}
-        />
-        <FontAwesomeIcon
-          icon={faArrowRightLong}
-          size="lg"
-          onClick={onNextRequest}
-          className={css["arrow"]}
-        />
+        <a href="#">
+          <FontAwesomeIcon
+            icon={faArrowLeftLong}
+            size="lg"
+            onClick={onPrevRequest}
+            className={css["arrow"]}
+          />
+        </a>
+        <a href="#">
+          <FontAwesomeIcon
+            icon={faArrowRightLong}
+            size="lg"
+            onClick={onNextRequest}
+            className={css["arrow"]}
+          />
+        </a>
       </div>
     </div>
   );
