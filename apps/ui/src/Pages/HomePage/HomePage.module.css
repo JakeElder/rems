@@ -2,6 +2,10 @@
   margin-bottom: 60px;
 }
 
+.email-collector {
+  margin-bottom: 50px;
+}
+
 .heading {
   font-family: var(--font-libre);
   font-size: 26px;

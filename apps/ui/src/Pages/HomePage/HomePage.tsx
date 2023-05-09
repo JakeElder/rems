@@ -7,6 +7,7 @@ import EntryCardGrid from "../../Components/EntryCardGrid/EntryCardGrid";
 import Container from "../../Elements/Container/Container";
 import css from "./HomePage.module.css";
 import MailingListModule from "../../Components/MailingListModule/MailingListModule";
+import PropertySlider from "../../Components/PropertySlider/PropertySlider";
 
 type Props = {
   heroProperties: Property[];
@@ -22,6 +23,10 @@ const HomePage = ({ heroProperties }: Props) => {
         </div>
         <div className={css["email-collector"]}>
           <MailingListModule />
+        </div>
+        <div className={css["latest-properties"]}>
+          <h2 className={css["heading"]}>Latest Properties</h2>
+          <PropertySlider properties={heroProperties} />
         </div>
       </Container>
     </StandardHeroLayout>
