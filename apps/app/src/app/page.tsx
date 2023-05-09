@@ -1,11 +1,5 @@
-import { HomePage } from "@rems/ui/src";
-import api from "../api";
+import { HoldingPage } from "@rems/ui/src";
 
 export default async function Home() {
-  const { ids } = await api.query.featuredProperties();
-  const properties = await api.get.properties(...ids);
-
-  const withImages = properties.filter((p) => !!p.images.length);
-
-  return <HomePage heroProperties={withImages} />;
+  return <HoldingPage />;
 }
