@@ -8,7 +8,7 @@ const nextConfig = {
     remotePatterns: [
       { hostname: "127.0.0.1" },
       { hostname: "cms.stage.jyoproperty.com" },
-      { hostname: 'res.cloudinary.com'}
+      { hostname: "res.cloudinary.com" }
     ]
   }
 };

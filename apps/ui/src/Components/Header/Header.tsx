@@ -72,6 +72,9 @@ const Header = ({ mode }: Props) => {
             <A href="/real-estate" style={style}>
               Real Estate
             </A>
+            <A href="/about-us" style={style}>
+              About Us
+            </A>
           </nav>
           <div className={css["nav-icon"]}>
             <NavIcon color={styles.fill} />
