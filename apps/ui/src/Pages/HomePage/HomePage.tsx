@@ -8,6 +8,7 @@ import Container from "../../Elements/Container/Container";
 import css from "./HomePage.module.css";
 import MailingListModule from "../../Components/MailingListModule/MailingListModule";
 import PropertySlider from "../../Components/PropertySlider/PropertySlider";
+import MonogramHR from "../../Components/MonogramHR/MonogramHR";
 
 type Props = {
   heroProperties: Property[];
@@ -27,6 +28,9 @@ const HomePage = ({ heroProperties }: Props) => {
         <div className={css["latest-properties"]}>
           <h2 className={css["heading"]}>Latest Properties</h2>
           <PropertySlider properties={heroProperties} />
+        </div>
+        <div className={css["hr"]}>
+          <MonogramHR />
         </div>
       </Container>
     </StandardHeroLayout>

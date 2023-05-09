@@ -6,6 +6,20 @@
   margin-bottom: 50px;
 }
 
+.latest-properties {
+  margin-bottom: 70px;
+}
+
+.hr {
+  margin-bottom: 80px;
+}
+
+@media (min-width: 768px) {
+  .latest-properties {
+    margin-bottom: 90px;
+  }
+}
+
 .heading {
   font-family: var(--font-libre);
   font-size: 26px;

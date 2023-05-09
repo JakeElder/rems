@@ -1,0 +1,18 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hr {
+  flex: 1;
+  height: 1px;
+  background-color: #e6e6e6;
+  position: relative;
+  top: -6px;
+}
+
+.root svg {
+  width: calc(75px * 0.8);
+  height: calc(100px * 0.8);
+}
