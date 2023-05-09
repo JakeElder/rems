@@ -6,6 +6,7 @@ import { Default as cardData } from "../../Components/EntryCardGrid/EntryCardGri
 import EntryCardGrid from "../../Components/EntryCardGrid/EntryCardGrid";
 import Container from "../../Elements/Container/Container";
 import css from "./HomePage.module.css";
+import MailingListModule from "../../Components/MailingListModule/MailingListModule";
 
 type Props = {
   heroProperties: Property[];
@@ -16,7 +17,11 @@ const HomePage = ({ heroProperties }: Props) => {
     <StandardHeroLayout hero={<FeaturedCarousel properties={heroProperties} />}>
       <Container>
         <div className={css["popular-searches"]}>
+          <h2 className={css["heading"]}>Popular Searches</h2>
           <EntryCardGrid cards={cardData.args?.cards!} />
+        </div>
+        <div className={css["email-collector"]}>
+          <MailingListModule />
         </div>
       </Container>
     </StandardHeroLayout>

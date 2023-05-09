@@ -1,0 +1,116 @@
+.root {
+  background-image: url("../../assets/mailing-list-bg.webp");
+  background-size: cover;
+  background-position: right top;
+  color: #fff;
+  padding: 30px 30px 40px;
+  position: relative;
+}
+
+.root::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-image: url("../../assets/mailing-list-logo.png");
+  background-repeat: no-repeat;
+  background-size: 550px 733px;
+  background-position: bottom -480px right -140px;
+  color: #fff;
+}
+
+.content {
+  position: relative;
+}
+
+.heading {
+  font-family: var(--font-libre);
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.lede {
+  font-family: var(--font-inter);
+  font-weight: 300;
+  font-size: 15px;
+  margin: 30px auto;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 720px;
+}
+
+.lede em {
+  font-weight: 500;
+}
+
+.form {
+  max-width: 500px;
+  margin: auto;
+}
+
+.form ::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.form input {
+  font-family: var(--font-inter);
+  font-weight: 200;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 14px;
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.form button {
+  font-family: var(--font-inter);
+  background: #fff;
+  color: #000;
+  height: 50px;
+  width: 100%;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .heading,
+  .lede {
+    text-align: unset;
+    max-width: unset;
+  }
+
+  .form {
+    margin: unset;
+  }
+
+  .root {
+    padding: 38px 44px 40px 44px;
+  }
+
+  .heading {
+    margin-bottom: 16px;
+  }
+
+  .lede {
+    margin: 0 0 30px;
+    max-width: 500px;
+  }
+
+  .form {
+    max-width: 460px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .form input {
+    flex: 1;
+    height: 50px;
+  }
+
+  .form button {
+    flex: 0;
+    padding: 0 20px;
+  }
+}

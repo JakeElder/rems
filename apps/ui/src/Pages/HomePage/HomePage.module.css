@@ -1,3 +1,15 @@
 .popular-searches {
-  padding:  20px 0; 
+  margin-bottom: 60px;
+}
+
+.heading {
+  font-family: var(--font-libre);
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 1200px) {
+  .heading {
+    font-size: 28px;
+  }
 }
