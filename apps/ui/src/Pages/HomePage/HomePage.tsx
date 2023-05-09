@@ -9,6 +9,7 @@ import css from "./HomePage.module.css";
 import MailingListModule from "../../Components/MailingListModule/MailingListModule";
 import PropertySlider from "../../Components/PropertySlider/PropertySlider";
 import MonogramHR from "../../Components/MonogramHR/MonogramHR";
+import Footer from "../../Components/Footer/Footer";
 
 type Props = {
   heroProperties: Property[];
@@ -33,6 +34,9 @@ const HomePage = ({ heroProperties }: Props) => {
           <MonogramHR />
         </div>
       </Container>
+      <div className={css["footer"]}>
+        <Footer />
+      </div>
     </StandardHeroLayout>
   );
 };

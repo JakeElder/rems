@@ -11,12 +11,16 @@
 }
 
 .hr {
-  margin-bottom: 80px;
+  margin-bottom: 110px;
 }
 
 @media (min-width: 768px) {
   .latest-properties {
     margin-bottom: 90px;
+  }
+
+  .hr {
+    margin-bottom: 120px;
   }
 }
 
