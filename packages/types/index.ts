@@ -20,7 +20,7 @@ type CMSAttributes = {
   publishedAt: string;
 };
 
-type Image = Partial<
+export type Image = Partial<
   Omit<PluginUploadFile["attributes"], "width" | "height">
 > & {
   id: ResourceId;
@@ -28,6 +28,10 @@ type Image = Partial<
   height: number;
   src: string;
   formats?: any;
+};
+
+export type CarouselImage = Image & {
+  alt: string;
 };
 
 export type Property = {
