@@ -14,17 +14,9 @@ type Props = {
 
 const Img = animated(Image);
 
-const SizeProxy = (props: Props) => {
-  const [$root, { width }] = useElementSize();
-  return (
-    <div ref={$root}>
-      <SimpleImageCarousel {...props} width={width} />
-    </div>
-  );
-};
-
-const SimpleImageCarousel = ({ images, width }: Props & { width: number }) => {
+const SimpleImageCarousel = ({ images }: Props) => {
   const [index, setIndex] = useState(0);
+  const [$root, { width }] = useElementSize();
 
   const [props, api] = useSprings(
     images.length,
@@ -66,7 +58,7 @@ const SimpleImageCarousel = ({ images, width }: Props & { width: number }) => {
   );
 
   return (
-    <div className={css["root"]}>
+    <div className={css["root"]} ref={$root}>
       <div className={css["controls"]}>
         <div className={css["container"]}>
           {images.map((i, idx) => (
@@ -101,4 +93,4 @@ const SimpleImageCarousel = ({ images, width }: Props & { width: number }) => {
   );
 };
 
-export default SizeProxy;
+export default SimpleImageCarousel;
