@@ -1,17 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import css from "./SimpleImageCarousel.module.css";
 import { CarouselImage } from "@rems/types";
-import { default as Img } from "next/image";
-import cm from "classnames";
-import { animated, useSpring } from "@react-spring/web";
+import Image from "next/image";
+import { animated, useSprings } from "@react-spring/web";
+import { useDrag } from "@use-gesture/react";
+import clamp from "lodash.clamp";
+import { useElementSize } from "usehooks-ts";
+import cn from "classnames";
 
 type Props = {
   images: CarouselImage[];
 };
 
-const SimpleImageCarousel = ({ images }: Props) => {
-  const [slide, setSlide] = useState(0);
-  const { left } = useSpring({ left: `${slide * -100}%` });
+const Img = animated(Image);
+
+const SizeProxy = (props: Props) => {
+  const [$root, { width }] = useElementSize();
+  return (
+    <div ref={$root}>
+      <SimpleImageCarousel {...props} width={width} />
+    </div>
+  );
+};
+
+const SimpleImageCarousel = ({ images, width }: Props & { width: number }) => {
+  const [index, setIndex] = useState(0);
+
+  const [props, api] = useSprings(
+    images.length,
+    (i) => ({
+      x: i * width,
+      scale: 1,
+      display: "block"
+    }),
+    [width]
+  );
+
+  useEffect(() => {
+    api.start((i) => {
+      if (i < index - 1 || i > index + 1) {
+        return { display: "none" };
+      }
+      const x = (i - index) * width + 0;
+      return { x, scale: 1, display: "block" };
+    });
+  }, [index]);
+
+  const bind = useDrag(
+    ({ active, movement: [mx], direction: [xDir], cancel }) => {
+      if (active && Math.abs(mx) > width / 2) {
+        setIndex((index) =>
+          clamp(index + (xDir > 0 ? -1 : 1), 0, images.length - 1)
+        );
+        cancel();
+      }
+      api.start((i) => {
+        if (i < index - 1 || i > index + 1) {
+          return { display: "none" };
+        }
+        const x = (i - index) * width + (active ? mx : 0);
+        const scale = active ? 1 - Math.abs(mx) / width / 2 : 1;
+        return { x, scale, display: "block" };
+      });
+    }
+  );
 
   return (
     <div className={css["root"]}>
@@ -20,30 +72,33 @@ const SimpleImageCarousel = ({ images }: Props) => {
           {images.map((i, idx) => (
             <span
               key={i.src}
-              onClick={() => setSlide(idx)}
+              onClick={() => setIndex(idx)}
               role="button"
-              className={cm({
-                [css["control"]]: slide !== idx,
-                [css["active-control"]]: slide === idx
+              className={cn({
+                [css["control"]]: index !== idx,
+                [css["active-control"]]: index === idx
               })}
             />
           ))}
         </div>
       </div>
-      <animated.div className={css["images"]} style={{ left }}>
-        {images.map((i, idx) => (
+      <div className={css["images"]}>
+        {props.map(({ x, display }, i) => (
           <Img
-            key={idx}
+            key={i}
+            draggable={false}
             className={css["image"]}
-            alt={i.alt}
-            src={i.src}
-            width={i.width}
-            height={i.height}
+            alt={images[i].alt}
+            src={images[i].src}
+            width={images[i].width}
+            height={images[i].height}
+            {...bind()}
+            style={{ x, display, zIndex: images.length - i }}
           />
         ))}
-      </animated.div>
+      </div>
     </div>
   );
 };
 
-export default SimpleImageCarousel;
+export default SizeProxy;

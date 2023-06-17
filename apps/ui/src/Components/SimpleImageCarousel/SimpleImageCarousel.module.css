@@ -10,7 +10,8 @@
   display: flex;
   align-items: flex-end;
   padding-bottom: 10px;
-  z-index: 1;
+  z-index: 100;
+  pointer-events: none;
 }
 
 .container {
@@ -27,19 +28,23 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
+  pointer-events: all;
 }
 
 .active-control {
-  background: rgba(255, 255, 255, 1)
+  background: rgba(255, 255, 255, 1);
 }
 
 .images {
   display: flex;
   position: relative;
+  aspect-ratio: 16/10;
 }
 
 .image {
+  touch-action: none;
   object-fit: cover;
+  position: absolute;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
