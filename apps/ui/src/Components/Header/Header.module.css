@@ -10,14 +10,23 @@
 }
 
 .nav-icon {
-  display: none;
   position: relative;
   top: 2px;
 }
 
 .nav {
+  display: none;
   font-family: var(--font-inter);
-  display: flex;
   gap: 16px;
   font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .nav-icon {
+    display: none;
+  }
+
+  .nav {
+    display: flex;
+  }
 }
