@@ -8,6 +8,7 @@ import css from "./Header.module.css";
 import { animated, useSpring } from "@react-spring/web";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import NavModal from "../NavModal/NavModal";
 
 type Props = {
   mode: "standard" | "hero";
@@ -41,17 +42,17 @@ const Header = ({ mode }: Props) => {
   const styles = useSpring(
     style === "transparent"
       ? {
-        background: "rgba(255, 255, 255, 0)",
-        color: "rgba(255, 255, 255, 0.7)",
-        fill: "rgba(255, 255, 255, 1)",
-        borderBottomColor: "rgba(255, 255, 255, 0.2)"
-      }
+          background: "rgba(255, 255, 255, 0)",
+          color: "rgba(255, 255, 255, 0.7)",
+          fill: "rgba(255, 255, 255, 1)",
+          borderBottomColor: "rgba(255, 255, 255, 0.2)"
+        }
       : {
-        background: "rgba(255, 255, 255, 1)",
-        color: "rgba(0, 0, 0, 0.7)",
-        fill: "rgba(0, 0, 0, 1)",
-        borderBottomColor: "rgb(234, 234, 234, 1)"
-      }
+          background: "rgba(255, 255, 255, 1)",
+          color: "rgba(0, 0, 0, 0.7)",
+          fill: "rgba(0, 0, 0, 1)",
+          borderBottomColor: "rgb(234, 234, 234, 1)"
+        }
   );
 
   useEffect(() => {
@@ -60,25 +61,34 @@ const Header = ({ mode }: Props) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const [navOpen, setNavOpen] = useState(false);
+
   return (
-    <animated.div className={css["root"]} style={styles}>
-      <Container>
-        <div className={css["container"]}>
-          <Logo />
-          <nav className={css["nav"]}>
-            <A href="/" style={style}>
-              Home
-            </A>
-            <A href="/real-estate" style={style}>
-              Real Estate
-            </A>
-          </nav>
-          <div className={css["nav-icon"]}>
-            <NavIcon color={styles.fill} />
+    <div>
+      <NavModal open={navOpen} onCloseRequest={() => setNavOpen(false)} />
+      <animated.div className={css["root"]} style={styles}>
+        <Container>
+          <div className={css["container"]}>
+            <Logo />
+            <nav className={css["nav"]}>
+              <A href="/" style={style}>
+                Home
+              </A>
+              <A href="/real-estate" style={style}>
+                Real Estate
+              </A>
+            </nav>
+            <a
+              role="button"
+              className={css["nav-icon"]}
+              onClick={() => setNavOpen(true)}
+            >
+              <NavIcon color={styles.fill} />
+            </a>
           </div>
-        </div>
-      </Container>
-    </animated.div>
+        </Container>
+      </animated.div>
+    </div>
   );
 };
 

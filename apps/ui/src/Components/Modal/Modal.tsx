@@ -9,7 +9,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Modal = ({ open, children, onCloseRequest: handleClose }: Props) => {
+const Modal = ({ open, children, onCloseRequest }: Props) => {
   const transition = useTransition(open, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
@@ -17,7 +17,7 @@ const Modal = ({ open, children, onCloseRequest: handleClose }: Props) => {
     reverse: open
   });
 
-  useEscapeKey(handleClose)
+  useEscapeKey(onCloseRequest);
 
   return transition(
     (styles, item) =>

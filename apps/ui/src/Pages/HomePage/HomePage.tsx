@@ -1,15 +1,18 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Property } from "@rems/types";
-import FeaturedCarousel from "../../Components/FeaturedCarousel/FeaturedCarousel";
+import FeaturedCarousel from "../../Components/FeaturedCarousel";
 import StandardHeroLayout from "../../Layouts/StandardHeroLayout";
 import { Default as cardData } from "../../Components/EntryCardGrid/EntryCardGrid.stories";
-import EntryCardGrid from "../../Components/EntryCardGrid/EntryCardGrid";
+import EntryCardGrid from "../../Components/EntryCardGrid";
 import Container from "../../Elements/Container/Container";
 import css from "./HomePage.module.css";
-import MailingListModule from "../../Components/MailingListModule/MailingListModule";
-import PropertySlider from "../../Components/PropertySlider/PropertySlider";
-import MonogramHR from "../../Components/MonogramHR/MonogramHR";
-import Footer from "../../Components/Footer/Footer";
+import MailingListModule from "../../Components/MailingListModule";
+import PropertySlider from "../../Components/PropertySlider";
+import MonogramHR from "../../Components/MonogramHR";
+import Footer from "../../Components/Footer";
+import NavModal from "../../Components/NavModal";
 
 type Props = {
   heroProperties: Property[];

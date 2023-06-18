@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Property } from "@rems/types";
 import HomePage from "./HomePage";
-import properties from "../../fixtures/properties.json";
+import properties from "../../fixtures/properties";
 
 const meta: Meta<typeof HomePage> = {
   title: "Pages/HomePage",
@@ -15,7 +14,7 @@ type Story = StoryObj<typeof HomePage>;
 
 export const Default: Story = {
   args: {
-    heroProperties: properties as unknown as Property[]
+    heroProperties: properties
   }
 };
 

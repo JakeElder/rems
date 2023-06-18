@@ -12,6 +12,7 @@
 .nav-icon {
   position: relative;
   top: 2px;
+  cursor: pointer;
 }
 
 .nav {

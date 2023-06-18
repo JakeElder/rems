@@ -23,8 +23,8 @@ const UL = ({
     <div className={css["section"]}>
       <div className={css["heading"]}>{heading}</div>
       <ul className={css["list"]}>
-        {links.map((l) => (
-          <li>
+        {links.map((l, idx) => (
+          <li key={idx}>
             <a href={l.href}>{l.text}</a>
           </li>
         ))}
