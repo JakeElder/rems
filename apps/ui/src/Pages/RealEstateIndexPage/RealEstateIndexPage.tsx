@@ -1,17 +1,20 @@
+'use client';
+
 import React from "react";
 import { Property } from "@rems/types";
-import ListingMap from "../../Components/ListingMap/ListingMap";
-import StandardHeroLayout from "../../Layouts/StandardHeroLayout/StandardHeroLayout";
+import Header from "../../Components/Header/Header";
+import FilterBar from "../../Components/FilterBar/FilterBar";
 
 type Props = {
   properties: Property[];
 };
 
-const RealEstateIndexPage = ({ properties }: Props) => {
+const RealEstateIndexPage = ({}: Props) => {
   return (
-    <StandardHeroLayout hero={<ListingMap properties={properties} />}>
-      {null}
-    </StandardHeroLayout>
+    <div>
+      <Header full mode="standard" />
+      <FilterBar />
+    </div>
   );
 };
 

@@ -12,6 +12,7 @@ import NavModal from "../NavModal/NavModal";
 
 type Props = {
   mode: "standard" | "hero";
+  full?: boolean;
 };
 
 const L = animated(Link);
@@ -35,24 +36,24 @@ const A = ({
   return <L href={href} children={children} style={styles} />;
 };
 
-const Header = ({ mode }: Props) => {
+const Header = ({ mode, full = false }: Props) => {
   const [hasScrollY, setHasScrollY] = useState(false);
   const style = mode === "hero" && !hasScrollY ? "transparent" : "opaque";
 
   const styles = useSpring(
     style === "transparent"
       ? {
-          background: "rgba(255, 255, 255, 0)",
-          color: "rgba(255, 255, 255, 0.7)",
-          fill: "rgba(255, 255, 255, 1)",
-          borderBottomColor: "rgba(255, 255, 255, 0.2)"
-        }
+        background: "rgba(255, 255, 255, 0)",
+        color: "rgba(255, 255, 255, 0.7)",
+        fill: "rgba(255, 255, 255, 1)",
+        borderBottomColor: "rgba(255, 255, 255, 0.2)"
+      }
       : {
-          background: "rgba(255, 255, 255, 1)",
-          color: "rgba(0, 0, 0, 0.7)",
-          fill: "rgba(0, 0, 0, 1)",
-          borderBottomColor: "rgb(234, 234, 234, 1)"
-        }
+        background: "rgba(255, 255, 255, 1)",
+        color: "rgba(0, 0, 0, 0.7)",
+        fill: "rgba(0, 0, 0, 1)",
+        borderBottomColor: "rgb(234, 234, 234, 1)"
+      }
   );
 
   useEffect(() => {
@@ -67,7 +68,7 @@ const Header = ({ mode }: Props) => {
     <div>
       <NavModal open={navOpen} onCloseRequest={() => setNavOpen(false)} />
       <animated.div className={css["root"]} style={styles}>
-        <Container>
+        <Container full={full}>
           <div className={css["container"]}>
             <Logo />
             <nav className={css["nav"]}>
@@ -76,6 +77,9 @@ const Header = ({ mode }: Props) => {
               </A>
               <A href="/real-estate" style={style}>
                 Real Estate
+              </A>
+              <A href="/about-us" style={style}>
+                About Us
               </A>
             </nav>
             <a

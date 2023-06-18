@@ -1,0 +1,46 @@
+.root {
+  padding: 14px 0;
+  border-bottom: 1px solid rgb(236, 236, 236);
+  overflow: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.root::-webkit-scrollbar {
+  display: none;
+}
+
+.sections {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.filters,
+.key-filters,
+.toggles {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.control {
+  font-size: 14px;
+  font-family: var(--font-inter);
+  border: 1px solid #dfdfdf;
+  border-radius: 3px;
+  height: 34px;
+  line-height: 34px;
+  padding: 0 12px;
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.separator {
+  height: 26px;
+  background: #dfdfdf;
+  flex: 0 0 1px;
+}
