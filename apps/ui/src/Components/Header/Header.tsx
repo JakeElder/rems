@@ -28,12 +28,33 @@ const A = ({
 }) => {
   const active = usePathname() === href;
   const opacity = active ? "1" : "0.7";
+  const fontWeight = active ? 500 : 400;
   const styles = useSpring(
     style === "transparent"
-      ? { color: `rgba(255, 255, 255, ${opacity})` }
-      : { color: `rgba(0, 0, 0, ${opacity})` }
+      ? { color: `rgba(255, 255, 255, ${opacity})`, fontWeight }
+      : { color: `rgba(0, 0, 0, ${opacity})`, fontWeight }
   );
   return <L href={href} children={children} style={styles} />;
+};
+
+const Button = ({
+  style,
+  children
+}: {
+  style: "transparent" | "opaque";
+  children: React.ReactNode;
+}) => {
+  const styles = useSpring(
+    style === "transparent"
+      ? { background: "#c19d54", borderColor: "transparent" }
+      : { background: "transparent", borderColor: "#999999" }
+  );
+
+  return (
+    <animated.button className={css["button"]} style={styles}>
+      {children}
+    </animated.button>
+  );
 };
 
 const Header = ({ mode, full = false }: Props) => {
@@ -73,17 +94,20 @@ const Header = ({ mode, full = false }: Props) => {
             <Link href="/">
               <Logo />
             </Link>
-            <nav className={css["nav"]}>
-              <A href="/" style={style}>
-                Home
-              </A>
-              <A href="/real-estate" style={style}>
-                Real Estate
-              </A>
-              <A href="/about-us" style={style}>
-                About Us
-              </A>
-            </nav>
+            <div className={css["nav-and-contact-button"]}>
+              <nav className={css["nav"]}>
+                <A href="/" style={style}>
+                  Home
+                </A>
+                <A href="/real-estate" style={style}>
+                  Real Estate
+                </A>
+                <A href="/about-us" style={style}>
+                  About Us
+                </A>
+              </nav>
+              <Button style={style}>Contact Us</Button>
+            </div>
             <a
               role="button"
               className={css["nav-icon"]}

@@ -15,11 +15,27 @@
   cursor: pointer;
 }
 
+.nav-and-contact-button {
+  font-family: var(--font-inter);
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 16px;
+}
+
 .nav {
   display: none;
-  font-family: var(--font-inter);
-  gap: 16px;
-  font-size: 14px;
+  gap: 18px;
+}
+
+.button {
+  border-radius: 19px;
+  height: 36px;
+  padding: 0 20px;
+  text-shadow: 0 0 2px 1px rgba(0, 0, 0, 1);
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {
