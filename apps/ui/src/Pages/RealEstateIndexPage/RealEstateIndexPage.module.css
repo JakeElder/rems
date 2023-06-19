@@ -1,5 +1,13 @@
-.filter-bar {
-  margin-bottom: 20px;
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  z-index: 200;
+}
+
+.main {
+  padding: 20px;
 }
 
 .breadcrumbs {
@@ -71,4 +79,40 @@
 
 .hr {
   margin-bottom: 110px;
+}
+
+.map {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .content {
+    position: relative;
+  }
+
+  .main {
+    position: relative;
+    padding: 40px;
+    margin-right: 36vw;
+    max-width: 840px;
+  }
+
+  .map {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: calc(100% - 840px);
+    min-width: 36vw;
+    border-left: 1px solid rgb(236, 236, 236);
+  }
+
+  .map-inner {
+    position: sticky;
+    width: 100%;
+    height: calc(100vh - 138px);
+    left: 0;
+    top: 138px;
+  }
 }
