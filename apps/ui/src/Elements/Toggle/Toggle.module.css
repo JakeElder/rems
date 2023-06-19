@@ -1,0 +1,23 @@
+.root {
+  all: unset;
+  font-size: 14px;
+  font-family: var(--font-inter);
+  border: 1px solid #dfdfdf;
+  border-radius: 3px;
+  height: 34px;
+  line-height: 34px;
+  padding: 0 12px;
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #444;
+  transition-property: color, border-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+
+.root[data-state="on"] {
+  border-color: #000;
+  color: #000;
+}

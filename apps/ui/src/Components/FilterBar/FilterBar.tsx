@@ -4,6 +4,7 @@ import Container from "../../Elements/Container/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { useDraggable } from "react-use-draggable-scroll";
+import Toggle from "../../Elements/Toggle";
 
 type Props = {};
 
@@ -106,9 +107,7 @@ const FilterBar = ({}: Props) => {
           <div className={css["separator"]} />
           <div className={css["toggles"]}>
             {toggles.map((t) => (
-              <a key={t} className={css["control"]}>
-                {t}
-              </a>
+              <Toggle key={t}>{t}</Toggle>
             ))}
           </div>
         </div>
