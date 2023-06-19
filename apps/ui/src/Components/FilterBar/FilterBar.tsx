@@ -7,7 +7,7 @@ import { useDraggable } from "react-use-draggable-scroll";
 
 type Props = {};
 
-const FilterBar = ({ }: Props) => {
+const FilterBar = ({}: Props) => {
   const toggles = [
     "Sea View",
     "Water View",

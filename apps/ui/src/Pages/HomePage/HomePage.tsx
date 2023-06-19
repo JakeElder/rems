@@ -12,7 +12,6 @@ import MailingListModule from "../../Components/MailingListModule";
 import PropertySlider from "../../Components/PropertySlider";
 import MonogramHR from "../../Components/MonogramHR";
 import Footer from "../../Components/Footer";
-import NavModal from "../../Components/NavModal";
 
 type Props = {
   heroProperties: Property[];
