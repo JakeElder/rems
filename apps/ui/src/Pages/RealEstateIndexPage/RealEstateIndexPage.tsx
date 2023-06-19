@@ -10,7 +10,8 @@ import FilterBar from "../../Components/FilterBar";
 import css from "./RealEstateIndexPage.module.css";
 import PropertyCard from "../../Components/PropertyCard";
 import Footer from "../../Components/Footer";
-import ListingMap from "../../Components/ListingMap/ListingMap";
+import ListingMap from "../../Components/ListingMap";
+import Pagination from "../../Components/Pagination";
 
 type Props = {
   properties: Property[];
@@ -60,6 +61,9 @@ const RealEstateIndexPage = ({ properties }: Props) => {
             {properties.map((p) => (
               <PropertyCard key={p.id} property={p} />
             ))}
+          </div>
+          <div className={css["pagination"]}>
+            <Pagination />
           </div>
         </div>
         <div className={css["map"]}>

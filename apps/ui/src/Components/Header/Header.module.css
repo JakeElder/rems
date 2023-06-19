@@ -36,9 +36,14 @@
   border-width: 1px;
   border-style: solid;
   cursor: pointer;
+  display: none;
 }
 
 @media (min-width: 768px) {
+  .button {
+    display: unset;
+  }
+
   .nav-icon {
     display: none;
   }

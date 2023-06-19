@@ -1,0 +1,47 @@
+.root {
+  font-family: var(--font-inter);
+}
+
+.next {
+  margin-bottom: 26px;
+  color: #222;
+}
+
+.next a {
+  display: block;
+  max-width: 330px;
+  margin: auto;
+  height: 54px;
+  line-height: 54px;
+  border: 1px solid #dfdfdf;
+  text-align: center;
+  border-radius: 30px;
+}
+
+.pages {
+  display: flex;
+  justify-content: center;
+}
+
+.page,
+.active,
+.next-arrow,
+.ellipsis {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #555;
+  border: 1px solid transparent;
+  border-radius: 50%;
+}
+
+.page,
+.active,
+.next-arrow {
+  cursor: pointer;
+}
+
+.active {
+  border-color: #dfdfdf;
+}
