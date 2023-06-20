@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import { Property } from "@rems/types";
 import FeaturedCarousel from "../../Components/FeaturedCarousel";
 import StandardHeroLayout from "../../Layouts/StandardHeroLayout";

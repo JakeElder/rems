@@ -1,7 +1,10 @@
-import React from "react";
-import css from "./PropertySlider.module.css";
+"use client";
+
+import React, { MutableRefObject, useRef } from "react";
+import { useDraggable } from "react-use-draggable-scroll";
 import { Property } from "@rems/types";
 import Image from "next/image";
+import css from "./PropertySlider.module.css";
 
 type Props = { properties: Property[] };
 
@@ -24,8 +27,11 @@ const Card = ({ property }: { property: Property }) => {
 };
 
 const PropertySlider = ({ properties }: Props) => {
+  const $root = useRef<HTMLDivElement>(null);
+  const { events } = useDraggable($root as MutableRefObject<HTMLDivElement>);
+
   return (
-    <div className={css["root"]}>
+    <div className={css["root"]} ref={$root} {...events}>
       {properties.map((p) => (
         <Card key={p.id} property={p} />
       ))}

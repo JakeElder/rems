@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Property } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import slugify from "slugify";
 import Header from "../../Components/Header";
 import FilterBar from "../../Components/FilterBar";
 import css from "./RealEstateIndexPage.module.css";
@@ -59,7 +60,13 @@ const RealEstateIndexPage = ({ properties }: Props) => {
           </div>
           <div className={css["properties"]}>
             {properties.map((p) => (
-              <PropertyCard key={p.id} property={p} />
+              <Link
+                href={`/real-estate/${slugify(p.title, { lower: true })}-${
+                  p.id
+                }`}
+              >
+                <PropertyCard key={p.id} property={p} />
+              </Link>
             ))}
           </div>
           <div className={css["pagination"]}>
