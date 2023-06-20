@@ -40,6 +40,59 @@
     "location": {
       "type": "customField",
       "customField": "plugin::google-map-picker.place"
+    },
+    "propertyId": {
+      "type": "uid",
+      "required": true
+    },
+    "rentalPrice": {
+      "type": "integer"
+    },
+    "availableToPurchase": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "availableToRent": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "property_type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::property-type.property-type",
+      "inversedBy": "properties"
+    },
+    "view_types": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::view-type.view-type",
+      "mappedBy": "properties"
+    },
+    "outdoor_features": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::outdoor-feature.outdoor-feature",
+      "inversedBy": "properties"
+    },
+    "indoor_features": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::indoor-feature.indoor-feature",
+      "inversedBy": "properties"
+    },
+    "lot_features": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::lot-feature.lot-feature",
+      "inversedBy": "properties"
+    },
+    "yearBuilt": {
+      "type": "integer"
+    },
+    "address": {
+      "type": "text"
     }
   }
 }

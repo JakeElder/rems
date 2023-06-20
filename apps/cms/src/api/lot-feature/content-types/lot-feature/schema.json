@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "lot_features",
+  "info": {
+    "singularName": "lot-feature",
+    "pluralName": "lot-features",
+    "displayName": "Lot Feature"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "properties": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::property.property",
+      "mappedBy": "lot_features"
+    }
+  }
+}

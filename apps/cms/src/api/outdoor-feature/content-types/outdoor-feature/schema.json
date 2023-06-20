@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "outdoor_features",
+  "info": {
+    "singularName": "outdoor-feature",
+    "pluralName": "outdoor-features",
+    "displayName": "Outdoor Feature",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "properties": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::property.property",
+      "mappedBy": "outdoor_features"
+    }
+  }
+}

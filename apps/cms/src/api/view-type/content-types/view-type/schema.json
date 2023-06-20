@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "view_types",
+  "info": {
+    "singularName": "view-type",
+    "pluralName": "view-types",
+    "displayName": "View Type",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "properties": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::property.property",
+      "inversedBy": "view_types"
+    }
+  }
+}
