@@ -60,13 +60,13 @@ const RealEstateIndexPage = ({ properties }: Props) => {
           </div>
           <div className={css["properties"]}>
             {properties.map((p) => (
-              <Link
-                href={`/real-estate/${slugify(p.title, { lower: true })}-${
+              <PropertyCard
+                key={p.id}
+                property={p}
+                link={`/real-estate/${slugify(p.title, { lower: true })}-${
                   p.id
                 }`}
-              >
-                <PropertyCard key={p.id} property={p} />
-              </Link>
+              />
             ))}
           </div>
           <div className={css["pagination"]}>
@@ -85,5 +85,15 @@ const RealEstateIndexPage = ({ properties }: Props) => {
     </div>
   );
 };
+
+// {properties.map((p) => (
+//   <Link
+//     href={`/real-estate/${slugify(p.title, { lower: true })}-${
+//       p.id
+//     }`}
+//   >
+//     <PropertyCard key={p.id} property={p} />
+//   </Link>
+// ))}
 
 export default RealEstateIndexPage;

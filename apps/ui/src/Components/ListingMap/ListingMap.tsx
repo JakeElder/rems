@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef } from "react";
-import "mapbox-gl/dist/mapbox-gl.css";
 import css from "./ListingMap.module.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 import mapbox from "mapbox-gl";
 import { Property } from "@rems/types";
 import MapPropertyMarker from "../MapPropertyMarker/MapPropertyMarker";
