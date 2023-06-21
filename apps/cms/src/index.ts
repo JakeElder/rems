@@ -5,7 +5,7 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/*{ strapi }*/) { },
+  register(/*{ strapi }*/) {},
 
   /**
    * An asynchronous bootstrap function that runs before
@@ -30,9 +30,9 @@ export default {
       { name: "Private Airport" }
     ];
 
-    await strapi.db.query("api::outdoor-feature.outdoor-feature").createMany({
-      data: outdoorFeatures
-    });
+    //     await strapi.db.query("api::outdoor-feature.outdoor-feature").createMany({
+    //       data: outdoorFeatures
+    //     });
 
     // await strapi.db
     //   .connection("outdoor_features")
@@ -84,8 +84,8 @@ export default {
       { name: "Ski-In / Ski-Out" }
     ];
 
-    // await strapi.db.query("api::lot-feature.lot-feature").createMany({
-    //   data: lotFeatures
+    // await strapi.db.query("api::indoor-feature.indoor-feature").createMany({
+    //   data: indoorFeatures
     // });
   }
 };

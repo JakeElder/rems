@@ -20,7 +20,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::property.property",
-      "inversedBy": "view_types"
+      "mappedBy": "view_types"
     }
   }
 }

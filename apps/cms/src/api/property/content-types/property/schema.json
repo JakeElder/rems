@@ -41,10 +41,6 @@
       "type": "customField",
       "customField": "plugin::google-map-picker.place"
     },
-    "propertyId": {
-      "type": "uid",
-      "required": true
-    },
     "rentalPrice": {
       "type": "integer"
     },
@@ -58,23 +54,11 @@
       "default": false,
       "required": true
     },
-    "property_type": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::property-type.property-type",
-      "inversedBy": "properties"
+    "yearBuilt": {
+      "type": "integer"
     },
-    "view_types": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::view-type.view-type",
-      "mappedBy": "properties"
-    },
-    "outdoor_features": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::outdoor-feature.outdoor-feature",
-      "inversedBy": "properties"
+    "address": {
+      "type": "text"
     },
     "indoor_features": {
       "type": "relation",
@@ -88,11 +72,23 @@
       "target": "api::lot-feature.lot-feature",
       "inversedBy": "properties"
     },
-    "yearBuilt": {
-      "type": "integer"
+    "outdoor_features": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::outdoor-feature.outdoor-feature",
+      "inversedBy": "properties"
     },
-    "address": {
-      "type": "text"
+    "property_type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::property-type.property-type",
+      "inversedBy": "properties"
+    },
+    "view_types": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::view-type.view-type",
+      "inversedBy": "properties"
     }
   }
 }

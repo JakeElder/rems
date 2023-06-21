@@ -80,6 +80,7 @@ const get = {
     );
     return res;
   },
+
   async property(id: ResourceId): Promise<Property> {
     const q = qs.stringify({ populate: "images" });
     const url = `${process.env.API_URL}/properties/${id}?${q}`;
