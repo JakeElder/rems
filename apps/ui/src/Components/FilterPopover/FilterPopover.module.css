@@ -1,4 +1,6 @@
-.root {
+.control {
+  border: 1px solid #dfdfdf;
+  border-radius: 3px;
   all: unset;
   font-size: 14px;
   font-family: var(--font-inter);
@@ -14,7 +16,12 @@
   color: #444;
 }
 
-.root[data-state="on"] {
+.control[data-state="open"] {
   border-color: #000;
   color: #000;
+}
+
+.content {
+  border-radius: 3px;
+  border: 1px solid #000;
 }
