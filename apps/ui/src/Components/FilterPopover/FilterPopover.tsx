@@ -21,7 +21,7 @@ const FilterPopover = ({ label, children }: Props) => {
         </button>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content className={css["content"]} sideOffset={5}>
+        <Popover.Content className={css["content"]} align="start" sideOffset={5}>
           {children}
         </Popover.Content>
       </Popover.Portal>

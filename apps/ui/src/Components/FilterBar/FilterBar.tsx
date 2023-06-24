@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { useDraggable } from "react-use-draggable-scroll";
 import Toggle from "../../Elements/Toggle";
+import TypeFilterPopover from "../TypeFilterPopover/TypeFilterPopover";
 
 type Props = {};
 
@@ -85,12 +86,7 @@ const FilterBar = ({}: Props) => {
           </div>
           <div className={css["separator"]} />
           <div className={css["key-filters"]}>
-            <a className={css["control"]}>
-              Type
-              <div className={css["icon"]}>
-                <FontAwesomeIcon icon={faChevronDown} size="sm" />
-              </div>
-            </a>
+            <TypeFilterPopover />
             <a className={css["control"]}>
               Price
               <div className={css["icon"]}>

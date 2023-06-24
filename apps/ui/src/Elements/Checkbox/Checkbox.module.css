@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-inter);
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #838383;
+}
+
+.label {
+  cursor: default;
+  margin-left: 5px;
+  font-size: 15px;
+  font-weight: 300;
+}
