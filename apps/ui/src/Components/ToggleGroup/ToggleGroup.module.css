@@ -1,0 +1,23 @@
+.item {
+  height: 42px;
+  line-height: 42px;
+  padding: 0 12px;
+  font-family: var(--font-inter);
+  border: 1px solid #e0e0e0;
+  border-left-width: 0;
+}
+
+.item:first-child {
+  border-radius: 4px 0 0 4px;
+  border-left-width: 1px;
+}
+
+.item:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.item[data-state="on"] {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+}
