@@ -13,7 +13,7 @@ type Story = StoryObj<typeof ToggleGroup>;
 
 export const Default: Story = {
   args: {
-    toggles: [
+    items: [
       { label: "1", value: "one" },
       { label: "2", value: "two" },
       { label: "3", value: "three" }

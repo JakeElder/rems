@@ -3,7 +3,10 @@ import TypeFilterPopover from "./TypeFilterPopover";
 
 const meta: Meta<typeof TypeFilterPopover> = {
   title: "Components/TypeFilterPopover",
-  component: TypeFilterPopover
+  component: TypeFilterPopover,
+  parameters: {
+    layout: "centered"
+  }
 };
 
 type Story = StoryObj<typeof TypeFilterPopover>;

@@ -1,0 +1,21 @@
+.slider {
+  margin-bottom: 16px;
+}
+
+.inputs {
+  display: flex;
+  gap: 12px;
+}
+
+.inputs input {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  background: #f5f5f5;
+  color: #888;
+  user-select: none;
+  min-width: 0;
+  flex-shrink: 1;
+  width: 100%;
+}

@@ -7,11 +7,14 @@ type Toggle = {
   value: string;
 };
 
-type Props = { items: Toggle[] };
+type Props = {
+  defaultValue: string;
+  items: Toggle[];
+};
 
-const ToggleGroup = ({ items }: Props) => {
+const ToggleGroup = ({ items, defaultValue }: Props) => {
   return (
-    <TG.Root type="single" className={css["root"]}>
+    <TG.Root type="single" defaultValue={defaultValue} className={css["root"]}>
       {items.map((t) => (
         <TG.Item className={css["item"]} value={t.value} key={t.value}>
           {t.label}

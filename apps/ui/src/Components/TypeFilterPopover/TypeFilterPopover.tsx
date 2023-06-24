@@ -13,6 +13,7 @@ const TypeFilterPopover = ({}: Props) => {
         <div className={css["content"]}>
           <div className={css["rent-or-sale"]}>
             <ToggleGroup
+              defaultValue="rent"
               items={[
                 { label: "Rent", value: "rent" },
                 { label: "Sale", value: "sale" }
@@ -20,7 +21,7 @@ const TypeFilterPopover = ({}: Props) => {
             />
           </div>
           <div className={css["divider"]} />
-          <div className={css['types']}>
+          <div className={css["types"]}>
             <Checkbox id="apartment" label="Apartment" />
             <Checkbox id="condo" label="Condo" />
           </div>
