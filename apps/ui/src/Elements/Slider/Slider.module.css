@@ -1,0 +1,32 @@
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  min-width: 140px;
+  height: 20px;
+}
+
+.track {
+  background-color: #bbb;
+  position: relative;
+  flex-grow: 1;
+  border-radius: 1.5px;
+  height: 3px;
+}
+
+.range {
+  position: absolute;
+  background-color: #000;
+  height: 100%;
+}
+
+.thumb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  outline: 3px solid #000;
+  border-radius: 10px;
+}
