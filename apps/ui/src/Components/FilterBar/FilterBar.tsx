@@ -2,11 +2,12 @@ import React, { MutableRefObject, useRef } from "react";
 import css from "./FilterBar.module.css";
 import Container from "../../Elements/Container/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSliders, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useDraggable } from "react-use-draggable-scroll";
 import Toggle from "../../Elements/Toggle";
-import TypeFilterPopover from "../TypeFilterPopover/TypeFilterPopover";
-import PriceFilterPopover from "../PriceFilterPopover/PriceFilterPopover";
+import TypeFilterPopover from "../TypeFilterPopover";
+import PriceFilterPopover from "../PriceFilterPopover";
+import BedsFilterPopover from "../BedsFilterPopover";
 
 type Props = {};
 
@@ -89,12 +90,7 @@ const FilterBar = ({}: Props) => {
           <div className={css["key-filters"]}>
             <TypeFilterPopover />
             <PriceFilterPopover />
-            <a className={css["control"]}>
-              Beds
-              <div className={css["icon"]}>
-                <FontAwesomeIcon icon={faChevronDown} size="sm" />
-              </div>
-            </a>
+            <BedsFilterPopover />
           </div>
           <div className={css["separator"]} />
           <div className={css["toggles"]}>

@@ -1,23 +1,22 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import * as CB from "@radix-ui/react-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import css from "./Checkbox.module.css";
 
-type Props = {
-  id: string;
+type Props = ComponentProps<typeof CB.Root> & {
   label: string;
 };
 
-const Checkbox = ({ id, label }: Props) => {
+const Checkbox = ({ label, ...props }: Props) => {
   return (
     <div className={css["root"]}>
-      <CB.Root className={css["checkbox"]} defaultChecked id={id}>
+      <CB.Root className={css["checkbox"]} {...props}>
         <CB.Indicator className="CheckboxIndicator">
           <FontAwesomeIcon icon={faCheck} className={css["check"]} size="xs" />
         </CB.Indicator>
       </CB.Root>
-      <label className={css["label"]} htmlFor={id}>
+      <label className={css["label"]} htmlFor={props.id}>
         {label}
       </label>
     </div>

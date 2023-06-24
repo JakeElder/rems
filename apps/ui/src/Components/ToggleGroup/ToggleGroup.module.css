@@ -1,11 +1,18 @@
 .item {
-  height: 36px;
-  line-height: 36px;
-  padding: 0 12px;
+  height: 40px;
+  line-height: 40px;
   font-family: var(--font-inter);
   border: 1px solid #e0e0e0;
   border-left-width: 0;
   font-size: 14px;
+}
+
+.root .item {
+  padding: 0 12px;
+}
+
+.root-fixed .item {
+  text-align: center;
 }
 
 .item:first-child {
