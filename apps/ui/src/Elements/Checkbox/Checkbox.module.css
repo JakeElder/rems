@@ -1,6 +1,5 @@
 .root {
   display: flex;
-  align-items: center;
   font-family: var(--font-inter);
 }
 
@@ -16,7 +15,7 @@
 
 .label {
   cursor: default;
-  margin-left: 5px;
+  margin-left: 6px;
   font-size: 15px;
   font-weight: 300;
 }
