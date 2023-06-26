@@ -1,4 +1,4 @@
-import { PluginUploadFile } from "./cms";
+import { PluginUploadFile } from "./generated/contentTypes";
 
 type Pagination = {
   page: number;

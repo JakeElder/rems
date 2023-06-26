@@ -1,99 +1,50 @@
-"use client";
-
-import React, { useState } from "react";
-import Link from "next/link";
-import { Property } from "@rems/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import slugify from "slugify";
-import Header from "../../Components/Header";
-import FilterBar from "../../Components/FilterBar";
+import React from "react";
 import css from "./RealEstateIndexPage.module.css";
-import PropertyCard from "../../Components/PropertyCard";
-import Footer from "../../Components/Footer";
-import ListingMap from "../../Components/ListingMap";
-import Pagination from "../../Components/Pagination";
 
-type Props = {
-  properties: Property[];
+export const Root = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["root"]}>{children}</div>;
 };
 
-const RealEstateIndexPage = ({ properties }: Props) => {
-  const [selection, setSelection] = useState("Popular");
+export const Header = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["header"]}>{children}</div>;
+};
+
+export const Main = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["main"]}>{children}</div>;
+};
+
+export const Content = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["content"]}>{children}</div>;
+};
+
+export const Breadcrumbs = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["breadcrumbs"]}>{children}</div>;
+};
+
+export const Title = ({ children }: { children: React.ReactNode }) => {
+  return <h1 className={css["title"]}>{children}</h1>;
+};
+
+export const CountAndSort = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["count-and-sort"]}>{children}</div>;
+};
+
+export const Properties = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["properties"]}>{children}</div>;
+};
+
+export const Pagination = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["pagination"]}>{children}</div>;
+};
+
+export const Map = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className={css["root"]}>
-      <div className={css["header"]}>
-        <Header full mode="standard" />
-        <div className={css["filter-bar"]}>
-          <FilterBar />
-        </div>
-      </div>
-      <div className={css["content"]}>
-        <div className={css["main"]}>
-          <div className={css["breadcrumbs"]}>
-            <Link href="/">Home</Link>
-            <div className={css["separator"]}>/</div>
-            <span className={css["location"]}>Real Estate</span>
-          </div>
-          <h1 className={css["title"]}>Homes for sale in Thailand</h1>
-          <div className={css["count-and-sort"]}>
-            <div className={css["count"]}>{properties.length} listings</div>
-            <div className={css["sort"]}>
-              <select
-                className={css["select"]}
-                onChange={(e) => setSelection(e.currentTarget.value)}
-              >
-                <option>Popular</option>
-                <option>Lowest Price First</option>
-                <option>Highest Price First</option>
-                <option>Largest Area First</option>
-                <option>Smallest Area First</option>
-              </select>
-              <div className={css["active"]}>
-                <span className={css["label"]}>Sort:</span>
-                <span className={css["selection"]}>{selection}</span>
-                <span className={css["icon"]}>
-                  <FontAwesomeIcon icon={faChevronDown} size="sm" />
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className={css["properties"]}>
-            {properties.map((p) => (
-              <PropertyCard
-                key={p.id}
-                property={p}
-                link={`/real-estate/${slugify(p.title, { lower: true })}-${
-                  p.id
-                }`}
-              />
-            ))}
-          </div>
-          <div className={css["pagination"]}>
-            <Pagination />
-          </div>
-        </div>
-        <div className={css["map"]}>
-          <div className={css["map-inner"]}>
-            <ListingMap properties={properties} />
-          </div>
-        </div>
-      </div>
-      <div className={css["footer"]}>
-        <Footer />
-      </div>
+    <div className={css["map"]}>
+      <div className={css["map-inner"]}>{children}</div>
     </div>
   );
 };
 
-// {properties.map((p) => (
-//   <Link
-//     href={`/real-estate/${slugify(p.title, { lower: true })}-${
-//       p.id
-//     }`}
-//   >
-//     <PropertyCard key={p.id} property={p} />
-//   </Link>
-// ))}
-
-export default RealEstateIndexPage;
+export const Footer = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["footer"]}>{children}</div>;
+};

@@ -1,21 +1,57 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Property } from "@rems/types";
-import RealEstateIndexPage from "./RealEstateIndexPage";
-import properties from "../../fixtures/properties.json";
+import * as Page from "./RealEstateIndexPage";
+import Header from "../../Components/Header";
+import FilterBar from "../../Components/FilterBar";
+import properties from "../../fixtures/properties";
+import PropertyCard from "../../Components/PropertyCard";
+import Pagination from "../../Components/Pagination";
+import Footer from "../../Components/Footer";
+import ListingMap from "../../Components/ListingMap";
+import Breadcrumbs from "../../Components/Breadcrumbs";
+import CountAndSort from "../../Components/CountAndSort";
 
-const meta: Meta<typeof RealEstateIndexPage> = {
+const meta: Meta<typeof Page> = {
   title: "Pages/RealEstateIndexPage",
-  component: RealEstateIndexPage,
-  parameters: {
-    layout: "fullscreen"
-  }
+  parameters: { layout: "fullscreen" }
 };
 
-type Story = StoryObj<typeof RealEstateIndexPage>;
+type Story = StoryObj<typeof Page>;
 
 export const Default: Story = {
-  args: {
-    properties: properties as unknown as Property[]
+  render() {
+    return (
+      <Page.Root>
+        <Page.Header>
+          <Header full mode="standard" />
+          <FilterBar />
+        </Page.Header>
+        <Page.Main>
+          <Page.Content>
+            <Page.Breadcrumbs>
+              <Breadcrumbs />
+            </Page.Breadcrumbs>
+            <Page.Title>Homes for sale in Thailand</Page.Title>
+            <Page.CountAndSort>
+              <CountAndSort count={properties.length} />
+            </Page.CountAndSort>
+            <Page.Properties>
+              {properties.map((p) => (
+                <PropertyCard key={p.id} property={p} link="#" />
+              ))}
+            </Page.Properties>
+            <Page.Pagination>
+              <Pagination />
+            </Page.Pagination>
+          </Page.Content>
+          <Page.Map>
+            <ListingMap properties={properties} />
+          </Page.Map>
+        </Page.Main>
+        <Page.Footer>
+          <Footer />
+        </Page.Footer>
+      </Page.Root>
+    );
   }
 };
 

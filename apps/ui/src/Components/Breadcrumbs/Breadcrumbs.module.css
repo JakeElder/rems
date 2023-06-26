@@ -1,0 +1,11 @@
+.root {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  display: flex;
+  color: #444;
+  gap: 7px;
+}
+
+.separator {
+  color: #aaa;
+}

@@ -8,7 +8,7 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "generate-types": "strapi ts:generate-types --out-dir ../../packages/types --file cms.d.ts"
+    "generate-types": "strapi ts:generate-types --out-dir ../../packages/types"
   },
   "dependencies": {
     "@strapi/plugin-i18n": "4.11.1",

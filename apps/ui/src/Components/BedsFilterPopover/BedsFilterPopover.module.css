@@ -3,13 +3,3 @@
   min-width: 260px;
   max-width: 300px;
 }
-
-.toggle-group {
-  margin-bottom: 16px;
-}
-
-.divider {
-  height: 1px;
-  background-color: #eee;
-  margin-bottom: 16px;
-}

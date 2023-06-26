@@ -1,3 +1,7 @@
+async function seed(collection: string, data: any[]) {
+  await strapi.db.query(`api::${collection}`).createMany({ data });
+}
+
 export default {
   /**
    * An asynchronous register function that runs before
@@ -15,77 +19,97 @@ export default {
    * run jobs, or perform some special logic.
    */
   async bootstrap({ strapi }) {
-    const outdoorFeatures = [
-      { name: "Pool" },
-      { name: "Terrace" },
-      { name: "Garden" },
-      { name: "Balcony" },
-      { name: "Garage" },
-      { name: "Outdoor Kitchen" },
-      { name: "Boat House" },
-      { name: "Tennis Court" },
-      { name: "Vineyard / Winery" },
-      { name: "Helipad" },
-      { name: "Private Beach" },
-      { name: "Private Airport" }
-    ];
+    if (process.env.SEED) {
+      console.log("seeding");
 
-    //     await strapi.db.query("api::outdoor-feature.outdoor-feature").createMany({
-    //       data: outdoorFeatures
-    //     });
+      seed("indoor-feature.indoor-feature", [
+        { name: "Air Conditioning", slug: "air-conditioning" },
+        { name: "Open Kitchen", slug: "open-kitchen" },
+        { name: "Bar", slug: "bar" },
+        { name: "Fitness Center / Gym", slug: "fitness-center-gym" },
+        { name: "Fireplace", slug: "fireplace" },
+        { name: "Cinema", slug: "cinema" },
+        { name: "Game Room", slug: "game-room" },
+        { name: "Jacuzzi", slug: "jacuzzi" },
+        { name: "Wine Cellar", slug: "wine-cellar" },
+        { name: "Sauna", slug: "sauna" },
+        { name: "Office", slug: "office" },
+        { name: "Elevator", slug: "elevator" },
+        { name: "Steam Room", slug: "steam-room" },
+        { name: "Indoor Pool", slug: "indoor-pool" },
+        { name: "Library", slug: "library" }
+      ]);
 
-    // await strapi.db
-    //   .connection("outdoor_features")
-    //   .update("published_at", new Date().toISOString())
-    //   .whereNull("published_at");
+      seed("lot-feature.lot-feature", [
+        { name: "Privacy", slug: "privacy" },
+        { name: "Modern", slug: "modern" },
+        { name: "Gated Community", slug: "gated-community" },
+        { name: "New Built", slug: "new-built" },
+        { name: "Investment Property", slug: "investment-property" },
+        { name: "Coastal", slug: "coastal" },
+        { name: "Mansion", slug: "mansion" },
+        { name: "Hilltop", slug: "hilltop" },
+        { name: "High Altitude", slug: "high-altitude" },
+        { name: "City View", slug: "city-view" },
+        { name: "Renovated", slug: "renovated" },
+        { name: "Beachfront", slug: "beachfront" },
+        { name: "Oceanfront", slug: "oceanfront" },
+        { name: "Seafront", slug: "seafront" },
+        { name: "Waterfront", slug: "waterfront" },
+        { name: "Duplex", slug: "duplex" },
+        { name: "Equestrian", slug: "equestrian" },
+        { name: "Lakefront", slug: "lakefront" },
+        { name: "Riverfront", slug: "riverfront" },
+        { name: "Ski-In / Ski-Out", slug: "ski-in-ski-out" }
+      ]);
 
-    const indoorFeatures = [
-      { name: "Air Conditioning" },
-      { name: "Open Kitchen" },
-      { name: "Bar" },
-      { name: "Fitness Center / Gym" },
-      { name: "Fireplace" },
-      { name: "Cinema" },
-      { name: "Game Room" },
-      { name: "Jacuzzi" },
-      { name: "Wine Cellar" },
-      { name: "Sauna" },
-      { name: "Office" },
-      { name: "Elevator" },
-      { name: "Steam Room" },
-      { name: "Indoor Pool" },
-      { name: "Library" }
-    ];
+      seed("outdoor-feature.outdoor-feature", [
+        { name: "Pool", slug: "pool" },
+        { name: "Terrace", slug: "terrace" },
+        { name: "Garden", slug: "garden" },
+        { name: "Balcony", slug: "balcony" },
+        { name: "Garage", slug: "garage" },
+        { name: "Outdoor Kitchen", slug: "outdoor-kitchen" },
+        { name: "Boat House", slug: "boat-house" },
+        { name: "Tennis Court", slug: "tennis-court" },
+        { name: "Vineyard / Winery", slug: "vineyard-winery" },
+        { name: "Helipad", slug: "helipad" },
+        { name: "Private Beach", slug: "private-beach" },
+        { name: "Private Airport", slug: "private-airport" }
+      ]);
 
-    // await strapi.db.query("api::indoor-feature.indoor-feature").createMany({
-    //   data: indoorFeatures
-    // });
+      seed("property-type.property-type", [
+        { name: "House", slug: "house" },
+        { name: "Villa", slug: "villa" },
+        { name: "Estate", slug: "estate" },
+        { name: "Country House", slug: "country-house" },
+        { name: "Chalet", slug: "chalet" },
+        { name: "Townhouse", slug: "townhouse" },
+        { name: "Bungalow", slug: "bungalow" },
+        { name: "Apartment", slug: "apartment" },
+        { name: "Penthouse", slug: "penthouse" },
+        { name: "Condo", slug: "condo" },
+        { name: "Land", slug: "land" },
+        { name: "Castle", slug: "castle" },
+        { name: "Chateau", slug: "chateau" },
+        { name: "Farm Ranch", slug: "farm-ranch" }
+      ]);
 
-    const lotFeatures = [
-      { name: "Privacy" },
-      { name: "Modern" },
-      { name: "Gated Community" },
-      { name: "New Built" },
-      { name: "Investment Property" },
-      { name: "Coastal" },
-      { name: "Mansion" },
-      { name: "Hilltop" },
-      { name: "High Altitude" },
-      { name: "City View" },
-      { name: "Renovated" },
-      { name: "Beachfront" },
-      { name: "Oceanfront" },
-      { name: "Seafront" },
-      { name: "Waterfront" },
-      { name: "Duplex" },
-      { name: "Equestrian" },
-      { name: "Lakefront" },
-      { name: "Riverfront" },
-      { name: "Ski-In / Ski-Out" }
-    ];
-
-    // await strapi.db.query("api::indoor-feature.indoor-feature").createMany({
-    //   data: indoorFeatures
-    // });
+      seed("view-type.view-type", [
+        { name: "Panoramic / Scenic View", slug: "panoramic-scenic-view" },
+        { name: "Mounain View", slug: "mounain-view" },
+        { name: "Water View", slug: "water-view" },
+        { name: "Ocean View", slug: "ocean-view" },
+        { name: "Sea View", slug: "sea-view" },
+        { name: "Lake View", slug: "lake-view" },
+        { name: "River View", slug: "river-view" },
+        { name: "Golf View", slug: "golf-view" }
+      ]);
+    }
   }
 };
+
+// await strapi.db
+//   .connection("outdoor_features")
+//   .update("published_at", new Date().toISOString())
+//   .whereNull("published_at");

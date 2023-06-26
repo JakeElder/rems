@@ -21,6 +21,10 @@
       "relation": "manyToMany",
       "target": "api::property.property",
       "mappedBy": "view_types"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

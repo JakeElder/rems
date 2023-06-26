@@ -5,11 +5,12 @@ import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import CloseIcon from "../../Elements/CloseIcon";
 import css from "./FilterDialog.module.css";
 import { animated, useTransition } from "@react-spring/web";
+import PropertyFilters from "../PropertyFilters";
 
 type Props = {};
 
 const SidePanel = ({}: Props) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const transitions = useTransition(open, {
     from: {
@@ -39,8 +40,8 @@ const SidePanel = ({}: Props) => {
           Filters
         </a>
       </Dialog.Trigger>
-      {transitions((styles, item) =>
-        item ? (
+      {transitions((styles, show) =>
+        show ? (
           <>
             <Dialog.Overlay forceMount asChild>
               <animated.div
@@ -62,7 +63,9 @@ const SidePanel = ({}: Props) => {
                     <CloseIcon />
                   </Dialog.Close>
                 </div>
-                <div className={css["filters"]}></div>
+                <div className={css["filters"]}>
+                  <PropertyFilters />
+                </div>
                 <div className={css["footer"]}>
                   <button>Clear all</button>
                   <button>Show</button>

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "lot-feature",
     "pluralName": "lot-features",
-    "displayName": "Lot Feature"
+    "displayName": "Lot Feature",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -20,6 +21,10 @@
       "relation": "manyToMany",
       "target": "api::property.property",
       "mappedBy": "lot_features"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

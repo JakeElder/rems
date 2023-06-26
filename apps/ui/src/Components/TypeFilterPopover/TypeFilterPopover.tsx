@@ -1,8 +1,7 @@
 import React from "react";
 import FilterPopover from "../FilterPopover";
-import ToggleGroup from "../ToggleGroup";
 import css from "./TypeFilterPopover.module.css";
-import Checkbox from "../../Elements/Checkbox";
+import TypeFilters from "../TypeFilters/TypeFilters";
 
 type Props = {};
 
@@ -11,20 +10,7 @@ const TypeFilterPopover = ({}: Props) => {
     <div className={css["root"]}>
       <FilterPopover label="Type">
         <div className={css["content"]}>
-          <div className={css["rent-or-sale"]}>
-            <ToggleGroup
-              defaultValue="rent"
-              items={[
-                { label: "Rent", value: "rent" },
-                { label: "Sale", value: "sale" }
-              ]}
-            />
-          </div>
-          <div className={css["divider"]} />
-          <div className={css["types"]}>
-            <Checkbox id="apartment" label="Apartment" />
-            <Checkbox id="condo" label="Condo" />
-          </div>
+          <TypeFilters />
         </div>
       </FilterPopover>
     </div>

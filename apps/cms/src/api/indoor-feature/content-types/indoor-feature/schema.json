@@ -4,7 +4,8 @@
   "info": {
     "singularName": "indoor-feature",
     "pluralName": "indoor-features",
-    "displayName": "Indoor Feature"
+    "displayName": "Indoor Feature",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -18,6 +19,10 @@
       "relation": "manyToMany",
       "target": "api::property.property",
       "mappedBy": "indoor_features"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

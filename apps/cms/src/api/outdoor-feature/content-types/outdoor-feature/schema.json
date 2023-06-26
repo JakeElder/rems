@@ -21,6 +21,10 @@
       "relation": "manyToMany",
       "target": "api::property.property",
       "mappedBy": "outdoor_features"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

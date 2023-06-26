@@ -1,5 +1,6 @@
 import qs from "qs";
 import { fetch } from "./utils";
+import slugify from "@sindresorhus/slugify";
 import { Property, QueryResponse, ResourceId } from "@rems/types";
 
 const adapters = {
@@ -86,6 +87,38 @@ const get = {
     const url = `${process.env.API_URL}/properties/${id}?${q}`;
     const res = await fetch(url);
     return adapters.property(await res.json());
+  },
+
+  async indoorFeatures() {
+    return this.generic("indoor-features");
+  },
+
+  async lotFeatures() {
+    return this.generic("lot-features");
+  },
+
+  async outdoorFeatures() {
+    return this.generic("outdoor-features");
+  },
+
+  async propertyTypes() {
+    return this.generic("property-types");
+  },
+
+  async viewTypes() {
+    return this.generic("view-types");
+  },
+
+  async generic(resource: string) {
+    const url = `${process.env.API_URL}/${resource}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    console.log(
+      data.data.map((a: any) => {
+        return { ...a.attributes };
+      })
+    );
   }
 };
 
