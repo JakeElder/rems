@@ -1,0 +1,19 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.checkbox {
+  width: calc(50% - 7px);
+}
+
+.checkbox button {
+  flex-shrink: 0;
+}
+
+.checkbox label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

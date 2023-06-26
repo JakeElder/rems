@@ -4,7 +4,11 @@ import type { Preview } from "@storybook/react";
 import FontLoader from "../src/Utils/FontLoader";
 import IconLoader from "../src/Utils/IconLoader";
 import FiltersContext from "../src/Utils/FiltersContext";
+import indoorFeatures from "../src/fixtures/indoor-features";
+import lotFeatures from "../src/fixtures/lot-features";
+import outdoorFeatures from "../src/fixtures/outdoor-features";
 import propertyTypes from "../src/fixtures/property-types";
+import viewTypes from "../src/fixtures/view-types";
 
 const preview: Preview = {
   parameters: {
@@ -18,7 +22,15 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <FiltersContext value={{ propertyTypes }}>
+      <FiltersContext
+        value={{
+          propertyTypes,
+          indoorFeatures,
+          lotFeatures,
+          outdoorFeatures,
+          viewTypes
+        }}
+      >
         <FontLoader>
           <IconLoader>
             <Story />

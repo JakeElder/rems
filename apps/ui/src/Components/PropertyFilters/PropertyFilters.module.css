@@ -5,4 +5,5 @@
 .header {
   font-family: var(--font-inter);
   margin-bottom: 14px;
+  font-weight: 500;
 }

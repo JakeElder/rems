@@ -10,22 +10,39 @@ import {
   PropertyCard,
   FiltersContext
 } from "@rems/ui";
-// import { inspect } from "util";
 import api from "../../api";
 
 export default async function Home() {
   const { ids } = await api.query.properties();
   const properties = await api.get.properties(...ids);
 
-  const propertyTypes = await api.get.propertyTypes();
-
-  // console.log(inspect(await api.get.propertyTypes(), { depth: Infinity }));
+  const [
+    indoorFeatures,
+    lotFeatures,
+    outdoorFeatures,
+    propertyTypes,
+    viewTypes
+  ] = await Promise.all([
+    api.get.indoorFeatures(),
+    api.get.lotFeatures(),
+    api.get.outdoorFeatures(),
+    api.get.propertyTypes(),
+    api.get.viewTypes()
+  ]);
 
   return (
     <Page.Root>
       <Page.Header>
         <Header full mode="standard" />
-        <FiltersContext value={{ propertyTypes }}>
+        <FiltersContext
+          value={{
+            indoorFeatures,
+            lotFeatures,
+            outdoorFeatures,
+            propertyTypes,
+            viewTypes
+          }}
+        >
           <FilterBar />
         </FiltersContext>
       </Page.Header>

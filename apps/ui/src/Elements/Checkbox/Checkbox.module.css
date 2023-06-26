@@ -1,11 +1,12 @@
 .root {
   display: flex;
   font-family: var(--font-inter);
+  align-items: center;
 }
 
 .checkbox {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 1px;
   display: flex;
   align-items: center;
@@ -13,9 +14,15 @@
   border: 1px solid #838383;
 }
 
+.checkbox[data-state="checked"] {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+
 .label {
   cursor: default;
-  margin-left: 6px;
+  margin-left: 8px;
   font-size: 15px;
   font-weight: 300;
 }

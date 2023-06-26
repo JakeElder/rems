@@ -1,10 +1,15 @@
 import qs from "qs";
 import { fetch } from "./utils";
 import {
+  Filter,
   IndoorFeature,
+  LotFeature,
+  OutdoorFeature,
   Property,
+  PropertyType,
   QueryResponse,
-  ResourceId
+  ResourceId,
+  ViewType
 } from "@rems/types";
 
 const adapters = {
@@ -42,12 +47,7 @@ const adapters = {
     };
   },
 
-  indoorFeature(res: any): IndoorFeature {
-    const { name, createdAt, updatedAt, slug } = res.attributes;
-    return { id: res.id, name, slug, createdAt, updatedAt };
-  },
-
-  propertyType(res: any): IndoorFeature {
+  filter(res: any): Filter {
     const { name, createdAt, updatedAt, slug } = res.attributes;
     return { id: res.id, name, slug, createdAt, updatedAt };
   }
@@ -103,28 +103,29 @@ const get = {
     return adapters.property(await res.json());
   },
 
-  async indoorFeatures() {
-    return (await this.generic("indoor-features")).data.map(
-      adapters.indoorFeature
-    );
+  async indoorFeatures(): Promise<IndoorFeature[]> {
+    const { data } = await this.generic("indoor-features");
+    return data.map(adapters.filter);
   },
 
-  async lotFeatures() {
-    return this.generic("lot-features");
+  async lotFeatures(): Promise<LotFeature[]> {
+    const { data } = await this.generic("lot-features");
+    return data.map(adapters.filter);
   },
 
-  async outdoorFeatures() {
-    return this.generic("outdoor-features");
+  async outdoorFeatures(): Promise<OutdoorFeature[]> {
+    const { data } = await this.generic("outdoor-features");
+    return data.map(adapters.filter);
   },
 
-  async propertyTypes() {
-    return (await this.generic("property-types")).data.map(
-      adapters.propertyType
-    );
+  async propertyTypes(): Promise<PropertyType[]> {
+    const { data } = await this.generic("property-types");
+    return data.map(adapters.filter);
   },
 
-  async viewTypes() {
-    return this.generic("view-types");
+  async viewTypes(): Promise<ViewType[]> {
+    const { data } = await this.generic("view-types");
+    return data.map(adapters.filter);
   },
 
   async generic(resource: string) {

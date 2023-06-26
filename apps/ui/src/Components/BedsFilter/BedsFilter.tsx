@@ -14,7 +14,7 @@ const BedsFilter = ({}: Props) => {
     <div className={css["root"]}>
       <div className={css["toggle-group"]}>
         <ToggleGroup
-          width={44}
+          width={54}
           defaultValue="any"
           items={[
             { value: "any", label: "Any" },

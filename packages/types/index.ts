@@ -58,18 +58,22 @@ export type EntryCard = {
   image: Image;
 };
 
-export type IndoorFeature = {
+export type Filter = {
   id: number;
   name: string;
   slug: string;
 } & CMSAttributes;
 
-export type PropertyType = {
-  id: number;
-  name: string;
-  slug: string;
-} & CMSAttributes;
+export type IndoorFeature = Filter;
+export type LotFeature = Filter;
+export type OutdoorFeature = Filter;
+export type PropertyType = Filter;
+export type ViewType = Filter;
 
 export type Filters = {
+  indoorFeatures: IndoorFeature[];
+  lotFeatures: LotFeature[];
+  outdoorFeatures: OutdoorFeature[];
   propertyTypes: PropertyType[];
+  viewTypes: ViewType[];
 };

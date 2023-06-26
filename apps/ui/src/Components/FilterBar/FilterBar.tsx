@@ -3,13 +3,12 @@
 import React, { MutableRefObject, useRef } from "react";
 import css from "./FilterBar.module.css";
 import Container from "../../Elements/Container/Container";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useDraggable } from "react-use-draggable-scroll";
 import Toggle from "../../Elements/Toggle";
 import TypeFilterPopover from "../TypeFilterPopover";
 import PriceFilterPopover from "../PriceFilterPopover";
 import BedsFilterPopover from "../BedsFilterPopover";
+import FilterDialog from "../FilterDialog";
 
 type Props = {};
 
@@ -81,12 +80,7 @@ const FilterBar = ({}: Props) => {
       <Container full>
         <div className={css["sections"]}>
           <div className={css["filters"]}>
-            <a className={css["control"]}>
-              <div className={css["icon"]}>
-                <FontAwesomeIcon icon={faSliders} size="sm" />
-              </div>
-              Filters
-            </a>
+            <FilterDialog />
           </div>
           <div className={css["separator"]} />
           <div className={css["key-filters"]}>
