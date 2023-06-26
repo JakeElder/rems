@@ -1,3 +1,5 @@
+"use client";
+
 import React, { MutableRefObject, useRef } from "react";
 import css from "./FilterBar.module.css";
 import Container from "../../Elements/Container/Container";

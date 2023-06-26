@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import css from "./SimpleImageCarousel.module.css";
 import { CarouselImage } from "@rems/types";

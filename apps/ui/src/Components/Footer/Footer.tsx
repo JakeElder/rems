@@ -10,7 +10,9 @@ import {
   faFacebookSquare
 } from "@fortawesome/free-brands-svg-icons";
 
-type Props = {};
+type Props = {
+  full?: boolean;
+};
 
 const UL = ({
   heading,
@@ -33,10 +35,10 @@ const UL = ({
   );
 };
 
-const Footer = ({}: Props) => {
+const Footer = ({ full = false }: Props) => {
   return (
     <footer className={css["root"]}>
-      <Container>
+      <Container full={full}>
         <div className={css["links"]}>
           <UL
             heading="JYOPROPERTY"

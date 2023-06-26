@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 // ffs
 const nextConfig = {
-  experimental: {
-    appDir: true
-  },
   transpilePackages: ["@rems/ui"],
   images: {
     remotePatterns: [

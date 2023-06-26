@@ -48,7 +48,7 @@ export const Default: Story = {
           </Page.Map>
         </Page.Main>
         <Page.Footer>
-          <Footer />
+          <Footer full />
         </Page.Footer>
       </Page.Root>
     );

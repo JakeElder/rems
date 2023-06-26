@@ -3,6 +3,8 @@ import * as Popover from "@radix-ui/react-popover";
 import css from "./FilterPopover.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { inter } from "../../Utils/FontLoader";
+import cn from "classnames";
 
 type Props = {
   label: string;
@@ -22,7 +24,7 @@ const FilterPopover = ({ label, children }: Props) => {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
-          className={css["content"]}
+          className={cn(css["content"], inter.className)}
           align="start"
           sideOffset={15}
         >
