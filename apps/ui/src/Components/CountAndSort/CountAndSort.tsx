@@ -19,7 +19,7 @@ const CountAndSort = ({ count }: Props) => {
         </select>
         <div className={css["active"]}>
           <span className={css["label"]}>Sort:</span>
-          <span className={css["selection"]}>popular</span>
+          <span className={css["selection"]}>Popular</span>
           <span className={css["icon"]}>
             <FontAwesomeIcon icon={faChevronDown} size="sm" />
           </span>

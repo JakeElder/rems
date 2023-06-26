@@ -17,7 +17,6 @@ export type QueryResponse = {
 type CMSAttributes = {
   createdAt: string;
   updatedAt: string;
-  publishedAt: string;
 };
 
 export type Image = Partial<
@@ -49,6 +48,7 @@ export type Property = {
     lng: number;
     lat: number;
   };
+  publishedAt: string;
 } & CMSAttributes;
 
 export type EntryCard = {
@@ -56,4 +56,20 @@ export type EntryCard = {
   caption: string;
   url: string;
   image: Image;
+};
+
+export type IndoorFeature = {
+  id: number;
+  name: string;
+  slug: string;
+} & CMSAttributes;
+
+export type PropertyType = {
+  id: number;
+  name: string;
+  slug: string;
+} & CMSAttributes;
+
+export type Filters = {
+  propertyTypes: PropertyType[];
 };

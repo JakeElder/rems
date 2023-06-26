@@ -1,7 +1,11 @@
 import qs from "qs";
 import { fetch } from "./utils";
-import slugify from "@sindresorhus/slugify";
-import { Property, QueryResponse, ResourceId } from "@rems/types";
+import {
+  IndoorFeature,
+  Property,
+  QueryResponse,
+  ResourceId
+} from "@rems/types";
 
 const adapters = {
   property(res: any): Property {
@@ -36,6 +40,16 @@ const adapters = {
       updatedAt,
       publishedAt
     };
+  },
+
+  indoorFeature(res: any): IndoorFeature {
+    const { name, createdAt, updatedAt, slug } = res.attributes;
+    return { id: res.id, name, slug, createdAt, updatedAt };
+  },
+
+  propertyType(res: any): IndoorFeature {
+    const { name, createdAt, updatedAt, slug } = res.attributes;
+    return { id: res.id, name, slug, createdAt, updatedAt };
   }
 };
 
@@ -90,7 +104,9 @@ const get = {
   },
 
   async indoorFeatures() {
-    return this.generic("indoor-features");
+    return (await this.generic("indoor-features")).data.map(
+      adapters.indoorFeature
+    );
   },
 
   async lotFeatures() {
@@ -102,7 +118,9 @@ const get = {
   },
 
   async propertyTypes() {
-    return this.generic("property-types");
+    return (await this.generic("property-types")).data.map(
+      adapters.propertyType
+    );
   },
 
   async viewTypes() {
@@ -113,12 +131,7 @@ const get = {
     const url = `${process.env.API_URL}/${resource}`;
     const res = await fetch(url);
     const data = await res.json();
-
-    console.log(
-      data.data.map((a: any) => {
-        return { ...a.attributes };
-      })
-    );
+    return data;
   }
 };
 

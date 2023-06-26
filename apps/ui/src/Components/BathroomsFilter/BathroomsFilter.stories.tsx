@@ -3,10 +3,7 @@ import BathroomsFilter from "./BathroomsFilter";
 
 const meta: Meta<typeof BathroomsFilter> = {
   title: "Components/BathroomsFilter",
-  component: BathroomsFilter,
-  parameters: {
-    layout: "fullscreen"
-  }
+  component: BathroomsFilter
 };
 
 type Story = StoryObj<typeof BathroomsFilter>;

@@ -3,10 +3,7 @@ import BedsFilterPopover from "./BedsFilterPopover";
 
 const meta: Meta<typeof BedsFilterPopover> = {
   title: "Components/BedsFilterPopover",
-  component: BedsFilterPopover,
-  parameters: {
-    layout: "centered"
-  }
+  component: BedsFilterPopover
 };
 
 type Story = StoryObj<typeof BedsFilterPopover>;

@@ -1,4 +1,4 @@
-import { HomePage } from "@rems/ui/src";
+import { HomePage } from "@rems/ui";
 import api from "../api";
 
 export default async function Home() {

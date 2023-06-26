@@ -1,5 +1,6 @@
 export { default as FontLoader } from "./Utils/FontLoader";
 export { default as IconLoader } from "./Utils/IconLoader";
+export { default as FiltersContext } from "./Utils/FiltersContext";
 
 export * as RealEstateIndexPage from "./Pages/RealEstateIndexPage";
 export { default as HomePage } from "./Pages/HomePage";

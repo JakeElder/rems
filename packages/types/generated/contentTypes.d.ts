@@ -717,6 +717,7 @@ export interface ApiIndoorFeatureIndoorFeature extends Schema.CollectionType {
     singularName: "indoor-feature";
     pluralName: "indoor-features";
     displayName: "Indoor Feature";
+    description: "";
   };
   options: {
     draftAndPublish: false;
@@ -728,6 +729,7 @@ export interface ApiIndoorFeatureIndoorFeature extends Schema.CollectionType {
       "manyToMany",
       "api::property.property"
     >;
+    slug: Attribute.UID<"api::indoor-feature.indoor-feature", "name">;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -751,6 +753,7 @@ export interface ApiLotFeatureLotFeature extends Schema.CollectionType {
     singularName: "lot-feature";
     pluralName: "lot-features";
     displayName: "Lot Feature";
+    description: "";
   };
   options: {
     draftAndPublish: false;
@@ -762,6 +765,7 @@ export interface ApiLotFeatureLotFeature extends Schema.CollectionType {
       "manyToMany",
       "api::property.property"
     >;
+    slug: Attribute.UID<"api::lot-feature.lot-feature", "name">;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -797,6 +801,7 @@ export interface ApiOutdoorFeatureOutdoorFeature extends Schema.CollectionType {
       "manyToMany",
       "api::property.property"
     >;
+    slug: Attribute.UID<"api::outdoor-feature.outdoor-feature", "name">;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -904,6 +909,7 @@ export interface ApiPropertyTypePropertyType extends Schema.CollectionType {
       "oneToMany",
       "api::property.property"
     >;
+    slug: Attribute.UID<"api::property-type.property-type", "name">;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -939,6 +945,7 @@ export interface ApiViewTypeViewType extends Schema.CollectionType {
       "manyToMany",
       "api::property.property"
     >;
+    slug: Attribute.UID<"api::view-type.view-type", "name">;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

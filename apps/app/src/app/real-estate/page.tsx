@@ -7,19 +7,27 @@ import {
   ListingMap,
   RealEstateIndexPage as Page,
   Pagination,
-  PropertyCard
+  PropertyCard,
+  FiltersContext
 } from "@rems/ui";
+// import { inspect } from "util";
 import api from "../../api";
 
 export default async function Home() {
   const { ids } = await api.query.properties();
   const properties = await api.get.properties(...ids);
 
+  const propertyTypes = await api.get.propertyTypes();
+
+  // console.log(inspect(await api.get.propertyTypes(), { depth: Infinity }));
+
   return (
     <Page.Root>
       <Page.Header>
         <Header full mode="standard" />
-        <FilterBar />
+        <FiltersContext value={{ propertyTypes }}>
+          <FilterBar />
+        </FiltersContext>
       </Page.Header>
       <Page.Main>
         <Page.Content>

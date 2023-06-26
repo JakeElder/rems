@@ -3,6 +3,8 @@ import "the-new-css-reset";
 import type { Preview } from "@storybook/react";
 import FontLoader from "../src/Utils/FontLoader";
 import IconLoader from "../src/Utils/IconLoader";
+import FiltersContext from "../src/Utils/FiltersContext";
+import propertyTypes from "../src/fixtures/property-types";
 
 const preview: Preview = {
   parameters: {
@@ -16,11 +18,13 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <FontLoader>
-        <IconLoader>
-          <Story />
-        </IconLoader>
-      </FontLoader>
+      <FiltersContext value={{ propertyTypes }}>
+        <FontLoader>
+          <IconLoader>
+            <Story />
+          </IconLoader>
+        </FontLoader>
+      </FiltersContext>
     )
   ]
 };

@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import css from "./EntryCardGrid.module.css";
 import { EntryCard } from "@rems/types";
