@@ -7,6 +7,8 @@ import BathroomsFilter from "../BathroomsFilter";
 import CheckboxGrid from "../CheckboxGrid";
 import { useFilters } from "../../Utils/FiltersContext";
 import Checkbox from "../../Elements/Checkbox";
+import Select from "../../Elements/Select";
+import Split from "../../Elements/Split";
 
 type Props = {};
 
@@ -77,6 +79,28 @@ const PropertyFilters = ({}: Props) => {
               <Checkbox key={t.slug} id={t.slug} label={t.name} />
             ))}
           />
+        </div>
+      </div>
+      <div className={css["section"]}>
+        <div className={css["header"]}>Living Area</div>
+        <div className={css["filters"]}>
+          <Split>
+            <Select
+              options={[
+                { value: "", label: "No Min" },
+                { value: "20", label: "20 m²" },
+                { value: "30", label: "30 m²" }
+              ]}
+            />
+            <Select
+              defaultValue=""
+              options={[
+                { value: "", label: "No Min" },
+                { value: "20", label: "20 m²" },
+                { value: "30", label: "30 m²" }
+              ]}
+            />
+          </Split>
         </div>
       </div>
     </div>

@@ -6,6 +6,8 @@ import CloseIcon from "../../Elements/CloseIcon";
 import css from "./FilterDialog.module.css";
 import { animated, useTransition } from "@react-spring/web";
 import PropertyFilters from "../PropertyFilters";
+import Split from "../../Elements/Split";
+import Button from "../../Elements/Button";
 
 type Props = {};
 
@@ -67,8 +69,10 @@ const SidePanel = ({}: Props) => {
                   <PropertyFilters />
                 </div>
                 <div className={css["footer"]}>
-                  <button>Clear all</button>
-                  <button>Show</button>
+                  <Split>
+                    <Button secondary>Clear all</Button>
+                    <Button>Show</Button>
+                  </Split>
                 </div>
               </animated.div>
             </Dialog.Content>

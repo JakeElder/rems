@@ -57,20 +57,7 @@
 }
 
 .footer {
-  display: flex;
-  gap: 16px;
   padding: 26px 30px;
-  align-items: stretch;
   border-top: 1px solid #dfdfdf;
   flex-shrink: 0;
-}
-
-.footer button {
-  font-family: var(--font-inter);
-  background: #000;
-  color: #fff;
-  flex: 1;
-  text-align: center;
-  height: 44px;
-  line-height: 44px;
 }

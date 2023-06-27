@@ -1,0 +1,27 @@
+.primary,
+.secondary {
+  height: 48px;
+  font-weight: 300;
+  display: flex;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-inter);
+  align-items: center;
+  justify-content: center;
+}
+
+.primary {
+  background: #000;
+  color: #fff;
+}
+
+.secondary {
+  border: 1px solid #e0e0e0;
+}
+
+.primary[disabled],
+.secondary[disabled] {
+  background: #ededed;
+  border: 1px solid #f0f0f0;
+  color: #adadad;
+}
