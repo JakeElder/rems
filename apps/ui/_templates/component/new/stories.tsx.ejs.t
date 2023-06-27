@@ -6,10 +6,7 @@ import <%= name %> from "./<%= name %>";
 
 const meta: Meta<typeof <%= name %>> = {
   title: "<%= type %>s/<%= name %>",
-  component: <%= name %>,
-  parameters: {
-    layout: "fullscreen"
-  }
+  component: <%= name %>
 };
 
 type Story = StoryObj<typeof <%= name %>>;

@@ -3,10 +3,7 @@ import CountAndSort from "./CountAndSort";
 
 const meta: Meta<typeof CountAndSort> = {
   title: "Components/CountAndSort",
-  component: CountAndSort,
-  parameters: {
-    layout: "fullscreen"
-  }
+  component: CountAndSort
 };
 
 type Story = StoryObj<typeof CountAndSort>;

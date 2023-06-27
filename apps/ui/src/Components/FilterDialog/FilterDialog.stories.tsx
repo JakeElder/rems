@@ -12,7 +12,7 @@ const meta: Meta<typeof FilterDialog> = {
 type Story = StoryObj<typeof FilterDialog>;
 
 export const Default: Story = {
-  args: {}
+  args: { defaultOpen: true }
 };
 
 export default meta;

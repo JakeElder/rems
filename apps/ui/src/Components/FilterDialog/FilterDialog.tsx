@@ -9,10 +9,12 @@ import PropertyFilters from "../PropertyFilters";
 import Split from "../../Elements/Split";
 import Button from "../../Elements/Button";
 
-type Props = {};
+type Props = {
+  defaultOpen?: boolean;
+};
 
-const SidePanel = ({}: Props) => {
-  const [open, setOpen] = useState(true);
+const SidePanel = ({ defaultOpen = false }: Props) => {
+  const [open, setOpen] = useState(defaultOpen);
 
   const transitions = useTransition(open, {
     from: {
