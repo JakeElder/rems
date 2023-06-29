@@ -36,6 +36,7 @@ export type CarouselImage = Image & {
 export type Property = {
   id: number;
   title: string;
+  description: string;
   purchasePrice?: number;
   formattedPurchasePrice?: string;
   latitude?: number;
@@ -48,6 +49,11 @@ export type Property = {
     lng: number;
     lat: number;
   };
+  indoorFeatures: IndoorFeature[];
+  lotFeatures: LotFeature[];
+  outdoorFeatures: OutdoorFeature[];
+  viewTypes: ViewType[];
+  address: string;
   publishedAt: string;
 } & CMSAttributes;
 

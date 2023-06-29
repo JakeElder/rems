@@ -1,0 +1,20 @@
+.read-more,
+.read-less {
+  font-family: var(--font-inter);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: #e0e0e0;
+  cursor: pointer;
+  text-underline-offset: 5px;
+}
+
+.read-more:hover,
+.read-less:hover {
+  text-decoration-color: #000;
+}
+
+.read-less {
+  display: block;
+  margin-top: 10px;
+}

@@ -1,7 +1,97 @@
 [
   {
+    "id": 2,
+    "title": "Apartment in Sotogrande, Andalusia, Spain",
+    "description": null,
+    "purchasePrice": 1359423,
+    "location": {
+      "lat": 13.711807270614983,
+      "lng": 100.5100965499878
+    },
+    "formattedPurchasePrice": "$1,359,423",
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "indoorFeatures": [],
+    "lotFeatures": [],
+    "outdoorFeatures": [],
+    "viewTypes": [],
+    "address": null,
+    "area": 340,
+    "images": [
+      {
+        "id": 6,
+        "src": "http://127.0.0.1:3002/uploads/Adobe_Stock_357430337_e7f0164880.jpeg",
+        "name": "AdobeStock_357430337.jpeg",
+        "alternativeText": null,
+        "caption": null,
+        "width": 6451,
+        "height": 4301,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_AdobeStock_357430337.jpeg",
+            "hash": "thumbnail_Adobe_Stock_357430337_e7f0164880",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 234,
+            "height": 156,
+            "size": 6.51,
+            "url": "/uploads/thumbnail_Adobe_Stock_357430337_e7f0164880.jpeg"
+          },
+          "medium": {
+            "name": "medium_AdobeStock_357430337.jpeg",
+            "hash": "medium_Adobe_Stock_357430337_e7f0164880",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 750,
+            "height": 500,
+            "size": 48.34,
+            "url": "/uploads/medium_Adobe_Stock_357430337_e7f0164880.jpeg"
+          },
+          "small": {
+            "name": "small_AdobeStock_357430337.jpeg",
+            "hash": "small_Adobe_Stock_357430337_e7f0164880",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 500,
+            "height": 333,
+            "size": 23.77,
+            "url": "/uploads/small_Adobe_Stock_357430337_e7f0164880.jpeg"
+          },
+          "large": {
+            "name": "large_AdobeStock_357430337.jpeg",
+            "hash": "large_Adobe_Stock_357430337_e7f0164880",
+            "ext": ".jpeg",
+            "mime": "image/jpeg",
+            "path": null,
+            "width": 1000,
+            "height": 667,
+            "size": 79.62,
+            "url": "/uploads/large_Adobe_Stock_357430337_e7f0164880.jpeg"
+          }
+        },
+        "hash": "Adobe_Stock_357430337_e7f0164880",
+        "ext": ".jpeg",
+        "mime": "image/jpeg",
+        "size": 1737.46,
+        "url": "/uploads/Adobe_Stock_357430337_e7f0164880.jpeg",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-03-22T08:18:20.082Z",
+        "updatedAt": "2023-03-26T02:24:25.873Z"
+      }
+    ],
+    "createdAt": "2023-03-22T08:12:10.503Z",
+    "updatedAt": "2023-06-20T02:08:13.300Z",
+    "publishedAt": "2023-03-22T08:12:24.692Z"
+  },
+  {
     "id": 4,
     "title": "Apartment in Tromsø, Troms og Finnmark fylke, Norway",
+    "description": "Bangkok’s Ultimate New York Style Penthouse\n\nInspired by the unique and architecturally significant buildings which define the iconic New York skyline, Heritage Thonglor brings the timeless elegance and refinement of Art Deco sophistication to city living in Bangkok.\n\nWhen you need a break from the bustling energy of Thonglor, simply retreat and relax in the splendid privacy of your apartment, where you will find many luxurious features and fittings. Designed for modern living, the interior of each suite at Heritage Thonglor is thoughtfully proportioned for the perfect blend of style and function. Kitchens and bathrooms are designed for a practical, yet refined aesthetic. High ceilings and large floor-to-ceiling windows let in plenty of natural light for a bright and airy feel, so you can enjoy sweeping views of the city, by day or by night. The development comprises a single tower with 45-floors  and will be ready to move-in to in Q4 2022\n\nThe penthouses at Heritage Thonglor promise spectacular luxury and span the 42nd, 43rd and 44th floors of this Palladian-style landmark building with a striking art deco geometric design that is further enhanced by beautifully landscaped gardens to complement the New York inspired architecture.\n\nPenthouse 3 Duplex is located on floor 42/43 and has 326 Sq.m of living space\n\n4 Bedroom, 5 Bathroom and Maid quarter\n\nFacilities\n\nThey are extensive and include a hotel-designed reception and lobby lounge with dedicated VIP storage spaces for each unit, smart lockers for deliveries, and supercar parking and EV chargers in the basement and ground floors. Most of the recreational facilities are to be found on the 7th floor and include a glass house, a garden, a grand residents’ lounge, a co-working space, a library, a tea lounge, a childrens’ playroom, a theatre room and a spa and salon offering manicures and pedicures. The 39th and 41st floors will house the fitness facilities including a professional gymnasium, male and female saunas, a yoga studio, a golf simulator and adults and childrens’ 360-degree temperature-controlled swimming pools, all with magnificent views of the Bangkok skyline. There will be 24-hour security, keycard entry and CCTV throughout the development.",
     "purchasePrice": 2477553,
     "location": {
       "lat": 13.656086052118855,
@@ -10,6 +100,64 @@
     "formattedPurchasePrice": "$2,477,553",
     "bedrooms": 5,
     "bathrooms": 3,
+    "indoorFeatures": [
+      {
+        "id": 36,
+        "name": "Cinema",
+        "slug": "cinema",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      }
+    ],
+    "lotFeatures": [
+      {
+        "id": 52,
+        "name": "Beachfront",
+        "slug": "beachfront",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      },
+      {
+        "id": 49,
+        "name": "High Altitude",
+        "slug": "high-altitude",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      },
+      {
+        "id": 43,
+        "name": "Gated Community",
+        "slug": "gated-community",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      }
+    ],
+    "outdoorFeatures": [
+      {
+        "id": 527,
+        "name": "Pool",
+        "slug": "pool",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      }
+    ],
+    "viewTypes": [
+      {
+        "id": 17,
+        "name": "Panoramic / Scenic View",
+        "slug": "panoramic-scenic-view",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      },
+      {
+        "id": 20,
+        "name": "Ocean View",
+        "slug": "ocean-view",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      }
+    ],
+    "address": "1199 Sukhumvit Rd, Khwaeng Khlong Tan Nuea, Khet Watthana, Krung Thep Maha Nakhon 10110, Thailand, Bangkok, Krung Thep Maha Nakhon, Thailand.",
     "area": 550,
     "images": [
       {
@@ -144,95 +292,13 @@
       }
     ],
     "createdAt": "2023-03-22T08:16:11.355Z",
-    "updatedAt": "2023-03-31T02:04:47.684Z",
+    "updatedAt": "2023-06-28T10:28:38.821Z",
     "publishedAt": "2023-03-22T08:16:15.071Z"
-  },
-  {
-    "id": 3,
-    "title": "Villa in Dubai, Dubai, United Arab Emirates",
-    "purchasePrice": 28589827,
-    "location": {
-      "lat": 13.636782607623335,
-      "lng": 100.48360389404299
-    },
-    "formattedPurchasePrice": "$28,589,827",
-    "bedrooms": 5,
-    "bathrooms": 3,
-    "area": 460,
-    "images": [
-      {
-        "id": 3,
-        "src": "http://127.0.0.1:3002/uploads/3_236ce982f9.jpeg",
-        "name": "3.jpeg",
-        "alternativeText": null,
-        "caption": null,
-        "width": 4608,
-        "height": 3072,
-        "formats": {
-          "thumbnail": {
-            "name": "thumbnail_3.jpeg",
-            "hash": "thumbnail_3_236ce982f9",
-            "ext": ".jpeg",
-            "mime": "image/jpeg",
-            "path": null,
-            "width": 234,
-            "height": 156,
-            "size": 7.04,
-            "url": "/uploads/thumbnail_3_236ce982f9.jpeg"
-          },
-          "medium": {
-            "name": "medium_3.jpeg",
-            "hash": "medium_3_236ce982f9",
-            "ext": ".jpeg",
-            "mime": "image/jpeg",
-            "path": null,
-            "width": 750,
-            "height": 500,
-            "size": 53.02,
-            "url": "/uploads/medium_3_236ce982f9.jpeg"
-          },
-          "small": {
-            "name": "small_3.jpeg",
-            "hash": "small_3_236ce982f9",
-            "ext": ".jpeg",
-            "mime": "image/jpeg",
-            "path": null,
-            "width": 500,
-            "height": 333,
-            "size": 24.39,
-            "url": "/uploads/small_3_236ce982f9.jpeg"
-          },
-          "large": {
-            "name": "large_3.jpeg",
-            "hash": "large_3_236ce982f9",
-            "ext": ".jpeg",
-            "mime": "image/jpeg",
-            "path": null,
-            "width": 1000,
-            "height": 667,
-            "size": 97.24,
-            "url": "/uploads/large_3_236ce982f9.jpeg"
-          }
-        },
-        "hash": "3_236ce982f9",
-        "ext": ".jpeg",
-        "mime": "image/jpeg",
-        "size": 2493.63,
-        "url": "/uploads/3_236ce982f9.jpeg",
-        "previewUrl": null,
-        "provider": "local",
-        "provider_metadata": null,
-        "createdAt": "2023-03-22T08:13:32.107Z",
-        "updatedAt": "2023-03-22T08:13:32.107Z"
-      }
-    ],
-    "createdAt": "2023-03-22T08:13:35.529Z",
-    "updatedAt": "2023-03-31T02:05:05.491Z",
-    "publishedAt": "2023-03-22T08:13:36.359Z"
   },
   {
     "id": 5,
     "title": "House in Palm Beach, Florida, United States",
+    "description": null,
     "purchasePrice": 218000000,
     "location": {
       "lat": 13.755530076794498,
@@ -241,6 +307,11 @@
     "formattedPurchasePrice": "$218,000,000",
     "bedrooms": 3,
     "bathrooms": 1,
+    "indoorFeatures": [],
+    "lotFeatures": [],
+    "outdoorFeatures": [],
+    "viewTypes": [],
+    "address": null,
     "area": 220,
     "images": [
       {
@@ -310,90 +381,433 @@
       }
     ],
     "createdAt": "2023-03-22T08:18:26.071Z",
-    "updatedAt": "2023-03-31T02:04:53.371Z",
-    "publishedAt": "2023-03-22T08:18:26.857Z"
+    "updatedAt": "2023-06-21T10:53:19.928Z",
+    "publishedAt": "2023-06-21T10:53:19.926Z"
   },
   {
-    "id": 2,
-    "title": "Apartment in Sotogrande, Andalusia, Spain",
-    "purchasePrice": 1359423,
+    "id": 7,
+    "title": "Four Seasons Residential Penthouse Suite with Views",
+    "description": null,
+    "purchasePrice": 100000000,
     "location": {
-      "lat": 13.711807270614983,
-      "lng": 100.5100965499878
+      "lat": 13.652596817582612,
+      "lng": 100.50193192321775
     },
-    "formattedPurchasePrice": "$1,359,423",
+    "formattedPurchasePrice": "$100,000,000",
     "bedrooms": 4,
     "bathrooms": 3,
-    "area": 340,
+    "indoorFeatures": [],
+    "lotFeatures": [],
+    "outdoorFeatures": [],
+    "viewTypes": [],
+    "address": null,
+    "area": 440,
     "images": [
       {
-        "id": 6,
-        "src": "http://127.0.0.1:3002/uploads/Adobe_Stock_357430337_e7f0164880.jpeg",
-        "name": "AdobeStock_357430337.jpeg",
+        "id": 9,
+        "src": "http://127.0.0.1:3002/uploads/1_cdd3b1838f.webp",
+        "name": "1.webp",
         "alternativeText": null,
         "caption": null,
-        "width": 6451,
-        "height": 4301,
+        "width": 1800,
+        "height": 1200,
         "formats": {
           "thumbnail": {
-            "name": "thumbnail_AdobeStock_357430337.jpeg",
-            "hash": "thumbnail_Adobe_Stock_357430337_e7f0164880",
-            "ext": ".jpeg",
-            "mime": "image/jpeg",
+            "name": "thumbnail_1.webp",
+            "hash": "thumbnail_1_cdd3b1838f",
+            "ext": ".webp",
+            "mime": "image/webp",
             "path": null,
             "width": 234,
             "height": 156,
-            "size": 6.51,
-            "url": "/uploads/thumbnail_Adobe_Stock_357430337_e7f0164880.jpeg"
+            "size": 9.52,
+            "url": "/uploads/thumbnail_1_cdd3b1838f.webp"
           },
           "medium": {
-            "name": "medium_AdobeStock_357430337.jpeg",
-            "hash": "medium_Adobe_Stock_357430337_e7f0164880",
-            "ext": ".jpeg",
-            "mime": "image/jpeg",
+            "name": "medium_1.webp",
+            "hash": "medium_1_cdd3b1838f",
+            "ext": ".webp",
+            "mime": "image/webp",
             "path": null,
             "width": 750,
             "height": 500,
-            "size": 48.34,
-            "url": "/uploads/medium_Adobe_Stock_357430337_e7f0164880.jpeg"
+            "size": 56.5,
+            "url": "/uploads/medium_1_cdd3b1838f.webp"
           },
           "small": {
-            "name": "small_AdobeStock_357430337.jpeg",
-            "hash": "small_Adobe_Stock_357430337_e7f0164880",
-            "ext": ".jpeg",
-            "mime": "image/jpeg",
+            "name": "small_1.webp",
+            "hash": "small_1_cdd3b1838f",
+            "ext": ".webp",
+            "mime": "image/webp",
             "path": null,
             "width": 500,
             "height": 333,
-            "size": 23.77,
-            "url": "/uploads/small_Adobe_Stock_357430337_e7f0164880.jpeg"
+            "size": 31.59,
+            "url": "/uploads/small_1_cdd3b1838f.webp"
           },
           "large": {
-            "name": "large_AdobeStock_357430337.jpeg",
-            "hash": "large_Adobe_Stock_357430337_e7f0164880",
-            "ext": ".jpeg",
-            "mime": "image/jpeg",
+            "name": "large_1.webp",
+            "hash": "large_1_cdd3b1838f",
+            "ext": ".webp",
+            "mime": "image/webp",
             "path": null,
             "width": 1000,
             "height": 667,
-            "size": 79.62,
-            "url": "/uploads/large_Adobe_Stock_357430337_e7f0164880.jpeg"
+            "size": 81.02,
+            "url": "/uploads/large_1_cdd3b1838f.webp"
           }
         },
-        "hash": "Adobe_Stock_357430337_e7f0164880",
-        "ext": ".jpeg",
-        "mime": "image/jpeg",
-        "size": 1737.46,
-        "url": "/uploads/Adobe_Stock_357430337_e7f0164880.jpeg",
+        "hash": "1_cdd3b1838f",
+        "ext": ".webp",
+        "mime": "image/webp",
+        "size": 176.83,
+        "url": "/uploads/1_cdd3b1838f.webp",
         "previewUrl": null,
         "provider": "local",
         "provider_metadata": null,
-        "createdAt": "2023-03-22T08:18:20.082Z",
-        "updatedAt": "2023-03-26T02:24:25.873Z"
+        "createdAt": "2023-03-31T06:35:13.332Z",
+        "updatedAt": "2023-03-31T06:35:13.332Z"
       }
     ],
-    "createdAt": "2023-03-22T08:12:10.503Z",
-    "updatedAt": "2023-03-31T01:51:03.284Z",
-    "publishedAt": "2023-03-22T08:12:24.692Z"
+    "createdAt": "2023-03-31T06:35:27.718Z",
+    "updatedAt": "2023-03-31T06:36:31.842Z",
+    "publishedAt": "2023-03-31T06:36:04.207Z"
+  },
+  {
+    "id": 9,
+    "title": "Unique Industrial Bareshell Loft Residence",
+    "description": "Bangkok’s Ultimate New York Style Penthouse\n\nInspired by the unique and architecturally significant buildings which define the iconic New York skyline, Heritage Thonglor brings the timeless elegance and refinement of Art Deco sophistication to city living in Bangkok.\n\nWhen you need a break from the bustling energy of Thonglor, simply retreat and relax in the splendid privacy of your apartment, where you will find many luxurious features and fittings. Designed for modern living, the interior of each suite at Heritage Thonglor is thoughtfully proportioned for the perfect blend of style and function. Kitchens and bathrooms are designed for a practical, yet refined aesthetic. High ceilings and large floor-to-ceiling windows let in plenty of natural light for a bright and airy feel, so you can enjoy sweeping views of the city, by day or by night. The development comprises a single tower with 45-floors  and will be ready to move-in to in Q4 2022\n\nThe penthouses at Heritage Thonglor promise spectacular luxury and span the 42nd, 43rd and 44th floors of this Palladian-style landmark building with a striking art deco geometric design that is further enhanced by beautifully landscaped gardens to complement the New York inspired architecture.\n\nPenthouse 3 Duplex is located on floor 42/43 and has 326 Sq.m of living space\n\n4 Bedroom, 5 Bathroom and Maid quarter\n\nFacilities\n\nThey are extensive and include a hotel-designed reception and lobby lounge with dedicated VIP storage spaces for each unit, smart lockers for deliveries, and supercar parking and EV chargers in the basement and ground floors. Most of the recreational facilities are to be found on the 7th floor and include a glass house, a garden, a grand residents’ lounge, a co-working space, a library, a tea lounge, a childrens’ playroom, a theatre room and a spa and salon offering manicures and pedicures. The 39th and 41st floors will house the fitness facilities including a professional gymnasium, male and female saunas, a yoga studio, a golf simulator and adults and childrens’ 360-degree temperature-controlled swimming pools, all with magnificent views of the Bangkok skyline. There will be 24-hour security, keycard entry and CCTV throughout the development.",
+    "purchasePrice": 8633093,
+    "location": {
+      "lat": 13.692723586396555,
+      "lng": 100.56328251245968
+    },
+    "formattedPurchasePrice": "$8,633,093",
+    "bedrooms": 5,
+    "bathrooms": 6,
+    "indoorFeatures": [
+      {
+        "id": 42,
+        "name": "Elevator",
+        "slug": "elevator",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      },
+      {
+        "id": 44,
+        "name": "Indoor Pool",
+        "slug": "indoor-pool",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      }
+    ],
+    "lotFeatures": [
+      {
+        "id": 57,
+        "name": "Equestrian",
+        "slug": "equestrian",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      },
+      {
+        "id": 47,
+        "name": "Mansion",
+        "slug": "mansion",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      }
+    ],
+    "outdoorFeatures": [
+      {
+        "id": 536,
+        "name": "Helipad",
+        "slug": "helipad",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      },
+      {
+        "id": 527,
+        "name": "Pool",
+        "slug": "pool",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T06:39:45.151Z"
+      }
+    ],
+    "viewTypes": [
+      {
+        "id": 18,
+        "name": "Mountain View",
+        "slug": "mountain-view",
+        "createdAt": "2023-06-26T06:39:45.151Z",
+        "updatedAt": "2023-06-26T16:08:47.156Z"
+      }
+    ],
+    "address": "53 Thanon Naradhiwat Rajanagarindra, Khwaeng Thung Maha Mek, Khet Sathon, Krung Thep Maha Nakhon 10120, Thailand, Bangkok, Krung Thep Maha Nakhon, Thailand.",
+    "area": 235,
+    "images": [
+      {
+        "id": 17,
+        "src": "http://127.0.0.1:3002/uploads/1900xxs_30a4fc07fa.webp",
+        "name": "1900xxs.webp",
+        "alternativeText": null,
+        "caption": null,
+        "width": 1200,
+        "height": 675,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_1900xxs.webp",
+            "hash": "thumbnail_1900xxs_30a4fc07fa",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 245,
+            "height": 138,
+            "size": 6.64,
+            "url": "/uploads/thumbnail_1900xxs_30a4fc07fa.webp"
+          },
+          "large": {
+            "name": "large_1900xxs.webp",
+            "hash": "large_1900xxs_30a4fc07fa",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 1000,
+            "height": 562,
+            "size": 58.34,
+            "url": "/uploads/large_1900xxs_30a4fc07fa.webp"
+          },
+          "small": {
+            "name": "small_1900xxs.webp",
+            "hash": "small_1900xxs_30a4fc07fa",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 500,
+            "height": 281,
+            "size": 20.03,
+            "url": "/uploads/small_1900xxs_30a4fc07fa.webp"
+          },
+          "medium": {
+            "name": "medium_1900xxs.webp",
+            "hash": "medium_1900xxs_30a4fc07fa",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 750,
+            "height": 422,
+            "size": 37.93,
+            "url": "/uploads/medium_1900xxs_30a4fc07fa.webp"
+          }
+        },
+        "hash": "1900xxs_30a4fc07fa",
+        "ext": ".webp",
+        "mime": "image/webp",
+        "size": 97.77,
+        "url": "/uploads/1900xxs_30a4fc07fa.webp",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-06-20T12:19:38.581Z",
+        "updatedAt": "2023-06-20T12:19:38.581Z"
+      },
+      {
+        "id": 18,
+        "src": "http://127.0.0.1:3002/uploads/1900xxs_4_1cd8d0cb85.webp",
+        "name": "1900xxs (4).webp",
+        "alternativeText": null,
+        "caption": null,
+        "width": 1200,
+        "height": 675,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_1900xxs (4).webp",
+            "hash": "thumbnail_1900xxs_4_1cd8d0cb85",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 245,
+            "height": 138,
+            "size": 7.2,
+            "url": "/uploads/thumbnail_1900xxs_4_1cd8d0cb85.webp"
+          },
+          "large": {
+            "name": "large_1900xxs (4).webp",
+            "hash": "large_1900xxs_4_1cd8d0cb85",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 1000,
+            "height": 562,
+            "size": 58.79,
+            "url": "/uploads/large_1900xxs_4_1cd8d0cb85.webp"
+          },
+          "medium": {
+            "name": "medium_1900xxs (4).webp",
+            "hash": "medium_1900xxs_4_1cd8d0cb85",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 750,
+            "height": 422,
+            "size": 39.97,
+            "url": "/uploads/medium_1900xxs_4_1cd8d0cb85.webp"
+          },
+          "small": {
+            "name": "small_1900xxs (4).webp",
+            "hash": "small_1900xxs_4_1cd8d0cb85",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 500,
+            "height": 281,
+            "size": 21.5,
+            "url": "/uploads/small_1900xxs_4_1cd8d0cb85.webp"
+          }
+        },
+        "hash": "1900xxs_4_1cd8d0cb85",
+        "ext": ".webp",
+        "mime": "image/webp",
+        "size": 98.86,
+        "url": "/uploads/1900xxs_4_1cd8d0cb85.webp",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-06-20T12:19:38.595Z",
+        "updatedAt": "2023-06-20T12:19:38.595Z"
+      },
+      {
+        "id": 19,
+        "src": "http://127.0.0.1:3002/uploads/1900xxs_2_47ba12a9cb.webp",
+        "name": "1900xxs (2).webp",
+        "alternativeText": null,
+        "caption": null,
+        "width": 1200,
+        "height": 675,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_1900xxs (2).webp",
+            "hash": "thumbnail_1900xxs_2_47ba12a9cb",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 245,
+            "height": 138,
+            "size": 8.23,
+            "url": "/uploads/thumbnail_1900xxs_2_47ba12a9cb.webp"
+          },
+          "medium": {
+            "name": "medium_1900xxs (2).webp",
+            "hash": "medium_1900xxs_2_47ba12a9cb",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 750,
+            "height": 422,
+            "size": 50.53,
+            "url": "/uploads/medium_1900xxs_2_47ba12a9cb.webp"
+          },
+          "small": {
+            "name": "small_1900xxs (2).webp",
+            "hash": "small_1900xxs_2_47ba12a9cb",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 500,
+            "height": 281,
+            "size": 26.23,
+            "url": "/uploads/small_1900xxs_2_47ba12a9cb.webp"
+          },
+          "large": {
+            "name": "large_1900xxs (2).webp",
+            "hash": "large_1900xxs_2_47ba12a9cb",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 1000,
+            "height": 562,
+            "size": 78.6,
+            "url": "/uploads/large_1900xxs_2_47ba12a9cb.webp"
+          }
+        },
+        "hash": "1900xxs_2_47ba12a9cb",
+        "ext": ".webp",
+        "mime": "image/webp",
+        "size": 128.71,
+        "url": "/uploads/1900xxs_2_47ba12a9cb.webp",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-06-20T12:19:38.670Z",
+        "updatedAt": "2023-06-20T12:19:38.670Z"
+      },
+      {
+        "id": 20,
+        "src": "http://127.0.0.1:3002/uploads/1900xxs_3_0d15d67c4c.webp",
+        "name": "1900xxs (3).webp",
+        "alternativeText": null,
+        "caption": null,
+        "width": 1200,
+        "height": 675,
+        "formats": {
+          "thumbnail": {
+            "name": "thumbnail_1900xxs (3).webp",
+            "hash": "thumbnail_1900xxs_3_0d15d67c4c",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 245,
+            "height": 138,
+            "size": 9.01,
+            "url": "/uploads/thumbnail_1900xxs_3_0d15d67c4c.webp"
+          },
+          "medium": {
+            "name": "medium_1900xxs (3).webp",
+            "hash": "medium_1900xxs_3_0d15d67c4c",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 750,
+            "height": 422,
+            "size": 52.8,
+            "url": "/uploads/medium_1900xxs_3_0d15d67c4c.webp"
+          },
+          "small": {
+            "name": "small_1900xxs (3).webp",
+            "hash": "small_1900xxs_3_0d15d67c4c",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 500,
+            "height": 281,
+            "size": 27.64,
+            "url": "/uploads/small_1900xxs_3_0d15d67c4c.webp"
+          },
+          "large": {
+            "name": "large_1900xxs (3).webp",
+            "hash": "large_1900xxs_3_0d15d67c4c",
+            "ext": ".webp",
+            "mime": "image/webp",
+            "path": null,
+            "width": 1000,
+            "height": 562,
+            "size": 81.16,
+            "url": "/uploads/large_1900xxs_3_0d15d67c4c.webp"
+          }
+        },
+        "hash": "1900xxs_3_0d15d67c4c",
+        "ext": ".webp",
+        "mime": "image/webp",
+        "size": 132.19,
+        "url": "/uploads/1900xxs_3_0d15d67c4c.webp",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "createdAt": "2023-06-20T12:19:38.674Z",
+        "updatedAt": "2023-06-20T12:19:38.674Z"
+      }
+    ],
+    "createdAt": "2023-06-20T12:21:06.103Z",
+    "updatedAt": "2023-06-28T09:05:36.734Z",
+    "publishedAt": "2023-06-21T10:55:07.273Z"
   }
 ]

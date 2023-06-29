@@ -11,6 +11,7 @@ import {
   FiltersContext
 } from "@rems/ui";
 import api from "../../api";
+import slugify from "@sindresorhus/slugify";
 
 export default async function Home() {
   const { ids } = await api.query.properties();
@@ -20,14 +21,14 @@ export default async function Home() {
     indoorFeatures,
     lotFeatures,
     outdoorFeatures,
-    propertyTypes,
-    viewTypes
+    viewTypes,
+    propertyTypes
   ] = await Promise.all([
     api.get.indoorFeatures(),
     api.get.lotFeatures(),
     api.get.outdoorFeatures(),
-    api.get.propertyTypes(),
-    api.get.viewTypes()
+    api.get.viewTypes(),
+    api.get.propertyTypes()
   ]);
 
   return (
@@ -57,7 +58,11 @@ export default async function Home() {
           </Page.CountAndSort>
           <Page.Properties>
             {properties.map((p) => (
-              <PropertyCard key={p.id} property={p} link="#" />
+              <PropertyCard
+                key={p.id}
+                property={p}
+                link={`/real-estate/${slugify(p.title)}-${p.id}`}
+              />
             ))}
           </Page.Properties>
           <Page.Pagination>

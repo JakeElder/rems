@@ -12,11 +12,12 @@ import cn from "classnames";
 
 type Props = {
   images: CarouselImage[];
+  fill?: boolean;
 };
 
 const Img = animated(Image);
 
-const SimpleImageCarousel = ({ images }: Props) => {
+const SimpleImageCarousel = ({ images, fill = false }: Props) => {
   const [index, setIndex] = useState(0);
   const [$root, { width }] = useElementSize();
 
@@ -60,7 +61,13 @@ const SimpleImageCarousel = ({ images }: Props) => {
   );
 
   return (
-    <div className={css["root"]} ref={$root}>
+    <div
+      className={cn({
+        [css["root"]]: !fill,
+        [css["root-fill"]]: fill
+      })}
+      ref={$root}
+    >
       <div className={css["controls"]}>
         <div className={css["container"]}>
           {images.map((i, idx) => (

@@ -19,19 +19,21 @@ const HomePage = ({ heroProperties }: Props) => {
   return (
     <StandardHeroLayout hero={<FeaturedCarousel properties={heroProperties} />}>
       <Container>
-        <div className={css["popular-searches"]}>
-          <h2 className={css["heading"]}>Popular Searches</h2>
-          <EntryCardGrid cards={cardData.args?.cards!} />
-        </div>
-        <div className={css["email-collector"]}>
-          <MailingListModule />
-        </div>
-        <div className={css["latest-properties"]}>
-          <h2 className={css["heading"]}>Latest Properties</h2>
-          <PropertySlider properties={heroProperties} />
-        </div>
-        <div className={css["hr"]}>
-          <MonogramHR />
+        <div className={css["content"]}>
+          <div className={css["popular-searches"]}>
+            <h2 className={css["heading"]}>Popular Searches</h2>
+            <EntryCardGrid cards={cardData.args?.cards!} />
+          </div>
+          <div className={css["email-collector"]}>
+            <MailingListModule />
+          </div>
+          <div className={css["latest-properties"]}>
+            <h2 className={css["heading"]}>Latest Properties</h2>
+            <PropertySlider properties={heroProperties} />
+          </div>
+          <div className={css["hr"]}>
+            <MonogramHR />
+          </div>
         </div>
       </Container>
       <div className={css["footer"]}>

@@ -29,13 +29,16 @@
       "type": "integer"
     },
     "bedrooms": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
     },
     "bathrooms": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
     },
     "area": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
     },
     "location": {
       "type": "customField",
@@ -89,6 +92,10 @@
       "relation": "manyToMany",
       "target": "api::view-type.view-type",
       "inversedBy": "properties"
+    },
+    "description": {
+      "type": "text",
+      "required": true
     }
   }
 }

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import RealEstatePage from "./RealEstatePage";
+import properties from "../../fixtures/properties";
 
 const meta: Meta<typeof RealEstatePage> = {
   title: "Pages/RealEstatePage",
@@ -12,7 +13,7 @@ const meta: Meta<typeof RealEstatePage> = {
 type Story = StoryObj<typeof RealEstatePage>;
 
 export const Default: Story = {
-  args: {}
+  args: { property: properties[1] }
 };
 
 export default meta;

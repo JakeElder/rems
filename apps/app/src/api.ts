@@ -22,19 +22,31 @@ const adapters = {
       bedrooms,
       bathrooms,
       area,
+      description,
       createdAt,
       updatedAt,
+      indoor_features,
+      lot_features,
+      outdoor_features,
+      view_types,
+      address,
       publishedAt
     } = res.data.attributes;
 
     return {
       id: res.data.id,
       title,
+      description,
       purchasePrice,
       location: JSON.parse(location),
-      formattedPurchasePrice: `$${purchasePrice.toLocaleString()}`,
+      formattedPurchasePrice: `฿${purchasePrice.toLocaleString()}`,
       bedrooms,
       bathrooms,
+      indoorFeatures: (indoor_features?.data || []).map(adapters.filter),
+      lotFeatures: (lot_features?.data || []).map(adapters.filter),
+      outdoorFeatures: (outdoor_features?.data || []).map(adapters.filter),
+      viewTypes: (view_types?.data || []).map(adapters.filter),
+      address,
       area,
       images: (images.data || []).map((d: any) => ({
         id: d.id,
@@ -87,7 +99,15 @@ const get = {
   async properties(...ids: ResourceId[]): Promise<Property[]> {
     const res = Promise.all(
       ids.map(async (id) => {
-        const q = qs.stringify({ populate: "images" });
+        const q = qs.stringify({
+          populate: [
+            "images",
+            "indoor_features",
+            "lot_features",
+            "outdoor_features",
+            "view_types"
+          ]
+        });
         const url = `${process.env.API_URL}/properties/${id}?${q}`;
         const res = await fetch(url);
         return adapters.property(await res.json());
@@ -97,7 +117,15 @@ const get = {
   },
 
   async property(id: ResourceId): Promise<Property> {
-    const q = qs.stringify({ populate: "images" });
+    const q = qs.stringify({
+      populate: [
+        "images",
+        "indoor_features",
+        "lot_features",
+        "outdoor_features",
+        "view_types"
+      ]
+    });
     const url = `${process.env.API_URL}/properties/${id}?${q}`;
     const res = await fetch(url);
     return adapters.property(await res.json());

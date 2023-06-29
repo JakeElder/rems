@@ -2,14 +2,9 @@
   position: relative;
 }
 
-.pre {
-  background: #555;
-  color: #ccc;
-  margin: 30px;
-  padding: 30px;
-}
-
 .overlay {
+  z-index: 5;
+  pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -18,7 +13,114 @@
   background-image: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.6) 0,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0.6) 100%
+    rgba(0, 0, 0, 0.1) 20%,
+    rgba(0, 0, 0, 0.1) 80%,
+    rgba(0, 0, 0, 0.3) 100%
   );
+}
+
+.content {
+  padding-top: 30px;
+}
+
+.breadcrumbs {
+  margin-bottom: 26px;
+}
+
+.title {
+  font-size: 24px;
+  font-family: var(--font-libre);
+  margin-bottom: 18px;
+}
+
+.price {
+  font-family: var(--font-libre);
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.beds-baths-area {
+  font-family: var(--font-inter);
+  font-size: 14px;
+  font-weight: 300;
+  color: #151515;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.separator {
+  color: #aaa;
+  font-size: 8px;
+}
+
+.description {
+  font-family: var(--font-inter);
+  font-weight: 350;
+  margin-bottom: 24px;
+}
+
+.description p {
+  margin-bottom: 18px;
+}
+
+.listed {
+  font-family: var(--font-inter);
+  color: #777;
+  font-weight: 300;
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+
+.score {
+  height: 1px;
+  background-color: #dfdfdf;
+  margin-bottom: 40px;
+}
+
+.hr {
+  margin-bottom: 130px;
+}
+
+.heading {
+  font-size: 24px;
+  font-family: var(--font-libre);
+  margin-bottom: 16px;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 50px;
+}
+
+.feature {
+  font-family: var(--font-inter);
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.ask-a-question {
+  margin-bottom: 50px;
+}
+
+.address {
+  margin-bottom: 14px;
+}
+
+.the-area {
+  font-family: var(--font-inter);
+  font-size: 14px;
+  margin-bottom: 50px;
+}
+
+.map {
+  position: relative;
+  height: 330px;
 }
