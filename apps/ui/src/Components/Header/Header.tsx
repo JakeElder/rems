@@ -25,7 +25,7 @@ const A = ({
   children: ReactNode;
   style: "transparent" | "opaque";
 }) => {
-  const active = usePathname() === href;
+  const active = usePathname().split("/")[1] === href.replace(/^\//, "");
   const opacity = active ? "1" : "0.7";
   const fontWeight = active ? 500 : 400;
   const styles = useSpring(

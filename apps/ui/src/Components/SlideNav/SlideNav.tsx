@@ -27,7 +27,7 @@ type Props = {
 };
 
 const L = ({ href, children }: { href: string; children: React.ReactNode }) => {
-  const active = usePathname() === href;
+  const active = usePathname().split("/")[1] === href.replace(/^\//, "");
   const className = active ? css["active-link"] : css["link"];
   return (
     <Link href={href} className={className}>
