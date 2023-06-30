@@ -10,6 +10,7 @@ import Breadcrumbs from "../../Components/Breadcrumbs";
 import Container from "../../Elements/Container";
 import MonogramHR from "../../Components/MonogramHR";
 import Truncate from "../../Components/Truncate";
+import AskAQuestionForm from "../../Components/AskAQuestionForm";
 import AreaMap from "../../Components/AreaMap";
 import ContactAgentModule from "../../Components/ContactAgentModule";
 import ContactAgentForm from "../../Components/ContactAgentForm/ContactAgentForm";
@@ -80,9 +81,13 @@ const RealEstatePage = ({ property }: Props) => {
               ))}
             </ul>
             <div className={css["score"]} />
+            <div className={css["contact-agent"]}>
+              <h2 className={css["heading"]}>Contact Agent</h2>
+              <ContactAgentForm />
+            </div>
             <div className={css["ask-a-question"]}>
               <h2 className={css["heading"]}>Ask a Question</h2>
-              <ContactAgentForm />
+              <AskAQuestionForm />
             </div>
             <div className={css["score"]} />
             <div className={css["the-area"]}>

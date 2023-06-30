@@ -106,7 +106,12 @@
   margin-right: 8px;
 }
 
+.contact-agent {
+  margin-bottom: 50px;
+}
+
 .ask-a-question {
+  display: none;
   margin-bottom: 50px;
 }
 
@@ -139,13 +144,21 @@
     padding-right: 50px;
   }
 
+  .contact-agent {
+    display: none;
+  }
+
+  .ask-a-question {
+    display: unset;
+  }
+
   .contact {
     display: unset;
     width: 380px;
     flex-shrink: 0;
   }
 
-  .contact-module {
+  .contact .contact-module {
     position: sticky;
     top: 97px;
   }
