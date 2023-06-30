@@ -124,3 +124,29 @@
   position: relative;
   height: 330px;
 }
+
+.contact {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .content {
+    display: flex;
+    position: relative;
+  }
+
+  .main {
+    padding-right: 50px;
+  }
+
+  .contact {
+    display: unset;
+    width: 380px;
+    flex-shrink: 0;
+  }
+
+  .contact-module {
+    position: sticky;
+    top: 97px;
+  }
+}

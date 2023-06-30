@@ -77,8 +77,8 @@
   .map-inner {
     position: sticky;
     width: 100%;
-    height: calc(100vh - 140px);
+    height: calc(100vh - 138px);
     left: 0;
-    top: 140px;
+    top: 138px;
   }
 }

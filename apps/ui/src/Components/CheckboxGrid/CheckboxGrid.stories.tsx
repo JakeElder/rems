@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import CheckboxGrid from "./CheckboxGrid";
+import Checkbox from "src/Elements/Checkbox/Checkbox";
 
 const meta: Meta<typeof CheckboxGrid> = {
   title: "Components/CheckboxGrid",
@@ -12,7 +13,12 @@ const meta: Meta<typeof CheckboxGrid> = {
 type Story = StoryObj<typeof CheckboxGrid>;
 
 export const Default: Story = {
-  args: {}
+  args: {
+    items: [
+      <Checkbox id="apartment" label="Apartment" />,
+      <Checkbox id="condo" label="Condo" />
+    ]
+  }
 };
 
 export default meta;

@@ -2,13 +2,12 @@
 
 import React, { ReactNode, useEffect, useState } from "react";
 import Logo from "../../Elements/Logo";
-import NavIcon from "../../Elements/NavIcon";
 import Container from "../../Elements/Container/Container";
 import css from "./Header.module.css";
 import { animated, useSpring } from "@react-spring/web";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import NavModal from "../NavModal/NavModal";
+import SlideNav from "../SlideNav/SlideNav";
 
 type Props = {
   mode: "standard" | "hero";
@@ -83,15 +82,12 @@ const Header = ({ mode, full = false }: Props) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const [navOpen, setNavOpen] = useState(false);
-
   return (
     <div>
-      <NavModal open={navOpen} onCloseRequest={() => setNavOpen(false)} />
       <animated.div className={css["root"]} style={styles}>
         <Container full={full}>
           <div className={css["container"]}>
-            <Link href="/">
+            <Link href="/" className={css["logo"]}>
               <Logo />
             </Link>
             <div className={css["nav-and-contact-button"]}>
@@ -108,13 +104,9 @@ const Header = ({ mode, full = false }: Props) => {
               </nav>
               <Button style={style}>Contact Us</Button>
             </div>
-            <a
-              role="button"
-              className={css["nav-icon"]}
-              onClick={() => setNavOpen(true)}
-            >
-              <NavIcon color={styles.fill} />
-            </a>
+            <div className={css["nav-icon"]}>
+              <SlideNav navIconColor={styles.fill} />
+            </div>
           </div>
         </Container>
       </animated.div>

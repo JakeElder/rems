@@ -3,7 +3,17 @@ import TextInput from "./TextInput";
 
 const meta: Meta<typeof TextInput> = {
   title: "Elements/TextInput",
-  component: TextInput
+  component: TextInput,
+  parameters: {
+    layout: "centered"
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 300 }}>
+        <Story />
+      </div>
+    )
+  ]
 };
 
 type Story = StoryObj<typeof TextInput>;
