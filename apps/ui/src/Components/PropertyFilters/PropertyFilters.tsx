@@ -12,15 +12,21 @@ import Split from "../../Elements/Split";
 
 type Props = {};
 
-const PropertyFilters = ({}: Props) => {
-  const { viewTypes, outdoorFeatures, indoorFeatures, lotFeatures } =
-    useFilters();
+const PropertyFilters = ({ }: Props) => {
+  const {
+    viewTypes,
+    outdoorFeatures,
+    indoorFeatures,
+    lotFeatures,
+    mrtStations,
+    btsStations
+  } = useFilters();
   return (
     <div className={css["root"]}>
       <div className={css["section"]}>
         <div className={css["header"]}>Property Type</div>
         <div className={css["filters"]}>
-          <TypeFilters />
+          <TypeFilters id="dialog" />
         </div>
       </div>
       <div className={css["section"]}>
@@ -98,6 +104,38 @@ const PropertyFilters = ({}: Props) => {
                 { value: "", label: "No Min" },
                 { value: "20", label: "20 m²" },
                 { value: "30", label: "30 m²" }
+              ]}
+            />
+          </Split>
+        </div>
+      </div>
+      <div className={css["section"]}>
+        <div className={css["header"]}>Nearest MRT Station</div>
+        <div className={css["filters"]}>
+          <Split>
+            <Select
+              options={[
+                { label: "Any", value: "" },
+                ...mrtStations.map((s) => ({
+                  label: s.name,
+                  value: s.slug
+                }))
+              ]}
+            />
+          </Split>
+        </div>
+      </div>
+      <div className={css["section"]}>
+        <div className={css["header"]}>Nearest BTS Station</div>
+        <div className={css["filters"]}>
+          <Split>
+            <Select
+              options={[
+                { label: "Any", value: "" },
+                ...btsStations.map((s) => ({
+                  label: s.name,
+                  value: s.slug
+                }))
               ]}
             />
           </Split>

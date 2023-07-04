@@ -5,12 +5,12 @@ import TypeFilters from "../TypeFilters/TypeFilters";
 
 type Props = {};
 
-const TypeFilterPopover = ({}: Props) => {
+const TypeFilterPopover = ({ }: Props) => {
   return (
     <div className={css["root"]}>
       <FilterPopover label="Type">
         <div className={css["content"]}>
-          <TypeFilters />
+          <TypeFilters id="bar" />
         </div>
       </FilterPopover>
     </div>

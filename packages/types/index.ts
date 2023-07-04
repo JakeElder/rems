@@ -70,16 +70,24 @@ export type Filter = {
   slug: string;
 } & CMSAttributes;
 
+export type BTSStation = Filter;
 export type IndoorFeature = Filter;
 export type LotFeature = Filter;
+export type MRTStation = Filter;
 export type OutdoorFeature = Filter;
 export type PropertyType = Filter;
 export type ViewType = Filter;
 
 export type Filters = {
+  btsStations: BTSStation[];
   indoorFeatures: IndoorFeature[];
   lotFeatures: LotFeature[];
+  mrtStations: MRTStation[];
   outdoorFeatures: OutdoorFeature[];
   propertyTypes: PropertyType[];
   viewTypes: ViewType[];
+};
+
+export type PropertyQuery = {
+  "property-type": string[];
 };

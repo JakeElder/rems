@@ -142,6 +142,7 @@
 
   .main {
     padding-right: 50px;
+    flex: 1;
   }
 
   .contact-agent {

@@ -18,14 +18,18 @@ export default async function Home() {
   const properties = await api.get.properties(...ids);
 
   const [
+    btsStations,
     indoorFeatures,
     lotFeatures,
+    mrtStations,
     outdoorFeatures,
     viewTypes,
     propertyTypes
   ] = await Promise.all([
+    api.get.btsStations(),
     api.get.indoorFeatures(),
     api.get.lotFeatures(),
+    api.get.mrtStations(),
     api.get.outdoorFeatures(),
     api.get.viewTypes(),
     api.get.propertyTypes()
@@ -37,8 +41,10 @@ export default async function Home() {
         <Header full mode="standard" />
         <FiltersContext
           value={{
+            btsStations,
             indoorFeatures,
             lotFeatures,
+            mrtStations,
             outdoorFeatures,
             propertyTypes,
             viewTypes

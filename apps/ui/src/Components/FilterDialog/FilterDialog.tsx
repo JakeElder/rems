@@ -73,7 +73,7 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                 <div className={css["footer"]}>
                   <Split>
                     <Button secondary>Clear all</Button>
-                    <Button>Show</Button>
+                    <Button type="submit">Show</Button>
                   </Split>
                 </div>
               </animated.div>

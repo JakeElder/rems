@@ -3,6 +3,8 @@ import { fetch } from "./utils";
 import {
   Filter,
   IndoorFeature,
+  BTSStation,
+  MRTStation,
   LotFeature,
   OutdoorFeature,
   Property,
@@ -131,6 +133,11 @@ const get = {
     return adapters.property(await res.json());
   },
 
+  async btsStations(): Promise<BTSStation[]> {
+    const { data } = await this.generic("bts-stations");
+    return data.map(adapters.filter);
+  },
+
   async indoorFeatures(): Promise<IndoorFeature[]> {
     const { data } = await this.generic("indoor-features");
     return data.map(adapters.filter);
@@ -138,6 +145,11 @@ const get = {
 
   async lotFeatures(): Promise<LotFeature[]> {
     const { data } = await this.generic("lot-features");
+    return data.map(adapters.filter);
+  },
+
+  async mrtStations(): Promise<MRTStation[]> {
+    const { data } = await this.generic("mrt-stations");
     return data.map(adapters.filter);
   },
 

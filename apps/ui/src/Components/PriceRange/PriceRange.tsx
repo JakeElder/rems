@@ -6,9 +6,9 @@ type Props = {};
 
 const MIN = 0;
 const MAX = 100_000_000;
-const STEP = 1000
+const STEP = 1000;
 
-const PriceRange = ({}: Props) => {
+const PriceRange = ({ }: Props) => {
   const [value, setValue] = useState([MIN, MAX]);
   const formatted = [
     `฿ ${value[0].toLocaleString()}`,
@@ -23,6 +23,7 @@ const PriceRange = ({}: Props) => {
           step={STEP}
           value={value}
           onValueChange={setValue}
+          name="price-range"
         />
       </div>
       <div className={css["inputs"]}>
