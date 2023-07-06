@@ -79,6 +79,11 @@ export type OutdoorFeature = Filter;
 export type PropertyType = Filter;
 export type ViewType = Filter;
 
+export type LivingAreaSize = {
+  value: number;
+  label: string;
+};
+
 export type Filters = {
   btsStations: BTSStation[];
   indoorFeatures: IndoorFeature[];
@@ -87,6 +92,10 @@ export type Filters = {
   outdoorFeatures: OutdoorFeature[];
   propertyTypes: PropertyType[];
   viewTypes: ViewType[];
+  livingAreaSizes: {
+    min: LivingAreaSize[];
+    max: LivingAreaSize[];
+  };
 };
 
 export const realEstateQuerySchema = z.object({
@@ -110,7 +119,9 @@ export const realEstateQuerySchema = z.object({
   "max-price": z.coerce.number().default(100_000_000).catch(100_000_000),
   "min-bedrooms": z.coerce.number().default(0).catch(0),
   "max-bedrooms": z.coerce.number().nullable().default(null).catch(null),
-  "min-bathrooms": z.coerce.number().default(0).catch(0)
+  "min-bathrooms": z.coerce.number().default(0).catch(0),
+  "min-living-area": z.coerce.number().default(0).catch(0),
+  "max-living-area": z.coerce.number().nullable().default(null).catch(null)
 });
 
 export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;

@@ -8,8 +8,14 @@ type Option = {
   label: string;
 };
 
-type Props = {
-  defaultValue?: string;
+type Props = Omit<
+  React.DetailedHTMLProps<
+    React.SelectHTMLAttributes<HTMLSelectElement>,
+    HTMLSelectElement
+  >,
+  "value"
+> & {
+  value: string;
   options: Option[];
 };
 
@@ -21,9 +27,7 @@ const lookup = (value: string, options: Option[]) => {
   return v.label;
 };
 
-const Select = ({ options, defaultValue = "" }: Props) => {
-  const [value, setValue] = useState(defaultValue);
-
+const Select = ({ options, value, ...props }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["sort"]}>
@@ -33,11 +37,7 @@ const Select = ({ options, defaultValue = "" }: Props) => {
             <FontAwesomeIcon icon={faChevronDown} size="xs" />
           </span>
         </div>
-        <select
-          className={css["select"]}
-          value={value}
-          onChange={(e) => setValue(e.currentTarget.value)}
-        >
+        <select className={css["select"]} value={value} {...props}>
           {options.map((o) => (
             <option key={o.value} value={o.value}>
               {o.label}

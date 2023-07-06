@@ -15,6 +15,11 @@ import api from "../../api";
 import slugify from "@sindresorhus/slugify";
 import { realEstateQuerySchema } from "@rems/types";
 import { flatten } from "remeda";
+import {
+  LIVING_AREA_SIZES,
+  MAX_LIVING_AREA_SIZES,
+  MIN_LIVING_AREA_SIZES
+} from "../../constants";
 
 const processSearchParams = (params: {
   [key: string]: string | string[] | undefined;
@@ -68,7 +73,11 @@ export default async function Home({
             mrtStations,
             outdoorFeatures,
             propertyTypes,
-            viewTypes
+            viewTypes,
+            livingAreaSizes: {
+              min: MIN_LIVING_AREA_SIZES,
+              max: MAX_LIVING_AREA_SIZES
+            }
           }}
         >
           <RealEstateQueryController query={query}>

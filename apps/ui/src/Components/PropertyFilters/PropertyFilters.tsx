@@ -11,6 +11,7 @@ import ViewTypeFilters from "../ViewTypeFilters";
 import IndoorFeatureFilters from "../IndoorFeatureFilters";
 import OutdoorFeatureFilters from "../OutdoorFeatureFilters";
 import LotFeatureFilters from "../LotFeatureFilters";
+import LivingAreaFilters from "../LivingAreaFilters/LivingAreaFilters";
 
 type Props = {};
 
@@ -69,24 +70,7 @@ const PropertyFilters = ({}: Props) => {
       <div className={css["section"]}>
         <div className={css["header"]}>Living Area</div>
         <div className={css["filters"]}>
-          <Split>
-            <Select
-              defaultValue="0"
-              options={[
-                { value: "0", label: "No Min" },
-                { value: "20", label: "20 m²" },
-                { value: "30", label: "30 m²" }
-              ]}
-            />
-            <Select
-              defaultValue="0"
-              options={[
-                { value: "0", label: "No Max" },
-                { value: "20", label: "20 m²" },
-                { value: "30", label: "30 m²" }
-              ]}
-            />
-          </Split>
+          <LivingAreaFilters />
         </div>
       </div>
       <div className={css["section"]}>
@@ -94,12 +78,10 @@ const PropertyFilters = ({}: Props) => {
         <div className={css["filters"]}>
           <Split>
             <Select
+              value=""
               options={[
                 { label: "Any", value: "" },
-                ...mrtStations.map((s) => ({
-                  label: s.name,
-                  value: s.slug
-                }))
+                ...mrtStations.map((s) => ({ label: s.name, value: s.slug }))
               ]}
             />
           </Split>
@@ -110,12 +92,10 @@ const PropertyFilters = ({}: Props) => {
         <div className={css["filters"]}>
           <Split>
             <Select
+              value=""
               options={[
                 { label: "Any", value: "" },
-                ...btsStations.map((s) => ({
-                  label: s.name,
-                  value: s.slug
-                }))
+                ...btsStations.map((s) => ({ label: s.name, value: s.slug }))
               ]}
             />
           </Split>

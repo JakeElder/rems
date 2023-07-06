@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_quick_filters_view_types",
+  "info": {
+    "displayName": "View Type"
+  },
+  "options": {},
+  "attributes": {
+    "view_type": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::view-type.view-type"
+    }
+  }
+}

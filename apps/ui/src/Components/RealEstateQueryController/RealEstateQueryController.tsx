@@ -20,7 +20,10 @@ type RealEstateQueryContext = {
     value: string,
     state: CheckedState
   ) => void;
-  onValueChange: (param: keyof RealEstateQuery, value: string | number) => void;
+  onValueChange: (
+    param: keyof RealEstateQuery,
+    value: string | number | null
+  ) => void;
   onPriceRangeChange: (
     min: RealEstateQuery["min-price"],
     max: RealEstateQuery["max-price"]

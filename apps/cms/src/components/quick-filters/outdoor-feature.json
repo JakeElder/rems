@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_quick_filters_outdoor_features",
+  "info": {
+    "displayName": "Outdoor Feature"
+  },
+  "options": {},
+  "attributes": {
+    "outdoor_feature": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::outdoor-feature.outdoor-feature"
+    }
+  }
+}

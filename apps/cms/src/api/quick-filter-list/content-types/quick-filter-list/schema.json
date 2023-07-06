@@ -1,0 +1,25 @@
+{
+  "kind": "singleType",
+  "collectionName": "quick_filters",
+  "info": {
+    "singularName": "quick-filter-list",
+    "pluralName": "quick-filters",
+    "displayName": "Quick Filter List",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Filters": {
+      "type": "dynamiczone",
+      "components": [
+        "quick-filters.indoor-feature-quick-filter",
+        "quick-filters.lot-feature-quick-filter",
+        "quick-filters.outdoor-feature",
+        "quick-filters.view-type"
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_quick_filters_lot_feature_quick_filters",
+  "info": {
+    "displayName": "Lot Feature",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "lot_feature": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::lot-feature.lot-feature"
+    }
+  }
+}
