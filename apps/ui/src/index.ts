@@ -14,3 +14,4 @@ export { default as Header } from "./Components/Header";
 export { default as ListingMap } from "./Components/ListingMap";
 export { default as Pagination } from "./Components/Pagination";
 export { default as PropertyCard } from "./Components/PropertyCard";
+export { default as RealEstateQueryController } from "./Components/RealEstateQueryController";

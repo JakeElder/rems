@@ -1,4 +1,5 @@
 import { PluginUploadFile } from "./generated/contentTypes";
+import { z } from "zod";
 
 type Pagination = {
   page: number;
@@ -88,6 +89,28 @@ export type Filters = {
   viewTypes: ViewType[];
 };
 
-export type PropertyQuery = {
-  "property-type": string[];
-};
+export const realEstateQuerySchema = z.object({
+  "indoor-features": z.string().array().default([]).catch([]),
+  "lot-features": z.string().array().default([]).catch([]),
+  "outdoor-features": z.string().array().default([]).catch([]),
+  "property-type": z.string().array().default([]).catch([]),
+  "view-type": z.string().array().default([]).catch([]),
+  page: z.number().default(1).catch(1),
+  order: z
+    .enum([
+      "newest-first",
+      "lowest-price-first",
+      "highest-price-first",
+      "smallest-living-area-first",
+      "largest-living-area-first"
+    ])
+    .default("newest-first")
+    .catch("newest-first"),
+  "min-price": z.coerce.number().default(0).catch(0),
+  "max-price": z.coerce.number().default(100_000_000).catch(100_000_000),
+  "min-bedrooms": z.coerce.number().default(0).catch(0),
+  "max-bedrooms": z.coerce.number().nullable().default(null).catch(null),
+  "min-bathrooms": z.coerce.number().default(0).catch(0)
+});
+
+export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;

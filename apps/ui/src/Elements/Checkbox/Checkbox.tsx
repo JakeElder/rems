@@ -8,7 +8,7 @@ type Props = ComponentProps<typeof CB.Root> & {
   label: string;
 };
 
-const Checkbox = ({ label, ...props }: Props) => {
+const Checkbox = ({ label, name, value, ...props }: Props) => {
   return (
     <div className={css["root"]}>
       <CB.Root className={css["checkbox"]} {...props}>

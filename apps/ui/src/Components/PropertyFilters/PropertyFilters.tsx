@@ -4,23 +4,18 @@ import TypeFilters from "../TypeFilters";
 import PriceRange from "../PriceRange";
 import BedsFilter from "../BedsFilter";
 import BathroomsFilter from "../BathroomsFilter";
-import CheckboxGrid from "../CheckboxGrid";
 import { useFilters } from "../../Utils/FiltersContext";
-import Checkbox from "../../Elements/Checkbox";
 import Select from "../../Elements/Select";
 import Split from "../../Elements/Split";
+import ViewTypeFilters from "../ViewTypeFilters";
+import IndoorFeatureFilters from "../IndoorFeatureFilters";
+import OutdoorFeatureFilters from "../OutdoorFeatureFilters";
+import LotFeatureFilters from "../LotFeatureFilters";
 
 type Props = {};
 
-const PropertyFilters = ({ }: Props) => {
-  const {
-    viewTypes,
-    outdoorFeatures,
-    indoorFeatures,
-    lotFeatures,
-    mrtStations,
-    btsStations
-  } = useFilters();
+const PropertyFilters = ({}: Props) => {
+  const { mrtStations, btsStations } = useFilters();
   return (
     <div className={css["root"]}>
       <div className={css["section"]}>
@@ -50,41 +45,25 @@ const PropertyFilters = ({ }: Props) => {
       <div className={css["section"]}>
         <div className={css["header"]}>View</div>
         <div className={css["filters"]}>
-          <CheckboxGrid
-            items={viewTypes.map((t) => (
-              <Checkbox key={t.slug} id={t.slug} label={t.name} />
-            ))}
-          />
+          <ViewTypeFilters />
         </div>
       </div>
       <div className={css["section"]}>
         <div className={css["header"]}>Indoor Features</div>
         <div className={css["filters"]}>
-          <CheckboxGrid
-            items={indoorFeatures.map((t) => (
-              <Checkbox key={t.slug} id={t.slug} label={t.name} />
-            ))}
-          />
+          <IndoorFeatureFilters />
         </div>
       </div>
       <div className={css["section"]}>
         <div className={css["header"]}>Outdoor Features</div>
         <div className={css["filters"]}>
-          <CheckboxGrid
-            items={outdoorFeatures.map((t) => (
-              <Checkbox key={t.slug} id={t.slug} label={t.name} />
-            ))}
-          />
+          <OutdoorFeatureFilters />
         </div>
       </div>
       <div className={css["section"]}>
         <div className={css["header"]}>Lot Features</div>
         <div className={css["filters"]}>
-          <CheckboxGrid
-            items={lotFeatures.map((t) => (
-              <Checkbox key={t.slug} id={t.slug} label={t.name} />
-            ))}
-          />
+          <LotFeatureFilters />
         </div>
       </div>
       <div className={css["section"]}>
@@ -92,16 +71,17 @@ const PropertyFilters = ({ }: Props) => {
         <div className={css["filters"]}>
           <Split>
             <Select
+              defaultValue="0"
               options={[
-                { value: "", label: "No Min" },
+                { value: "0", label: "No Min" },
                 { value: "20", label: "20 m²" },
                 { value: "30", label: "30 m²" }
               ]}
             />
             <Select
-              defaultValue=""
+              defaultValue="0"
               options={[
-                { value: "", label: "No Min" },
+                { value: "0", label: "No Max" },
                 { value: "20", label: "20 m²" },
                 { value: "30", label: "30 m²" }
               ]}

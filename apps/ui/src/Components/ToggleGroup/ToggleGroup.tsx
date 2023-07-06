@@ -3,8 +3,7 @@ import * as TG from "@radix-ui/react-toggle-group";
 import cn from "classnames";
 import css from "./ToggleGroup.module.css";
 
-type Props = {
-  defaultValue: string;
+type Props = Omit<TG.ToggleGroupSingleProps, "type"> & {
   items: Toggle[];
   width?: number;
 };
@@ -14,11 +13,11 @@ type Toggle = {
   value: string;
 };
 
-const ToggleGroup = ({ items, defaultValue, width }: Props) => {
+const ToggleGroup = ({ items, width, ...props }: Props) => {
   return (
     <TG.Root
+      {...props}
       type="single"
-      defaultValue={defaultValue}
       className={cn({
         [css["root"]]: !width,
         [css["root-fixed"]]: width

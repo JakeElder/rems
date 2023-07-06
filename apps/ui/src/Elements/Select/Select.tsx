@@ -39,7 +39,9 @@ const Select = ({ options, defaultValue = "" }: Props) => {
           onChange={(e) => setValue(e.currentTarget.value)}
         >
           {options.map((o) => (
-            <option value={o.value}>{o.label}</option>
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
           ))}
         </select>
       </div>

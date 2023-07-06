@@ -8,12 +8,33 @@ import {
   RealEstateIndexPage as Page,
   Pagination,
   PropertyCard,
-  FiltersContext
+  FiltersContext,
+  RealEstateQueryController
 } from "@rems/ui";
 import api from "../../api";
 import slugify from "@sindresorhus/slugify";
+import { realEstateQuerySchema } from "@rems/types";
+import { flatten } from "remeda";
 
-export default async function Home() {
+const processSearchParams = (params: {
+  [key: string]: string | string[] | undefined;
+}) => {
+  return {
+    ...params,
+    "indoor-features": flatten([params["indoor-features[]"]]),
+    "lot-features": flatten([params["lot-features[]"]]),
+    "outdoor-features": flatten([params["outdoor-features[]"]]),
+    "property-type": flatten([params["property-type[]"]]),
+    "view-type": flatten([params["view-type[]"]])
+  };
+};
+
+export default async function Home({
+  searchParams
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const query = realEstateQuerySchema.parse(processSearchParams(searchParams));
   const { ids } = await api.query.properties();
   const properties = await api.get.properties(...ids);
 
@@ -50,7 +71,9 @@ export default async function Home() {
             viewTypes
           }}
         >
-          <FilterBar />
+          <RealEstateQueryController query={query}>
+            <FilterBar />
+          </RealEstateQueryController>
         </FiltersContext>
       </Page.Header>
       <Page.Main>

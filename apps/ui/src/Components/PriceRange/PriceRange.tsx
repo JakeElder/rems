@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import css from "./PriceRange.module.css";
 import Slider from "../../Elements/Slider";
+import { useRealEstateQuery } from "../RealEstateQueryController";
 
 type Props = {};
 
@@ -8,12 +9,15 @@ const MIN = 0;
 const MAX = 100_000_000;
 const STEP = 1000;
 
-const PriceRange = ({ }: Props) => {
-  const [value, setValue] = useState([MIN, MAX]);
+const PriceRange = ({}: Props) => {
+  const { query, onPriceRangeChange } = useRealEstateQuery();
+  const [value, setValue] = useState([query["min-price"], query["max-price"]]);
+
   const formatted = [
     `฿ ${value[0].toLocaleString()}`,
     `฿ ${value[1].toLocaleString()}`
   ];
+
   return (
     <div className={css["root"]}>
       <div className={css["slider"]}>
@@ -23,6 +27,7 @@ const PriceRange = ({ }: Props) => {
           step={STEP}
           value={value}
           onValueChange={setValue}
+          onValueCommit={([min, max]) => onPriceRangeChange(min, max)}
           name="price-range"
         />
       </div>
