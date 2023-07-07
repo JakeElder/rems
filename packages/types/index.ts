@@ -139,3 +139,5 @@ export type QuickFilterQueryKey = keyof Pick<
   RealEstateQuery,
   "indoor-features" | "outdoor-features" | "lot-features" | "view-types"
 >;
+
+export type SortType = RealEstateQuery["sort"];

@@ -88,7 +88,9 @@ export default async function Home({
           </Page.Breadcrumbs>
           <Page.Title>Homes for sale in Thailand</Page.Title>
           <Page.CountAndSort>
-            <CountAndSort query={query} />
+            <RealEstateQueryController query={query}>
+              <CountAndSort query={query} />
+            </RealEstateQueryController>
           </Page.CountAndSort>
           <Page.Properties>
             <PropertyCards query={query} />

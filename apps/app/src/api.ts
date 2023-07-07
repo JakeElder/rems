@@ -14,7 +14,8 @@ import {
   RealEstateQuery,
   Pagination,
   QuickFilter,
-  QuickFilterType
+  QuickFilterType,
+  SortType
 } from "@rems/types";
 
 export const adapters = {
@@ -166,6 +167,17 @@ const get = {
       ? { slug: { $eq: query["nearest-bts-station"] } }
       : {};
 
+    const sort = (() => {
+      const map: Record<SortType, string> = {
+        "newest-first": "createdAt:desc",
+        "lowest-price-first": "purchasePrice",
+        "highest-price-first": "purchasePrice:desc",
+        "smallest-living-area-first": "livingArea",
+        "largest-living-area-first": "livingArea:desc"
+      };
+      return map[query["sort"]];
+    })();
+
     const q = qs.stringify({
       populate: [
         "images",
@@ -191,7 +203,8 @@ const get = {
           ...outdoor_features,
           ...lot_features
         ]
-      }
+      },
+      sort
     });
 
     const res = await fetch(`${process.env.API_URL}/properties?${q}`);
