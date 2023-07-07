@@ -5,7 +5,7 @@
   },
   "options": {},
   "attributes": {
-    "view_type": {
+    "filter": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::view-type.view-type"

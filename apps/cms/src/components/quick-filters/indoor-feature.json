@@ -1,12 +1,11 @@
 {
-  "collectionName": "components_quick_filters_indoor_feature_quick_filters",
+  "collectionName": "components_quick_filters_indoor_features",
   "info": {
-    "displayName": "Indoor Feature",
-    "description": ""
+    "displayName": "Indoor Feature"
   },
   "options": {},
   "attributes": {
-    "indoor_feature": {
+    "filter": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::indoor-feature.indoor-feature"

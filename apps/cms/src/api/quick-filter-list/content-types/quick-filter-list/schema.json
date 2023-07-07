@@ -12,13 +12,13 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "Filters": {
+    "filters": {
       "type": "dynamiczone",
       "components": [
-        "quick-filters.indoor-feature-quick-filter",
-        "quick-filters.lot-feature-quick-filter",
+        "quick-filters.view-type",
+        "quick-filters.lot-feature",
         "quick-filters.outdoor-feature",
-        "quick-filters.view-type"
+        "quick-filters.indoor-feature"
       ]
     }
   }

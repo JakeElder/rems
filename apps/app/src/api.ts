@@ -68,6 +68,27 @@ const adapters = {
 };
 
 const query = {
+  async quickFilterList() {
+    const q = qs.stringify({
+      populate: {
+        filters: {
+          on: {
+            "quick-filters.indoor-feature": { populate: ["filter"] },
+            "quick-filters.lot-feature": { populate: ["filter"] },
+            "quick-filters.outdoor-feature": { populate: ["filter"] },
+            "quick-filters.view-type": { populate: ["filter"] }
+          }
+        }
+      }
+    });
+
+    const url = `${process.env.API_URL}/quick-filter-list?${q}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    return data.data;
+  },
+
   async featuredProperties(): Promise<QueryResponse> {
     const q = qs.stringify({ populate: "properties" });
     const url = `${process.env.API_URL}/featured-property-list?${q}`;

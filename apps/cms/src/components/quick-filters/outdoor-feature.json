@@ -5,7 +5,7 @@
   },
   "options": {},
   "attributes": {
-    "outdoor_feature": {
+    "filter": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::outdoor-feature.outdoor-feature"

@@ -1,12 +1,11 @@
 {
-  "collectionName": "components_quick_filters_lot_feature_quick_filters",
+  "collectionName": "components_quick_filters_lot_features",
   "info": {
-    "displayName": "Lot Feature",
-    "description": ""
+    "displayName": "Lot Feature"
   },
   "options": {},
   "attributes": {
-    "lot_feature": {
+    "filter": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::lot-feature.lot-feature"
