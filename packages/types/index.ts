@@ -1,7 +1,7 @@
 import { PluginUploadFile } from "./generated/contentTypes";
 import { z } from "zod";
 
-type Pagination = {
+export type Pagination = {
   page: number;
   pageSize: number;
   pageCount: number;
@@ -9,11 +9,6 @@ type Pagination = {
 };
 
 export type ResourceId = string;
-
-export type QueryResponse = {
-  ids: ResourceId[];
-  pagination?: Pagination;
-};
 
 type CMSAttributes = {
   createdAt: string;
@@ -44,7 +39,7 @@ export type Property = {
   longitude?: number;
   bedrooms?: number;
   bathrooms?: number;
-  area?: number;
+  livingArea?: number;
   images: Image[];
   location: null | {
     lng: number;
@@ -103,7 +98,7 @@ export const realEstateQuerySchema = z.object({
   "lot-features": z.string().array().default([]).catch([]),
   "outdoor-features": z.string().array().default([]).catch([]),
   "property-type": z.string().array().default([]).catch([]),
-  "view-type": z.string().array().default([]).catch([]),
+  "view-types": z.string().array().default([]).catch([]),
   page: z.number().default(1).catch(1),
   order: z
     .enum([
@@ -116,7 +111,7 @@ export const realEstateQuerySchema = z.object({
     .default("newest-first")
     .catch("newest-first"),
   "min-price": z.coerce.number().default(0).catch(0),
-  "max-price": z.coerce.number().default(100_000_000).catch(100_000_000),
+  "max-price": z.coerce.number().nullable().default(null).catch(null),
   "min-bedrooms": z.coerce.number().default(0).catch(0),
   "max-bedrooms": z.coerce.number().nullable().default(null).catch(null),
   "min-bathrooms": z.coerce.number().default(0).catch(0),

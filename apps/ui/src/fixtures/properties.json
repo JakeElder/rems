@@ -16,7 +16,7 @@
     "outdoorFeatures": [],
     "viewTypes": [],
     "address": null,
-    "area": 340,
+    "livingArea": 340,
     "images": [
       {
         "id": 6,
@@ -158,7 +158,7 @@
       }
     ],
     "address": "1199 Sukhumvit Rd, Khwaeng Khlong Tan Nuea, Khet Watthana, Krung Thep Maha Nakhon 10110, Thailand, Bangkok, Krung Thep Maha Nakhon, Thailand.",
-    "area": 550,
+    "livingArea": 550,
     "images": [
       {
         "id": 5,
@@ -312,7 +312,7 @@
     "outdoorFeatures": [],
     "viewTypes": [],
     "address": null,
-    "area": 220,
+    "livingArea": 220,
     "images": [
       {
         "id": 4,
@@ -401,7 +401,7 @@
     "outdoorFeatures": [],
     "viewTypes": [],
     "address": null,
-    "area": 440,
+    "livingArea": 440,
     "images": [
       {
         "id": 9,
@@ -543,7 +543,7 @@
       }
     ],
     "address": "53 Thanon Naradhiwat Rajanagarindra, Khwaeng Thung Maha Mek, Khet Sathon, Krung Thep Maha Nakhon 10120, Thailand, Bangkok, Krung Thep Maha Nakhon, Thailand.",
-    "area": 235,
+    "livingArea": 235,
     "images": [
       {
         "id": 17,

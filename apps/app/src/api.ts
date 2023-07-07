@@ -9,12 +9,13 @@ import {
   OutdoorFeature,
   Property,
   PropertyType,
-  QueryResponse,
   ResourceId,
-  ViewType
+  ViewType,
+  RealEstateQuery,
+  Pagination
 } from "@rems/types";
 
-const adapters = {
+export const adapters = {
   property(res: any): Property {
     const {
       title,
@@ -23,7 +24,7 @@ const adapters = {
       location,
       bedrooms,
       bathrooms,
-      area,
+      livingArea,
       description,
       createdAt,
       updatedAt,
@@ -33,10 +34,10 @@ const adapters = {
       view_types,
       address,
       publishedAt
-    } = res.data.attributes;
+    } = res.attributes;
 
     return {
-      id: res.data.id,
+      id: res.id,
       title,
       description,
       purchasePrice,
@@ -49,7 +50,7 @@ const adapters = {
       outdoorFeatures: (outdoor_features?.data || []).map(adapters.filter),
       viewTypes: (view_types?.data || []).map(adapters.filter),
       address,
-      area,
+      livingArea,
       images: (images.data || []).map((d: any) => ({
         id: d.id,
         src: `${process.env.ASSET_URL}${d.attributes.url}`,
@@ -67,7 +68,7 @@ const adapters = {
   }
 };
 
-const query = {
+const get = {
   async quickFilterList() {
     const q = qs.stringify({
       populate: {
@@ -88,55 +89,88 @@ const query = {
 
     return data.data;
   },
-
-  async featuredProperties(): Promise<QueryResponse> {
-    const q = qs.stringify({ populate: "properties" });
+  async featuredProperties(): Promise<Property[]> {
+    const q = qs.stringify({
+      populate: ["properties", "properties.images"]
+    });
     const url = `${process.env.API_URL}/featured-property-list?${q}`;
     const res = await fetch(url);
-    const data = await res.json();
+    const json = await res.json();
 
-    return {
-      ids: data.data.attributes.properties.data.map((d: any) => d.id),
-      pagination: {
-        page: 1,
-        pageCount: 1,
-        pageSize: data.data.length,
-        total: data.data.length
-      }
-    };
+    return json.data.attributes.properties.data.map(adapters.property);
   },
 
-  async properties(): Promise<QueryResponse> {
-    const url = `${process.env.API_URL}/properties`;
-    const res = await fetch(url);
-    const data = await res.json();
+  async properties(
+    query: RealEstateQuery
+  ): Promise<{ data: Property[]; pagination: Pagination }> {
+    const property_type = { slug: { $in: query["property-type"] } };
+
+    const purchasePrice = {
+      $gte: query["min-price"],
+      ...(query["max-price"] ? { $lte: query["max-price"] } : {})
+    };
+
+    const bedrooms = {
+      $gte: query["min-bedrooms"],
+      ...(query["max-bedrooms"] ? { $lte: query["max-bedrooms"] } : {})
+    };
+
+    const bathrooms = { $gte: query["min-bathrooms"] };
+
+    const view_types = query["view-types"].map((t) => ({
+      view_types: { slug: { $in: t } }
+    }));
+
+    const indoor_features = query["indoor-features"].map((t) => ({
+      indoor_features: { slug: { $in: t } }
+    }));
+
+    const outdoor_features = query["outdoor-features"].map((t) => ({
+      outdoor_features: { slug: { $in: t } }
+    }));
+
+    const lot_features = query["lot-features"].map((t) => ({
+      lot_features: { slug: { $in: t } }
+    }));
+
+    const livingArea = {
+      $gte: query["min-living-area"],
+      ...(query["max-living-area"] ? { $lte: query["max-living-area"] } : {})
+    };
+
+    const q = qs.stringify({
+      populate: [
+        "images",
+        "property_type",
+        "indoor_features",
+        "lot_features",
+        "outdoor_features",
+        "view_types"
+      ],
+      filters: {
+        $and: [
+          {
+            property_type,
+            purchasePrice,
+            bedrooms,
+            bathrooms,
+            livingArea
+          },
+          ...view_types,
+          ...indoor_features,
+          ...outdoor_features,
+          ...lot_features
+        ]
+      }
+    });
+
+    const res = await fetch(`${process.env.API_URL}/properties?${q}`);
+    const json = await res.json();
 
     return {
-      ids: data.data.map((d: any) => d.id),
-      pagination: data.meta.pagination
+      data: json.data.map((p: any) => adapters.property(p)),
+      pagination: json.meta
     };
-  }
-};
-
-const get = {
-  async properties(...ids: ResourceId[]): Promise<Property[]> {
-    const res = Promise.all(
-      ids.map(async (id) => {
-        const q = qs.stringify({
-          populate: [
-            "images",
-            "indoor_features",
-            "lot_features",
-            "outdoor_features",
-            "view_types"
-          ]
-        });
-        const url = `${process.env.API_URL}/properties/${id}?${q}`;
-        const res = await fetch(url);
-        return adapters.property(await res.json());
-      })
-    );
-    return res;
   },
 
   async property(id: ResourceId): Promise<Property> {
@@ -151,7 +185,8 @@ const get = {
     });
     const url = `${process.env.API_URL}/properties/${id}?${q}`;
     const res = await fetch(url);
-    return adapters.property(await res.json());
+    const json = await res.json();
+    return adapters.property(json.data);
   },
 
   async btsStations(): Promise<BTSStation[]> {
@@ -197,4 +232,4 @@ const get = {
   }
 };
 
-export default { query, get };
+export default { get };

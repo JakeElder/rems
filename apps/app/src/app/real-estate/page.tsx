@@ -1,25 +1,20 @@
 import {
   Breadcrumbs,
-  CountAndSort,
   FilterBar,
   Footer,
   Header,
-  ListingMap,
   RealEstateIndexPage as Page,
   Pagination,
-  PropertyCard,
   FiltersContext,
   RealEstateQueryController
 } from "@rems/ui";
 import api from "../../api";
-import slugify from "@sindresorhus/slugify";
 import { realEstateQuerySchema } from "@rems/types";
 import { flatten } from "remeda";
-import {
-  LIVING_AREA_SIZES,
-  MAX_LIVING_AREA_SIZES,
-  MIN_LIVING_AREA_SIZES
-} from "../../constants";
+import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
+import PropertyCards from "./PropertyCards";
+import ListingMap from "./ListingMap";
+import CountAndSort from "./CountAndSort";
 
 const processSearchParams = (params: {
   [key: string]: string | string[] | undefined;
@@ -30,7 +25,7 @@ const processSearchParams = (params: {
     "lot-features": flatten([params["lot-features[]"]]),
     "outdoor-features": flatten([params["outdoor-features[]"]]),
     "property-type": flatten([params["property-type[]"]]),
-    "view-type": flatten([params["view-type[]"]])
+    "view-types": flatten([params["view-types[]"]])
   };
 };
 
@@ -40,8 +35,6 @@ export default async function Home({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const query = realEstateQuerySchema.parse(processSearchParams(searchParams));
-  const { ids } = await api.query.properties();
-  const properties = await api.get.properties(...ids);
 
   const [
     btsStations,
@@ -92,23 +85,17 @@ export default async function Home({
           </Page.Breadcrumbs>
           <Page.Title>Homes for sale in Thailand</Page.Title>
           <Page.CountAndSort>
-            <CountAndSort count={properties.length} />
+            <CountAndSort query={query} />
           </Page.CountAndSort>
           <Page.Properties>
-            {properties.map((p) => (
-              <PropertyCard
-                key={p.id}
-                property={p}
-                link={`/real-estate/${slugify(p.title)}-${p.id}`}
-              />
-            ))}
+            <PropertyCards query={query} />
           </Page.Properties>
           <Page.Pagination>
             <Pagination />
           </Page.Pagination>
         </Page.Content>
         <Page.Map>
-          <ListingMap properties={properties} />
+          <ListingMap query={query} />
         </Page.Map>
       </Page.Main>
       <Page.Footer>

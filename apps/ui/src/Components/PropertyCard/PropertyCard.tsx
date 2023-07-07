@@ -24,7 +24,7 @@ const PropertyCard = ({ property, link = "#" }: Props) => {
             <span className={css["separator"]}>&bull;</span>
             <span className={css["baths"]}>{property.bathrooms} baths</span>
             <span className={css["separator"]}>&bull;</span>
-            <span className={css["area"]}>{property.area}m&#178;</span>
+            <span className={css["area"]}>{property.livingArea}m&#178;</span>
           </div>
           <div className={css["title"]}>{property.title}</div>
         </div>

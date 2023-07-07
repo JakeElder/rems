@@ -18,9 +18,9 @@ const ViewTypeFilters = ({}: Props) => {
           items={viewTypes.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onCheckedChange("view-type", t.slug, checked)
+                onCheckedChange("view-types", t.slug, checked)
               }
-              checked={query["view-type"].includes(t.slug)}
+              checked={query["view-types"].includes(t.slug)}
               key={t.slug}
               name="view-type[]"
               value={t.slug}

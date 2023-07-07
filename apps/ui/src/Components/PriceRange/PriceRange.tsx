@@ -11,7 +11,10 @@ const STEP = 1000;
 
 const PriceRange = ({}: Props) => {
   const { query, onPriceRangeChange } = useRealEstateQuery();
-  const [value, setValue] = useState([query["min-price"], query["max-price"]]);
+  const [value, setValue] = useState([
+    query["min-price"],
+    query["max-price"] ? query["max-price"] : MAX
+  ]);
 
   const formatted = [
     `฿ ${value[0].toLocaleString()}`,
@@ -27,7 +30,9 @@ const PriceRange = ({}: Props) => {
           step={STEP}
           value={value}
           onValueChange={setValue}
-          onValueCommit={([min, max]) => onPriceRangeChange(min, max)}
+          onValueCommit={([min, max]) =>
+            onPriceRangeChange(min, max === MAX ? null : max)
+          }
           name="price-range"
         />
       </div>

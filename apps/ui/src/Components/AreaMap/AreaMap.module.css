@@ -6,10 +6,6 @@
   left: 0;
 }
 
-.markers {
-  display: none;
-}
-
 .marker {
   width: 8px;
   height: 8px;
