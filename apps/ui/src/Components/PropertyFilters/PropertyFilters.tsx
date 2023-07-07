@@ -4,20 +4,18 @@ import TypeFilters from "../TypeFilters";
 import PriceRange from "../PriceRange";
 import BedsFilter from "../BedsFilter";
 import BathroomsFilter from "../BathroomsFilter";
-import { useFilters } from "../../Utils/FiltersContext";
-import Select from "../../Elements/Select";
 import Split from "../../Elements/Split";
 import ViewTypeFilters from "../ViewTypeFilters";
 import IndoorFeatureFilters from "../IndoorFeatureFilters";
 import OutdoorFeatureFilters from "../OutdoorFeatureFilters";
 import LotFeatureFilters from "../LotFeatureFilters";
 import LivingAreaFilters from "../LivingAreaFilters/LivingAreaFilters";
-import NearestMRTStationFilter from "../NearestMRTStationFilter/NearestMRTStationFilter";
+import NearestMRTStationFilter from "../NearestMRTStationFilter";
+import NearestBTSStationFilter from "../NearestBTSStationFilter";
 
 type Props = {};
 
 const PropertyFilters = ({}: Props) => {
-  const { mrtStations, btsStations } = useFilters();
   return (
     <div className={css["root"]}>
       <div className={css["section"]}>
@@ -86,13 +84,7 @@ const PropertyFilters = ({}: Props) => {
         <div className={css["header"]}>Nearest BTS Station</div>
         <div className={css["filters"]}>
           <Split>
-            <Select
-              value=""
-              options={[
-                { label: "Any", value: "" },
-                ...btsStations.map((s) => ({ label: s.name, value: s.slug }))
-              ]}
-            />
+            <NearestBTSStationFilter />
           </Split>
         </div>
       </div>

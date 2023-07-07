@@ -117,7 +117,8 @@ export const realEstateQuerySchema = z.object({
   "min-bathrooms": z.coerce.number().default(0).catch(0),
   "min-living-area": z.coerce.number().default(0).catch(0),
   "max-living-area": z.coerce.number().nullable().default(null).catch(null),
-  "nearest-mrt-station": z.string().nullable().default(null).catch(null)
+  "nearest-mrt-station": z.string().nullable().default(null).catch(null),
+  "nearest-bts-station": z.string().nullable().default(null).catch(null)
 });
 
 export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;

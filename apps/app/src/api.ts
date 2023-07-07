@@ -142,6 +142,10 @@ const get = {
       ? { slug: { $eq: query["nearest-mrt-station"] } }
       : {};
 
+    const nearest_bts_station = query["nearest-bts-station"]
+      ? { slug: { $eq: query["nearest-bts-station"] } }
+      : {};
+
     const q = qs.stringify({
       populate: [
         "images",
@@ -159,7 +163,8 @@ const get = {
             bedrooms,
             bathrooms,
             livingArea,
-            nearest_mrt_station
+            nearest_mrt_station,
+            nearest_bts_station
           },
           ...view_types,
           ...indoor_features,
