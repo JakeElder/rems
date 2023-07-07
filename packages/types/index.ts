@@ -100,7 +100,7 @@ export const realEstateQuerySchema = z.object({
   "property-type": z.string().array().default([]).catch([]),
   "view-types": z.string().array().default([]).catch([]),
   page: z.number().default(1).catch(1),
-  order: z
+  sort: z
     .enum([
       "newest-first",
       "lowest-price-first",
@@ -116,7 +116,8 @@ export const realEstateQuerySchema = z.object({
   "max-bedrooms": z.coerce.number().nullable().default(null).catch(null),
   "min-bathrooms": z.coerce.number().default(0).catch(0),
   "min-living-area": z.coerce.number().default(0).catch(0),
-  "max-living-area": z.coerce.number().nullable().default(null).catch(null)
+  "max-living-area": z.coerce.number().nullable().default(null).catch(null),
+  "nearest-mrt-station": z.string().nullable().default(null).catch(null)
 });
 
 export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;

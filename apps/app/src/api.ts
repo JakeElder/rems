@@ -138,6 +138,10 @@ const get = {
       ...(query["max-living-area"] ? { $lte: query["max-living-area"] } : {})
     };
 
+    const nearest_mrt_station = query["nearest-mrt-station"]
+      ? { slug: { $eq: query["nearest-mrt-station"] } }
+      : {};
+
     const q = qs.stringify({
       populate: [
         "images",
@@ -154,7 +158,8 @@ const get = {
             purchasePrice,
             bedrooms,
             bathrooms,
-            livingArea
+            livingArea,
+            nearest_mrt_station
           },
           ...view_types,
           ...indoor_features,

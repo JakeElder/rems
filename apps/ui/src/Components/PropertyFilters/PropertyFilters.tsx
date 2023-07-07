@@ -12,6 +12,7 @@ import IndoorFeatureFilters from "../IndoorFeatureFilters";
 import OutdoorFeatureFilters from "../OutdoorFeatureFilters";
 import LotFeatureFilters from "../LotFeatureFilters";
 import LivingAreaFilters from "../LivingAreaFilters/LivingAreaFilters";
+import NearestMRTStationFilter from "../NearestMRTStationFilter/NearestMRTStationFilter";
 
 type Props = {};
 
@@ -77,13 +78,7 @@ const PropertyFilters = ({}: Props) => {
         <div className={css["header"]}>Nearest MRT Station</div>
         <div className={css["filters"]}>
           <Split>
-            <Select
-              value=""
-              options={[
-                { label: "Any", value: "" },
-                ...mrtStations.map((s) => ({ label: s.name, value: s.slug }))
-              ]}
-            />
+            <NearestMRTStationFilter />
           </Split>
         </div>
       </div>
