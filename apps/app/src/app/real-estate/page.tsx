@@ -43,7 +43,8 @@ export default async function Home({
     mrtStations,
     outdoorFeatures,
     viewTypes,
-    propertyTypes
+    propertyTypes,
+    quickFilters
   ] = await Promise.all([
     api.get.btsStations(),
     api.get.indoorFeatures(),
@@ -51,7 +52,8 @@ export default async function Home({
     api.get.mrtStations(),
     api.get.outdoorFeatures(),
     api.get.viewTypes(),
-    api.get.propertyTypes()
+    api.get.propertyTypes(),
+    api.get.quickFilters()
   ]);
 
   return (
@@ -70,7 +72,8 @@ export default async function Home({
             livingAreaSizes: {
               min: MIN_LIVING_AREA_SIZES,
               max: MAX_LIVING_AREA_SIZES
-            }
+            },
+            quickFilters
           }}
         >
           <RealEstateQueryController query={query}>

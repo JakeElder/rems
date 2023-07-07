@@ -12,7 +12,9 @@ import {
   ResourceId,
   ViewType,
   RealEstateQuery,
-  Pagination
+  Pagination,
+  QuickFilter,
+  QuickFilterType
 } from "@rems/types";
 
 export const adapters = {
@@ -69,7 +71,7 @@ export const adapters = {
 };
 
 const get = {
-  async quickFilterList() {
+  async quickFilters(): Promise<QuickFilter[]> {
     const q = qs.stringify({
       populate: {
         filters: {
@@ -85,10 +87,28 @@ const get = {
 
     const url = `${process.env.API_URL}/quick-filter-list?${q}`;
     const res = await fetch(url);
-    const data = await res.json();
+    const json = await res.json();
 
-    return data.data;
+    const mapType = (component: string): QuickFilterType => {
+      const map: Record<string, QuickFilterType> = {
+        "quick-filters.indoor-feature": "INDOOR_FEATURE",
+        "quick-filters.lot-feature": "LOT_FEATURE",
+        "quick-filters.outdoor-feature": "OUTDOOR_FEATURE",
+        "quick-filters.view-type": "VIEW_TYPE"
+      };
+      return map[component];
+    };
+
+    const quickFilters = (
+      json.data.attributes.filters as any[]
+    ).map<QuickFilter>((d: any) => ({
+      type: mapType(d.__component),
+      filter: d.filter.data.attributes
+    }));
+
+    return quickFilters;
   },
+
   async featuredProperties(): Promise<Property[]> {
     const q = qs.stringify({
       populate: ["properties", "properties.images"]

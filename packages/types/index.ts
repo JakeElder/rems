@@ -79,6 +79,17 @@ export type LivingAreaSize = {
   label: string;
 };
 
+export type QuickFilterType =
+  | "INDOOR_FEATURE"
+  | "LOT_FEATURE"
+  | "OUTDOOR_FEATURE"
+  | "VIEW_TYPE";
+
+export type QuickFilter = {
+  type: QuickFilterType;
+  filter: Filter;
+};
+
 export type Filters = {
   btsStations: BTSStation[];
   indoorFeatures: IndoorFeature[];
@@ -91,6 +102,7 @@ export type Filters = {
     min: LivingAreaSize[];
     max: LivingAreaSize[];
   };
+  quickFilters: QuickFilter[];
 };
 
 export const realEstateQuerySchema = z.object({
@@ -122,3 +134,8 @@ export const realEstateQuerySchema = z.object({
 });
 
 export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;
+
+export type QuickFilterQueryKey = keyof Pick<
+  RealEstateQuery,
+  "indoor-features" | "outdoor-features" | "lot-features" | "view-types"
+>;
