@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import css from "./PriceRange.module.css";
 import Slider from "../../Elements/Slider";
 import { useRealEstateQuery } from "../RealEstateQueryController";
@@ -15,6 +15,13 @@ const PriceRange = ({}: Props) => {
     query["min-price"],
     query["max-price"] ? query["max-price"] : MAX
   ]);
+
+  useEffect(() => {
+    setValue([
+      query["min-price"],
+      query["max-price"] ? query["max-price"] : MAX
+    ]);
+  }, [query["min-price"], query["max-price"]]);
 
   const formatted = [
     `฿ ${value[0].toLocaleString()}`,

@@ -29,7 +29,7 @@ const QuickFilters = ({}: Props) => {
         const pressed = query[key].includes(f.filter.slug);
         return (
           <Toggle
-            key={`${key}.${f.filter.id}`}
+            key={`${key}.${f.filter.slug}`}
             pressed={pressed}
             onPressedChange={(pressed) => {
               onCheckedChange(key, f.filter.slug, pressed);

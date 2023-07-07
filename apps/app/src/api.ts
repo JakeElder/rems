@@ -212,7 +212,7 @@ const get = {
 
     return {
       data: json.data.map((p: any) => adapters.property(p)),
-      pagination: json.meta
+      pagination: json.meta.pagination
     };
   },
 

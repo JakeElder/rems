@@ -8,6 +8,7 @@ import { animated, useTransition } from "@react-spring/web";
 import PropertyFilters from "../PropertyFilters";
 import Split from "../../Elements/Split";
 import Button from "../../Elements/Button";
+import { useRealEstateQuery } from "../RealEstateQueryController";
 
 type Props = {
   defaultOpen?: boolean;
@@ -15,6 +16,7 @@ type Props = {
 
 const SidePanel = ({ defaultOpen = false }: Props) => {
   const [open, setOpen] = useState(defaultOpen);
+  const { reset, count } = useRealEstateQuery();
 
   const transitions = useTransition(open, {
     from: {
@@ -72,8 +74,12 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                 </div>
                 <div className={css["footer"]}>
                   <Split>
-                    <Button secondary>Clear all</Button>
-                    <Button type="submit">Show</Button>
+                    <Button secondary onClick={() => reset()}>
+                      Clear all
+                    </Button>
+                    <Button type="submit" onClick={() => setOpen(false)}>
+                      Show {count} properties
+                    </Button>
                   </Split>
                 </div>
               </animated.div>

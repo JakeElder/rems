@@ -10,11 +10,13 @@ import { useRouter, usePathname } from "next/navigation";
 
 type Props = {
   query: RealEstateQuery;
+  count: number;
   children: React.ReactNode;
 };
 
 type RealEstateQueryContext = {
   query: RealEstateQuery;
+  count: number;
   onCheckedChange: (
     param: keyof RealEstateQuery,
     value: string,
@@ -31,6 +33,7 @@ type RealEstateQueryContext = {
   onMinBedsChange: (min: RealEstateQuery["min-bedrooms"]) => void;
   onMaxBedsChange: (max: RealEstateQuery["max-bedrooms"]) => void;
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
+  reset: () => void;
 };
 
 const RealEstateQueryContext = createContext<RealEstateQueryContext | null>(
@@ -48,12 +51,12 @@ export const useRealEstateQuery = () => {
 export const generateQueryString = (
   query: RealEstateQuery,
   page?: number,
-  order?: RealEstateQuery["order"]
+  sort?: RealEstateQuery["sort"]
 ) => {
   const withForced = {
     ...query,
     ...(page ? { page } : {}),
-    ...(order ? { order } : {})
+    ...(sort ? { sort } : {})
   };
 
   const defaults = realEstateQuerySchema.parse({});
@@ -61,7 +64,7 @@ export const generateQueryString = (
   return qs.stringify(final, { arrayFormat: "bracket" });
 };
 
-const RealEstateQueryController = ({ query, children }: Props) => {
+const RealEstateQueryController = ({ query, count, children }: Props) => {
   const pathname = usePathname();
   const { push } = useRouter();
 
@@ -74,6 +77,7 @@ const RealEstateQueryController = ({ query, children }: Props) => {
     <RealEstateQueryContext.Provider
       value={{
         query,
+        count,
         onCheckedChange: (param, value, state) => {
           const checked = state !== "indeterminate" && state;
           const nextQuery = update(query, {
@@ -115,6 +119,10 @@ const RealEstateQueryController = ({ query, children }: Props) => {
         onValueChange: (param, value) => {
           const nextQuery = update(query, { [param]: { $set: value } });
           commit(nextQuery);
+        },
+
+        reset: () => {
+          commit(realEstateQuerySchema.parse({}));
         }
       }}
     >
