@@ -15,7 +15,8 @@ import {
   Pagination,
   QuickFilter,
   QuickFilterType,
-  SortType
+  SortType,
+  GetPropertiesResult
 } from "@rems/types";
 
 export const adapters = {
@@ -121,9 +122,7 @@ const get = {
     return json.data.attributes.properties.data.map(adapters.property);
   },
 
-  async properties(
-    query: RealEstateQuery
-  ): Promise<{ data: Property[]; pagination: Pagination }> {
+  async properties(query: RealEstateQuery): Promise<GetPropertiesResult> {
     const property_type = { slug: { $in: query["property-type"] } };
 
     const purchasePrice = {

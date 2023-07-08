@@ -1,7 +1,11 @@
 "use client";
 
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { RealEstateQuery, realEstateQuerySchema } from "@rems/types";
+import {
+  GetPropertiesResult,
+  RealEstateQuery,
+  realEstateQuerySchema
+} from "@rems/types";
 import React, { createContext, useContext } from "react";
 import qs from "query-string";
 import update from "immutability-helper";
@@ -10,13 +14,13 @@ import { useRouter, usePathname } from "next/navigation";
 
 type Props = {
   query: RealEstateQuery;
-  count: number;
+  result: GetPropertiesResult;
   children: React.ReactNode;
 };
 
 type RealEstateQueryContext = {
   query: RealEstateQuery;
-  count: number;
+  result: GetPropertiesResult;
   onCheckedChange: (
     param: keyof RealEstateQuery,
     value: string,
@@ -64,7 +68,7 @@ export const generateQueryString = (
   return qs.stringify(final, { arrayFormat: "bracket" });
 };
 
-const RealEstateQueryController = ({ query, count, children }: Props) => {
+const RealEstateQueryController = ({ query, result, children }: Props) => {
   const pathname = usePathname();
   const { push } = useRouter();
 
@@ -77,7 +81,7 @@ const RealEstateQueryController = ({ query, count, children }: Props) => {
     <RealEstateQueryContext.Provider
       value={{
         query,
-        count,
+        result,
         onCheckedChange: (param, value, state) => {
           const checked = state !== "indeterminate" && state;
           const nextQuery = update(query, {

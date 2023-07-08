@@ -16,7 +16,7 @@ type Props = {
 
 const SidePanel = ({ defaultOpen = false }: Props) => {
   const [open, setOpen] = useState(defaultOpen);
-  const { reset, count } = useRealEstateQuery();
+  const { reset, result } = useRealEstateQuery();
 
   const transitions = useTransition(open, {
     from: {
@@ -78,7 +78,7 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                       Clear all
                     </Button>
                     <Button type="submit" onClick={() => setOpen(false)}>
-                      Show {count} properties
+                      Show {result.pagination.total} properties
                     </Button>
                   </Split>
                 </div>

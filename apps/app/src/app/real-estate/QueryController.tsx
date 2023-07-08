@@ -9,11 +9,11 @@ type Props = {
 };
 
 async function QueryController({ query, children }: Props) {
-  const { pagination } = await api.get.properties(query);
+  const result = await api.get.properties(query);
   return (
     <RealEstateQueryController
       query={query}
-      count={pagination.total}
+      result={result}
       children={children}
     />
   );
