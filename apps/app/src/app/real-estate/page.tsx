@@ -5,7 +5,7 @@ import {
   Header,
   RealEstateIndexPage as Page,
   Pagination,
-  FiltersContext,
+  FiltersContext
 } from "@rems/ui";
 import api from "../../api";
 import { realEstateQuerySchema } from "@rems/types";
@@ -96,7 +96,9 @@ export default async function Home({
             <PropertyCards query={query} />
           </Page.Properties>
           <Page.Pagination>
-            <Pagination />
+            <QueryController query={query}>
+              <Pagination />
+            </QueryController>
           </Page.Pagination>
         </Page.Content>
         <Page.Map>

@@ -7,7 +7,7 @@ import css from "./CountAndSort.module.css";
 import { SortType } from "@rems/types";
 import { useRealEstateQuery } from "../RealEstateQueryController";
 
-type Props = { count: number };
+type Props = {};
 
 const label = (sort: SortType) => {
   const map: Record<SortType, string> = {
@@ -20,13 +20,13 @@ const label = (sort: SortType) => {
   return map[sort];
 };
 
-const CountAndSort = ({ count }: Props) => {
-  const { query, onValueChange } = useRealEstateQuery();
+const CountAndSort = ({}: Props) => {
+  const { query, result, onValueChange } = useRealEstateQuery();
   const value = query["sort"];
 
   return (
     <div className={css["root"]}>
-      <div className={css["count"]}>{count} listings</div>
+      <div className={css["count"]}>{result.pagination.total} listings</div>
       <div className={css["sort"]}>
         <select
           className={css["select"]}

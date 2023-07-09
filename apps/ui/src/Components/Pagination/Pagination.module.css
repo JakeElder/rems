@@ -25,11 +25,15 @@
 
 .page,
 .active,
+.prev-arrow,
 .next-arrow,
 .ellipsis {
+  display: block;
   width: 40px;
   height: 40px;
-  line-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   color: #555;
   border: 1px solid transparent;
@@ -38,7 +42,8 @@
 
 .page,
 .active,
-.next-arrow {
+.next-arrow,
+.prev-arrow {
   cursor: pointer;
 }
 

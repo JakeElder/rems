@@ -12,7 +12,6 @@ import {
   ResourceId,
   ViewType,
   RealEstateQuery,
-  Pagination,
   QuickFilter,
   QuickFilterType,
   SortType,
@@ -203,7 +202,11 @@ const get = {
           ...lot_features
         ]
       },
-      sort
+      sort,
+      pagination: {
+        pageSize: 4,
+        page: query["page"]
+      }
     });
 
     const res = await fetch(`${process.env.API_URL}/properties?${q}`);

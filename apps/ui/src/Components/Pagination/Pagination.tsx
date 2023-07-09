@@ -1,33 +1,66 @@
+"use client";
+
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronRight,
+  faChevronLeft
+} from "@fortawesome/free-solid-svg-icons";
 import css from "./Pagination.module.css";
+import {
+  generateQueryString,
+  useRealEstateQuery
+} from "../RealEstateQueryController";
+import ReactPaginate from "react-paginate";
+import Link from "next/link";
 
 type Props = {};
 
 const Pagination = ({}: Props) => {
+  const { result, query, onPageChange } = useRealEstateQuery();
+  const { pagination } = result;
+
+  const pageCount = Math.ceil(pagination.total / pagination.pageSize);
+
   return (
     <div className={css["root"]}>
-      <div className={css["next"]}>
-        <a>Next</a>
-      </div>
+      {pageCount > query["page"] ? (
+        <div className={css["next"]}>
+          <Link
+            href={`/real-estate/?${generateQueryString(
+              query,
+              query["page"] + 1
+            )}`}
+          >
+            Next
+          </Link>
+        </div>
+      ) : null}
       <div className={css["pages"]}>
-        <a className={css["active"]} href="#">
-          1
-        </a>
-        <a className={css["page"]} href="#">
-          2
-        </a>
-        <a className={css["page"]} href="#">
-          3
-        </a>
-        <span className={css["ellipsis"]}>&hellip;</span>
-        <a className={css["page"]} href="#">
-          6
-        </a>
-        <a className={css["next-arrow"]}>
-          <FontAwesomeIcon icon={faChevronRight} size="sm" />
-        </a>
+        <ReactPaginate
+          marginPagesDisplayed={1}
+          pageRangeDisplayed={2}
+          breakClassName={css["ellipsis"]}
+          breakLabel={<>&hellip;</>}
+          previousLinkClassName={css["prev-arrow"]}
+          nextLinkClassName={css["next-arrow"]}
+          previousLabel={<FontAwesomeIcon icon={faChevronLeft} size="sm" />}
+          nextLabel={<FontAwesomeIcon icon={faChevronRight} size="sm" />}
+          pageLinkClassName={css["page"]}
+          containerClassName={css["pages"]}
+          activeLinkClassName={css["active"]}
+          hrefBuilder={(page) => {
+            return `/real-estate/?${generateQueryString(query, page)}`;
+          }}
+          onClick={({ nextSelectedPage }) => {
+            if (typeof nextSelectedPage !== "undefined") {
+              onPageChange(nextSelectedPage + 1);
+            }
+            return false;
+          }}
+          pageCount={pageCount}
+          forcePage={query["page"] - 1}
+        />
       </div>
     </div>
   );

@@ -111,7 +111,7 @@ export const realEstateQuerySchema = z.object({
   "outdoor-features": z.string().array().default([]).catch([]),
   "property-type": z.string().array().default([]).catch([]),
   "view-types": z.string().array().default([]).catch([]),
-  page: z.number().default(1).catch(1),
+  page: z.coerce.number().default(1).catch(1),
   sort: z
     .enum([
       "newest-first",

@@ -34,6 +34,7 @@ type RealEstateQueryContext = {
     min: RealEstateQuery["min-price"],
     max: RealEstateQuery["max-price"]
   ) => void;
+  onPageChange: (page: RealEstateQuery["page"]) => void;
   onMinBedsChange: (min: RealEstateQuery["min-bedrooms"]) => void;
   onMaxBedsChange: (max: RealEstateQuery["max-bedrooms"]) => void;
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
@@ -87,7 +88,8 @@ const RealEstateQueryController = ({ query, result, children }: Props) => {
           const nextQuery = update(query, {
             [param]: checked
               ? { $push: [value] }
-              : { $apply: (p: any) => p.filter((v: any) => v !== value) }
+              : { $apply: (p: any) => p.filter((v: any) => v !== value) },
+            page: { $set: 1 }
           });
           commit(nextQuery);
         },
@@ -95,7 +97,8 @@ const RealEstateQueryController = ({ query, result, children }: Props) => {
         onPriceRangeChange: (min, max) => {
           const nextQuery = update(query, {
             "min-price": { $set: min },
-            "max-price": { $set: max }
+            "max-price": { $set: max },
+            page: { $set: 1 }
           });
           commit(nextQuery);
         },
@@ -105,28 +108,43 @@ const RealEstateQueryController = ({ query, result, children }: Props) => {
             "min-bedrooms": { $set: min },
             ...(query["max-bedrooms"]
               ? { "max-bedrooms": { $set: min === 0 ? null : min } }
-              : {})
+              : {}),
+            page: { $set: 1 }
           });
           commit(nextQuery);
         },
 
         onMaxBedsChange: (max) => {
-          const nextQuery = update(query, { "max-bedrooms": { $set: max } });
+          const nextQuery = update(query, {
+            "max-bedrooms": { $set: max },
+            page: { $set: 1 }
+          });
           commit(nextQuery);
         },
 
         onMinBathsChange: (min) => {
-          const nextQuery = update(query, { "min-bathrooms": { $set: min } });
+          const nextQuery = update(query, {
+            "min-bathrooms": { $set: min },
+            page: { $set: 1 }
+          });
           commit(nextQuery);
         },
 
         onValueChange: (param, value) => {
-          const nextQuery = update(query, { [param]: { $set: value } });
+          const nextQuery = update(query, {
+            [param]: { $set: value },
+            page: { $set: 1 }
+          });
           commit(nextQuery);
         },
 
         reset: () => {
           commit(realEstateQuerySchema.parse({}));
+        },
+
+        onPageChange: (page) => {
+          const nextQuery = update(query, { page: { $set: page } });
+          commit(nextQuery);
         }
       }}
     >
