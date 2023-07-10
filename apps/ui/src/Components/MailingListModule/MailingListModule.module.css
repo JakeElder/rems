@@ -64,7 +64,8 @@
   font-family: var(--font-inter);
   font-weight: 200;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  padding: 14px;
+  height: 48px;
+  padding: 0 14px;
   display: block;
   width: 100%;
   margin-bottom: 10px;
@@ -74,8 +75,6 @@
   font-family: var(--font-inter);
   background: #fff;
   color: #000;
-  height: 50px;
-  width: 100%;
   text-align: center;
 }
 
@@ -111,7 +110,6 @@
 
   .form input {
     flex: 1;
-    height: 50px;
   }
 
   .form button {

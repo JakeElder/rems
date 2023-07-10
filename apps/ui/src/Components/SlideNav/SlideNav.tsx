@@ -4,7 +4,6 @@ import CloseIcon from "../../Elements/CloseIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRectangleList,
-  faAddressCard,
   faEnvelope
 } from "@fortawesome/free-regular-svg-icons";
 import css from "./SlideNav.module.css";
@@ -101,12 +100,6 @@ const SlideNav = ({ defaultOpen = false, navIconColor }: Props) => {
                       </span>
                       Real Estate
                     </L>
-                    <L href="/about-us">
-                      <span className={css["icon"]}>
-                        <FontAwesomeIcon icon={faAddressCard} size="sm" />
-                      </span>
-                      About Us
-                    </L>
                     <L href="/contact-us">
                       <span className={css["icon"]}>
                         <FontAwesomeIcon icon={faEnvelope} size="sm" />
@@ -139,5 +132,12 @@ const SlideNav = ({ defaultOpen = false, navIconColor }: Props) => {
     </Dialog.Root>
   );
 };
+
+// <L href="/about-us">
+//   <span className={css["icon"]}>
+//     <FontAwesomeIcon icon={faAddressCard} size="sm" />
+//   </span>
+//   About Us
+// </L>
 
 export default SlideNav;

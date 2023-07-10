@@ -29,6 +29,7 @@ const A = ({
   const active = pathname
     ? usePathname().split("/")[1] === href.replace(/^\//, "")
     : false;
+
   const opacity = active ? "1" : "0.7";
   const fontWeight = active ? 500 : 400;
   const styles = useSpring(
@@ -60,7 +61,7 @@ const Button = ({
 };
 
 const Header = ({ mode, full = false }: Props) => {
-  const [hasScrollY, setHasScrollY] = useState(false);
+  const [hasScrollY, setHasScrollY] = useState(window.pageYOffset > 0);
   const style = mode === "hero" && !hasScrollY ? "transparent" : "opaque";
 
   const styles = useSpring(
@@ -100,9 +101,6 @@ const Header = ({ mode, full = false }: Props) => {
                 </A>
                 <A href="/real-estate" style={style}>
                   Real Estate
-                </A>
-                <A href="/about-us" style={style}>
-                  About Us
                 </A>
               </nav>
               <Button style={style}>Contact Us</Button>
