@@ -3,7 +3,7 @@ import css from "./RealEstatePage.module.css";
 import { Property } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import StandardHeroLayout from "../../Layouts/StandardHeroLayout";
+import * as Layout from "../../Layouts/StandardHeroLayout";
 import Footer from "../../Components/Footer";
 import SimpleImageCarousel from "../../Components/SimpleImageCarousel";
 import Breadcrumbs from "../../Components/Breadcrumbs";
@@ -42,7 +42,7 @@ const RealEstatePage = ({ property }: Props) => {
     <StandardHeroLayout
       hero={
         <div className={css["image"]}>
-          <SimpleImageCarousel fill images={images} />
+          <SimpleImageCarousel images={images} fill />
           <div className={css["overlay"]} />
         </div>
       }
