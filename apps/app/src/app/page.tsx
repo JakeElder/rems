@@ -1,8 +1,30 @@
-import { HomePage } from "@rems/ui";
-import api from "../api";
+import { HomePage as Page, Header } from "@rems/ui";
+import PopularSearches from "./PopularSearches";
+import LatestProperties from "./LatestProperties";
+import Hero from "./Hero";
+import EmailCollector from "./EmailCollector";
 
 export default async function Home() {
-  const properties = await api.get.featuredProperties();
-  const withImages = properties.filter((p) => !!p.images.length);
-  return <HomePage heroProperties={withImages} />;
+  return (
+    <Page.Root>
+      <Page.Header>
+        <Header mode="hero" />
+      </Page.Header>
+      <Page.Hero>
+        <Hero />
+      </Page.Hero>
+      <Page.Content>
+        <Page.PopularSearches>
+          <PopularSearches />
+        </Page.PopularSearches>
+        <Page.EmailCollector>
+          <EmailCollector />
+        </Page.EmailCollector>
+        <Page.LatestProperties>
+          <LatestProperties />
+        </Page.LatestProperties>
+      </Page.Content>
+      <Page.Footer />
+    </Page.Root>
+  );
 }

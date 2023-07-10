@@ -1,22 +1,18 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import css from "./StandardHeroLayout.module.css";
-import Header from "../../Components/Header/Header";
 
-type Props = {
-  hero: ReactNode;
-  children: ReactNode;
+export const Root = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["root"]}>{children}</div>;
 };
 
-const StandardHeroLayout = ({ hero, children }: Props) => {
-  return (
-    <div className={css["root"]}>
-      <div className={css["header"]}>
-        <Header mode="hero" />
-      </div>
-      <div className={css["hero"]}>{hero}</div>
-      <div className={css["content"]}>{children}</div>
-    </div>
-  );
+export const Header = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["header"]}>{children}</div>;
 };
 
-export default StandardHeroLayout;
+export const Hero = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["hero"]}>{children}</div>;
+};
+
+export const Content = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["content"]}>{children}</div>;
+};

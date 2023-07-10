@@ -32,7 +32,7 @@ export const Default: Story = {
             </Page.Breadcrumbs>
             <Page.Title>Homes for sale in Thailand</Page.Title>
             <Page.CountAndSort>
-              <CountAndSort count={properties.length} />
+              <CountAndSort />
             </Page.CountAndSort>
             <Page.Properties>
               {properties.map((p) => (

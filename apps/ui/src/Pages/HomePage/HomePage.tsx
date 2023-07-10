@@ -1,46 +1,69 @@
 import React from "react";
-import { Property } from "@rems/types";
-import FeaturedCarousel from "../../Components/FeaturedCarousel";
-import StandardHeroLayout from "../../Layouts/StandardHeroLayout";
-import { Default as cardData } from "../../Components/EntryCardGrid/EntryCardGrid.stories";
-import EntryCardGrid from "../../Components/EntryCardGrid";
+import * as Layout from "../../Layouts/StandardHeroLayout";
 import Container from "../../Elements/Container/Container";
 import css from "./HomePage.module.css";
-import MailingListModule from "../../Components/MailingListModule";
-import PropertySlider from "../../Components/PropertySlider";
 import MonogramHR from "../../Components/MonogramHR";
-import Footer from "../../Components/Footer";
+import FooterView from "../../Components/Footer";
 
-type Props = {
-  heroProperties: Property[];
+export const Root = ({ children }: { children: React.ReactNode }) => {
+  return <Layout.Root>{children}</Layout.Root>;
 };
 
-const HomePage = ({ heroProperties }: Props) => {
+export const Header = ({ children }: { children: React.ReactNode }) => {
+  return <Layout.Header>{children}</Layout.Header>;
+};
+
+export const Hero = ({ children }: { children: React.ReactNode }) => {
+  return <Layout.Hero>{children}</Layout.Hero>;
+};
+
+export const Content = ({ children }: { children: React.ReactNode }) => {
   return (
-    <StandardHeroLayout hero={<FeaturedCarousel properties={heroProperties} />}>
+    <Layout.Content>
       <Container>
-        <div className={css["content"]}>
-          <div className={css["popular-searches"]}>
-            <h2 className={css["heading"]}>Popular Searches</h2>
-            <EntryCardGrid cards={cardData.args?.cards!} />
-          </div>
-          <div className={css["email-collector"]}>
-            <MailingListModule />
-          </div>
-          <div className={css["latest-properties"]}>
-            <h2 className={css["heading"]}>Latest Properties</h2>
-            <PropertySlider properties={heroProperties} />
-          </div>
-          <div className={css["hr"]}>
-            <MonogramHR />
-          </div>
+        <div className={css["content"]}>{children}</div>
+        <div className={css["hr"]}>
+          <MonogramHR />
         </div>
       </Container>
-      <div className={css["footer"]}>
-        <Footer />
-      </div>
-    </StandardHeroLayout>
+    </Layout.Content>
   );
 };
 
-export default HomePage;
+export const PopularSearches = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className={css["popular-searches"]}>
+      <h2 className={css["heading"]}>Popular Searches</h2>
+      {children}
+    </div>
+  );
+};
+
+export const EmailCollector = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["email-collector"]}>{children}</div>;
+};
+
+export const LatestProperties = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className={css["latest-properties"]}>
+      <h2 className={css["heading"]}>Latest Properties</h2>
+      {children}
+    </div>
+  );
+};
+
+export const Footer = () => {
+  return (
+    <div className={css["footer"]}>
+      <FooterView />
+    </div>
+  );
+};

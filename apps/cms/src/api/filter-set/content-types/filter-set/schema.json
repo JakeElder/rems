@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "filter_sets",
+  "info": {
+    "singularName": "filter-set",
+    "pluralName": "filter-sets",
+    "displayName": "Filter Set",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "required": true,
+      "targetField": "name"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "collectionName": "popular_searches",
+  "info": {
+    "singularName": "popular-searches-list",
+    "pluralName": "popular-searches",
+    "displayName": "Popular Searches List",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "filter_sets": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::filter-set.filter-set"
+    }
+  }
+}

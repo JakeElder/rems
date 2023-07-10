@@ -1,75 +1,24 @@
 import qs from "qs";
 import { fetch } from "./utils";
+import adapters from "./adapters";
 import {
-  Filter,
-  IndoorFeature,
   BTSStation,
-  MRTStation,
+  FilterSet,
+  GetPropertiesResult,
+  IndoorFeature,
   LotFeature,
+  MRTStation,
   OutdoorFeature,
+  PartialRealEstateQuery,
   Property,
   PropertyType,
-  ResourceId,
-  ViewType,
-  RealEstateQuery,
   QuickFilter,
   QuickFilterType,
+  ResourceId,
   SortType,
-  GetPropertiesResult
+  ViewType,
+  realEstateQuerySchema
 } from "@rems/types";
-
-export const adapters = {
-  property(res: any): Property {
-    const {
-      title,
-      purchasePrice,
-      images,
-      location,
-      bedrooms,
-      bathrooms,
-      livingArea,
-      description,
-      createdAt,
-      updatedAt,
-      indoor_features,
-      lot_features,
-      outdoor_features,
-      view_types,
-      address,
-      publishedAt
-    } = res.attributes;
-
-    return {
-      id: res.id,
-      title,
-      description,
-      purchasePrice,
-      location: JSON.parse(location),
-      formattedPurchasePrice: `฿${purchasePrice.toLocaleString()}`,
-      bedrooms,
-      bathrooms,
-      indoorFeatures: (indoor_features?.data || []).map(adapters.filter),
-      lotFeatures: (lot_features?.data || []).map(adapters.filter),
-      outdoorFeatures: (outdoor_features?.data || []).map(adapters.filter),
-      viewTypes: (view_types?.data || []).map(adapters.filter),
-      address,
-      livingArea,
-      images: (images.data || []).map((d: any) => ({
-        id: d.id,
-        src: `${process.env.ASSET_URL}${d.attributes.url}`,
-        ...d.attributes
-      })),
-      createdAt,
-      updatedAt,
-      publishedAt
-    };
-  },
-
-  filter(res: any): Filter {
-    const { name, createdAt, updatedAt, slug } = res.attributes;
-    return { id: res.id, name, slug, createdAt, updatedAt };
-  }
-};
 
 const get = {
   async quickFilters(): Promise<QuickFilter[]> {
@@ -110,6 +59,17 @@ const get = {
     return quickFilters;
   },
 
+  async popularSearches(): Promise<FilterSet[]> {
+    const q = qs.stringify({
+      populate: ["filter_sets", "filter_sets.image"]
+    });
+    const url = `${process.env.API_URL}/popular-searches-list?${q}`;
+    const res = await fetch(url);
+    const json = await res.json();
+
+    return json.data.attributes.filter_sets.data.map(adapters.filterSet);
+  },
+
   async featuredProperties(): Promise<Property[]> {
     const q = qs.stringify({
       populate: ["properties", "properties.images"]
@@ -118,10 +78,17 @@ const get = {
     const res = await fetch(url);
     const json = await res.json();
 
-    return json.data.attributes.properties.data.map(adapters.property);
+    return json.data.attributes.properties.data
+      .map(adapters.property)
+      .filter((p: Property) => !!p.images.length);
   },
 
-  async properties(query: RealEstateQuery): Promise<GetPropertiesResult> {
+  async properties(pq: PartialRealEstateQuery): Promise<GetPropertiesResult> {
+    const query = {
+      ...realEstateQuerySchema.parse({}),
+      ...pq
+    };
+
     const property_type = { slug: { $in: query["property-type"] } };
 
     const purchasePrice = {

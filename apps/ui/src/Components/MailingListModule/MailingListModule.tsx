@@ -1,9 +1,15 @@
+"use client";
+
 import React from "react";
 import css from "./MailingListModule.module.css";
+import Button from "../../Elements/Button";
 
-type Props = {};
+type Props = {
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
+  loading?: boolean;
+};
 
-const MailingListModule = ({}: Props) => {
+const MailingListModule = ({ onSubmit, loading = false }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["content"]}>
@@ -14,9 +20,16 @@ const MailingListModule = ({}: Props) => {
           mailling list to be amongst the first notified when we update our
           listings.
         </p>
-        <form className={css["form"]}>
-          <input type="email" placeholder="Email Address" />
-          <button type="submit">Submit</button>
+        <form className={css["form"]} onSubmit={onSubmit}>
+          <input
+            type="email"
+            required
+            name="email"
+            placeholder="Email Address"
+          />
+          <Button disabled={loading} type="submit">
+            {loading ? "Loading" : "Submit"}
+          </Button>
         </form>
       </div>
     </div>

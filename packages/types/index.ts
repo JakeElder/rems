@@ -135,6 +135,9 @@ export const realEstateQuerySchema = z.object({
 
 export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;
 
+const partialRealEstateQuery = realEstateQuerySchema.partial();
+export type PartialRealEstateQuery = z.infer<typeof partialRealEstateQuery>;
+
 export type QuickFilterQueryKey = keyof Pick<
   RealEstateQuery,
   "indoor-features" | "outdoor-features" | "lot-features" | "view-types"
@@ -145,4 +148,11 @@ export type SortType = RealEstateQuery["sort"];
 export type GetPropertiesResult = {
   data: Property[];
   pagination: Pagination;
+};
+
+export type FilterSet = {
+  id: number;
+  name: string;
+  slug: string;
+  image: Image;
 };

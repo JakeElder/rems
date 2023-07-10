@@ -15,13 +15,18 @@
     "@types/node": "18.15.3",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.0.11",
+    "mailersend": "^2.1.2",
     "mapbox-gl": "^2.13.0",
     "next": "13.4.7",
+    "nodemailer": "^6.9.3",
     "qs": "^6.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "remeda": "^1.23.0",
     "the-new-css-reset": "^1.8.4",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.8"
   }
 }
