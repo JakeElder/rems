@@ -70,7 +70,7 @@ const MapPropertyMarker = forwardRef<HTMLDivElement, Props>(
                         {property.bathrooms} Baths
                       </span>
                       <Bullet />
-                      <span className={css["area"]}>{property.area}m²</span>
+                      <span className={css["area"]}>{property.livingArea}m²</span>
                     </div>
                     <h2 className={css["heading"]}>{property.title}</h2>
                   </div>

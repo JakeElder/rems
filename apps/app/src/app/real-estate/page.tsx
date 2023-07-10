@@ -5,7 +5,8 @@ import {
   Header,
   RealEstateIndexPage as Page,
   Pagination,
-  FiltersContext
+  FiltersContext,
+  CountAndSort
 } from "@rems/ui";
 import api from "../../api";
 import { realEstateQuerySchema } from "@rems/types";
@@ -13,7 +14,6 @@ import { flatten } from "remeda";
 import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
 import PropertyCards from "./PropertyCards";
 import ListingMap from "./ListingMap";
-import CountAndSort from "./CountAndSort";
 import QueryController from "./QueryController";
 
 const processSearchParams = (params: {
@@ -89,7 +89,7 @@ export default async function Home({
           <Page.Title>Homes for sale in Thailand</Page.Title>
           <Page.CountAndSort>
             <QueryController query={query}>
-              <CountAndSort query={query} />
+              <CountAndSort />
             </QueryController>
           </Page.CountAndSort>
           <Page.Properties>
