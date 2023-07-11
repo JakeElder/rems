@@ -8,7 +8,8 @@ import {
   FiltersContext,
   CountAndSort,
   PropertyGrid,
-  ListingMap
+  ListingMap,
+  RealEstateQueryController
 } from "@rems/ui";
 import api from "../../api";
 import { realEstateQuerySchema } from "@rems/types";
@@ -57,8 +58,8 @@ export default async function Home({
   ]);
 
   return (
-    <QueryController query={query}>
-      <Page.Root>
+    <Page.Root>
+      <RealEstateQueryController query={query}>
         <Page.Header>
           <Header full mode="standard" />
           <FiltersContext
@@ -103,7 +104,7 @@ export default async function Home({
         <Page.Footer>
           <Footer full />
         </Page.Footer>
-      </Page.Root>
-    </QueryController>
+      </RealEstateQueryController>
+    </Page.Root>
   );
 }

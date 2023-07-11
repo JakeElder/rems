@@ -16,7 +16,6 @@ import eq from "fast-deep-equal";
 type Props = {
   query: RealEstateQuery;
   children: React.ReactNode;
-  get: (query: RealEstateQuery) => Promise<GetPropertiesResult>;
 };
 
 type RealEstateQueryContext = {
@@ -74,7 +73,7 @@ export const generateQueryString = (
   return qs.stringify(final, { arrayFormat: "bracket" });
 };
 
-const RealEstateQueryController = ({ query, children, get }: Props) => {
+const RealEstateQueryController = ({ query, children }: Props) => {
   const pathname = usePathname();
   const { push } = useRouter();
 
@@ -88,6 +87,14 @@ const RealEstateQueryController = ({ query, children, get }: Props) => {
     loading: true,
     result: null
   });
+
+  const get: (
+    q: RealEstateQuery
+  ) => Promise<GetPropertiesResult> = async () => {
+    const string = generateQueryString(query);
+    const res = await fetch(`/properties?${string}`);
+    return res.json();
+  };
 
   useEffect(() => {
     setLoader(
