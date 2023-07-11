@@ -83,7 +83,8 @@ const RealEstateQueryController = ({
   const commit = (query: RealEstateQuery) => {
     React.startTransition(() => setQuery(query));
     const string = generateQueryString(query);
-    window.history.pushState("", "", `${pathname}?${string}`);
+    const q = `?${string}`;
+    window.history.pushState("", "", `${pathname} ? ${q === "?" ? "" : q}`);
   };
 
   const [loader, setLoader] = useState<LoadingState>({
@@ -96,7 +97,7 @@ const RealEstateQueryController = ({
     q: RealEstateQuery
   ) => Promise<GetPropertiesResult> = async () => {
     const string = generateQueryString(query);
-    const res = await fetch(`/properties?${string}`);
+    const res = await fetch(`/ properties ? ${string} `);
     return res.json();
   };
 
