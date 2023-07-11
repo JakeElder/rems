@@ -45,78 +45,65 @@ export default async function Home({
     viewTypes,
     propertyTypes,
     quickFilters
-  ] = await Promise.all([[], [], [], [], [], [], [], []]);
-
-  //   const [
-  //     btsStations,
-  //     indoorFeatures,
-  //     lotFeatures,
-  //     mrtStations,
-  //     outdoorFeatures,
-  //     viewTypes,
-  //     propertyTypes,
-  //     quickFilters
-  //   ] = await Promise.all([
-  //     api.get.btsStations(),
-  //     api.get.indoorFeatures(),
-  //     api.get.lotFeatures(),
-  //     api.get.mrtStations(),
-  //     api.get.outdoorFeatures(),
-  //     api.get.viewTypes(),
-  //     api.get.propertyTypes(),
-  //     api.get.quickFilters()
-  //   ]);
+  ] = await Promise.all([
+    api.get.btsStations(),
+    api.get.indoorFeatures(),
+    api.get.lotFeatures(),
+    api.get.mrtStations(),
+    api.get.outdoorFeatures(),
+    api.get.viewTypes(),
+    api.get.propertyTypes(),
+    api.get.quickFilters()
+  ]);
 
   return (
     <QueryController query={query}>
-      <FiltersContext
-        value={{
-          btsStations,
-          indoorFeatures,
-          lotFeatures,
-          mrtStations,
-          outdoorFeatures,
-          propertyTypes,
-          viewTypes,
-          livingAreaSizes: {
-            min: MIN_LIVING_AREA_SIZES,
-            max: MAX_LIVING_AREA_SIZES
-          },
-          quickFilters
-        }}
-      >
-        <Page.Root>
-          <Page.Header>
-            <Header full mode="standard" />
+      <Page.Root>
+        <Page.Header>
+          <Header full mode="standard" />
+          <FiltersContext
+            value={{
+              btsStations,
+              indoorFeatures,
+              lotFeatures,
+              mrtStations,
+              outdoorFeatures,
+              propertyTypes,
+              viewTypes,
+              livingAreaSizes: {
+                min: MIN_LIVING_AREA_SIZES,
+                max: MAX_LIVING_AREA_SIZES
+              },
+              quickFilters
+            }}
+          >
             <FilterBar />
-          </Page.Header>
-          <Page.Main>
-            <Page.Content>
-              <Page.Breadcrumbs>
-                <Breadcrumbs />
-              </Page.Breadcrumbs>
-              <Page.Title>Homes for sale in Thailand</Page.Title>
-              <Page.CountAndSort>
-                <QueryController query={query}>
-                  <CountAndSort />
-                </QueryController>
-              </Page.CountAndSort>
-              <Page.Properties>
-                <PropertyGrid />
-              </Page.Properties>
-              <Page.Pagination>
-                <Pagination />
-              </Page.Pagination>
-            </Page.Content>
-            <Page.Map>
-              <ListingMap />
-            </Page.Map>
-          </Page.Main>
-          <Page.Footer>
-            <Footer full />
-          </Page.Footer>
-        </Page.Root>
-      </FiltersContext>
+          </FiltersContext>
+        </Page.Header>
+        <Page.Main>
+          <Page.Content>
+            <Page.Breadcrumbs>
+              <Breadcrumbs />
+            </Page.Breadcrumbs>
+            <Page.Title>Homes for sale in Thailand</Page.Title>
+            <Page.CountAndSort>
+              <CountAndSort />
+            </Page.CountAndSort>
+            <Page.Properties>
+              <PropertyGrid />
+            </Page.Properties>
+            <Page.Pagination>
+              <Pagination />
+            </Page.Pagination>
+          </Page.Content>
+          <Page.Map>
+            <ListingMap />
+          </Page.Map>
+        </Page.Main>
+        <Page.Footer>
+          <Footer full />
+        </Page.Footer>
+      </Page.Root>
     </QueryController>
   );
 }
