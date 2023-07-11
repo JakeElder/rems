@@ -107,6 +107,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::mrt-station.mrt-station"
+    },
+    "lotSize": {
+      "type": "integer"
+    },
+    "uid": {
+      "type": "uid"
     }
   }
 }
