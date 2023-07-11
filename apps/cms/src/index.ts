@@ -9,7 +9,7 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/*{ strapi }*/) {},
+  register(/*{ strapi }*/) { },
 
   /**
    * An asynchronous bootstrap function that runs before
@@ -18,7 +18,7 @@ export default {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  async bootstrap({ strapi }) {
+  async bootstrap({ }) {
     if (process.env.SEED) {
       console.log("seeding");
 
@@ -97,7 +97,7 @@ export default {
 
       seed("view-type.view-type", [
         { name: "Panoramic / Scenic View", slug: "panoramic-scenic-view" },
-        { name: "Mounain View", slug: "mounain-view" },
+        { name: "Mountain View", slug: "mountain-view" },
         { name: "Water View", slug: "water-view" },
         { name: "Ocean View", slug: "ocean-view" },
         { name: "Sea View", slug: "sea-view" },

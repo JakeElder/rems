@@ -61,7 +61,9 @@ const Button = ({
 };
 
 const Header = ({ mode, full = false }: Props) => {
-  const [hasScrollY, setHasScrollY] = useState(window.pageYOffset > 0);
+  const [hasScrollY, setHasScrollY] = useState(
+    typeof window !== "undefined" && window.scrollY > 0
+  );
   const style = mode === "hero" && !hasScrollY ? "transparent" : "opaque";
 
   const styles = useSpring(
@@ -81,7 +83,7 @@ const Header = ({ mode, full = false }: Props) => {
   );
 
   useEffect(() => {
-    const onScroll = () => setHasScrollY(window.pageYOffset > 0);
+    const onScroll = () => setHasScrollY(window.scrollY > 0);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);

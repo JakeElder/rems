@@ -4,11 +4,13 @@
   "info": {
     "singularName": "featured-property-list",
     "pluralName": "featured-property-lists",
-    "displayName": "Featured Property List"
+    "displayName": "Featured Property List",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
+  "pluginOptions": {},
   "attributes": {
     "properties": {
       "type": "relation",
