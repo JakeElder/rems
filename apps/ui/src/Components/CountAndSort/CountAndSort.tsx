@@ -29,7 +29,13 @@ const CountAndSort = ({}: Props) => {
     <div className={css["root"]}>
       <div className={css["count"]}>
         {initialLoad || loading ? (
-          <Oval height={16} width={16} color="#000" visible={true} />
+          <Oval
+            height={16}
+            width={16}
+            color="#c19d54"
+            secondaryColor="#c19d54"
+            visible={true}
+          />
         ) : (
           `${result.pagination.total} listings`
         )}

@@ -80,7 +80,12 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                     </Button>
                     <Button type="submit" onClick={() => setOpen(false)}>
                       {initialLoad || loading ? (
-                        <Oval height={22} width={22} color="#fff" />
+                        <Oval
+                          height={22}
+                          width={22}
+                          color="#fff"
+                          secondaryColor="#fff"
+                        />
                       ) : (
                         `Show ${result.pagination.total} homes`
                       )}
