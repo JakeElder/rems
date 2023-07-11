@@ -84,7 +84,7 @@ const RealEstateQueryController = ({
     React.startTransition(() => setQuery(query));
     const string = generateQueryString(query);
     const q = `?${string}`;
-    window.history.pushState("", "", `${pathname} ? ${q === "?" ? "" : q}`);
+    window.history.pushState("", "", `${pathname}${q === "?" ? "" : q}`);
   };
 
   const [loader, setLoader] = useState<LoadingState>({
