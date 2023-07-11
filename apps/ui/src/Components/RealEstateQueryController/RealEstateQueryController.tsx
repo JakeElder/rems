@@ -116,6 +116,7 @@ const RealEstateQueryController = ({
           loading: false,
           result
         });
+        window.scrollTo(0, 0);
       }
     });
   }, [query]);
