@@ -64,6 +64,7 @@ const Header = ({ mode, full = false }: Props) => {
   const [hasScrollY, setHasScrollY] = useState(
     typeof window !== "undefined" && window.scrollY > 0
   );
+
   const style = mode === "hero" && !hasScrollY ? "transparent" : "opaque";
 
   const styles = useSpring(

@@ -9,6 +9,7 @@ import PropertyFilters from "../PropertyFilters";
 import Split from "../../Elements/Split";
 import Button from "../../Elements/Button";
 import { useRealEstateQuery } from "../RealEstateQueryController";
+import { Oval } from "react-loader-spinner";
 
 type Props = {
   defaultOpen?: boolean;
@@ -16,7 +17,7 @@ type Props = {
 
 const SidePanel = ({ defaultOpen = false }: Props) => {
   const [open, setOpen] = useState(defaultOpen);
-  const { reset, result } = useRealEstateQuery();
+  const { reset, initialLoad, loading, result } = useRealEstateQuery();
 
   const transitions = useTransition(open, {
     from: {
@@ -78,7 +79,11 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                       Clear all
                     </Button>
                     <Button type="submit" onClick={() => setOpen(false)}>
-                      Show {result.pagination.total} properties
+                      {initialLoad || loading ? (
+                        <Oval height={22} width={22} color="#fff" />
+                      ) : (
+                        `Show ${result.pagination.total} homes`
+                      )}
                     </Button>
                   </Split>
                 </div>

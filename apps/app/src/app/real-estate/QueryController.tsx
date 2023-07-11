@@ -1,6 +1,6 @@
+import React from "react";
 import { RealEstateQuery } from "@rems/types";
 import { RealEstateQueryController } from "@rems/ui";
-import React from "react";
 import api from "../../api";
 
 type Props = {
@@ -9,13 +9,13 @@ type Props = {
 };
 
 async function QueryController({ query, children }: Props) {
-  const result = await api.get.properties(query);
+  async function get(query: RealEstateQuery) {
+    "use server";
+    return api.get.properties(query);
+  }
+
   return (
-    <RealEstateQueryController
-      query={query}
-      result={result}
-      children={children}
-    />
+    <RealEstateQueryController query={query} children={children} get={get} />
   );
 }
 

@@ -6,21 +6,21 @@ import {
   RealEstateQuery,
   realEstateQuerySchema
 } from "@rems/types";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import qs from "query-string";
 import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
 import { useRouter, usePathname } from "next/navigation";
+import eq from "fast-deep-equal";
 
 type Props = {
   query: RealEstateQuery;
-  result: GetPropertiesResult;
   children: React.ReactNode;
+  get: (query: RealEstateQuery) => Promise<GetPropertiesResult>;
 };
 
 type RealEstateQueryContext = {
   query: RealEstateQuery;
-  result: GetPropertiesResult;
   onCheckedChange: (
     param: keyof RealEstateQuery,
     value: string,
@@ -39,7 +39,12 @@ type RealEstateQueryContext = {
   onMaxBedsChange: (max: RealEstateQuery["max-bedrooms"]) => void;
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
   reset: () => void;
-};
+  loading: boolean;
+} & LoadingState;
+
+type LoadingState =
+  | { initialLoad: true; result: null; loading: boolean }
+  | { initialLoad: false; result: GetPropertiesResult; loading: boolean };
 
 const RealEstateQueryContext = createContext<RealEstateQueryContext | null>(
   null
@@ -69,7 +74,7 @@ export const generateQueryString = (
   return qs.stringify(final, { arrayFormat: "bracket" });
 };
 
-const RealEstateQueryController = ({ query, result, children }: Props) => {
+const RealEstateQueryController = ({ query, children, get }: Props) => {
   const pathname = usePathname();
   const { push } = useRouter();
 
@@ -78,11 +83,34 @@ const RealEstateQueryController = ({ query, result, children }: Props) => {
     push(`${pathname}?${string}`);
   };
 
+  const [loader, setLoader] = useState<LoadingState>({
+    initialLoad: true,
+    loading: true,
+    result: null
+  });
+
+  useEffect(() => {
+    setLoader(
+      update(loader, {
+        loading: { $set: true }
+      })
+    );
+
+    get(query).then((result) => {
+      if (eq(query, result.query)) {
+        setLoader({
+          initialLoad: false,
+          loading: false,
+          result
+        });
+      }
+    });
+  }, [query]);
+
   return (
     <RealEstateQueryContext.Provider
       value={{
         query,
-        result,
         onCheckedChange: (param, value, state) => {
           const checked = state !== "indeterminate" && state;
           const nextQuery = update(query, {
@@ -145,7 +173,11 @@ const RealEstateQueryController = ({ query, result, children }: Props) => {
         onPageChange: (page) => {
           const nextQuery = update(query, { page: { $set: page } });
           commit(nextQuery);
-        }
+        },
+
+        initialLoad: loader.initialLoad as any,
+        loading: loader.loading,
+        result: loader.result
       }}
     >
       {children}

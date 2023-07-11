@@ -17,10 +17,11 @@ import Link from "next/link";
 type Props = {};
 
 const Pagination = ({}: Props) => {
-  const { result, query, onPageChange } = useRealEstateQuery();
-  const { pagination } = result;
+  const { result, initialLoad, query, onPageChange } = useRealEstateQuery();
 
-  const pageCount = Math.ceil(pagination.total / pagination.pageSize);
+  const pageCount = initialLoad
+    ? 1
+    : Math.ceil(result.pagination.total / result.pagination.pageSize);
 
   return (
     <div className={css["root"]}>

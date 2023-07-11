@@ -26,14 +26,6 @@
   margin-bottom: 14px;
 }
 
-.properties {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-gap: 20px 23px;
-  grid-auto-rows: auto;
-  margin-bottom: 70px;
-}
-
 .pagination {
   margin-bottom: 50px;
 }

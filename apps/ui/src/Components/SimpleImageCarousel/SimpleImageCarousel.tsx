@@ -24,9 +24,8 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
   const [props, api] = useSprings(
     images.length,
     (i) => ({
-      x: i * width,
-      scale: 1,
-      display: "block"
+      to: { x: i * width },
+      immediate: true
     }),
     [width]
   );
@@ -34,10 +33,10 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
   useEffect(() => {
     api.start((i) => {
       if (i < index - 1 || i > index + 1) {
-        return { display: "none" };
+        return {};
       }
       const x = (i - index) * width + 0;
-      return { x, scale: 1, display: "block" };
+      return { x };
     });
   }, [index]);
 
@@ -51,11 +50,10 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
       }
       api.start((i) => {
         if (i < index - 1 || i > index + 1) {
-          return { display: "none" };
+          return {};
         }
         const x = (i - index) * width + (active ? mx : 0);
-        const scale = active ? 1 - Math.abs(mx) / width / 2 : 1;
-        return { x, scale, display: "block" };
+        return { x };
       });
     }
   );
@@ -84,7 +82,7 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
         </div>
       </div>
       <div className={css["images"]}>
-        {props.map(({ x, display }, i) => (
+        {props.map((style, i) => (
           <Img
             key={i}
             draggable={false}
@@ -94,7 +92,7 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
             width={images[i].width}
             height={images[i].height}
             {...bind()}
-            style={{ x, display, zIndex: images.length - i }}
+            style={style}
           />
         ))}
       </div>

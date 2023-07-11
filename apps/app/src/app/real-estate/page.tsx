@@ -6,14 +6,14 @@ import {
   RealEstateIndexPage as Page,
   Pagination,
   FiltersContext,
-  CountAndSort
+  CountAndSort,
+  PropertyGrid,
+  ListingMap
 } from "@rems/ui";
 import api from "../../api";
 import { realEstateQuerySchema } from "@rems/types";
 import { flatten } from "remeda";
 import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
-import PropertyCards from "./PropertyCards";
-import ListingMap from "./ListingMap";
 import QueryController from "./QueryController";
 
 const processSearchParams = (params: {
@@ -93,7 +93,9 @@ export default async function Home({
             </QueryController>
           </Page.CountAndSort>
           <Page.Properties>
-            <PropertyCards query={query} />
+            <QueryController query={query}>
+              <PropertyGrid />
+            </QueryController>
           </Page.Properties>
           <Page.Pagination>
             <QueryController query={query}>
@@ -102,7 +104,9 @@ export default async function Home({
           </Page.Pagination>
         </Page.Content>
         <Page.Map>
-          <ListingMap query={query} />
+          <QueryController query={query}>
+            <ListingMap />
+          </QueryController>
         </Page.Map>
       </Page.Main>
       <Page.Footer>

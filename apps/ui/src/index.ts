@@ -20,6 +20,9 @@ export { default as ListingMap } from "./Components/ListingMap";
 export { default as MailingListModule } from "./Components/MailingListModule";
 export { default as Pagination } from "./Components/Pagination";
 export { default as PropertyCard } from "./Components/PropertyCard";
+export { default as PropertyGrid } from "./Components/PropertyGrid";
 export { default as PropertySlider } from "./Components/PropertySlider";
 export { default as RealEstateQueryController } from "./Components/RealEstateQueryController";
 export { default as SimpleImageCarousel } from "./Components/SimpleImageCarousel";
+
+export { useRealEstateQuery } from "./Components/RealEstateQueryController";

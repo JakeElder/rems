@@ -6,6 +6,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import css from "./CountAndSort.module.css";
 import { SortType } from "@rems/types";
 import { useRealEstateQuery } from "../RealEstateQueryController";
+import { Oval } from "react-loader-spinner";
 
 type Props = {};
 
@@ -21,16 +22,22 @@ const label = (sort: SortType) => {
 };
 
 const CountAndSort = ({}: Props) => {
-  const { query, result, onValueChange } = useRealEstateQuery();
-  const value = query["sort"];
+  const { query, result, initialLoad, loading, onValueChange } =
+    useRealEstateQuery();
 
   return (
     <div className={css["root"]}>
-      <div className={css["count"]}>{result.pagination.total} listings</div>
+      <div className={css["count"]}>
+        {initialLoad || loading ? (
+          <Oval height={16} width={16} color="#000" visible={true} />
+        ) : (
+          `${result.pagination.total} listings`
+        )}
+      </div>
       <div className={css["sort"]}>
         <select
           className={css["select"]}
-          value={value}
+          value={query["sort"]}
           onChange={(e) => onValueChange("sort", e.currentTarget.value)}
         >
           <option value="newest-first">{label("newest-first")}</option>
@@ -49,7 +56,7 @@ const CountAndSort = ({}: Props) => {
         </select>
         <div className={css["active"]}>
           <span className={css["label"]}>Sort:</span>
-          <span className={css["selection"]}>{label(value)}</span>
+          <span className={css["selection"]}>{label(query["sort"])}</span>
           <span className={css["icon"]}>
             <FontAwesomeIcon icon={faChevronDown} size="sm" />
           </span>

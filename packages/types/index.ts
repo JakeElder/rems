@@ -146,6 +146,7 @@ export type QuickFilterQueryKey = keyof Pick<
 export type SortType = RealEstateQuery["sort"];
 
 export type GetPropertiesResult = {
+  query: RealEstateQuery;
   data: Property[];
   pagination: Pagination;
 };

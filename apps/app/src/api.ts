@@ -181,7 +181,8 @@ const get = {
 
     return {
       data: json.data.map((p: any) => adapters.property(p)),
-      pagination: json.meta.pagination
+      pagination: json.meta.pagination,
+      query
     };
   },
 
