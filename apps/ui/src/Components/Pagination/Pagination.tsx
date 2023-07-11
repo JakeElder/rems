@@ -19,24 +19,33 @@ type Props = {};
 const Pagination = ({}: Props) => {
   const { result, initialLoad, query, onPageChange } = useRealEstateQuery();
 
-  const pageCount = initialLoad
-    ? 1
-    : Math.ceil(result.pagination.total / result.pagination.pageSize);
+  const pageCount = Math.max(
+    initialLoad
+      ? 1
+      : Math.ceil(result.pagination.total / result.pagination.pageSize),
+    1
+  );
+
+  if (!initialLoad && result.pagination.total === 0) {
+    return null;
+  }
 
   return (
     <div className={css["root"]}>
-      {pageCount > query["page"] ? (
-        <div className={css["next"]}>
+      <div className={css["next"]}>
+        {pageCount > query["page"] ? (
           <Link
+            className={css["button"]}
+            children="Next"
             href={`/real-estate/?${generateQueryString(
               query,
               query["page"] + 1
             )}`}
-          >
-            Next
-          </Link>
-        </div>
-      ) : null}
+          />
+        ) : (
+          <div className={`${css["button"]} ${css["inactive"]}`}>Next</div>
+        )}
+      </div>
       <div className={css["pages"]}>
         <ReactPaginate
           marginPagesDisplayed={1}
@@ -54,9 +63,14 @@ const Pagination = ({}: Props) => {
             return `/real-estate/?${generateQueryString(query, page)}`;
           }}
           onClick={({ nextSelectedPage }) => {
+            if (initialLoad || result.pagination.total === 0) {
+              return false;
+            }
+
             if (typeof nextSelectedPage !== "undefined") {
               onPageChange(nextSelectedPage + 1);
             }
+
             return false;
           }}
           pageCount={pageCount}
