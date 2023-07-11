@@ -37,6 +37,8 @@ export default async function Home({
 }) {
   const query = realEstateQuerySchema.parse(processSearchParams(searchParams));
 
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
   const [
     btsStations,
     indoorFeatures,

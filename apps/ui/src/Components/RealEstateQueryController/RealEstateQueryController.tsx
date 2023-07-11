@@ -73,13 +73,17 @@ export const generateQueryString = (
   return qs.stringify(final, { arrayFormat: "bracket" });
 };
 
-const RealEstateQueryController = ({ query, children }: Props) => {
+const RealEstateQueryController = ({
+  query: initialQuery,
+  children
+}: Props) => {
+  const [query, setQuery] = useState<RealEstateQuery>(initialQuery);
   const pathname = usePathname();
-  const { push } = useRouter();
 
   const commit = (query: RealEstateQuery) => {
+    React.startTransition(() => setQuery(query));
     const string = generateQueryString(query);
-    push(`${pathname}?${string}`);
+    window.history.pushState("", "", `${pathname}?${string}`);
   };
 
   const [loader, setLoader] = useState<LoadingState>({
