@@ -2,6 +2,7 @@ import React from "react";
 import css from "./RealEstateIndexPage.module.css";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
+  "use client";
   return <div className={css["root"]}>{children}</div>;
 };
 

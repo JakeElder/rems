@@ -57,61 +57,55 @@ export default async function Home({
   ]);
 
   return (
-    <Page.Root>
-      <Page.Header>
-        <Header full mode="standard" />
-        <FiltersContext
-          value={{
-            btsStations,
-            indoorFeatures,
-            lotFeatures,
-            mrtStations,
-            outdoorFeatures,
-            propertyTypes,
-            viewTypes,
-            livingAreaSizes: {
-              min: MIN_LIVING_AREA_SIZES,
-              max: MAX_LIVING_AREA_SIZES
-            },
-            quickFilters
-          }}
-        >
-          <QueryController query={query}>
+    <QueryController query={query}>
+      <Page.Root>
+        <Page.Header>
+          <Header full mode="standard" />
+          <FiltersContext
+            value={{
+              btsStations,
+              indoorFeatures,
+              lotFeatures,
+              mrtStations,
+              outdoorFeatures,
+              propertyTypes,
+              viewTypes,
+              livingAreaSizes: {
+                min: MIN_LIVING_AREA_SIZES,
+                max: MAX_LIVING_AREA_SIZES
+              },
+              quickFilters
+            }}
+          >
             <FilterBar />
-          </QueryController>
-        </FiltersContext>
-      </Page.Header>
-      <Page.Main>
-        <Page.Content>
-          <Page.Breadcrumbs>
-            <Breadcrumbs />
-          </Page.Breadcrumbs>
-          <Page.Title>Homes for sale in Thailand</Page.Title>
-          <Page.CountAndSort>
-            <QueryController query={query}>
-              <CountAndSort />
-            </QueryController>
-          </Page.CountAndSort>
-          <Page.Properties>
-            <QueryController query={query}>
+          </FiltersContext>
+        </Page.Header>
+        <Page.Main>
+          <Page.Content>
+            <Page.Breadcrumbs>
+              <Breadcrumbs />
+            </Page.Breadcrumbs>
+            <Page.Title>Homes for sale in Thailand</Page.Title>
+            <Page.CountAndSort>
+              <QueryController query={query}>
+                <CountAndSort />
+              </QueryController>
+            </Page.CountAndSort>
+            <Page.Properties>
               <PropertyGrid />
-            </QueryController>
-          </Page.Properties>
-          <Page.Pagination>
-            <QueryController query={query}>
+            </Page.Properties>
+            <Page.Pagination>
               <Pagination />
-            </QueryController>
-          </Page.Pagination>
-        </Page.Content>
-        <Page.Map>
-          <QueryController query={query}>
+            </Page.Pagination>
+          </Page.Content>
+          <Page.Map>
             <ListingMap />
-          </QueryController>
-        </Page.Map>
-      </Page.Main>
-      <Page.Footer>
-        <Footer full />
-      </Page.Footer>
-    </Page.Root>
+          </Page.Map>
+        </Page.Main>
+        <Page.Footer>
+          <Footer full />
+        </Page.Footer>
+      </Page.Root>
+    </QueryController>
   );
 }
