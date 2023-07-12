@@ -62,7 +62,7 @@
 }
 
 .image {
-  touch-action: none;
+  touch-action: pan-y;
   object-fit: cover;
   position: absolute;
   width: 100%;
