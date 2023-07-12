@@ -42,7 +42,7 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
 
   const bind = useDrag(
     ({ active, movement: [mx], direction: [xDir], cancel }) => {
-      if (active && Math.abs(mx) > width / 2) {
+      if (active && Math.abs(mx) > width / 3) {
         setIndex((index) =>
           clamp(index + (xDir > 0 ? -1 : 1), 0, images.length - 1)
         );
@@ -55,7 +55,8 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
         const x = (i - index) * width + (active ? mx : 0);
         return { x };
       });
-    }
+    },
+    { axis: "x" }
   );
 
   return (
