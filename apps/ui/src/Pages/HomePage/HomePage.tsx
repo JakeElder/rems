@@ -3,7 +3,6 @@ import * as Layout from "../../Layouts/StandardHeroLayout";
 import Container from "../../Elements/Container/Container";
 import css from "./HomePage.module.css";
 import MonogramHR from "../../Components/MonogramHR";
-import FooterView from "../../Components/Footer";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return <Layout.Root>{children}</Layout.Root>;
@@ -60,10 +59,6 @@ export const LatestProperties = ({
   );
 };
 
-export const Footer = () => {
-  return (
-    <div className={css["footer"]}>
-      <FooterView />
-    </div>
-  );
+export const Footer = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["footer"]}>{children}</div>;
 };

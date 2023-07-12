@@ -10,6 +10,7 @@ import {
 import api from "../../../api";
 import { Metadata } from "next";
 import { SearchParams } from "@rems/types";
+import Footer from "../../../components/Footer";
 
 type Props = {
   params: { id: string };
@@ -61,7 +62,9 @@ export default async function Home({ params }: Props) {
           <ContactAgentModule />
         </Page.Contact>
       </Page.Content>
-      <Page.Footer />
+      <Page.Footer>
+        <Footer />
+      </Page.Footer>
     </Page.Root>
   );
 }

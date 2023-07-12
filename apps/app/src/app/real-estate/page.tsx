@@ -1,7 +1,6 @@
 import {
   Breadcrumbs,
   FilterBar,
-  Footer,
   Header,
   RealEstateIndexPage as Page,
   Pagination,
@@ -16,6 +15,7 @@ import { SearchParams } from "@rems/types";
 import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
 import adapters from "../../adapters";
 import { Metadata } from "next";
+import Footer from "../../components/Footer";
 
 type Props = {
   params: { id: string };

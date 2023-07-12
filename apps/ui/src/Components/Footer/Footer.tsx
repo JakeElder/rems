@@ -9,9 +9,15 @@ import {
   faLinkedin,
   faFacebookSquare
 } from "@fortawesome/free-brands-svg-icons";
+import Link from "next/link";
 
 type Props = {
   full?: boolean;
+  popularSearches: React.ComponentProps<typeof Link>[];
+  linkedInURL: string;
+  lineURL: string;
+  instagramURL: string;
+  facebookURL: string;
 };
 
 const UL = ({
@@ -19,7 +25,7 @@ const UL = ({
   links
 }: {
   heading: string;
-  links: { href: string; text: string }[];
+  links: React.ComponentProps<typeof Link>[];
 }) => {
   return (
     <div className={css["section"]}>
@@ -27,7 +33,7 @@ const UL = ({
       <ul className={css["list"]}>
         {links.map((l, idx) => (
           <li key={idx}>
-            <a href={l.href}>{l.text}</a>
+            <Link {...l} />
           </li>
         ))}
       </ul>
@@ -35,7 +41,14 @@ const UL = ({
   );
 };
 
-const Footer = ({ full = false }: Props) => {
+const Footer = ({
+  full = false,
+  popularSearches,
+  lineURL,
+  facebookURL,
+  linkedInURL,
+  instagramURL
+}: Props) => {
   return (
     <footer className={css["root"]}>
       <Container full={full}>
@@ -43,23 +56,12 @@ const Footer = ({ full = false }: Props) => {
           <UL
             heading="JYOPROPERTY"
             links={[
-              { href: "#", text: "Home" },
-              { href: "#", text: "Real Estate" },
-              { href: "#", text: "About Us" },
-              { href: "#", text: "Contact" }
+              { href: "/", children: "Home" },
+              { href: "/real-estate", children: "Real Estate" },
+              { href: "#", children: "Contact Us" }
             ]}
           />
-          <UL
-            heading="POPULAR SEARCHES"
-            links={[
-              { href: "#", text: "Rental Properties in Bangkok" },
-              { href: "#", text: "Beach Villa's for Sale in Hua Hin" },
-              { href: "#", text: "Beach Cabins in Phuket" },
-              { href: "#", text: "Condos in Silom" },
-              { href: "#", text: "Penthouse Suites in Sukhumvit" },
-              { href: "#", text: "Land for Sale in Bangkok" }
-            ]}
-          />
+          <UL heading="POPULAR SEARCHES" links={popularSearches} />
         </div>
         <div className={css["logo-disclaimer-socials"]}>
           <div className={css["logo"]}>
@@ -69,22 +71,22 @@ const Footer = ({ full = false }: Props) => {
             Copyright © 2023 Jyo Property Co Ltd
           </div>
           <div className={css["socials"]}>
-            <a className={css["linked-in"]} href="#">
+            <a className={css["linked-in"]} href={lineURL}>
               <FontAwesomeIcon icon={faLine} size="lg" />
             </a>
-            <a href="#">
+            <a href={instagramURL}>
               <FontAwesomeIcon icon={faInstagramSquare} size="lg" />
             </a>
-            <a href="#">
+            <a href={linkedInURL}>
               <FontAwesomeIcon icon={faLinkedin} size="lg" />
             </a>
-            <a href="#">
+            <a href={facebookURL}>
               <FontAwesomeIcon icon={faFacebookSquare} size="lg" />
             </a>
           </div>
         </div>
         <div className={css["full-disclaimer"]}>
-          Copyright © 2023 Jyo Property Co Ltd
+          Copyright © 2023 JYO Property Co Ltd
         </div>
       </Container>
     </footer>

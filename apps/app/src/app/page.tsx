@@ -5,6 +5,7 @@ import Hero from "./Hero";
 import EmailCollector from "./EmailCollector";
 import { Metadata } from "next";
 import api from "../api";
+import Footer from "../components/Footer";
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await api.get.appConfig();
@@ -35,7 +36,9 @@ export default async function Home() {
           <LatestProperties />
         </Page.LatestProperties>
       </Page.Content>
-      <Page.Footer />
+      <Page.Footer>
+        <Footer />
+      </Page.Footer>
     </Page.Root>
   );
 }

@@ -4,7 +4,6 @@ import { Property } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import * as Layout from "../../Layouts/StandardHeroLayout";
-import FooterView from "../../Components/Footer";
 import Container from "../../Elements/Container";
 import MonogramHR from "../../Components/MonogramHR";
 import Truncate from "../../Components/Truncate";
@@ -146,6 +145,6 @@ export const Contact = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const Footer = () => {
-  return <FooterView />;
+export const Footer = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["footer"]}>{children}</div>;
 };
