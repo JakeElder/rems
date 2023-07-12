@@ -157,3 +157,7 @@ export type FilterSet = {
   slug: string;
   image: Image;
 };
+
+export type SearchParams = {
+  [key: string]: string | string[] | undefined;
+};

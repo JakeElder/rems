@@ -1,6 +1,22 @@
-import { Filter, FilterSet, Image, Property } from "@rems/types";
+import {
+  Filter,
+  FilterSet,
+  Image,
+  Property,
+  RealEstateQuery,
+  SearchParams,
+  realEstateQuerySchema
+} from "@rems/types";
+import { mapKeys } from "remeda";
 
 const adapters = {
+  searchParamsToPartialQuery(params: SearchParams): RealEstateQuery {
+    const query = realEstateQuerySchema.parse(
+      mapKeys(params, (key) => (key as string).replace(/\[\]$/, ""))
+    );
+    return query;
+  },
+
   filterSet(res: any): FilterSet {
     const { name, slug, image } = res.attributes;
 

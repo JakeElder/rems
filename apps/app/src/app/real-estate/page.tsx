@@ -12,30 +12,16 @@ import {
   RealEstateQueryController
 } from "@rems/ui";
 import api from "../../api";
-import { realEstateQuerySchema } from "@rems/types";
-import { flatten } from "remeda";
+import { SearchParams } from "@rems/types";
 import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
-import QueryController from "./QueryController";
+import adapters from "../../adapters";
 
-const processSearchParams = (params: {
-  [key: string]: string | string[] | undefined;
-}) => {
-  return {
-    ...params,
-    "indoor-features": flatten([params["indoor-features[]"]]),
-    "lot-features": flatten([params["lot-features[]"]]),
-    "outdoor-features": flatten([params["outdoor-features[]"]]),
-    "property-type": flatten([params["property-type[]"]]),
-    "view-types": flatten([params["view-types[]"]])
-  };
+type Props = {
+  searchParams: SearchParams;
 };
 
-export default async function Home({
-  searchParams
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const query = realEstateQuerySchema.parse(processSearchParams(searchParams));
+export default async function Home({ searchParams }: Props) {
+  const query = adapters.searchParamsToPartialQuery(searchParams);
 
   const [
     btsStations,
