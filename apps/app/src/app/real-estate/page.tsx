@@ -15,10 +15,25 @@ import api from "../../api";
 import { SearchParams } from "@rems/types";
 import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
 import adapters from "../../adapters";
+import { Metadata } from "next";
 
 type Props = {
+  params: { id: string };
   searchParams: SearchParams;
 };
+
+export async function generateMetadata({
+  searchParams
+}: Props): Promise<Metadata> {
+  const query = adapters.searchParamsToPartialQuery(searchParams);
+  const type = query["availability"] === "rent" ? "Rent" : "Sale";
+  const config = await api.get.appConfig();
+
+  return {
+    title: `Homes for ${type} in Bangkok Thailand`,
+    description: config.defaultDescription
+  };
+}
 
 export default async function Home({ searchParams }: Props) {
   const query = adapters.searchParamsToPartialQuery(searchParams);

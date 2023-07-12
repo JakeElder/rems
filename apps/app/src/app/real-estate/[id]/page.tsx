@@ -8,9 +8,27 @@ import {
   ContactAgentModule
 } from "@rems/ui";
 import api from "../../../api";
+import { Metadata } from "next";
+import { SearchParams } from "@rems/types";
 
-export default async function Home({ params }: any) {
-  const property = await api.get.property(params.id.split("-").slice(-1));
+type Props = {
+  params: { id: string };
+  searchParams: SearchParams;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const parts = params.id.split("-");
+  const property = await api.get.property(parts[parts.length - 1]);
+
+  return {
+    title: property.title,
+    description: property.description
+  };
+}
+
+export default async function Home({ params }: Props) {
+  const parts = params.id.split("-");
+  const property = await api.get.property(parts[parts.length - 1]);
   const images = property.images.map((i) => ({
     ...i,
     alt: property.title

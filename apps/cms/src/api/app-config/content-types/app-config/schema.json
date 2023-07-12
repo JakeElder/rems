@@ -1,0 +1,40 @@
+{
+  "kind": "singleType",
+  "collectionName": "app_config_options",
+  "info": {
+    "singularName": "app-config",
+    "pluralName": "app-config-options",
+    "displayName": "App Config",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "defaultTitle": {
+      "type": "string",
+      "required": true
+    },
+    "defaultDescription": {
+      "type": "text",
+      "required": true
+    },
+    "notificationEmail": {
+      "type": "email",
+      "required": true
+    },
+    "lineURL": {
+      "type": "string"
+    },
+    "instagramURL": {
+      "type": "string"
+    },
+    "linkedInURL": {
+      "type": "string"
+    },
+    "facebookURL": {
+      "type": "string"
+    }
+  }
+}

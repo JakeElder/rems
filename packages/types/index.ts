@@ -130,7 +130,8 @@ export const realEstateQuerySchema = z.object({
   "min-living-area": z.coerce.number().default(0).catch(0),
   "max-living-area": z.coerce.number().nullable().default(null).catch(null),
   "nearest-mrt-station": z.string().nullable().default(null).catch(null),
-  "nearest-bts-station": z.string().nullable().default(null).catch(null)
+  "nearest-bts-station": z.string().nullable().default(null).catch(null),
+  availability: z.enum(["sale", "rent"]).default("sale").catch("sale")
 });
 
 export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;
@@ -160,4 +161,14 @@ export type FilterSet = {
 
 export type SearchParams = {
   [key: string]: string | string[] | undefined;
+};
+
+export type SiteConfig = {
+  defaultTitle: string;
+  defaultDescription: string;
+  notificationEmail: string;
+  lineURL?: string;
+  instagramURL?: string;
+  linkedInURL?: string;
+  facebookURL?: string;
 };

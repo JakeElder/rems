@@ -15,6 +15,7 @@ import {
   QuickFilter,
   QuickFilterType,
   ResourceId,
+  SiteConfig,
   SortType,
   ViewType,
   realEstateQuerySchema
@@ -68,6 +69,13 @@ const get = {
     const json = await res.json();
 
     return json.data.attributes.filter_sets.data.map(adapters.filterSet);
+  },
+
+  async appConfig(): Promise<SiteConfig> {
+    const url = `${process.env.API_URL}/app-config`;
+    const res = await fetch(url);
+    const json = await res.json();
+    return json.data.attributes;
   },
 
   async featuredProperties(): Promise<Property[]> {

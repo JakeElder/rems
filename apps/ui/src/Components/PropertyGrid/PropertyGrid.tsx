@@ -26,7 +26,7 @@ const PropertyGrid = ({}: Props) => {
           <PropertyCard
             key={p.id}
             property={p}
-            link={`/real-estate/${slugify(p.title)}-${p.id}`}
+            link={`/real-estate/${slugify(p.title, { strict: true })}-${p.id}`}
           />
         ))}
       </div>
