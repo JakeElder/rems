@@ -9,11 +9,13 @@ import PriceFilterPopover from "../PriceFilterPopover";
 import BedsFilterPopover from "../BedsFilterPopover";
 import FilterDialog from "../FilterDialog";
 import QuickFilters from "../QuickFilters";
+import { useRealEstateQuery } from "../RealEstateQueryController/RealEstateQueryController";
 
 type Props = {};
 
 const FilterBar = ({}: Props) => {
   const $sections = useRef<HTMLDivElement>(null);
+  const { has } = useRealEstateQuery();
   const { events } = useDraggable(
     $sections as MutableRefObject<HTMLDivElement>
   );
@@ -27,9 +29,11 @@ const FilterBar = ({}: Props) => {
           </div>
           <div className={css["separator"]} />
           <div className={css["key-filters"]}>
-            <TypeFilterPopover />
-            <PriceFilterPopover />
-            <BedsFilterPopover />
+            <TypeFilterPopover on={has("property-type")} />
+            <PriceFilterPopover on={has("min-price") || has("max-price")} />
+            <BedsFilterPopover
+              on={has("min-bedrooms") || has("max-bedrooms")}
+            />
           </div>
           <div className={css["separator"]} />
           <div className={css["toggles"]}>

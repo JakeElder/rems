@@ -16,7 +16,8 @@
   color: #444;
 }
 
-.control[data-state="open"] {
+.control[data-state="open"],
+.on {
   border-color: #000;
   color: #000;
 }

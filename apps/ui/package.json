@@ -43,6 +43,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-map-gl": "^7.1.2",
     "react-paginate": "^8.2.0",
+    "react-spring-scroll-to-hook": "^1.0.3",
     "react-use-draggable-scroll": "^0.4.7",
     "remeda": "^1.23.0",
     "slugify": "^1.6.6",

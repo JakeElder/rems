@@ -10,8 +10,9 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import qs from "query-string";
 import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import eq from "fast-deep-equal";
+import useScrollTo from "react-spring-scroll-to-hook";
 
 type Props = {
   query: RealEstateQuery;
@@ -20,6 +21,8 @@ type Props = {
 
 type RealEstateQueryContext = {
   query: RealEstateQuery;
+  has: (param: keyof RealEstateQuery) => boolean;
+  activeFilters: number;
   onCheckedChange: (
     param: keyof RealEstateQuery,
     value: string,
@@ -80,6 +83,9 @@ const RealEstateQueryController = ({
   const [query, setQuery] = useState<RealEstateQuery>(initialQuery);
   const pathname = usePathname();
 
+  const defaults = realEstateQuerySchema.parse({});
+  const queryWithoutDefaults = omitBy(query, (v, k) => equals(defaults[k], v));
+
   const commit = (query: RealEstateQuery) => {
     React.startTransition(() => setQuery(query));
     const string = generateQueryString(query);
@@ -102,6 +108,8 @@ const RealEstateQueryController = ({
     return res.json();
   };
 
+  const { scrollTo } = useScrollTo();
+
   useEffect(() => {
     setLoader(
       update(loader, {
@@ -116,15 +124,34 @@ const RealEstateQueryController = ({
           loading: false,
           result
         });
-        window.scrollTo(0, 0);
+        scrollTo(0);
       }
     });
   }, [query]);
+
+  const has: RealEstateQueryContext["has"] = (param) => {
+    return param in queryWithoutDefaults;
+  };
+
+  const activeFilters = [
+    has("property-type"),
+    has("min-price") || has("max-price"),
+    has("min-bedrooms") || has("max-bedrooms"),
+    has("min-bathrooms"),
+    has("view-types"),
+    has("indoor-features"),
+    has("outdoor-features"),
+    has("lot-features"),
+    has("min-living-area") || has("max-living-area"),
+    has("nearest-mrt-station"),
+    has("nearest-bts-station")
+  ].filter((i) => i).length;
 
   return (
     <RealEstateQueryContext.Provider
       value={{
         query,
+        activeFilters,
         onCheckedChange: (param, value, state) => {
           const checked = state !== "indeterminate" && state;
           const nextQuery = update(query, {
@@ -188,6 +215,8 @@ const RealEstateQueryController = ({
           const nextQuery = update(query, { page: { $set: page } });
           commit(nextQuery);
         },
+
+        has,
 
         initialLoad: loader.initialLoad as any,
         loading: loader.loading,

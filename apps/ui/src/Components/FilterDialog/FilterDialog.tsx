@@ -10,14 +10,23 @@ import Split from "../../Elements/Split";
 import Button from "../../Elements/Button";
 import { useRealEstateQuery } from "../RealEstateQueryController";
 import { Oval } from "react-loader-spinner";
+import cn from "classnames";
 
 type Props = {
   defaultOpen?: boolean;
 };
 
+const Indicator = ({ amount }: { amount: number }) => {
+  if (amount === 0) {
+    return null;
+  }
+  return <span className={css["indicator"]}>{amount}</span>;
+};
+
 const SidePanel = ({ defaultOpen = false }: Props) => {
   const [open, setOpen] = useState(defaultOpen);
-  const { reset, initialLoad, loading, result } = useRealEstateQuery();
+  const { reset, initialLoad, loading, result, activeFilters } =
+    useRealEstateQuery();
 
   const transitions = useTransition(open, {
     from: {
@@ -40,11 +49,11 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <a className={css["control"]}>
+        <a className={cn(css["control"], { [css["on"]]: activeFilters > 0 })}>
           <div className={css["icon"]}>
             <FontAwesomeIcon icon={faSliders} size="sm" />
           </div>
-          Filters
+          Filters <Indicator amount={activeFilters} />
         </a>
       </Dialog.Trigger>
       {transitions((styles, show) =>

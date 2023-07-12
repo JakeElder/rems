@@ -9,13 +9,14 @@ import cn from "classnames";
 type Props = {
   label: string;
   children: React.ReactNode;
+  on?: boolean;
 };
 
-const FilterPopover = ({ label, children }: Props) => {
+const FilterPopover = ({ label, children, on }: Props) => {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <button className={css["control"]}>
+        <button className={cn(css["control"], { [css["on"]]: on })}>
           {label}
           <div className={css["icon"]}>
             <FontAwesomeIcon icon={faChevronDown} size="sm" />
