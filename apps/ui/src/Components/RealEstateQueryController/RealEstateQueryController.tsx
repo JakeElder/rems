@@ -134,14 +134,14 @@ const RealEstateQueryController = ({
   };
 
   const activeFilters = [
-    has("property-type"),
+    ...query["property-type"],
     has("min-price") || has("max-price"),
     has("min-bedrooms") || has("max-bedrooms"),
     has("min-bathrooms"),
-    has("view-types"),
-    has("indoor-features"),
-    has("outdoor-features"),
-    has("lot-features"),
+    ...query["view-types"],
+    ...query["indoor-features"],
+    ...query["outdoor-features"],
+    ...query["lot-features"],
     has("min-living-area") || has("max-living-area"),
     has("nearest-mrt-station"),
     has("nearest-bts-station")
