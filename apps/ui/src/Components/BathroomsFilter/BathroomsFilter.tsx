@@ -16,6 +16,10 @@ const BathroomsFilter = ({}: Props) => {
           width={54}
           value={`${value}`}
           onValueChange={(val) => {
+            if (val === "") {
+              onMinBathsChange(0);
+              return;
+            }
             onMinBathsChange(parseInt(val, 10));
           }}
           items={[

@@ -22,6 +22,10 @@ const BedsFilter = ({}: Props) => {
           width={54}
           value={`${min}`}
           onValueChange={(val) => {
+            if (val === "") {
+              onMinBedsChange(0);
+              return;
+            }
             onMinBedsChange(parseInt(val, 10));
           }}
           items={[
