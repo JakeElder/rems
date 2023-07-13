@@ -13,6 +13,7 @@ import LivingAreaFilters from "../LivingAreaFilters/LivingAreaFilters";
 import NearestMRTStationFilter from "../NearestMRTStationFilter";
 import NearestBTSStationFilter from "../NearestBTSStationFilter";
 import AreaFilter from "../AreaFilter/AreaFilter";
+import LotSizeFilters from "../LotSizeFilters";
 
 type Props = {};
 
@@ -77,6 +78,12 @@ const PropertyFilters = ({}: Props) => {
         <div className={css["header"]}>Living Area</div>
         <div className={css["filters"]}>
           <LivingAreaFilters />
+        </div>
+      </div>
+      <div className={css["section"]}>
+        <div className={css["header"]}>Lot Size</div>
+        <div className={css["filters"]}>
+          <LotSizeFilters />
         </div>
       </div>
       <div className={css["section"]}>

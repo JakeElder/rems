@@ -12,7 +12,7 @@ import {
 } from "@rems/ui";
 import api from "../../api";
 import { SearchParams } from "@rems/types";
-import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
+import { MAX_LIVING_AREA_SIZES, MAX_LOT_SIZES, MIN_LIVING_AREA_SIZES, MIN_LOT_SIZES } from "../../constants";
 import adapters from "../../adapters";
 import { Metadata } from "next";
 import Footer from "../../components/Footer";
@@ -80,6 +80,10 @@ export default async function Home({ searchParams }: Props) {
               livingAreaSizes: {
                 min: MIN_LIVING_AREA_SIZES,
                 max: MAX_LIVING_AREA_SIZES
+              },
+              lotSizes: {
+                min: MIN_LOT_SIZES,
+                max: MAX_LOT_SIZES
               },
               quickFilters
             }}

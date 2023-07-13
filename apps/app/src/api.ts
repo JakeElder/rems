@@ -133,6 +133,14 @@ const get = {
       ...(query["max-living-area"] ? { $lte: query["max-living-area"] } : {})
     };
 
+    const lotSize =
+      query["min-lot-size"] || query["max-lot-size"]
+        ? {
+            $gte: query["min-lot-size"],
+            ...(query["max-lot-size"] ? { $lte: query["max-lot-size"] } : {})
+          }
+        : {};
+
     const nearest_mrt_station = query["nearest-mrt-station"]
       ? { slug: { $eq: query["nearest-mrt-station"] } }
       : {};
@@ -172,6 +180,7 @@ const get = {
             bedrooms,
             bathrooms,
             livingArea,
+            lotSize,
             nearest_mrt_station,
             nearest_bts_station,
             area

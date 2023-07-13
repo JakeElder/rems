@@ -81,6 +81,11 @@ export type LivingAreaSize = {
   label: string;
 };
 
+export type LotSize = {
+  value: number;
+  label: string;
+};
+
 export type QuickFilterType =
   | "INDOOR_FEATURE"
   | "LOT_FEATURE"
@@ -104,6 +109,10 @@ export type Filters = {
   livingAreaSizes: {
     min: LivingAreaSize[];
     max: LivingAreaSize[];
+  };
+  lotSizes: {
+    min: LotSize[];
+    max: LotSize[];
   };
   quickFilters: QuickFilter[];
 };
@@ -135,7 +144,9 @@ export const realEstateQuerySchema = z.object({
   "nearest-mrt-station": z.string().nullable().default(null).catch(null),
   "nearest-bts-station": z.string().nullable().default(null).catch(null),
   area: z.string().nullable().default(null).catch(null),
-  availability: z.enum(["sale", "rent"]).default("sale").catch("sale")
+  availability: z.enum(["sale", "rent"]).default("sale").catch("sale"),
+  "min-lot-size": z.coerce.number().default(0).catch(0),
+  "max-lot-size": z.coerce.number().nullable().default(null).catch(null)
 });
 
 export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;
