@@ -35,7 +35,9 @@ export type Property = {
   description: string;
   url: string;
   purchasePrice?: number;
-  formattedPurchasePrice?: string;
+  formattedPurchasePrice: string | null;
+  rentalPrice?: number;
+  formattedRentalPrice: string | null;
   latitude?: number;
   longitude?: number;
   bedrooms?: number;

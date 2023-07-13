@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import css from "./PropertyCard.module.css";
-import { Property } from "@rems/types";
+import { Property, RealEstateQuery } from "@rems/types";
 import SimpleImageCarousel from "../SimpleImageCarousel/SimpleImageCarousel";
 import { propertyToCarouselImages } from "../../adapters";
+import { useRealEstateQuery } from "../RealEstateQueryController/RealEstateQueryController";
 
 type Props = {
   property: Property;
@@ -11,7 +12,31 @@ type Props = {
   link?: string;
 };
 
+const Price = ({
+  property,
+  type
+}: {
+  property: Property;
+  type: RealEstateQuery["availability"];
+}) => {
+  if (type === "sale") {
+    return (
+      <div className={css["price"]}>{property.formattedPurchasePrice}</div>
+    );
+  }
+
+  return (
+    <div className={css["rental-price-and-pm"]}>
+      <span className={css["rental-price"]}>
+        {property.formattedRentalPrice}
+      </span>
+      <span className={css["pm"]}>p/m</span>
+    </div>
+  );
+};
+
 const PropertyCard = ({ property, link = "#", onClick }: Props) => {
+  const { state } = useRealEstateQuery();
   return (
     <div className={css["root"]}>
       <div className={css["images"]}>
@@ -19,7 +44,7 @@ const PropertyCard = ({ property, link = "#", onClick }: Props) => {
       </div>
       <Link href={link} onClick={onClick}>
         <div className={css["spec"]}>
-          <div className={css["price"]}>{property.formattedPurchasePrice}</div>
+          <Price property={property} type={state.query!["availability"]} />
           <div className={css["beds-baths-area"]}>
             <span className={css["beds"]}>{property.bedrooms} beds</span>
             <span className={css["separator"]}>&bull;</span>

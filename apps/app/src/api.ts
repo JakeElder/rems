@@ -15,7 +15,6 @@ import {
   PropertyType,
   QuickFilter,
   QuickFilterType,
-  ResourceId,
   SiteConfig,
   SortType,
   ViewType,
@@ -228,7 +227,7 @@ const get = {
     };
   },
 
-  async property(id: ResourceId): Promise<Property> {
+  async property(id: Property["id"]): Promise<Property> {
     const q = qs.stringify({
       populate: [
         "images",

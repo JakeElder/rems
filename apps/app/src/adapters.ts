@@ -41,6 +41,7 @@ const adapters = {
     const {
       title,
       purchasePrice,
+      rentalPrice,
       images,
       location,
       bedrooms,
@@ -62,9 +63,15 @@ const adapters = {
       title,
       description,
       purchasePrice,
+      rentalPrice,
       url: `/real-estate/${slugify(title, { strict: true })}-${res.id}`,
       location: JSON.parse(location),
-      formattedPurchasePrice: `฿${purchasePrice.toLocaleString()}`,
+      formattedPurchasePrice: purchasePrice
+        ? `฿${purchasePrice.toLocaleString()}`
+        : null,
+      formattedRentalPrice: rentalPrice
+        ? `฿${rentalPrice.toLocaleString()}`
+        : null,
       bedrooms,
       bathrooms,
       indoorFeatures: (indoor_features?.data || []).map(adapters.filter),

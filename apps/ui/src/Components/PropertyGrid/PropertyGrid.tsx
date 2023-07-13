@@ -10,11 +10,11 @@ import { useIndexConnector } from "../IndexConnector";
 type Props = {};
 
 const PropertyGrid = ({}: Props) => {
-  const { loading, result } = useRealEstateQuery();
-  const properties = result?.data || [];
+  const { state } = useRealEstateQuery();
+  const properties = state.result?.data || [];
   const { setMouseOver, setMouseOut } = useIndexConnector();
 
-  const transition = useTransition(loading, {
+  const transition = useTransition(state.loading, {
     from: { backgroundColor: "rgba(255, 255, 255, 0)" },
     enter: { backgroundColor: "rgba(255, 255, 255, .7)" },
     leave: { backgroundColor: "rgba(255, 255, 255, 0)" }

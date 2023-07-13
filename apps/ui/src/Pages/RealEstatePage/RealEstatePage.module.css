@@ -34,9 +34,38 @@
 }
 
 .price {
+  margin-bottom: 20px;
+}
+
+.purchase-price {
+  font-family: var(--font-libre);
+  font-size: 26px;
+  background-color: #c19d54;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.purchase-price + .rental-price-and-label {
+  margin-top: 6px;
+}
+
+.rental-price-and-label {
+  display: flex;
+  align-items: center;
+}
+
+.rental-price {
   font-family: var(--font-libre);
   font-size: 24px;
-  margin-bottom: 24px;
+  margin-right: 6px;
+}
+
+.rental-label {
+  font-size: 12px;
+  font-style: italic;
+  font-family: var(--font-inter);
 }
 
 .beds-baths-area {

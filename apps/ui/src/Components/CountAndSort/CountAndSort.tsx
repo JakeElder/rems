@@ -22,13 +22,12 @@ const label = (sort: SortType) => {
 };
 
 const CountAndSort = ({}: Props) => {
-  const { query, result, initialLoad, loading, onValueChange } =
-    useRealEstateQuery();
+  const { query, state, onValueChange } = useRealEstateQuery();
 
   return (
     <div className={css["root"]}>
       <div className={css["count"]}>
-        {initialLoad || loading ? (
+        {state.initialLoad || state.loading ? (
           <Oval
             height={16}
             width={16}
@@ -37,7 +36,7 @@ const CountAndSort = ({}: Props) => {
             visible={true}
           />
         ) : (
-          `${result.pagination.total} listings`
+          `${state.result.pagination.total} listings`
         )}
       </div>
       <div className={css["sort"]}>

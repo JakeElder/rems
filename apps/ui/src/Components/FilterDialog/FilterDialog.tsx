@@ -25,8 +25,7 @@ const Indicator = ({ amount }: { amount: number }) => {
 
 const SidePanel = ({ defaultOpen = false }: Props) => {
   const [open, setOpen] = useState(defaultOpen);
-  const { reset, initialLoad, loading, result, activeFilters } =
-    useRealEstateQuery();
+  const { reset, state, activeFilters } = useRealEstateQuery();
 
   const transitions = useTransition(open, {
     from: {
@@ -88,7 +87,7 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                       Clear all
                     </Button>
                     <Button type="submit" onClick={() => setOpen(false)}>
-                      {initialLoad || loading ? (
+                      {state.initialLoad || state.loading ? (
                         <Oval
                           height={22}
                           width={22}
@@ -96,7 +95,7 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                           secondaryColor="#fff"
                         />
                       ) : (
-                        `Show ${result.pagination.total} homes`
+                        `Show ${state.result.pagination.total} homes`
                       )}
                     </Button>
                   </Split>

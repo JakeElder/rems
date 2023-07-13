@@ -57,7 +57,21 @@ export const TitleAndDescription = ({ property }: { property: Property }) => {
   return (
     <>
       <h1 className={css["title"]}>{property.title}</h1>
-      <div className={css["price"]}>{property.formattedPurchasePrice}</div>
+      <div className={css["price"]}>
+        {property.purchasePrice && (
+          <span className={css["purchase-price"]}>
+            {property.formattedPurchasePrice}
+          </span>
+        )}
+        {property.rentalPrice && (
+          <span className={css["rental-price-and-label"]}>
+            <span className={css["rental-price"]}>
+              {property.formattedRentalPrice}
+            </span>
+            <span className={css["rental-label"]}>per month rental price</span>
+          </span>
+        )}
+      </div>
       <div className={css["beds-baths-area"]}>
         <span className={css["beds"]}>{property.bedrooms} beds</span>
         <span className={css["separator"]}>&bull;</span>

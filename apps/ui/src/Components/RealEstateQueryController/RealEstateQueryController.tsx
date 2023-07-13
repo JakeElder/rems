@@ -42,12 +42,24 @@ type RealEstateQueryContext = {
   onMaxBedsChange: (max: RealEstateQuery["max-bedrooms"]) => void;
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
   reset: () => void;
-  loading: boolean;
-} & LoadingState;
+  state: LoadingState;
+};
 
-type LoadingState =
-  | { initialLoad: true; result: null; loading: boolean }
-  | { initialLoad: false; result: GetPropertiesResult; loading: boolean };
+type InitialisingState = {
+  initialLoad: true;
+  loading: true;
+  result: null;
+  query: null;
+};
+
+type LoadedState = {
+  initialLoad: false;
+  result: GetPropertiesResult;
+  query: RealEstateQuery;
+  loading: boolean;
+};
+
+type LoadingState = InitialisingState | LoadedState;
 
 const RealEstateQueryContext = createContext<RealEstateQueryContext | null>(
   null
@@ -94,10 +106,11 @@ const RealEstateQueryController = ({
     window.history.pushState("", "", `${pathname}${q === "?" ? "" : q}`);
   };
 
-  const [loader, setLoader] = useState<LoadingState>({
+  const [loadingState, setLoadingState] = useState<LoadingState>({
     initialLoad: true,
     loading: true,
-    result: null
+    result: null,
+    query: null
   });
 
   const get: (
@@ -112,18 +125,15 @@ const RealEstateQueryController = ({
   const { scrollTo } = useScrollTo();
 
   useEffect(() => {
-    setLoader(
-      update(loader, {
-        loading: { $set: true }
-      })
-    );
+    setLoadingState(update(loadingState, { loading: { $set: true } }));
 
     get(query).then((result) => {
       if (eq(query, result.query)) {
-        setLoader({
+        setLoadingState({
           initialLoad: false,
           loading: false,
-          result
+          result,
+          query
         });
         scrollTo(0);
       }
@@ -230,9 +240,7 @@ const RealEstateQueryController = ({
 
         has,
 
-        initialLoad: loader.initialLoad as any,
-        loading: loader.loading,
-        result: loader.result
+        state: loadingState
       }}
     >
       {children}

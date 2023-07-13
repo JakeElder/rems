@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import api from "../api";
 import Footer from "../components/Footer";
 import Analytics from "../components/Analytics";
+import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await api.get.appConfig();
@@ -25,21 +26,29 @@ export default async function Home() {
         <Header mode="hero" />
       </Page.Header>
       <Page.Hero>
-        <Hero />
+        <Suspense>
+          <Hero />
+        </Suspense>
       </Page.Hero>
       <Page.Content>
         <Page.PopularSearches>
-          <PopularSearches />
+          <Suspense>
+            <PopularSearches />
+          </Suspense>
         </Page.PopularSearches>
         <Page.EmailCollector>
           <EmailCollector />
         </Page.EmailCollector>
         <Page.LatestProperties>
-          <LatestProperties />
+          <Suspense>
+            <LatestProperties />
+          </Suspense>
         </Page.LatestProperties>
       </Page.Content>
       <Page.Footer>
-        <Footer />
+        <Suspense>
+          <Footer />
+        </Suspense>
       </Page.Footer>
     </Page.Root>
   );

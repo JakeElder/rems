@@ -31,7 +31,7 @@ const FilterBar = ({}: Props) => {
           <div className={css["separator"]} />
           <div className={css["key-filters"]}>
             <TypeFilterPopover on={has("property-type")} />
-            <AvailabilityFilterPopover on={has("property-type")} />
+            <AvailabilityFilterPopover />
             <PriceFilterPopover on={has("min-price") || has("max-price")} />
             <BedsFilterPopover
               on={has("min-bedrooms") || has("max-bedrooms")}

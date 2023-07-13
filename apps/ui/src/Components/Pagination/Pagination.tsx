@@ -17,16 +17,18 @@ import Link from "next/link";
 type Props = {};
 
 const Pagination = ({}: Props) => {
-  const { result, initialLoad, query, onPageChange } = useRealEstateQuery();
+  const { state, query, onPageChange } = useRealEstateQuery();
 
   const pageCount = Math.max(
-    initialLoad
+    state.initialLoad
       ? 1
-      : Math.ceil(result.pagination.total / result.pagination.pageSize),
+      : Math.ceil(
+          state.result.pagination.total / state.result.pagination.pageSize
+        ),
     1
   );
 
-  if (!initialLoad && result.pagination.total === 0) {
+  if (!state.initialLoad && state.result.pagination.total === 0) {
     return null;
   }
 
@@ -67,7 +69,7 @@ const Pagination = ({}: Props) => {
             return `/real-estate/?${generateQueryString(query, page)}`;
           }}
           onClick={({ nextSelectedPage }) => {
-            if (initialLoad || result.pagination.total === 0) {
+            if (state.initialLoad || state.result.pagination.total === 0) {
               return false;
             }
 

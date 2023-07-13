@@ -14,8 +14,8 @@ const TOKEN =
 type Props = {};
 
 const ListingMap = ({}: Props) => {
-  const { result, initialLoad } = useRealEstateQuery();
-  const properties = initialLoad ? [] : result.data;
+  const { state } = useRealEstateQuery();
+  const properties = state.initialLoad ? [] : state.result.data;
   const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
 
   return (

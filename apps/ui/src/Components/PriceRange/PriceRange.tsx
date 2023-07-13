@@ -32,7 +32,7 @@ const PriceRange = ({}: Props) => {
       query["min-price"],
       query["max-price"] ? query["max-price"] : MAX
     ]);
-  }, [query["min-price"], query["max-price"]]);
+  }, [query["min-price"], query["max-price"], query["availability"]]);
 
   const formatted = [
     `฿ ${value[0].toLocaleString()}`,
