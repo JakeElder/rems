@@ -163,4 +163,8 @@
     position: sticky;
     top: 97px;
   }
+
+  .with-back .contact-module {
+    top: 133px;
+  }
 }

@@ -8,6 +8,7 @@ import Container from "../../Elements/Container";
 import MonogramHR from "../../Components/MonogramHR";
 import Truncate from "../../Components/Truncate";
 import AreaMap from "../../Components/AreaMap";
+import cn from "classnames";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return <Layout.Root>{children}</Layout.Root>;
@@ -137,9 +138,15 @@ export const TheArea = ({ property }: { property: Property }) => {
   );
 };
 
-export const Contact = ({ children }: { children: React.ReactNode }) => {
+export const Contact = ({
+  children,
+  hasBackHref
+}: {
+  children: React.ReactNode;
+  hasBackHref: boolean;
+}) => {
   return (
-    <div className={css["contact"]}>
+    <div className={cn(css["contact"], { [css["with-back"]]: hasBackHref })}>
       <div className={css["contact-module"]}>{children}</div>
     </div>
   );

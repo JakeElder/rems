@@ -43,6 +43,21 @@
   display: none;
 }
 
+.back {
+  border-bottom: 1px solid;
+  font-family: var(--font-inter);
+  font-size: 14px;
+}
+
+.back-inner {
+  height: 36px;
+  line-height: 36px;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
 @media (min-width: 768px) {
   .button {
     display: unset;

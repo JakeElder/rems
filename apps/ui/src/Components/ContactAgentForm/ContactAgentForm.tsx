@@ -24,6 +24,7 @@ const ContactAgentForm = ({}: Props) => {
         <Textarea
           rows={3}
           value="I'm interested in Unique Industrial Bareshell Loft Residence (Bangkok, Krung Thep Maha Nakhon, Thailand)."
+          readOnly
         />
       </div>
       <div className={css["control"]}>

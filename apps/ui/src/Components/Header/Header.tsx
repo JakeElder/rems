@@ -4,13 +4,16 @@ import React, { ReactNode, useEffect, useState } from "react";
 import Logo from "../../Elements/Logo";
 import Container from "../../Elements/Container/Container";
 import css from "./Header.module.css";
-import { animated, useSpring } from "@react-spring/web";
+import { SpringValue, animated, useSpring } from "@react-spring/web";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SlideNav from "../SlideNav/SlideNav";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   mode: "standard" | "hero";
+  backHref?: null | string;
   full?: boolean;
 };
 
@@ -60,7 +63,7 @@ const Button = ({
   );
 };
 
-const Header = ({ mode, full = false }: Props) => {
+const Header = ({ mode, full = false, backHref }: Props) => {
   const [hasScrollY, setHasScrollY] = useState(
     typeof window !== "undefined" && window.scrollY > 0
   );
@@ -114,7 +117,41 @@ const Header = ({ mode, full = false }: Props) => {
           </div>
         </Container>
       </animated.div>
+      <Back styles={styles} full={full} href={backHref} />
     </div>
+  );
+};
+
+type Styles = {
+  color: SpringValue<string>;
+  background: SpringValue<string>;
+  fill: SpringValue<string>;
+  borderBottomColor: SpringValue<string>;
+};
+
+type BackProps = {
+  full: Props["full"];
+  href: Props["backHref"];
+  styles: Styles;
+};
+
+const Back = ({ styles, full, href }: BackProps) => {
+  if (!href) {
+    return null;
+  }
+  return (
+    <animated.div className={css["back"]} style={styles}>
+      <Container full={full}>
+        <div className={css["back-inner"]}>
+          <Link href={href} className={css["back-link"]}>
+            <span className={css["icon"]}>
+              <FontAwesomeIcon icon={faArrowLeftLong} />
+            </span>
+            <span>Back to search</span>
+          </Link>
+        </div>
+      </Container>
+    </animated.div>
   );
 };
 

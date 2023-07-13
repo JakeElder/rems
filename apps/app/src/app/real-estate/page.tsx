@@ -85,7 +85,12 @@ export default async function Home({ searchParams }: Props) {
         <Page.Main>
           <Page.Content>
             <Page.Breadcrumbs>
-              <Breadcrumbs />
+              <Breadcrumbs
+                items={[
+                  { children: "Home", href: "/" },
+                  { children: "Real Estate", href: "/real-estate" }
+                ]}
+              />
             </Page.Breadcrumbs>
             <Page.Title>Homes for sale in Thailand</Page.Title>
             <Page.CountAndSort>

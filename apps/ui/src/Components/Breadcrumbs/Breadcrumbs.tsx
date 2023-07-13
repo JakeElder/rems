@@ -2,14 +2,31 @@ import React from "react";
 import Link from "next/link";
 import css from "./Breadcrumbs.module.css";
 
-type Props = {};
+type Item = React.ComponentProps<typeof Link>;
 
-const Breadcrumbs = ({}: Props) => {
+type Props = {
+  items: Item[];
+};
+
+const Item = ({ children, href, last }: Item & { last: boolean }) => {
+  if (!last) {
+    return (
+      <>
+        <Link children={children} href={href} className={css["link"]} />
+        <div className={css["separator"]}>/</div>
+      </>
+    );
+  }
+
+  return <span className={css["location"]}>{children}</span>;
+};
+
+const Breadcrumbs = ({ items }: Props) => {
   return (
     <div className={css["root"]}>
-      <Link href="/">Home</Link>
-      <div className={css["separator"]}>/</div>
-      <span className={css["location"]}>Real Estate</span>
+      {items.map((i, idx) => (
+        <Item {...i} last={idx === items.length - 1} />
+      ))}
     </div>
   );
 };

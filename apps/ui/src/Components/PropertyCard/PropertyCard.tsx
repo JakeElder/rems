@@ -7,16 +7,17 @@ import { propertyToCarouselImages } from "../../adapters";
 
 type Props = {
   property: Property;
+  onClick?: React.ComponentProps<typeof Link>["onClick"];
   link?: string;
 };
 
-const PropertyCard = ({ property, link = "#" }: Props) => {
+const PropertyCard = ({ property, link = "#", onClick }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["images"]}>
         <SimpleImageCarousel images={propertyToCarouselImages(property)} />
       </div>
-      <Link href={link}>
+      <Link href={link} onClick={onClick}>
         <div className={css["spec"]}>
           <div className={css["price"]}>{property.formattedPurchasePrice}</div>
           <div className={css["beds-baths-area"]}>

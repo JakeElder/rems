@@ -5,7 +5,7 @@ import { FontLoader, IconLoader } from "@rems/ui";
 export const metadata = {
   title: "JYO Property",
   description: "Luxury Real Estate",
-  icons: "favicon.svg"
+  icons: "/favicon.svg"
 };
 
 export default function RootLayout({

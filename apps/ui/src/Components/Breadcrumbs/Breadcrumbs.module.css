@@ -3,7 +3,19 @@
   font-size: 12px;
   display: flex;
   color: #444;
-  gap: 7px;
+  gap: 5px;
+}
+
+.link {
+  white-space: nowrap;
+}
+
+.location {
+  color: #aaa;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .separator {
