@@ -37,6 +37,10 @@ const Pagination = ({}: Props) => {
           <Link
             className={css["button"]}
             children="Next"
+            onClick={(e) => {
+              e.preventDefault();
+              onPageChange(query["page"] + 1);
+            }}
             href={`/real-estate/?${generateQueryString(
               query,
               query["page"] + 1
