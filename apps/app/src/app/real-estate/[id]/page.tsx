@@ -11,7 +11,7 @@ import api from "../../../api";
 import { Metadata } from "next";
 import { Property, SearchParams } from "@rems/types";
 import Footer from "../../../components/Footer";
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import Analytics from "../../../components/Analytics";
 import { Suspense } from "react";
 
@@ -29,19 +29,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: property.title,
     description: property.description
   };
-}
-
-function generateBackLink(referer: string | null) {
-  if (!referer) {
-    return null;
-  }
-
-  const url = new URL(referer);
-  if (url.pathname !== "/real-estate") {
-    return null;
-  }
-
-  return `${url.pathname}${url.search}`;
 }
 
 const Breadcrumbs = async ({ propertyId }: { propertyId: Property["id"] }) => {
@@ -86,14 +73,13 @@ export default async function RealEstatePage({ params }: Props) {
   const parts = params.id.split("-");
   const id = parseInt(parts[parts.length - 1], 10);
 
-  const headersList = headers();
-  const backHref = generateBackLink(headersList.get("referer"));
+  const backHref = cookies().get("referer");
 
   return (
     <Page.Root>
       <Analytics />
       <Page.Header>
-        <Header mode="hero" backHref={backHref} />
+        <Header mode="hero" backHref={backHref?.value} />
       </Page.Header>
       <Page.Carousel>
         <Suspense>
