@@ -221,10 +221,8 @@ const get = {
   },
 
   async areas(): Promise<Area[]> {
-    const r = await this.generic("area");
-    console.log(r);
-    return [];
-    // return data.map(adapters.filter);
+    const { data } = await this.generic("areas");
+    return data.map(adapters.filter);
   },
 
   async indoorFeatures(): Promise<IndoorFeature[]> {

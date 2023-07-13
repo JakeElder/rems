@@ -7,7 +7,7 @@ import { useRealEstateQuery } from "../RealEstateQueryController";
 type Props = {};
 
 const AreaFilter = ({}: Props) => {
-  const { btsStations } = useFilters();
+  const { areas } = useFilters();
   const { query, onValueChange } = useRealEstateQuery();
 
   return (
@@ -15,14 +15,14 @@ const AreaFilter = ({}: Props) => {
       value={`${query["area"] ? query["area"] : ""}`}
       options={[
         { label: "Any", value: "" },
-        ...btsStations.map((l) => ({
+        ...areas.map((l) => ({
           value: `${l.slug}`,
           label: l.name
         }))
       ]}
       onChange={(e) =>
         onValueChange(
-          "nearest-bts-station",
+          "area",
           e.currentTarget.value ? e.currentTarget.value : null
         )
       }

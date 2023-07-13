@@ -12,6 +12,7 @@ import LotFeatureFilters from "../LotFeatureFilters";
 import LivingAreaFilters from "../LivingAreaFilters/LivingAreaFilters";
 import NearestMRTStationFilter from "../NearestMRTStationFilter";
 import NearestBTSStationFilter from "../NearestBTSStationFilter";
+import AreaFilter from "../AreaFilter/AreaFilter";
 
 type Props = {};
 
@@ -22,6 +23,12 @@ const PropertyFilters = ({}: Props) => {
         <div className={css["header"]}>Property Type</div>
         <div className={css["filters"]}>
           <TypeFilters id="dialog" />
+        </div>
+      </div>
+      <div className={css["section"]}>
+        <div className={css["header"]}>Area</div>
+        <div className={css["filters"]}>
+          <AreaFilter />
         </div>
       </div>
       <div className={css["section"]}>
