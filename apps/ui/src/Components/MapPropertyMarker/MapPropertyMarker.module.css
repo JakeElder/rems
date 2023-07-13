@@ -8,10 +8,6 @@
   position: absolute;
 }
 
-.open {
-  z-index: 1;
-}
-
 .marker {
   position: relative;
   width: var(--marker-size);
@@ -32,6 +28,7 @@
   left: calc(-1 * (var(--popup-width) / 2) + calc(var(--marker-size) / 2));
   bottom: 100%;
   padding-bottom: 10px;
+  cursor: pointer;
 }
 
 .popup {
@@ -39,7 +36,7 @@
   border-radius: 2px;
   width: var(--popup-width);
   background: #fff;
-  box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.1);
 }
 
 .image-container {

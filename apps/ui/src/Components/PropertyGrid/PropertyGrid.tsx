@@ -5,12 +5,14 @@ import css from "./PropertyGrid.module.css";
 import { useRealEstateQuery } from "../RealEstateQueryController";
 import PropertyCard from "../PropertyCard";
 import { animated, useTransition } from "@react-spring/web";
+import { useIndexConnector } from "../IndexConnector";
 
 type Props = {};
 
 const PropertyGrid = ({}: Props) => {
   const { loading, result } = useRealEstateQuery();
   const properties = result?.data || [];
+  const { setMouseOver, setMouseOut } = useIndexConnector();
 
   const transition = useTransition(loading, {
     from: { backgroundColor: "rgba(255, 255, 255, 0)" },
@@ -22,7 +24,12 @@ const PropertyGrid = ({}: Props) => {
     <div className={css["root"]}>
       <div className={css["properties"]}>
         {properties.map((p) => (
-          <PropertyCard key={p.id} property={p} link={p.url} />
+          <div
+            onMouseOver={() => setMouseOver(p.id)}
+            onMouseOut={() => setMouseOut()}
+          >
+            <PropertyCard key={p.id} property={p} link={p.url} />
+          </div>
         ))}
       </div>
       {transition(

@@ -1,5 +1,6 @@
 import React from "react";
 import css from "./RealEstateIndexPage.module.css";
+import IndexConnector from "../../Components/IndexConnector";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   "use client";
@@ -11,7 +12,11 @@ export const Header = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
-  return <div className={css["main"]}>{children}</div>;
+  return (
+    <div className={css["main"]}>
+      <IndexConnector>{children}</IndexConnector>
+    </div>
+  );
 };
 
 export const Content = ({ children }: { children: React.ReactNode }) => {
