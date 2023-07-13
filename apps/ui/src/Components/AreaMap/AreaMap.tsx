@@ -32,7 +32,7 @@ const AreaMap = ({ property }: Props) => {
               longitude={property.location!.lng}
               latitude={property.location!.lat}
             >
-              <MapPropertyMarker property={property} />
+              <MapPropertyMarker property={property} open={false} />
             </Marker>
           </Map>
         </div>
