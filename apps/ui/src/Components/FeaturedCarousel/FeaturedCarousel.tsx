@@ -23,11 +23,11 @@ const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
   const [step, set] = useState(0);
 
   const bind = useDrag(({ swipe: [swipeX] }) => {
-    if (swipeX === 1) {
+    if (swipeX === -1) {
       set((step) => mod(step + 1, properties.length));
     }
 
-    if (swipeX === -1) {
+    if (swipeX === 1) {
       set((step) => mod(step - 1, properties.length));
     }
   });
