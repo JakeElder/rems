@@ -14,6 +14,7 @@ import NearestMRTStationFilter from "../NearestMRTStationFilter";
 import NearestBTSStationFilter from "../NearestBTSStationFilter";
 import AreaFilter from "../AreaFilter/AreaFilter";
 import LotSizeFilters from "../LotSizeFilters";
+import AvailabilityFilter from "../AvailabilityFilter/AvailabilityFilter";
 
 type Props = {};
 
@@ -27,10 +28,20 @@ const PropertyFilters = ({}: Props) => {
         </div>
       </div>
       <div className={css["section"]}>
-        <div className={css["header"]}>Area</div>
-        <div className={css["filters"]}>
-          <AreaFilter />
-        </div>
+        <Split>
+          <div>
+            <div className={css["header"]}>Availability</div>
+            <div className={css["filters"]}>
+              <AvailabilityFilter />
+            </div>
+          </div>
+          <div>
+            <div className={css["header"]}>Area</div>
+            <div className={css["filters"]}>
+              <AreaFilter />
+            </div>
+          </div>
+        </Split>
       </div>
       <div className={css["section"]}>
         <div className={css["header"]}>Price Range</div>

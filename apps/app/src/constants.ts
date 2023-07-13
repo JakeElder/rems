@@ -69,3 +69,9 @@ export const MAX_LOT_SIZES: LivingAreaSize[] = [
   { value: 50_000, label: "5 ha" },
   { value: 100_000, label: "10 ha" }
 ];
+
+export const MIN_PURCHASE_PRICE = 0;
+export const MAX_PURCHASE_PRICE = 100_000_000;
+
+export const MIN_RENTAL_PRICE = 0;
+export const MAX_RENTAL_PRICE = 1_000_000;

@@ -9,7 +9,8 @@ import PriceFilterPopover from "../PriceFilterPopover";
 import BedsFilterPopover from "../BedsFilterPopover";
 import FilterDialog from "../FilterDialog";
 import QuickFilters from "../QuickFilters";
-import { useRealEstateQuery } from "../RealEstateQueryController/RealEstateQueryController";
+import { useRealEstateQuery } from "../RealEstateQueryController";
+import AvailabilityFilterPopover from "../AvailabilityFilterPopover";
 
 type Props = {};
 
@@ -30,6 +31,7 @@ const FilterBar = ({}: Props) => {
           <div className={css["separator"]} />
           <div className={css["key-filters"]}>
             <TypeFilterPopover on={has("property-type")} />
+            <AvailabilityFilterPopover on={has("property-type")} />
             <PriceFilterPopover on={has("min-price") || has("max-price")} />
             <BedsFilterPopover
               on={has("min-bedrooms") || has("max-bedrooms")}

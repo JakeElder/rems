@@ -100,10 +100,21 @@ const get = {
 
     const property_type = { slug: { $in: query["property-type"] } };
 
-    const purchasePrice = {
-      $gte: query["min-price"],
-      ...(query["max-price"] ? { $lte: query["max-price"] } : {})
-    };
+    const purchasePrice =
+      query["availability"] === "sale"
+        ? {
+            $gte: query["min-price"],
+            ...(query["max-price"] ? { $lte: query["max-price"] } : {})
+          }
+        : {};
+
+    const rentalPrice =
+      query["availability"] === "rent"
+        ? {
+            $gte: query["min-price"],
+            ...(query["max-price"] ? { $lte: query["max-price"] } : {})
+          }
+        : {};
 
     const bedrooms = {
       $gte: query["min-bedrooms"],
@@ -151,6 +162,12 @@ const get = {
 
     const area = query["area"] ? { slug: { $eq: query["area"] } } : {};
 
+    const availableToPurchase =
+      query["availability"] === "sale" ? { $eq: true } : {};
+
+    const availableToRent =
+      query["availability"] === "rent" ? { $eq: true } : {};
+
     const sort = (() => {
       const map: Record<SortType, string> = {
         "newest-first": "createdAt:desc",
@@ -177,13 +194,16 @@ const get = {
           {
             property_type,
             purchasePrice,
+            rentalPrice,
             bedrooms,
             bathrooms,
             livingArea,
             lotSize,
             nearest_mrt_station,
             nearest_bts_station,
-            area
+            area,
+            availableToRent,
+            availableToPurchase
           },
           ...view_types,
           ...indoor_features,

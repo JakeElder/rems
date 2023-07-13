@@ -2,15 +2,26 @@ import React, { useEffect, useState } from "react";
 import css from "./PriceRange.module.css";
 import Slider from "../../Elements/Slider";
 import { useRealEstateQuery } from "../RealEstateQueryController";
+import { useFilters } from "../../Utils/FiltersContext";
 
 type Props = {};
 
-const MIN = 0;
-const MAX = 100_000_000;
-const STEP = 1000;
-
 const PriceRange = ({}: Props) => {
   const { query, onPriceRangeChange } = useRealEstateQuery();
+  const { priceRange } = useFilters();
+
+  const MIN =
+    query["availability"] === "sale"
+      ? priceRange.minPurchasePrice
+      : priceRange.minRentalPrice;
+
+  const MAX =
+    query["availability"] === "sale"
+      ? priceRange.maxPurchasePrice
+      : priceRange.maxRentalPrice;
+
+  const STEP = query["availability"] === "sale" ? 1000 : 100;
+
   const [value, setValue] = useState([
     query["min-price"],
     query["max-price"] ? query["max-price"] : MAX

@@ -12,7 +12,16 @@ import {
 } from "@rems/ui";
 import api from "../../api";
 import { SearchParams } from "@rems/types";
-import { MAX_LIVING_AREA_SIZES, MAX_LOT_SIZES, MIN_LIVING_AREA_SIZES, MIN_LOT_SIZES } from "../../constants";
+import {
+  MAX_LIVING_AREA_SIZES,
+  MAX_LOT_SIZES,
+  MAX_PURCHASE_PRICE,
+  MAX_RENTAL_PRICE,
+  MIN_LIVING_AREA_SIZES,
+  MIN_LOT_SIZES,
+  MIN_PURCHASE_PRICE,
+  MIN_RENTAL_PRICE
+} from "../../constants";
 import adapters from "../../adapters";
 import { Metadata } from "next";
 import Footer from "../../components/Footer";
@@ -84,6 +93,12 @@ export default async function Home({ searchParams }: Props) {
               lotSizes: {
                 min: MIN_LOT_SIZES,
                 max: MAX_LOT_SIZES
+              },
+              priceRange: {
+                minRentalPrice: MIN_RENTAL_PRICE,
+                maxRentalPrice: MAX_RENTAL_PRICE,
+                minPurchasePrice: MIN_PURCHASE_PRICE,
+                maxPurchasePrice: MAX_PURCHASE_PRICE
               },
               quickFilters
             }}

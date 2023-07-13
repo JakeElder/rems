@@ -28,6 +28,7 @@ type RealEstateQueryContext = {
     value: string,
     state: CheckedState
   ) => void;
+  onAvailabilityChange: (availability: RealEstateQuery["availability"]) => void;
   onValueChange: (
     param: keyof RealEstateQuery,
     value: string | number | null
@@ -135,6 +136,7 @@ const RealEstateQueryController = ({
 
   const activeFilters = [
     ...query["property-type"],
+    has("area"),
     has("min-price") || has("max-price"),
     has("min-bedrooms") || has("max-bedrooms"),
     has("min-bathrooms"),
@@ -143,6 +145,7 @@ const RealEstateQueryController = ({
     ...query["outdoor-features"],
     ...query["lot-features"],
     has("min-living-area") || has("max-living-area"),
+    has("min-lot-size") || has("max-lot-size"),
     has("nearest-mrt-station"),
     has("nearest-bts-station")
   ].filter((i) => i).length;
@@ -195,6 +198,15 @@ const RealEstateQueryController = ({
           const nextQuery = update(query, {
             "min-bathrooms": { $set: min },
             page: { $set: 1 }
+          });
+          commit(nextQuery);
+        },
+
+        onAvailabilityChange: (value) => {
+          const nextQuery = update(query, {
+            availability: { $set: value },
+            "min-price": { $set: 0 },
+            "max-price": { $set: null }
           });
           commit(nextQuery);
         },

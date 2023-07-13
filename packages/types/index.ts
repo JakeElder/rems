@@ -114,6 +114,12 @@ export type Filters = {
     min: LotSize[];
     max: LotSize[];
   };
+  priceRange: {
+    minRentalPrice: number;
+    maxRentalPrice: number;
+    minPurchasePrice: number;
+    maxPurchasePrice: number;
+  };
   quickFilters: QuickFilter[];
 };
 
