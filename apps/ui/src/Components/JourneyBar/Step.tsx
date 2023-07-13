@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import css from "./JourneyBar.module.css";
-import { motion } from "framer-motion";
 
 type Props = {
   active?: boolean;
@@ -9,17 +8,33 @@ type Props = {
 };
 
 const Step = ({ active = false, duration, onComplete }: Props) => {
+  const $fill = useRef<HTMLDivElement | null>(null);
+
+  const cleanup = ($el: HTMLDivElement) => {
+    $el.ontransitionend = null;
+    $el.style.transition = "unset";
+    $el.style.width = "0";
+  };
+
+  useEffect(() => {
+    if (!$fill.current) {
+      return;
+    }
+    if (active) {
+      $fill.current.style.transition = `width ${duration}ms linear`;
+      $fill.current.ontransitionend = () => {
+        cleanup($fill.current!);
+        onComplete();
+      };
+      $fill!.current!.style.width = "100%";
+    } else {
+      cleanup($fill.current);
+    }
+  }, [active]);
+
   return (
-    <div className={css.item}>
-      {active && (
-        <motion.div
-          className={css.fill}
-          initial={{ width: 0 }}
-          animate={{ width: "100%" }}
-          transition={{ duration: duration / 1000, ease: "linear" }}
-          onAnimationComplete={onComplete}
-        />
-      )}
+    <div className={css["item"]}>
+      <div ref={$fill} className={css["fill"]} />
     </div>
   );
 };

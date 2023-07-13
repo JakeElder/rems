@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^13.4.9",
     "@rems/types": "file:../../packages/types",
     "@rems/ui": "file:../ui",
     "@types/node": "18.15.3",
