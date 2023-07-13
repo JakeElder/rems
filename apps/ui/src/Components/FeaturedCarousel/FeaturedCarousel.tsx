@@ -8,6 +8,7 @@ import { Property } from "@rems/types";
 import Image from "next/image";
 import Container from "../../Elements/Container/Container";
 import Link from "next/link";
+import { useDrag } from "@use-gesture/react";
 
 function mod(n: number, m: number) {
   return ((n % m) + m) % m;
@@ -21,6 +22,16 @@ type Props = {
 const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
   const [step, set] = useState(0);
 
+  const bind = useDrag(({ swipe: [swipeX] }) => {
+    if (swipeX === 1) {
+      set((step) => mod(step + 1, properties.length));
+    }
+
+    if (swipeX === -1) {
+      set((step) => mod(step - 1, properties.length));
+    }
+  });
+
   const transitions = useTransition(step, {
     key: step,
     initial: null,
@@ -31,7 +42,7 @@ const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
   });
 
   return (
-    <div className={css["root"]}>
+    <div className={css["root"]} {...bind()}>
       {transitions((style, i) => {
         const img = properties[i].images[0];
         return (
