@@ -42,7 +42,7 @@ const PropertyCard = ({ property, link = "#", onClick }: Props) => {
       <div className={css["images"]}>
         <SimpleImageCarousel images={propertyToCarouselImages(property)} />
       </div>
-      <Link href={link} onClick={onClick}>
+      <Link href={link} onClick={onClick} prefetch={false}>
         <div className={css["spec"]}>
           <Price property={property} type={state.query!["availability"]} />
           <div className={css["beds-baths-area"]}>
