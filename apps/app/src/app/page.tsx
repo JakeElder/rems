@@ -6,6 +6,7 @@ import EmailCollector from "./EmailCollector";
 import { Metadata } from "next";
 import api from "../api";
 import Footer from "../components/Footer";
+import Analytics from "../components/Analytics";
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await api.get.appConfig();
@@ -19,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   return (
     <Page.Root>
+      <Analytics />
       <Page.Header>
         <Header mode="hero" />
       </Page.Header>

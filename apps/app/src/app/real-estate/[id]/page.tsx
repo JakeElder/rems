@@ -12,6 +12,7 @@ import { Metadata } from "next";
 import { SearchParams } from "@rems/types";
 import Footer from "../../../components/Footer";
 import { headers } from "next/headers";
+import Analytics from "../../../components/Analytics";
 
 type Props = {
   params: { id: string };
@@ -56,6 +57,7 @@ export default async function RealEstatePage({ params }: Props) {
 
   return (
     <Page.Root>
+      <Analytics />
       <Page.Header>
         <Header mode="hero" backHref={backHref} />
       </Page.Header>

@@ -34,12 +34,12 @@ const ListingMap = ({}: Props) => {
           >
             {properties.map((p) => (
               <Link
+                key={p.id}
                 href={p.url}
                 onMouseOver={() => setMouseOver(p.id)}
                 onMouseOut={() => setMouseOut()}
               >
                 <Marker
-                  key={p.id}
                   longitude={p.location!.lng}
                   latitude={p.location!.lat}
                   style={{ zIndex: activeProperty === p.id ? 1 : 0 }}

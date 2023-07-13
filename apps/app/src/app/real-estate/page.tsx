@@ -16,6 +16,7 @@ import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
 import adapters from "../../adapters";
 import { Metadata } from "next";
 import Footer from "../../components/Footer";
+import Analytics from "../../components/Analytics";
 
 type Props = {
   params: { id: string };
@@ -60,6 +61,7 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <Page.Root>
+      <Analytics />
       <RealEstateQueryController query={query}>
         <Page.Header>
           <Header full mode="standard" />
