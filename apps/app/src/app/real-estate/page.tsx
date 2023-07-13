@@ -47,7 +47,8 @@ export default async function Home({ searchParams }: Props) {
     outdoorFeatures,
     viewTypes,
     propertyTypes,
-    quickFilters
+    quickFilters,
+    areas
   ] = await Promise.all([
     api.get.btsStations(),
     api.get.indoorFeatures(),
@@ -56,7 +57,8 @@ export default async function Home({ searchParams }: Props) {
     api.get.outdoorFeatures(),
     api.get.viewTypes(),
     api.get.propertyTypes(),
-    api.get.quickFilters()
+    api.get.quickFilters(),
+    api.get.areas()
   ]);
 
   return (
@@ -67,6 +69,7 @@ export default async function Home({ searchParams }: Props) {
           <Header full mode="standard" />
           <FiltersContext
             value={{
+              areas,
               btsStations,
               indoorFeatures,
               lotFeatures,

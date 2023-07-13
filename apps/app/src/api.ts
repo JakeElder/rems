@@ -2,6 +2,7 @@ import qs from "qs";
 import { fetch } from "./utils";
 import adapters from "./adapters";
 import {
+  Area,
   BTSStation,
   FilterSet,
   GetPropertiesResult,
@@ -140,6 +141,8 @@ const get = {
       ? { slug: { $eq: query["nearest-bts-station"] } }
       : {};
 
+    const area = query["area"] ? { slug: { $eq: query["area"] } } : {};
+
     const sort = (() => {
       const map: Record<SortType, string> = {
         "newest-first": "createdAt:desc",
@@ -158,7 +161,8 @@ const get = {
         "indoor_features",
         "lot_features",
         "outdoor_features",
-        "view_types"
+        "view_types",
+        "area"
       ],
       filters: {
         $and: [
@@ -169,7 +173,8 @@ const get = {
             bathrooms,
             livingArea,
             nearest_mrt_station,
-            nearest_bts_station
+            nearest_bts_station,
+            area
           },
           ...view_types,
           ...indoor_features,
@@ -213,6 +218,13 @@ const get = {
   async btsStations(): Promise<BTSStation[]> {
     const { data } = await this.generic("bts-stations");
     return data.map(adapters.filter);
+  },
+
+  async areas(): Promise<Area[]> {
+    const r = await this.generic("area");
+    console.log(r);
+    return [];
+    // return data.map(adapters.filter);
   },
 
   async indoorFeatures(): Promise<IndoorFeature[]> {

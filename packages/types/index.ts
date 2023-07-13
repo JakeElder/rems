@@ -67,6 +67,7 @@ export type Filter = {
   slug: string;
 } & CMSAttributes;
 
+export type Area = Filter;
 export type BTSStation = Filter;
 export type IndoorFeature = Filter;
 export type LotFeature = Filter;
@@ -96,6 +97,7 @@ export type Filters = {
   indoorFeatures: IndoorFeature[];
   lotFeatures: LotFeature[];
   mrtStations: MRTStation[];
+  areas: Area[];
   outdoorFeatures: OutdoorFeature[];
   propertyTypes: PropertyType[];
   viewTypes: ViewType[];
@@ -132,6 +134,7 @@ export const realEstateQuerySchema = z.object({
   "max-living-area": z.coerce.number().nullable().default(null).catch(null),
   "nearest-mrt-station": z.string().nullable().default(null).catch(null),
   "nearest-bts-station": z.string().nullable().default(null).catch(null),
+  area: z.string().nullable().default(null).catch(null),
   availability: z.enum(["sale", "rent"]).default("sale").catch("sale")
 });
 

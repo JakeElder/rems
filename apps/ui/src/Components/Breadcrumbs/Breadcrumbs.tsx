@@ -25,7 +25,7 @@ const Breadcrumbs = ({ items }: Props) => {
   return (
     <div className={css["root"]}>
       {items.map((i, idx) => (
-        <Item {...i} last={idx === items.length - 1} />
+        <Item key={idx} {...i} last={idx === items.length - 1} />
       ))}
     </div>
   );
