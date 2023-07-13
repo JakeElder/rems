@@ -7,6 +7,7 @@ import JourneyBar from "../JourneyBar";
 import { Property } from "@rems/types";
 import Image from "next/image";
 import Container from "../../Elements/Container/Container";
+import Link from "next/link";
 
 function mod(n: number, m: number) {
   return ((n % m) + m) % m;
@@ -74,11 +75,16 @@ const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
               <div className={css["description-container"]}>
                 {transitions((style, i) => {
                   return (
-                    <animated.span style={style} className={css["description"]}>
-                      {properties[i].title}
-                      <span className={css["separator"]}>&bull;</span>
-                      {properties[i].formattedPurchasePrice}
-                    </animated.span>
+                    <Link href={properties[i].url}>
+                      <animated.span
+                        style={style}
+                        className={css["description"]}
+                      >
+                        {properties[i].title}
+                        <span className={css["separator"]}>&bull;</span>
+                        {properties[i].formattedPurchasePrice}
+                      </animated.span>
+                    </Link>
                   );
                 })}
               </div>

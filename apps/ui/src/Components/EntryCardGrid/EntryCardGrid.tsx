@@ -13,21 +13,25 @@ const Item = ({ card }: { card: EntryCard }) => {
   const { image } = card;
 
   return (
-    <a href={card.url}>
+    <a className={css["item"]} href={card.url}>
+      <div className={css["img"]}>
+        <Image
+          src={image.src}
+          alt={card.title}
+          width={image.width}
+          height={image.height}
+        />
+      </div>
       <div className={css["overlay"]} />
       <div className={css["content"]}>
         <div className={css["title"]}>{card.title}</div>
         <div className={css["caption-and-icon"]}>
           <div className={css["caption"]}>{card.caption}</div>
-          <FontAwesomeIcon icon={faArrowRightLong} />
+          <div className={css["icon"]}>
+            <FontAwesomeIcon icon={faArrowRightLong} />
+          </div>
         </div>
       </div>
-      <Image
-        src={image.src}
-        alt={card.title}
-        width={image.width}
-        height={image.height}
-      />
     </a>
   );
 };

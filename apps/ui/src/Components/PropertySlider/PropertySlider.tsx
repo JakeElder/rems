@@ -11,7 +11,7 @@ type Props = { properties: Property[] };
 const Card = ({ property }: { property: Property }) => {
   const img = property.images[0];
   return (
-    <a className={css["card"]} href="#">
+    <a className={css["card"]} href={property.url}>
       <Image
         alt={property.title}
         src={img.src}

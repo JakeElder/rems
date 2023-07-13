@@ -64,9 +64,9 @@ const Footer = ({
           <UL heading="POPULAR SEARCHES" links={popularSearches} />
         </div>
         <div className={css["logo-disclaimer-socials"]}>
-          <div className={css["logo"]}>
+          <Link href="/" className={css["logo"]}>
             <Logo />
-          </div>
+          </Link>
           <div className={css["column-disclaimer"]}>
             Copyright © 2023 Jyo Property Co Ltd
           </div>

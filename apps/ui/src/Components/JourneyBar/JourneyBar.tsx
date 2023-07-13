@@ -37,22 +37,22 @@ const JourneyBar = ({
         ))}
       </div>
       <div className={css["controls"]}>
-        <a href="#">
+        <span role="button">
           <FontAwesomeIcon
             icon={faArrowLeftLong}
             size="lg"
             onClick={onPrevRequest}
             className={css["arrow"]}
           />
-        </a>
-        <a href="#">
+        </span>
+        <span role="button">
           <FontAwesomeIcon
             icon={faArrowRightLong}
             size="lg"
             onClick={onNextRequest}
             className={css["arrow"]}
           />
-        </a>
+        </span>
       </div>
     </div>
   );

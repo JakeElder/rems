@@ -4,7 +4,6 @@ import React from "react";
 import css from "./PropertyGrid.module.css";
 import { useRealEstateQuery } from "../RealEstateQueryController";
 import PropertyCard from "../PropertyCard";
-import slugify from "slugify";
 import { animated, useTransition } from "@react-spring/web";
 
 type Props = {};
@@ -23,11 +22,7 @@ const PropertyGrid = ({}: Props) => {
     <div className={css["root"]}>
       <div className={css["properties"]}>
         {properties.map((p) => (
-          <PropertyCard
-            key={p.id}
-            property={p}
-            link={`/real-estate/${slugify(p.title, { strict: true })}-${p.id}`}
-          />
+          <PropertyCard key={p.id} property={p} link={p.url} />
         ))}
       </div>
       {transition(

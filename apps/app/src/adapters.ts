@@ -7,6 +7,7 @@ import {
   SearchParams,
   realEstateQuerySchema
 } from "@rems/types";
+import slugify from "slugify";
 import { mapKeys } from "remeda";
 
 const adapters = {
@@ -61,6 +62,7 @@ const adapters = {
       title,
       description,
       purchasePrice,
+      url: `/real-estate/${slugify(title, { strict: true })}-${res.id}`,
       location: JSON.parse(location),
       formattedPurchasePrice: `฿${purchasePrice.toLocaleString()}`,
       bedrooms,
