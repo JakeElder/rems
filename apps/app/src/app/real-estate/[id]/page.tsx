@@ -69,6 +69,8 @@ const Carousel = async ({ propertyId }: { propertyId: Property["id"] }) => {
   return <SimpleImageCarousel images={images} fill />;
 };
 
+export const revalidate = 0;
+
 export default async function RealEstatePage({ params }: Props) {
   const parts = params.id.split("-");
   const id = parseInt(parts[parts.length - 1], 10);
