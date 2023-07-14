@@ -13,6 +13,7 @@ import { omitBy, equals } from "remeda";
 import { usePathname } from "next/navigation";
 import eq from "fast-deep-equal";
 import useScrollTo from "react-spring-scroll-to-hook";
+import { setCookie } from "typescript-cookie";
 
 type Props = {
   query: RealEstateQuery;
@@ -116,9 +117,8 @@ const RealEstateQueryController = ({
   const get: (
     q: RealEstateQuery
   ) => Promise<GetPropertiesResult> = async () => {
-    const string = generateQueryString(query);
-    const q = `?${string}`;
-    const res = await fetch(`/properties${q === "?" ? "" : q}`);
+    const qs = generateQueryString(query);
+    const res = await fetch(`/properties${qs ? `?${qs}` : ""}`);
     return res.json();
   };
 
@@ -135,6 +135,16 @@ const RealEstateQueryController = ({
           result,
           query
         });
+
+        const expires = new Date();
+        expires.setSeconds(expires.getSeconds() + 60 * 5);
+        console.log("setting");
+        setCookie(
+          "referer",
+          `${window.location.pathname}${window.location.search}`,
+          { expires, path: "/" }
+        );
+
         scrollTo(0);
       }
     });

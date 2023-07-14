@@ -66,9 +66,12 @@ const Pagination = ({}: Props) => {
           containerClassName={css["pages"]}
           activeLinkClassName={css["active"]}
           hrefBuilder={(page) => {
-            return `/real-estate/?${generateQueryString(query, page)}`;
+            const qs = generateQueryString(query, page);
+            return `/real-estate${qs ? `?${qs}` : ""}`;
           }}
-          onClick={({ nextSelectedPage }) => {
+          onClick={({ nextSelectedPage, event }) => {
+            (event as any).preventDefault();
+
             if (state.initialLoad || state.result.pagination.total === 0) {
               return false;
             }

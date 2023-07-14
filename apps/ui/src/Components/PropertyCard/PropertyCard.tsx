@@ -8,7 +8,6 @@ import { useRealEstateQuery } from "../RealEstateQueryController/RealEstateQuery
 
 type Props = {
   property: Property;
-  onClick?: React.ComponentProps<typeof Link>["onClick"];
   link?: string;
 };
 
@@ -35,14 +34,14 @@ const Price = ({
   );
 };
 
-const PropertyCard = ({ property, link = "#", onClick }: Props) => {
+const PropertyCard = ({ property, link = "#" }: Props) => {
   const { state } = useRealEstateQuery();
   return (
     <div className={css["root"]}>
       <div className={css["images"]}>
         <SimpleImageCarousel images={propertyToCarouselImages(property)} />
       </div>
-      <span onClick={onClick} style={{ cursor: "pointer" }}>
+      <Link href={link}>
         <div className={css["spec"]}>
           <Price property={property} type={state.query!["availability"]} />
           <div className={css["beds-baths-area"]}>
@@ -54,7 +53,7 @@ const PropertyCard = ({ property, link = "#", onClick }: Props) => {
           </div>
           <div className={css["title"]}>{property.title}</div>
         </div>
-      </span>
+      </Link>
     </div>
   );
 };
