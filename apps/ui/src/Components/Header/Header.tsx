@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import SlideNav from "../SlideNav/SlideNav";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { getCookie } from "typescript-cookie";
 
 type Props = {
   mode: "standard" | "hero";
@@ -136,14 +137,19 @@ type BackProps = {
 };
 
 const Back = ({ styles, full, href }: BackProps) => {
-  if (!href) {
+  const cookieHref = getCookie("referer");
+
+  const link = cookieHref ? cookieHref : href;
+
+  if (!link) {
     return null;
   }
+
   return (
     <animated.div className={css["back"]} style={styles}>
       <Container full={full}>
         <div className={css["back-inner"]}>
-          <Link href={href} className={css["back-link"]}>
+          <Link href={link} className={css["back-link"]}>
             <span className={css["icon"]}>
               <FontAwesomeIcon icon={faArrowLeftLong} />
             </span>
