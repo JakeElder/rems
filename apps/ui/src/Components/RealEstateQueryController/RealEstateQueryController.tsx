@@ -138,7 +138,6 @@ const RealEstateQueryController = ({
 
         const expires = new Date();
         expires.setSeconds(expires.getSeconds() + 60 * 5);
-        console.log("setting");
         setCookie(
           "referer",
           `${window.location.pathname}${window.location.search}`,
