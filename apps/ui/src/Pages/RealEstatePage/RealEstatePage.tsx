@@ -8,16 +8,10 @@ import Container from "../../Elements/Container";
 import MonogramHR from "../../Components/MonogramHR";
 import Truncate from "../../Components/Truncate";
 import AreaMap from "../../Components/AreaMap";
-import RefererClearer from "../../Elements/RefererClearer";
 import cn from "classnames";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <Layout.Root>
-      <RefererClearer />
-      {children}
-    </Layout.Root>
-  );
+  return <Layout.Root>{children}</Layout.Root>;
 };
 
 export const Header = ({ children }: { children: React.ReactNode }) => {

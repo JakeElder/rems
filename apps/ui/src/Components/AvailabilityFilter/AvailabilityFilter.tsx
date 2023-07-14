@@ -18,7 +18,9 @@ const AvailabilityFilter = ({ type = "select" }: Props) => {
           width={80}
           value={query["availability"]}
           onValueChange={(val) => {
-            onAvailabilityChange(val as "sale" | "rent");
+            if (val === "sale" || val === "rent") {
+              onAvailabilityChange(val);
+            }
           }}
           items={[
             { value: "sale", label: "Sale" },
@@ -34,7 +36,10 @@ const AvailabilityFilter = ({ type = "select" }: Props) => {
       <Select
         value={query["availability"]}
         onChange={(e) => {
-          onAvailabilityChange(e.currentTarget.value as "sale" | "rent");
+          const val = e.currentTarget.value;
+          if (val === "sale" || val === "rent") {
+            onAvailabilityChange(val);
+          }
         }}
         options={[
           { value: "sale", label: "Sale" },
