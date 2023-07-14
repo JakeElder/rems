@@ -136,13 +136,14 @@ const RealEstateQueryController = ({
           query
         });
 
+        const qs = generateQueryString(query);
         const expires = new Date();
         expires.setSeconds(expires.getSeconds() + 60 * 5);
-        setCookie(
-          "referer",
-          `${window.location.pathname}${window.location.search}`,
-          { expires, path: "/" }
-        );
+
+        setCookie("referer", qs ? `/real-estate?${qs}` : "", {
+          expires,
+          path: "/"
+        });
 
         scrollTo(0);
       }
