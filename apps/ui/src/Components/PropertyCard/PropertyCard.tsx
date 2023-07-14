@@ -41,7 +41,7 @@ const PropertyCard = ({ property, link = "#" }: Props) => {
       <div className={css["images"]}>
         <SimpleImageCarousel images={propertyToCarouselImages(property)} />
       </div>
-      <Link href={link}>
+      <a href={link}>
         <div className={css["spec"]}>
           <Price property={property} type={state.query!["availability"]} />
           <div className={css["beds-baths-area"]}>
@@ -53,7 +53,7 @@ const PropertyCard = ({ property, link = "#" }: Props) => {
           </div>
           <div className={css["title"]}>{property.title}</div>
         </div>
-      </Link>
+      </a>
     </div>
   );
 };
