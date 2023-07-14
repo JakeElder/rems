@@ -81,7 +81,7 @@ export default async function RealEstatePage({ params }: Props) {
     <Page.Root>
       <Analytics />
       <Page.Header>
-        <Header mode="hero" backHref={backHref?.value} />
+        <Header mode="hero" back={true} backHref={backHref?.value} />
       </Page.Header>
       <Page.Carousel>
         <Suspense>

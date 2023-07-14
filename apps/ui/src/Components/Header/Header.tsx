@@ -16,6 +16,7 @@ type Props = {
   mode: "standard" | "hero";
   backHref?: null | string;
   full?: boolean;
+  back?: boolean;
 };
 
 const L = animated(Link);
@@ -64,7 +65,7 @@ const Button = ({
   );
 };
 
-const Header = ({ mode, full = false, backHref }: Props) => {
+const Header = ({ mode, full = false, backHref, back = false }: Props) => {
   const [hasScrollY, setHasScrollY] = useState(
     typeof window !== "undefined" && window.scrollY > 0
   );
@@ -118,7 +119,7 @@ const Header = ({ mode, full = false, backHref }: Props) => {
           </div>
         </Container>
       </animated.div>
-      <Back styles={styles} full={full} href={backHref} />
+      {back && <Back styles={styles} full={full} href={backHref} />}
     </div>
   );
 };
