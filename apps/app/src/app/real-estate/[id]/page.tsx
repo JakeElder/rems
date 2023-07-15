@@ -2,9 +2,8 @@ import {
   RealEstatePage as Page,
   Header,
   SimpleImageCarousel,
-  ContactAgentForm,
   AskAQuestionForm,
-  ContactAgentModule,
+  ContactAgentForm,
   Breadcrumbs as BreadcrumbsView
 } from "@rems/ui";
 import api from "../../../api";
@@ -14,6 +13,7 @@ import Footer from "../../../components/Footer";
 import { cookies } from "next/headers";
 import Analytics from "../../../components/Analytics";
 import { Suspense } from "react";
+import ContactAgentModule from "../../../components/ContactAgentModule";
 
 type Props = {
   params: { id: string };
@@ -100,7 +100,7 @@ export default async function RealEstatePage({ params }: Props) {
           </Suspense>
           <Features propertyId={id} />
           <Page.ContactAgent>
-            <ContactAgentForm />
+            <ContactAgentForm uid="" />
           </Page.ContactAgent>
           <Page.AskAQuestion>
             <AskAQuestionForm />
@@ -110,7 +110,7 @@ export default async function RealEstatePage({ params }: Props) {
           </Suspense>
         </Page.Main>
         <Page.Contact hasBackHref={!!backHref}>
-          <ContactAgentModule />
+          <ContactAgentModule propertyId={id} />
         </Page.Contact>
       </Page.Content>
       <Page.Footer>

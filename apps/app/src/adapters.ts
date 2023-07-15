@@ -53,6 +53,7 @@ const adapters = {
   property(res: any): Property {
     const {
       title,
+      uid,
       purchasePrice,
       rentalPrice,
       images,
@@ -73,6 +74,7 @@ const adapters = {
 
     return {
       id: res.id,
+      uid,
       title,
       description,
       purchasePrice,

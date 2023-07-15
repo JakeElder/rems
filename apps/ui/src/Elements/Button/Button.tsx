@@ -1,9 +1,11 @@
 import React, { MouseEventHandler } from "react";
 import cn from "classnames";
 import css from "./Button.module.css";
+import { Oval } from "react-loader-spinner";
 
 type Props = {
   children: React.ReactNode;
+  loading?: boolean;
   secondary?: boolean;
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -12,6 +14,7 @@ type Props = {
 
 const Button = ({
   children,
+  loading,
   secondary = false,
   onClick = () => {},
   type = "button",
@@ -19,7 +22,7 @@ const Button = ({
 }: Props) => {
   return (
     <button
-      disabled={disabled}
+      disabled={loading || disabled}
       type={type}
       onClick={onClick}
       className={cn({
@@ -27,7 +30,11 @@ const Button = ({
         [css["secondary"]]: secondary
       })}
     >
-      {children}
+      {loading ? (
+        <Oval height={22} width={22} color="#aaa" secondaryColor="#aaa" />
+      ) : (
+        children
+      )}
     </button>
   );
 };

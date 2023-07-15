@@ -31,6 +31,7 @@ export type CarouselImage = Image & {
 
 export type Property = {
   id: number;
+  uid: string;
   title: string;
   description: string;
   url: string;
