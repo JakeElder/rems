@@ -28,8 +28,6 @@ const adapters = {
       return { ...acc, [k]: val };
     }, {});
 
-    console.log(p);
-
     return realEstateQuerySchema.parse(p);
   },
 
