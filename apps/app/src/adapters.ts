@@ -8,14 +8,29 @@ import {
   realEstateQuerySchema
 } from "@rems/types";
 import slugify from "slugify";
-import { mapKeys } from "remeda";
+import { flatten } from "remeda";
 
 const adapters = {
   searchParamsToPartialQuery(params: SearchParams): RealEstateQuery {
-    const query = realEstateQuerySchema.parse(
-      mapKeys(params, (key) => (key as string).replace(/\[\]$/, ""))
-    );
-    return query;
+    const arrayKeys = [
+      "indoor-features",
+      "lot-features",
+      "outdoor-features",
+      "property-type",
+      "view-types"
+    ];
+
+    const p = Object.keys(params).reduce((acc, key) => {
+      const k = key.replace(/\[\]$/, "");
+      const val = arrayKeys.includes(k)
+        ? flatten([...[params[key]]])
+        : params[key];
+      return { ...acc, [k]: val };
+    }, {});
+
+    console.log(p);
+
+    return realEstateQuerySchema.parse(p);
   },
 
   filterSet(res: any): FilterSet {
