@@ -20,6 +20,7 @@
     "mapbox-gl": "^2.13.0",
     "next": "13.4.7",
     "nodemailer": "^6.9.3",
+    "openai": "^3.3.0",
     "qs": "^6.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -27,7 +28,8 @@
     "slugify": "^1.6.6",
     "the-new-css-reset": "^1.8.4",
     "typescript": "5.1.6",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "zod-to-json-schema": "^3.21.4"
   },
   "devDependencies": {
     "@types/nodemailer": "^6.4.8"
