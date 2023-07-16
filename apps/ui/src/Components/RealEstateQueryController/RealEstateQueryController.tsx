@@ -137,6 +137,7 @@ const RealEstateQueryController = ({
         });
 
         const qs = generateQueryString(query);
+
         const expires = new Date();
         expires.setSeconds(expires.getSeconds() + 60 * 5);
 

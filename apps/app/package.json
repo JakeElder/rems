@@ -33,6 +33,7 @@
     "zod-to-json-schema": "^3.21.4"
   },
   "devDependencies": {
-    "@types/nodemailer": "^6.4.8"
+    "@types/nodemailer": "^6.4.8",
+    "@types/prettyjson": "^0.0.30"
   }
 }

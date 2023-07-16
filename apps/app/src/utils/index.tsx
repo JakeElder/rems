@@ -1,7 +1,8 @@
 "use server";
 
 import nodemailer from "nodemailer";
-import Mail from "nodemailer/lib/mailer";
+import api from "../api";
+import prettyjson from "prettyjson";
 
 export async function fetch(input: RequestInfo | URL, init: RequestInit = {}) {
   return global.fetch(input, {
@@ -22,13 +23,25 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-export async function sendMail(options: Omit<Mail.Options, "from">) {
-  const { to, subject, text } = options;
+export async function sendMail({
+  subject,
+  data
+}: {
+  subject: string;
+  data: Record<string, any>;
+}) {
+  const { notificationEmail } = await api.get.appConfig();
+  const { renderToString } = await import("react-dom/server");
   return transporter.sendMail({
     from: FROM_EMAIL,
-    to,
+    to: notificationEmail,
     subject,
-    text
+    html: renderToString(
+      <pre style={{ padding: 30, border: "1px solid #888" }}>
+        {prettyjson.render(data, { noColor: true })}
+      </pre>
+    ),
+    text: prettyjson.render(data, { noColor: true })
   });
 }
 

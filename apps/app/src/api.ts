@@ -15,7 +15,7 @@ import {
   PropertyType,
   QuickFilter,
   QuickFilterType,
-  SiteConfig,
+  AppConfig,
   SortType,
   ViewType,
   realEstateQuerySchema
@@ -71,7 +71,7 @@ const get = {
     return json.data.attributes.filter_sets.data.map(adapters.filterSet);
   },
 
-  async appConfig(): Promise<SiteConfig> {
+  async appConfig(): Promise<AppConfig> {
     const url = `${process.env.API_URL}/app-config`;
     const res = await fetch(url);
     const json = await res.json();

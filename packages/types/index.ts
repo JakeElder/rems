@@ -187,7 +187,7 @@ export type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
 
-export type SiteConfig = {
+export type AppConfig = {
   defaultTitle: string;
   defaultDescription: string;
   notificationEmail: string;
@@ -196,3 +196,26 @@ export type SiteConfig = {
   linkedInURL?: string;
   facebookURL?: string;
 };
+
+export type ServerAction<T> = (
+  params: T,
+  uuid: string
+) => Promise<ServerActionResult>;
+
+type FailedServerActionResult = {
+  ok: false;
+  uuid: string;
+  data: {
+    message: string;
+  };
+};
+
+type SuccessfulServerActionResult<T = Record<string, any>> = {
+  ok: true;
+  uuid: string;
+  data: T;
+};
+
+export type ServerActionResult =
+  | FailedServerActionResult
+  | SuccessfulServerActionResult;

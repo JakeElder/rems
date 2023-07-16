@@ -1,13 +1,13 @@
-import { HomePage as Page, Header } from "@rems/ui";
+import { HomePage as Page, Header, MailingListModule } from "@rems/ui";
 import PopularSearches from "./PopularSearches";
 import LatestProperties from "./LatestProperties";
 import Hero from "./Hero";
-import EmailCollector from "./EmailCollector";
 import { Metadata } from "next";
 import api from "../api";
 import Footer from "../components/Footer";
 import Analytics from "../components/Analytics";
 import { Suspense } from "react";
+import { handleMailingListModuleSubmission } from "./actions";
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await api.get.appConfig();
@@ -37,7 +37,7 @@ export default async function Home() {
           </Suspense>
         </Page.PopularSearches>
         <Page.EmailCollector>
-          <EmailCollector />
+          <MailingListModule commit={handleMailingListModuleSubmission} />
         </Page.EmailCollector>
         <Page.LatestProperties>
           <Suspense>

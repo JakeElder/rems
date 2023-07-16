@@ -3,13 +3,16 @@
 import React from "react";
 import css from "./MailingListModule.module.css";
 import Button from "../../Elements/Button";
+import { ServerAction } from "@rems/types";
+import useServerAction from "../../hooks/useServerAction";
 
 type Props = {
-  onSubmit?: React.FormEventHandler<HTMLFormElement>;
-  loading?: boolean;
+  commit: ServerAction<{ email: string }>;
 };
 
-const MailingListModule = ({ onSubmit, loading = false }: Props) => {
+const MailingListModule = ({ commit }: Props) => {
+  const sa = useServerAction(commit);
+
   return (
     <div className={css["root"]}>
       <div className={css["content"]}>
@@ -20,15 +23,26 @@ const MailingListModule = ({ onSubmit, loading = false }: Props) => {
           mailling list to be amongst the first notified when we update our
           listings.
         </p>
-        <form className={css["form"]} onSubmit={onSubmit}>
+        <form
+          className={css["form"]}
+          onSubmit={(e) => {
+            e.preventDefault();
+            const data = new FormData(e.currentTarget);
+            const email = data.get("email");
+            if (!email) {
+              return;
+            }
+            sa.commit({ email: email.toString() });
+          }}
+        >
           <input
             type="email"
             required
             name="email"
             placeholder="Email Address"
           />
-          <Button disabled={loading} type="submit">
-            {loading ? "Loading" : "Submit"}
+          <Button disabled={sa.pending} type="submit" loading={sa.pending}>
+            Submit
           </Button>
         </form>
       </div>
