@@ -90,7 +90,7 @@ const SlideNav = ({ defaultOpen = false, navIconColor }: Props) => {
                   <nav className={css["nav"]}>
                     <L href="/">
                       <span className={css["monogram"]}>
-                        <Monogram />
+                        <Monogram height={19} />
                       </span>
                       Home
                     </L>
@@ -110,16 +110,16 @@ const SlideNav = ({ defaultOpen = false, navIconColor }: Props) => {
                   <div className={css["divider"]} />
                   <div className={css["socials"]}>
                     <a className={css["linked-in"]} href="#">
-                      <FontAwesomeIcon icon={faLine} size="xl" />
+                      <FontAwesomeIcon icon={faLine} size="lg" />
                     </a>
                     <a href="#">
-                      <FontAwesomeIcon icon={faInstagramSquare} size="xl" />
+                      <FontAwesomeIcon icon={faInstagramSquare} size="lg" />
                     </a>
                     <a href="#">
-                      <FontAwesomeIcon icon={faLinkedin} size="xl" />
+                      <FontAwesomeIcon icon={faLinkedin} size="lg" />
                     </a>
                     <a href="#">
-                      <FontAwesomeIcon icon={faFacebookSquare} size="xl" />
+                      <FontAwesomeIcon icon={faFacebookSquare} size="lg" />
                     </a>
                   </div>
                 </div>
