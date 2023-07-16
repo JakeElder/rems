@@ -2,13 +2,14 @@ import React from "react";
 import css from "./ContactAgentModule.module.css";
 import ContactAgentForm from "../ContactAgentForm/ContactAgentForm";
 import Monogram from "../../Elements/Monogram";
-import { Property } from "@rems/types";
+import { ContactAgentFormData, Property, ServerAction } from "@rems/types";
 
 type Props = {
   uid: Property["uid"];
+  commit: ServerAction<ContactAgentFormData>;
 };
 
-const ContactAgentModule = ({ uid }: Props) => {
+const ContactAgentModule = ({ uid, commit }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["header"]}>
@@ -23,7 +24,7 @@ const ContactAgentModule = ({ uid }: Props) => {
         </div>
       </div>
       <div className={css["form"]}>
-        <ContactAgentForm uid={uid} />
+        <ContactAgentForm uid={uid} commit={commit} />
       </div>
     </div>
   );

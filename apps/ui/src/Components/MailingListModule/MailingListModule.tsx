@@ -29,10 +29,7 @@ const MailingListModule = ({ commit }: Props) => {
             e.preventDefault();
             const data = new FormData(e.currentTarget);
             const email = data.get("email");
-            if (!email) {
-              return;
-            }
-            sa.commit({ email: email.toString() });
+            sa.commit({ email: email!.toString() });
           }}
         >
           <input

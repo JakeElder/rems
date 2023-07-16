@@ -5,15 +5,26 @@ import css from "./ContactAgentForm.module.css";
 import Button from "../../Elements/Button";
 import TextInput from "../../Elements/TextInput/TextInput";
 import Textarea from "../../Elements/Textarea/Textarea";
-import { Property } from "@rems/types";
+import { ContactAgentFormData, Property, ServerAction } from "@rems/types";
+import useServerAction from "../../hooks/useServerAction";
 
 type Props = {
   uid: Property["uid"];
+  commit: ServerAction<ContactAgentFormData>;
 };
 
-const ContactAgentForm = ({ uid }: Props) => {
+const ContactAgentForm = ({ uid, commit }: Props) => {
+  const sa = useServerAction(commit);
+
   return (
-    <div className={css["root"]}>
+    <form
+      className={css["root"]}
+      onSubmit={(e) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        sa.commit(Object.fromEntries(data) as ContactAgentFormData);
+      }}
+    >
       <input type="hidden" name="uid" value={uid} />
       <div className={css["control"]}>
         <TextInput name="name" placeholder="Your Name" required />
@@ -33,9 +44,11 @@ const ContactAgentForm = ({ uid }: Props) => {
         />
       </div>
       <div className={css["control"]}>
-        <Button type="submit">Send Message</Button>
+        <Button type="submit" loading={sa.pending}>
+          Send Message
+        </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

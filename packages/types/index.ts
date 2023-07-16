@@ -219,3 +219,11 @@ type SuccessfulServerActionResult<T = Record<string, any>> = {
 export type ServerActionResult =
   | FailedServerActionResult
   | SuccessfulServerActionResult;
+
+export type ContactAgentFormData = {
+  name: string;
+  uid: string;
+  email: string;
+  phone: string;
+  message: string;
+};
