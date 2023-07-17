@@ -1,0 +1,36 @@
+.root {
+  border-radius: 3px;
+  color: white;
+  background: #19c37d;
+  font-family: var(--font-inter);
+  display: flex;
+  align-items: center;
+}
+
+.title-and-message {
+  flex: 1;
+  padding-left: 14px;
+  padding-right: 10px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 1px;
+}
+
+.message {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.close {
+  padding: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6)
+}
+
+.close:hover {
+  color: #fff;
+  cursor: pointer;
+}
