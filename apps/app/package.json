@@ -25,6 +25,7 @@
     "qs": "^6.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hotkeys-hook": "^4.4.1",
     "remeda": "^1.23.0",
     "slugify": "^1.6.6",
     "the-new-css-reset": "^1.8.4",

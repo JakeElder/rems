@@ -9,6 +9,8 @@ import Image from "next/image";
 import Container from "../../Elements/Container/Container";
 import Link from "next/link";
 import { useDrag } from "@use-gesture/react";
+import { useHotkeys } from "react-hotkeys-hook";
+import { Key } from "ts-key-enum";
 
 function mod(n: number, m: number) {
   return ((n % m) + m) % m;
@@ -22,14 +24,22 @@ type Props = {
 const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
   const [step, set] = useState(0);
 
-  const bind = useDrag(({ swipe: [swipeX] }) => {
-    if (swipeX === -1) {
-      set((step) => mod(step + 1, properties.length));
-    }
+  useHotkeys(Key.ArrowLeft, () => prev());
+  useHotkeys(Key.ArrowRight, () => next());
 
-    if (swipeX === 1) {
-      set((step) => mod(step - 1, properties.length));
+  const next = () => {
+    set((step) => mod(step + 1, properties.length));
+  };
+
+  const prev = () => {
+    set((step) => mod(step - 1, properties.length));
+  };
+
+  const bind = useDrag(({ swipe: [swipeX] }) => {
+    if (swipeX === 0) {
+      return;
     }
+    swipeX === -1 ? next() : prev();
   });
 
   const transitions = useTransition(step, {
