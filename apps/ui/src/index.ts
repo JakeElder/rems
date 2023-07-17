@@ -6,6 +6,7 @@ export * as RealEstateIndexPage from "./Pages/RealEstateIndexPage";
 export * as HomePage from "./Pages/HomePage";
 export * as RealEstatePage from "./Pages/RealEstatePage";
 
+export { default as AiSearch } from "./Components/AiSearch";
 export { default as AskAQuestionForm } from "./Components/AskAQuestionForm";
 export { default as Breadcrumbs } from "./Components/Breadcrumbs";
 export { default as ContactAgentModule } from "./Components/ContactAgentModule";

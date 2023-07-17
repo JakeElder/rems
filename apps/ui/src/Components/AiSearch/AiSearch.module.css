@@ -1,0 +1,21 @@
+.root {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+}
+
+.form {
+  width: 600px;
+}
+
+.input-and-spinner {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  padding-right: 14px;
+}
+
+.input {
+  margin-right: 8px;
+  flex: 1;
+}

@@ -47,14 +47,22 @@ export default function useServerAction<T>(
     result: null
   });
 
-  const uuids = useRef<string[]>([]);
+  const uuidStore = useRef<{ loaded: null | string; uuids: string[] }>({
+    loaded: null,
+    uuids: []
+  });
 
   const commit: UseServerActionReturn<T>["commit"] = (params) => {
     const id = uuid();
-    uuids.current = [...uuids.current, id];
+    uuidStore.current = update(uuidStore.current, {
+      uuids: { $push: [id] }
+    });
+
     set((s) =>
       update(s, {
-        state: { $set: "activating" },
+        state: {
+          $set: s.state === "dormant" ? "activating" : (s.state as any)
+        },
         count: { $set: s.count + 1 },
         stale: { $set: true },
         pending: { $set: true }
@@ -62,7 +70,18 @@ export default function useServerAction<T>(
     );
 
     fn(params, id).then((res) => {
-      const current = res.uuid === uuids.current[uuids.current.length - 1];
+      const { uuids } = uuidStore.current;
+      const newer =
+        uuidStore.current.loaded === null ||
+        uuids.indexOf(uuidStore.current.loaded) > uuids.indexOf(res.uuid);
+
+      if (!newer) {
+        return;
+      }
+      const current =
+        res.uuid ===
+        uuidStore.current.uuids[uuidStore.current.uuids.length - 1];
+
       set((s) =>
         update(s, {
           state: { $set: "activated" },

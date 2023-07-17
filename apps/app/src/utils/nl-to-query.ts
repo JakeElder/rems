@@ -1,6 +1,5 @@
-import { realEstateQuerySchema } from "@rems/types";
+import { PartialRealEstateQuery, realEstateQuerySchema } from "@rems/types";
 import { Configuration, OpenAIApi } from "openai";
-import { z } from "zod";
 import api from "../api";
 const KEY = "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";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -96,19 +95,19 @@ async function generateSchema() {
   return withEnums;
 }
 
-export default async function nlToQuery(nl: string) {
+export default async function nlToQuery(
+  nl: string
+): Promise<PartialRealEstateQuery> {
   const res = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
+    temperature: 0,
     messages: [
       {
         role: "user",
         content: `
-          Search for properties based on the following query. prefer fewer options when populating enum arrays Ensure that the 'area' is included within the area enum. Omit the area if it is not included.
+          Search for properties based on the following query.
+          Set both the min-price and max-price within a 10% range of the users budget
         `
-      },
-      {
-        role: "user",
-        content: ""
       },
       {
         role: "user",
