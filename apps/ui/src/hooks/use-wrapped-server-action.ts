@@ -48,7 +48,7 @@ export default function useWrappedServerAction<T>(
       uuids.indexOf(uuidStore.current.loaded) > uuids.indexOf(res.uuid);
 
     if (!newer) {
-      return;
+      state.result;
     }
 
     const current =
