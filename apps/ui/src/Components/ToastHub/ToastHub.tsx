@@ -1,7 +1,11 @@
+"use client";
+
 import React, { useState, useMemo, createContext, useContext } from "react";
 import { animated, useTransition } from "@react-spring/web";
 import css from "./ToastHub.module.css";
-import Toast from "src/Elements/Toast/Toast";
+import Toast from "../../Elements/Toast";
+import { RemoveScroll } from "react-remove-scroll";
+import cn from "classnames";
 
 let id = 0;
 
@@ -11,8 +15,9 @@ type Props = {
 
 type ToastData = {
   title?: string;
-  message: string;
+  message: React.ReactNode;
   timeout?: number;
+  onClose?: () => void;
 };
 
 type Item = {
@@ -34,12 +39,12 @@ export const useToast = () => {
   return fns;
 };
 
-export default function MessageHub({ children }: Props) {
+export default function ToastHub({ children }: Props) {
   const refMap = useMemo(() => new WeakMap(), []);
   const [items, setItems] = useState<Item[]>([]);
 
   const message: UseToastReturn["message"] = (data) => {
-    const item: Key = { key: id++, data };
+    const item: Item = { key: id++, data };
     setItems((state) => [...state, item]);
     if (data.timeout) {
       setTimeout(() => close(item), data.timeout);
@@ -60,12 +65,17 @@ export default function MessageHub({ children }: Props) {
     enter: (item) => async (next) => {
       await next({ height: refMap.get(item).offsetHeight + 10 });
     },
-    leave: { height: 0 }
+    leave: (item) => async (next) => {
+      await next({ height: 0 });
+      if (item.data.onClose) {
+        item.data.onClose();
+      }
+    }
   });
 
   return (
     <div className={css["root"]}>
-      <div className={css["toasts"]}>
+      <div className={cn(css["toasts"], RemoveScroll.classNames.zeroRight)}>
         {transitions(({ ...style }, item) => (
           <animated.div className={css["message"]} style={style}>
             <div

@@ -30,4 +30,8 @@ export const Disabled: Story = {
   args: { disabled: true, children: "Disabled" }
 };
 
+export const Loading: Story = {
+  args: { loading: true }
+};
+
 export default meta;

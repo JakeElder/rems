@@ -2,10 +2,6 @@
   border-bottom: 1px solid;
 }
 
-.root svg {
-  display: block;
-}
-
 .container {
   display: flex;
   align-items: center;
@@ -24,12 +20,6 @@
   display: flex;
   align-items: center;
   font-size: 14px;
-  gap: 16px;
-}
-
-.nav {
-  display: none;
-  gap: 18px;
 }
 
 .button {
@@ -41,6 +31,12 @@
   border-style: solid;
   cursor: pointer;
   display: none;
+  margin-left: 16px;
+}
+
+.nav {
+  display: none;
+  gap: 18px;
 }
 
 .back {
@@ -60,7 +56,8 @@
 
 @media (min-width: 768px) {
   .button {
-    display: unset;
+    display: flex;
+    align-items: center;
   }
 
   .nav-icon {

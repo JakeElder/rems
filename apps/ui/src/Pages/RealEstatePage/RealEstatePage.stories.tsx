@@ -4,7 +4,7 @@ import properties from "../../fixtures/properties";
 import Header from "../../Components/Header";
 import SimpleImageCarousel from "../../Components/SimpleImageCarousel";
 import Breadcrumbs from "../../Components/Breadcrumbs";
-import ContactAgentForm from "../../Components/ContactAgentForm";
+import * as ContactForm from "../../Components/ContactForm";
 import AskAQuestionForm from "../../Components/AskAQuestionForm";
 import ContactAgentModule from "../../Components/ContactAgentModule";
 
@@ -36,23 +36,26 @@ export const Default: Story = {
         <Page.Content>
           <Page.Main>
             <Page.Breadcrumbs>
-              <Breadcrumbs />
+              <Breadcrumbs items={[]} />
             </Page.Breadcrumbs>
             <Page.TitleAndDescription property={property} />
             <Page.Features property={property} />
             <Page.ContactAgent>
-              <ContactAgentForm />
+              <ContactForm.Root>
+                <ContactForm.Controls />
+                <ContactForm.Submit />
+              </ContactForm.Root>
             </Page.ContactAgent>
             <Page.AskAQuestion>
               <AskAQuestionForm />
             </Page.AskAQuestion>
             <Page.TheArea property={property} />
           </Page.Main>
-          <Page.Contact>
-            <ContactAgentModule />
+          <Page.Contact hasBackHref={false}>
+            <ContactAgentModule uid="1" />
           </Page.Contact>
         </Page.Content>
-        <Page.Footer />
+        <Page.Footer>{null}</Page.Footer>
       </Page.Root>
     );
   }

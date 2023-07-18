@@ -220,10 +220,55 @@ export type ServerActionResult =
   | FailedServerActionResult
   | SuccessfulServerActionResult;
 
-export type ContactAgentFormData = {
+export type ContactFormData = {
   name: string;
   uid: string;
   email: string;
   phone: string;
   message: string;
+};
+
+type DormantUseWrappedServerActionState = {
+  state: "dormant";
+  count: 0;
+  stale: null;
+  pending: false;
+  result: null;
+};
+
+type ActivatingUseWrappedServerActionState = {
+  state: "activating";
+  count: number;
+  stale: boolean;
+  pending: boolean;
+  result: null | ServerActionResult;
+};
+
+type ActivatedUseWrappedServerActionState = {
+  state: "activated";
+  count: number;
+  stale: boolean;
+  pending: boolean;
+  result: ServerActionResult;
+};
+
+export type UseWrappedServerActionState =
+  | DormantUseWrappedServerActionState
+  | ActivatingUseWrappedServerActionState
+  | ActivatedUseWrappedServerActionState;
+
+export type UseWrappedServerActionReturn<T> = UseWrappedServerActionState & {
+  commit: (params: T) => Promise<ServerActionResult>;
+};
+
+export type ServerActionData = {
+  "submit-mailing-list-form": { email: string };
+  "submit-contact-form": ContactFormData;
+  "nl-to-query": { query: string };
+};
+
+export type ServerActions = {
+  [ActionId in keyof ServerActionData]: ServerAction<
+    ServerActionData[ActionId]
+  >;
 };

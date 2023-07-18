@@ -1,5 +1,5 @@
 import React from "react";
-import { ContactAgentModule as View } from "@rems/ui";
+import { ContactForm as View } from "@rems/ui";
 import { Property } from "@rems/types";
 import api from "../api";
 
@@ -7,14 +7,17 @@ type Props = {
   propertyId: Property["id"];
 };
 
-const ContactAgentModule = async ({ propertyId }: Props) => {
+const ContactForm = async ({ propertyId }: Props) => {
   const property = await api.get.property(propertyId);
   return (
-    <View
+    <View.Root
       uid={property.uid}
       defaultMessage={`I'm interested in ${property.title}`}
-    />
+    >
+      <View.Controls />
+      <View.Submit />
+    </View.Root>
   );
 };
 
-export default ContactAgentModule;
+export default ContactForm;

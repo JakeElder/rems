@@ -1,34 +1,33 @@
-import React, { MouseEventHandler } from "react";
+"use client";
+
+import React from "react";
 import cn from "classnames";
 import css from "./Button.module.css";
 import { Oval } from "react-loader-spinner";
 
-type Props = {
+type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
   loading?: boolean;
   secondary?: boolean;
-  disabled?: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
+  width?: number;
 };
 
 const Button = ({
   children,
   loading,
   secondary = false,
-  onClick = () => {},
-  type = "button",
-  disabled = false
+  width,
+  ...props
 }: Props) => {
   return (
     <button
-      disabled={loading || disabled}
-      type={type}
-      onClick={onClick}
+      {...props}
+      disabled={loading || props.disabled}
       className={cn({
         [css["primary"]]: !secondary,
         [css["secondary"]]: secondary
       })}
+      style={{ ...(width ? { width } : {}) }}
     >
       {loading ? (
         <Oval height={22} width={22} color="#aaa" secondaryColor="#aaa" />
@@ -38,5 +37,4 @@ const Button = ({
     </button>
   );
 };
-
 export default Button;

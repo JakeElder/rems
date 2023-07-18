@@ -18,8 +18,8 @@ function SomeComponent() {
         onClick={() => {
           toast.message({
             title: "Email Submitted",
-            message: "Thank you for joining our mailing list",
-            timeout: 5000
+            message:
+              "One of our agents will get back to you as soon as possible."
           });
         }}
       >

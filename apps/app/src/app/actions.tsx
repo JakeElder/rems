@@ -1,27 +1,28 @@
 "use server";
 
-import { ContactAgentFormData, ServerAction } from "@rems/types";
+import { ContactFormData, ServerAction } from "@rems/types";
 import { sendMail } from "../utils";
-import nlToQuery from "../utils/nl-to-query";
+import nlToQueryUtil from "../utils/nl-to-query";
 
-export const handleMailingListModuleSubmission: ServerAction<{
+export const submitMailingListForm: ServerAction<{
   email: string;
 }> = async (data, uuid) => {
   await sendMail({ subject: "[REMS] New mailing list submission", data });
   return { ok: true, uuid, data: {} };
 };
 
-export const handleContactAgentFormSubmission: ServerAction<
-  ContactAgentFormData
-> = async (data, uuid) => {
+export const submitContactForm: ServerAction<ContactFormData> = async (
+  data,
+  uuid
+) => {
   await sendMail({ subject: "[REMS] New contact form submission", data });
   return { ok: true, uuid, data: {} };
 };
 
-export const handleAiSearchQuery: ServerAction<{ query: string }> = async (
+export const nlToQuery: ServerAction<{ query: string }> = async (
   { query },
   uuid
 ) => {
-  const res = await nlToQuery(query);
+  const res = await nlToQueryUtil(query);
   return { ok: true, uuid, data: res };
 };

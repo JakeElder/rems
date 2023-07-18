@@ -2,18 +2,16 @@
 
 import React, { useCallback, useState } from "react";
 import css from "./AiSearch.module.css";
-import useServerAction from "../../hooks/useServerAction";
+import { useServerAction } from "../../Utils/ServerActionProvider";
 import { ServerAction } from "@rems/types";
 import TextInput from "../../Elements/TextInput";
 import { Oval } from "react-loader-spinner";
 import { debounce } from "throttle-debounce";
 
-type Props = {
-  search: ServerAction<{ query: string }>;
-};
+type Props = {};
 
-const AiSearch = ({ search }: Props) => {
-  const sa = useServerAction(search);
+const AiSearch = ({}: Props) => {
+  const sa = useServerAction("nl-to-query");
   const [query, setQuery] = useState("");
 
   const update = useCallback(

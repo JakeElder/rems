@@ -1,15 +1,15 @@
 import React from "react";
 import css from "./ContactAgentModule.module.css";
-import ContactAgentForm from "../ContactAgentForm/ContactAgentForm";
+import * as ContactForm from "../ContactForm";
 import Monogram from "../../Elements/Monogram";
-import { ContactAgentFormData, Property, ServerAction } from "@rems/types";
+import { Property } from "@rems/types";
 
 type Props = {
   uid: Property["uid"];
-  commit: ServerAction<ContactAgentFormData>;
+  defaultMessage?: string;
 };
 
-const ContactAgentModule = ({ uid, commit }: Props) => {
+const ContactAgentModule = ({ uid, defaultMessage }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["header"]}>
@@ -24,7 +24,10 @@ const ContactAgentModule = ({ uid, commit }: Props) => {
         </div>
       </div>
       <div className={css["form"]}>
-        <ContactAgentForm uid={uid} commit={commit} />
+        <ContactForm.Root uid={uid} defaultMessage={defaultMessage}>
+          <ContactForm.Controls />
+          <ContactForm.Submit />
+        </ContactForm.Root>
       </div>
     </div>
   );

@@ -3,15 +3,14 @@
 import React from "react";
 import css from "./MailingListModule.module.css";
 import Button from "../../Elements/Button";
-import { ServerAction } from "@rems/types";
-import useServerAction from "../../hooks/useServerAction";
+import { useServerAction } from "../../Utils/ServerActionProvider";
+import { useToast } from "../ToastHub";
 
-type Props = {
-  commit: ServerAction<{ email: string }>;
-};
+type Props = {};
 
-const MailingListModule = ({ commit }: Props) => {
-  const sa = useServerAction(commit);
+const MailingListModule = ({}: Props) => {
+  const sa = useServerAction("submit-mailing-list-form");
+  const { message } = useToast();
 
   return (
     <div className={css["root"]}>
@@ -25,11 +24,23 @@ const MailingListModule = ({ commit }: Props) => {
         </p>
         <form
           className={css["form"]}
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
             const data = new FormData(e.currentTarget);
-            const email = data.get("email");
-            sa.commit({ email: email!.toString() });
+            const email = data.get("email")!.toString();
+            const res = await sa.commit({ email });
+            if (res.ok) {
+              message({
+                title: "Mailing List Joined!",
+                message: (
+                  <>
+                    We've added <span style={{ fontWeight: 600 }}>{email}</span>{" "}
+                    to our mailing list
+                  </>
+                ),
+                timeout: 5000
+              });
+            }
           }}
         >
           <input
@@ -38,9 +49,16 @@ const MailingListModule = ({ commit }: Props) => {
             name="email"
             placeholder="Email Address"
           />
-          <Button disabled={sa.pending} type="submit" loading={sa.pending}>
-            Submit
-          </Button>
+          <div style={{ flexShrink: 0 }}>
+            <Button
+              disabled={sa.pending}
+              type="submit"
+              loading={sa.pending}
+              width={96}
+            >
+              Submit
+            </Button>
+          </div>
         </form>
       </div>
     </div>

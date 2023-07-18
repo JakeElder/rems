@@ -1,6 +1,15 @@
-import { AiSearch } from "@rems/ui";
-import { handleAiSearchQuery } from "../actions";
+import { ServerActions } from "@rems/types";
+import { AiSearch, ServerActionProvider } from "@rems/ui";
+import { nlToQuery } from "../actions";
 
 export default async function Home() {
-  return <AiSearch search={handleAiSearchQuery} />;
+  const serverActions: Partial<ServerActions> = {
+    "nl-to-query": nlToQuery
+  };
+
+  return (
+    <ServerActionProvider value={serverActions}>
+      <AiSearch />
+    </ServerActionProvider>
+  );
 }

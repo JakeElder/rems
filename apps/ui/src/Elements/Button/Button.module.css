@@ -21,7 +21,9 @@
 
 .primary[disabled],
 .secondary[disabled] {
-  background: #ededed;
-  border: 1px solid #f0f0f0;
-  color: #adadad;
+  background: #eee;
+  border: 1px solid #eee;
+  color: #ccc;
+  font-weight: 300;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
 }
