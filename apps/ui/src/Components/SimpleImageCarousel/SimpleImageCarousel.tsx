@@ -14,19 +14,58 @@ type Props = {
   children?: React.ReactNode;
   images: CarouselImage[];
   fill?: boolean;
-  index: number;
-  onIndexChange: (index: number) => void;
+  index?: number;
+  onIndexChange?: (index: number) => void;
 };
 
 const Img = animated(Image);
 
-const SimpleImageCarousel = ({
+const SimpleImageCarousel = ({ index, onIndexChange, ...props }: Props) => {
+  if (typeof index !== "undefined" && onIndexChange) {
+    return (
+      <ControlledImageCarousel
+        {...props}
+        index={index}
+        onIndexChange={onIndexChange}
+      />
+    );
+  }
+
+  return <UncontrolledImageCarousel {...props} />;
+};
+
+type UncontrolledProps = {
+  images: CarouselImage[];
+  children?: React.ReactNode;
+  fill?: boolean;
+};
+
+const UncontrolledImageCarousel = (props: UncontrolledProps) => {
+  const [index, setIndex] = useState(0);
+  return (
+    <ControlledImageCarousel
+      {...props}
+      index={index}
+      onIndexChange={setIndex}
+    />
+  );
+};
+
+type ControlledProps = {
+  children?: React.ReactNode;
+  images: CarouselImage[];
+  fill?: boolean;
+  index: number;
+  onIndexChange: (index: number) => void;
+};
+
+const ControlledImageCarousel = ({
+  onIndexChange,
+  fill,
   images,
-  fill = false,
-  children = null,
-  index,
-  onIndexChange
-}: Props) => {
+  children,
+  index
+}: ControlledProps) => {
   const [$root, { width }] = useElementSize();
 
   const [props, api] = useSprings(
