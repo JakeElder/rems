@@ -8,7 +8,6 @@ import SimpleImageCarousel from "../SimpleImageCarousel/SimpleImageCarousel";
 import { propertyToCarouselImages } from "../../adapters";
 import { useRealEstateQuery } from "../RealEstateQueryController/RealEstateQueryController";
 import ArrowNav from "../ArrowNav/ArrowNav";
-import { useRouter } from "next/navigation";
 
 type Props = {
   property: Property;
@@ -56,6 +55,7 @@ const PropertyCard = ({ property, link = "#" }: Props) => {
           images={images}
           index={image}
           onIndexChange={setImage}
+          link={link}
         >
           <div className={css["arrow-nav"]}>
             <ArrowNav

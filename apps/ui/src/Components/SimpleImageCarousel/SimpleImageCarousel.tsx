@@ -9,11 +9,13 @@ import { useDrag } from "@use-gesture/react";
 import clamp from "lodash.clamp";
 import { useElementSize } from "usehooks-ts";
 import cn from "classnames";
+import Link from "next/link";
 
 type Props = {
   children?: React.ReactNode;
   images: CarouselImage[];
   fill?: boolean;
+  link?: string;
   index?: number;
   onIndexChange?: (index: number) => void;
 };
@@ -38,6 +40,7 @@ type UncontrolledProps = {
   images: CarouselImage[];
   children?: React.ReactNode;
   fill?: boolean;
+  link?: string;
 };
 
 const UncontrolledImageCarousel = (props: UncontrolledProps) => {
@@ -57,6 +60,7 @@ type ControlledProps = {
   fill?: boolean;
   index: number;
   onIndexChange: (index: number) => void;
+  link?: string;
 };
 
 const ControlledImageCarousel = ({
@@ -64,7 +68,8 @@ const ControlledImageCarousel = ({
   fill,
   images,
   children,
-  index
+  index,
+  link
 }: ControlledProps) => {
   const [$root, { width }] = useElementSize();
 
@@ -91,6 +96,7 @@ const ControlledImageCarousel = ({
         onIndexChange(clamp(index + (xDir > 0 ? -1 : 1), 0, images.length - 1));
         cancel();
       }
+
       api.start((i) => {
         if (i < index - 1 || i > index + 1) {
           return {};
@@ -99,7 +105,11 @@ const ControlledImageCarousel = ({
         return { x };
       });
     },
-    { axis: "x" }
+    {
+      axis: "x",
+      preventDefault: true,
+      filterTaps: true
+    }
   );
 
   return (
@@ -128,7 +138,7 @@ const ControlledImageCarousel = ({
           ))}
         </div>
       </div>
-      <div className={css["images"]}>
+      <Images className={css["images"]} {...bind()} link={link}>
         {props.map((style, i) => (
           <Img
             key={i}
@@ -138,14 +148,25 @@ const ControlledImageCarousel = ({
             src={images[i].src}
             width={images[i].width}
             height={images[i].height}
-            {...bind()}
             style={style}
           />
         ))}
-      </div>
+      </Images>
       {children}
     </div>
   );
+};
+
+const Images = ({
+  link,
+  ...props
+}: ReturnType<typeof useDrag> & {
+  link: Props["link"];
+}) => {
+  if (link) {
+    return <Link href={link} {...props} />;
+  }
+  return <div {...props} />;
 };
 
 export default SimpleImageCarousel;
