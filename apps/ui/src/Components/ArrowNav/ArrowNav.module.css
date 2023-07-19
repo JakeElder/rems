@@ -21,4 +21,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.xl .prev-button,
+.xl .next-button {
+  width: 60px;
+  height: 60px;
+}
+
+.prev-button[disabled],
+.next-button[disabled] {
+  cursor: default;
 }

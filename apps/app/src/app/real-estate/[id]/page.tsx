@@ -4,7 +4,8 @@ import {
   SimpleImageCarousel,
   Breadcrumbs as BreadcrumbsView,
   ServerActionProvider,
-  ToastHub
+  ToastHub,
+  HeroCarousel
 } from "@rems/ui";
 import api from "../../../api";
 import { Metadata } from "next";
@@ -69,7 +70,7 @@ const TheArea = async ({ propertyId }: { propertyId: Property["id"] }) => {
 const Carousel = async ({ propertyId }: { propertyId: Property["id"] }) => {
   const property = await api.get.property(propertyId);
   const images = property.images.map((i) => ({ ...i, alt: property.title }));
-  return <SimpleImageCarousel images={images} fill />;
+  return <HeroCarousel images={images} />;
 };
 
 export const revalidate = 0;

@@ -6,6 +6,7 @@ import {
   faArrowRightLong
 } from "@fortawesome/free-solid-svg-icons";
 import { animated, useSpring, useTransition } from "@react-spring/web";
+import cn from "classnames";
 
 type Props = {
   onNext?: () => void;
@@ -13,9 +14,17 @@ type Props = {
   hasNext: boolean;
   hasPrev: boolean;
   show?: boolean;
+  size?: "rg" | "xl";
 };
 
-const ArrowNav = ({ onNext, onPrev, hasNext, hasPrev, show = true }: Props) => {
+const ArrowNav = ({
+  onNext,
+  onPrev,
+  hasNext,
+  hasPrev,
+  show = true,
+  size = "rg"
+}: Props) => {
   const hidden = { opacity: 0, scale: 0.8 };
   const visible = { opacity: 1, scale: 1 };
 
@@ -38,8 +47,16 @@ const ArrowNav = ({ onNext, onPrev, hasNext, hasPrev, show = true }: Props) => {
   const prev = useSpring(hasPrev ? active : inactive);
   const next = useSpring(hasNext ? active : inactive);
 
+  const iconSize: React.ComponentProps<typeof FontAwesomeIcon>["size"] =
+    size === "xl" ? "lg" : "sm";
+
   return (
-    <div className={css["root"]}>
+    <div
+      className={cn({
+        [css["root"]]: true,
+        [css["xl"]]: size === "xl"
+      })}
+    >
       <div className={css["prev"]}>
         {transition((styles, show) =>
           show ? (
@@ -52,7 +69,7 @@ const ArrowNav = ({ onNext, onPrev, hasNext, hasPrev, show = true }: Props) => {
                 hasPrev && onPrev?.();
               }}
             >
-              <FontAwesomeIcon icon={faArrowLeftLong} size="sm" />
+              <FontAwesomeIcon icon={faArrowLeftLong} size={iconSize} />
             </animated.button>
           ) : null
         )}
@@ -66,7 +83,7 @@ const ArrowNav = ({ onNext, onPrev, hasNext, hasPrev, show = true }: Props) => {
               disabled={!hasNext}
               onClick={() => onNext?.()}
             >
-              <FontAwesomeIcon icon={faArrowRightLong} size="sm" />
+              <FontAwesomeIcon icon={faArrowRightLong} size={iconSize} />
             </animated.button>
           ) : null
         )}

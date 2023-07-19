@@ -19,6 +19,7 @@ export { default as FeaturedCarousel } from "./Components/FeaturedCarousel";
 export { default as FilterBar } from "./Components/FilterBar";
 export { default as Footer } from "./Components/Footer";
 export { default as Header } from "./Components/Header";
+export { default as HeroCarousel } from "./Components/HeroCarousel";
 export { default as ListingMap } from "./Components/ListingMap";
 export { default as MailingListModule } from "./Components/MailingListModule";
 export { default as Pagination } from "./Components/Pagination";
