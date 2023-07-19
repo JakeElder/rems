@@ -79,7 +79,7 @@ export const Controls = () => {
   const { uid, defaultMessage, mode } = useContext();
   return (
     <>
-      <input type="hidden" name="uid" value={uid} />
+      <input type="hidden" name="uid" value={uid ? uid : undefined} />
       <div className={css["control"]}>
         <TextInput name="name" placeholder="Your Name" required />
       </div>

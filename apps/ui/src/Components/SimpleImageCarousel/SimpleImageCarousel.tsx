@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import css from "./SimpleImageCarousel.module.css";
 import { CarouselImage } from "@rems/types";
 import Image from "next/image";
-import { animated, useSprings } from "@react-spring/web";
+import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import clamp from "lodash.clamp";
 import { useElementSize } from "usehooks-ts";
@@ -73,18 +73,17 @@ const ControlledImageCarousel = ({
 }: ControlledProps) => {
   const [$root, { width }] = useElementSize();
 
-  const [props, api] = useSprings(
-    images.length,
-    (i) => ({
-      to: { x: i * width },
+  const [props, api] = useSpring(
+    {
+      to: { x: 0 },
       immediate: true
-    }),
+    },
     [width]
   );
 
   useEffect(() => {
     api.start((i) => {
-      const x = (i - index) * width + 0;
+      const x = (i - index) * width;
       return { x };
     });
   }, [index]);
@@ -98,9 +97,6 @@ const ControlledImageCarousel = ({
       }
 
       api.start((i) => {
-        if (i < index - 1 || i > index + 1) {
-          return {};
-        }
         const x = (i - index) * width + (active ? mx : 0);
         return { x };
       });
@@ -138,17 +134,17 @@ const ControlledImageCarousel = ({
           ))}
         </div>
       </div>
-      <Images className={css["images"]} {...bind()} link={link}>
-        {props.map((style, i) => (
+      <Images className={css["images"]} {...bind()} link={link} style={props}>
+        {images.map((i) => (
           <Img
-            key={i}
+            priority
+            key={i.id}
             draggable={false}
             className={css["image"]}
-            alt={images[i].alt}
-            src={images[i].src}
-            width={images[i].width}
-            height={images[i].height}
-            style={style}
+            alt={i.alt}
+            src={i.src}
+            width={i.width}
+            height={i.height}
           />
         ))}
       </Images>
@@ -159,14 +155,16 @@ const ControlledImageCarousel = ({
 
 const Images = ({
   link,
+  style,
   ...props
 }: ReturnType<typeof useDrag> & {
   link: Props["link"];
 }) => {
-  if (link) {
-    return <Link href={link} {...props} />;
-  }
-  return <div {...props} />;
+  return (
+    <animated.div className={css["images"]} style={style}>
+      {link ? <Link href={link} {...props} /> : <div {...props} />}
+    </animated.div>
+  );
 };
 
 export default SimpleImageCarousel;

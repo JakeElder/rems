@@ -11,7 +11,7 @@ import {
   ToastHub
 } from "@rems/ui";
 import api from "../../api";
-import { SearchParams, ServerAction, ServerActions } from "@rems/types";
+import { SearchParams, ServerActions } from "@rems/types";
 import adapters from "../../adapters";
 import { Metadata } from "next";
 import Footer from "../../components/Footer";
