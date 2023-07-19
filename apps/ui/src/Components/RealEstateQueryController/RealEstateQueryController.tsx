@@ -118,7 +118,7 @@ const RealEstateQueryController = ({
     q: RealEstateQuery
   ) => Promise<GetPropertiesResult> = async () => {
     const qs = generateQueryString(query);
-    const res = await fetch(`/properties${qs ? `?${qs}` : ""}`);
+    const res = await fetch(`/api/properties${qs ? `?${qs}` : ""}`);
     return res.json();
   };
 

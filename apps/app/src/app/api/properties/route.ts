@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import api from "../../api";
+import api from "../../../api";
 import qs from "qs";
 import { realEstateQuerySchema } from "@rems/types";
 

@@ -5,9 +5,9 @@ import {
   ServerActionProvider,
   ToastHub
 } from "@rems/ui";
-import PopularSearches from "./PopularSearches";
-import LatestProperties from "./LatestProperties";
-import Hero from "./Hero";
+import PopularSearches from "../components/PopularSearches";
+import LatestProperties from "../components/LatestProperties";
+import Hero from "../components/Hero";
 import { Metadata } from "next";
 import api from "../api";
 import Footer from "../components/Footer";
