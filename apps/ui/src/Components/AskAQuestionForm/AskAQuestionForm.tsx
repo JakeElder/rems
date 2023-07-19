@@ -33,7 +33,9 @@ const AskAQuestionForm = ({ uid }: Props) => {
           placeholder="Ask the agent for more information about this property..."
         />
       </div>
-      <Button onClick={() => setOpen(true)}>Ask a question</Button>
+      <Button onClick={() => setOpen(true)} fit>
+        Ask a question
+      </Button>
     </div>
   );
 };

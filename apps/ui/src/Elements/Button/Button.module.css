@@ -1,9 +1,9 @@
 .primary,
 .secondary {
   height: 48px;
+  padding: 0 16px;
   font-weight: 300;
   display: flex;
-  width: 100%;
   text-align: center;
   font-family: var(--font-inter);
   align-items: center;

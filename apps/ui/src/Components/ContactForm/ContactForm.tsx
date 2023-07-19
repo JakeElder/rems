@@ -105,7 +105,7 @@ export const Submit = () => {
   const { sa, mode } = useContext();
   return (
     <div className={css["control"]}>
-      <Button type="submit" loading={sa.pending}>
+      <Button type="submit" loading={sa.pending} fit>
         Send {mode === "question" ? "Question" : "Message"}
       </Button>
     </div>

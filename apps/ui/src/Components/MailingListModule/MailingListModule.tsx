@@ -8,7 +8,7 @@ import { useToast } from "../ToastHub";
 
 type Props = {};
 
-const MailingListModule = ({}: Props) => {
+const MailingListModule = ({ }: Props) => {
   const sa = useServerAction("submit-mailing-list-form");
   const { message } = useToast();
 
@@ -49,12 +49,12 @@ const MailingListModule = ({}: Props) => {
             name="email"
             placeholder="Email Address"
           />
-          <div style={{ flexShrink: 0 }}>
+          <div className={css["submit"]}>
             <Button
               disabled={sa.pending}
               type="submit"
               loading={sa.pending}
-              width={96}
+              fit
             >
               Submit
             </Button>

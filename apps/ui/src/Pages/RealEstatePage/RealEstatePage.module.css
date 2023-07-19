@@ -140,7 +140,6 @@
 }
 
 .ask-a-question {
-  display: none;
   margin-bottom: 50px;
 }
 
@@ -172,14 +171,6 @@
   .main {
     padding-right: 50px;
     flex: 1;
-  }
-
-  .contact-agent {
-    display: none;
-  }
-
-  .ask-a-question {
-    display: unset;
   }
 
   .contact {

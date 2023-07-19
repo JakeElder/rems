@@ -71,6 +71,11 @@
   margin-bottom: 10px;
 }
 
+.submit {
+  flex-shrink: 0;
+  width: 100%;
+}
+
 .form button {
   font-family: var(--font-inter);
   background: #fff;
@@ -112,8 +117,7 @@
     flex: 1;
   }
 
-  .form button {
-    flex: 0;
-    padding: 0 20px;
+  .submit {
+    width: 96px;
   }
 }

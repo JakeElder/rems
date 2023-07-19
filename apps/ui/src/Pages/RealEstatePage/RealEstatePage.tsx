@@ -114,15 +114,6 @@ export const Features = ({ property }: { property: Property }) => {
   );
 };
 
-export const ContactAgent = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className={css["contact-agent"]}>
-      <h2 className={css["heading"]}>Contact Agent</h2>
-      {children}
-    </div>
-  );
-};
-
 export const AskAQuestion = ({ children }: { children: React.ReactNode }) => {
   return (
     <>

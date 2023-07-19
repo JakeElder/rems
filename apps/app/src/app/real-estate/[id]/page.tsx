@@ -1,7 +1,6 @@
 import {
   RealEstatePage as Page,
   Header,
-  SimpleImageCarousel,
   Breadcrumbs as BreadcrumbsView,
   ServerActionProvider,
   ToastHub,
@@ -16,7 +15,6 @@ import Analytics from "../../../components/Analytics";
 import { Suspense } from "react";
 import ContactAgentModule from "../../../components/ContactAgentModule";
 import { submitContactForm } from "../../actions";
-import ContactForm from "../../../components/ContactForm";
 import AskAQuestionForm from "../../../components/AskAQuestionForm";
 
 type Props = {
@@ -110,11 +108,6 @@ export default async function RealEstatePage({ params }: Props) {
               <TitleAndDescription propertyId={id} />
             </Suspense>
             <Features propertyId={id} />
-            <Page.ContactAgent>
-              <ServerActionProvider value={serverActions}>
-                <ContactForm propertyId={id} />
-              </ServerActionProvider>
-            </Page.ContactAgent>
             <Page.AskAQuestion>
               <ServerActionProvider value={serverActions}>
                 <AskAQuestionForm propertyId={id} />

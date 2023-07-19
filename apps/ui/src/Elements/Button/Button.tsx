@@ -10,11 +10,13 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
   secondary?: boolean;
   width?: number;
+  fit?: boolean;
 };
 
 const Button = ({
   children,
   loading,
+  fit,
   secondary = false,
   width,
   ...props
@@ -27,7 +29,7 @@ const Button = ({
         [css["primary"]]: !secondary,
         [css["secondary"]]: secondary
       })}
-      style={{ ...(width ? { width } : {}) }}
+      style={{ width: fit ? "100%" : width ? width : "" }}
     >
       {loading ? (
         <Oval height={22} width={22} color="#aaa" secondaryColor="#aaa" />
