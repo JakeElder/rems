@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import CloseIcon from "../../Elements/CloseIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,9 +20,9 @@ import {
   faLinkedin
 } from "@fortawesome/free-brands-svg-icons";
 
-type Props = {
-  defaultOpen?: boolean;
+type Props = React.ComponentProps<typeof Dialog.Root> & {
   navIconColor: SpringValue<string>;
+  onContactUsClick?: () => void;
 };
 
 const L = ({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -35,10 +35,8 @@ const L = ({ href, children }: { href: string; children: React.ReactNode }) => {
   );
 };
 
-const SlideNav = ({ defaultOpen = false, navIconColor }: Props) => {
-  const [open, setOpen] = useState(defaultOpen);
-
-  const transitions = useTransition(open, {
+const SlideNav = ({ navIconColor, onContactUsClick, ...props }: Props) => {
+  const transitions = useTransition(props.open, {
     from: {
       opacity: 0,
       right: "-100%",
@@ -57,7 +55,7 @@ const SlideNav = ({ defaultOpen = false, navIconColor }: Props) => {
   });
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root {...props}>
       <Dialog.Trigger>
         <NavIcon color={navIconColor} />
       </Dialog.Trigger>
@@ -100,12 +98,12 @@ const SlideNav = ({ defaultOpen = false, navIconColor }: Props) => {
                       </span>
                       Real Estate
                     </L>
-                    <L href="/contact-us">
+                    <button className={css["link"]} onClick={onContactUsClick}>
                       <span className={css["icon"]}>
                         <FontAwesomeIcon icon={faEnvelope} size="sm" />
                       </span>
                       Contact Us
-                    </L>
+                    </button>
                   </nav>
                   <div className={css["divider"]} />
                   <div className={css["socials"]}>

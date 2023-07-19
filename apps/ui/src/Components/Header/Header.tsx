@@ -113,17 +113,17 @@ const Header = ({ mode, full = false, backHref, back = false }: Props) => {
   const styles = useSpring(
     style === "transparent"
       ? {
-          background: "rgba(255, 255, 255, 0)",
-          color: "rgba(255, 255, 255, 0.7)",
-          fill: "rgba(255, 255, 255, 1)",
-          borderBottomColor: "rgba(255, 255, 255, 0.2)"
-        }
+        background: "rgba(255, 255, 255, 0)",
+        color: "rgba(255, 255, 255, 0.7)",
+        fill: "rgba(255, 255, 255, 1)",
+        borderBottomColor: "rgba(255, 255, 255, 0.2)"
+      }
       : {
-          background: "rgba(255, 255, 255, 1)",
-          color: "rgba(0, 0, 0, 0.7)",
-          fill: "rgba(0, 0, 0, 1)",
-          borderBottomColor: "rgb(234, 234, 234, 1)"
-        }
+        background: "rgba(255, 255, 255, 1)",
+        color: "rgba(0, 0, 0, 0.7)",
+        fill: "rgba(0, 0, 0, 1)",
+        borderBottomColor: "rgb(234, 234, 234, 1)"
+      }
   );
 
   useEffect(() => {
@@ -133,10 +133,16 @@ const Header = ({ mode, full = false, backHref, back = false }: Props) => {
   }, []);
 
   const [contactOpen, setContactOpen] = useState(false);
+  const [slideNavOpen, setSlideNavOpen] = useState(false);
 
   return (
     <div>
       <animated.div className={css["root"]} style={styles}>
+        <ContactModal
+          open={contactOpen}
+          onOpenChange={setContactOpen}
+          onMessageSent={() => setTimeout(() => setContactOpen(false), 2000)}
+        />
         <Container full={full}>
           <div className={css["container"]}>
             <Link href="/" className={css["logo"]}>
@@ -151,17 +157,17 @@ const Header = ({ mode, full = false, backHref, back = false }: Props) => {
                   Real Estate
                 </A>
               </nav>
-              <ContactModal
-                open={contactOpen}
-                onOpenChange={setContactOpen}
-                onMessageSent={() =>
-                  setTimeout(() => setContactOpen(false), 2000)
-                }
-                trigger={<Button style={style}>Contact Us</Button>}
-              />
+              <Button style={style} onClick={() => setContactOpen(true)}>
+                Contact Us
+              </Button>
             </div>
             <div className={css["nav-icon"]}>
-              <SlideNav navIconColor={styles.fill} />
+              <SlideNav
+                open={slideNavOpen}
+                onOpenChange={setSlideNavOpen}
+                navIconColor={styles.fill}
+                onContactUsClick={() => setContactOpen(true)}
+              />
             </div>
           </div>
         </Container>

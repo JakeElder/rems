@@ -13,7 +13,6 @@ import cn from "classnames";
 import { Property } from "@rems/types";
 
 type Props = React.ComponentProps<typeof RadixDialog.Root> & {
-  trigger?: React.ReactNode;
   onMessageSent?: () => void;
   defaultMessage?: string;
   mode?: "contact" | "question";
@@ -21,7 +20,6 @@ type Props = React.ComponentProps<typeof RadixDialog.Root> & {
 };
 
 const ContactModal = ({
-  trigger,
   open,
   onOpenChange,
   onMessageSent,
@@ -52,7 +50,6 @@ const ContactModal = ({
 
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
-      <RadixDialog.Trigger>{trigger}</RadixDialog.Trigger>
       {transitions((styles, show) =>
         show ? (
           <>
