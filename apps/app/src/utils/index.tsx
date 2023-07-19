@@ -12,7 +12,7 @@ export async function fetch(input: RequestInfo | URL, init: RequestInit = {}) {
   });
 }
 
-const FROM_EMAIL = "mailer@mindfulstudio.io";
+const FROM_EMAIL = `"Rems" <mailer@mindfulstudio.io>`;
 
 const transporter = nodemailer.createTransport({
   host: "smtp.mailersend.net",
@@ -35,7 +35,7 @@ export async function sendMail({
   return transporter.sendMail({
     from: FROM_EMAIL,
     to: notificationEmail,
-    subject,
+    subject: `${subject}`,
     html: renderToString(
       <pre style={{ padding: 30, border: "1px solid #888" }}>
         {prettyjson.render(data, { noColor: true })}

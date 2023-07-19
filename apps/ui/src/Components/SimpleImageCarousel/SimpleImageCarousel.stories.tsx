@@ -20,7 +20,7 @@ const meta: Meta<typeof SimpleImageCarousel> = {
 type Story = StoryObj<typeof SimpleImageCarousel>;
 
 export const Default: Story = {
-  args: { images: images[0] }
+  args: { images: images[1] }
 };
 
 export default meta;

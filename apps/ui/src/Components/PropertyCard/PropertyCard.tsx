@@ -1,10 +1,14 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import css from "./PropertyCard.module.css";
 import { Property, RealEstateQuery } from "@rems/types";
 import SimpleImageCarousel from "../SimpleImageCarousel/SimpleImageCarousel";
 import { propertyToCarouselImages } from "../../adapters";
 import { useRealEstateQuery } from "../RealEstateQueryController/RealEstateQueryController";
+import ArrowNav from "../ArrowNav/ArrowNav";
+import { useRouter } from "next/navigation";
 
 type Props = {
   property: Property;
@@ -36,12 +40,35 @@ const Price = ({
 
 const PropertyCard = ({ property, link = "#" }: Props) => {
   const { state } = useRealEstateQuery();
+  const [image, setImage] = useState(0);
+
+  const images = propertyToCarouselImages(property);
+  const [mouseOver, setMouseOver] = useState(false);
+
   return (
-    <div className={css["root"]}>
+    <div
+      className={css["root"]}
+      onMouseEnter={() => setMouseOver(true)}
+      onMouseLeave={() => setMouseOver(false)}
+    >
       <div className={css["images"]}>
-        <SimpleImageCarousel images={propertyToCarouselImages(property)} />
+        <SimpleImageCarousel
+          images={images}
+          index={image}
+          onIndexChange={setImage}
+        >
+          <div className={css["arrow-nav"]}>
+            <ArrowNav
+              show={mouseOver}
+              hasNext={image !== images.length - 1}
+              hasPrev={image !== 0}
+              onNext={() => setImage(image + 1)}
+              onPrev={() => setImage(image - 1)}
+            />
+          </div>
+        </SimpleImageCarousel>
       </div>
-      <Link href={link}>
+      <Link href={link} draggable="false" className={css["link"]}>
         <div className={css["spec"]}>
           <Price property={property} type={state.query!["availability"]} />
           <div className={css["beds-baths-area"]}>

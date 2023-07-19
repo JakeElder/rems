@@ -11,14 +11,22 @@ import { useElementSize } from "usehooks-ts";
 import cn from "classnames";
 
 type Props = {
+  children?: React.ReactNode;
   images: CarouselImage[];
   fill?: boolean;
+  index: number;
+  onIndexChange: (index: number) => void;
 };
 
 const Img = animated(Image);
 
-const SimpleImageCarousel = ({ images, fill = false }: Props) => {
-  const [index, setIndex] = useState(0);
+const SimpleImageCarousel = ({
+  images,
+  fill = false,
+  children = null,
+  index,
+  onIndexChange
+}: Props) => {
   const [$root, { width }] = useElementSize();
 
   const [props, api] = useSprings(
@@ -32,20 +40,16 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
 
   useEffect(() => {
     api.start((i) => {
-      if (i < index - 1 || i > index + 1) {
-        return {};
-      }
       const x = (i - index) * width + 0;
       return { x };
     });
   }, [index]);
 
   const bind = useDrag(
-    ({ active, movement: [mx], direction: [xDir], cancel }) => {
+    ({ active, movement: [mx], direction: [xDir], cancel, event }) => {
+      event.preventDefault();
       if (active && Math.abs(mx) > width / 4) {
-        setIndex((index) =>
-          clamp(index + (xDir > 0 ? -1 : 1), 0, images.length - 1)
-        );
+        onIndexChange(clamp(index + (xDir > 0 ? -1 : 1), 0, images.length - 1));
         cancel();
       }
       api.start((i) => {
@@ -72,7 +76,10 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
           {images.map((i, idx) => (
             <span
               key={i.src}
-              onClick={() => setIndex(idx)}
+              onClick={(e) => {
+                e.preventDefault();
+                onIndexChange(idx);
+              }}
               role="button"
               className={cn({
                 [css["control"]]: index !== idx,
@@ -97,6 +104,7 @@ const SimpleImageCarousel = ({ images, fill = false }: Props) => {
           />
         ))}
       </div>
+      {children}
     </div>
   );
 };
