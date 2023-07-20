@@ -1,6 +1,7 @@
 import {
   Breadcrumbs,
   FilterBar,
+  NearestMRTStationFilter,
   RealEstateIndexPage as Page,
   PropertyFilters
 } from "@rems/ui";
@@ -18,6 +19,17 @@ import FilterDialogViewContainer from "../../client-components/FilterDialogViewC
 import TypeFiltersContainer from "../../server-components/TypeFiltersContainer";
 import AvailabilityFilterViewContainer from "../../client-components/AvailabilityFilterViewContainer";
 import AreaFilterContainer from "../../server-components/AreaFilterContainer";
+import PriceRangeViewContainer from "../../client-components/PriceRangeViewContainer";
+import BedsFilterViewContainer from "../../client-components/BedsFilterViewContainer";
+import BathroomsFilterViewContainer from "../../client-components/BathroomsFilterViewContainer";
+import ViewTypeFiltersContainer from "../../server-components/ViewTypeFiltersContainer";
+import IndoorFeatureFiltersContainer from "../../server-components/IndoorFeatureFiltersContainer";
+import OutdoorFeatureFiltersContainer from "../../server-components/OutdoorFeatureFiltersContainer";
+import LotFeatureFiltersContainer from "../../server-components/LotFeatureFiltersContainer";
+import LivingAreaFiltersViewContainer from "../../client-components/LivingAreaFiltersViewContainer";
+import LotSizeFiltersViewContainer from "../../client-components/LotSizeFiltersViewContainer";
+import NearestMRTStationFilterContainer from "../../server-components/NearestMRTStationFilter";
+import NearestBTSStationFilterContainer from "../../server-components/NearestBTSStationFilter";
 
 export default function Home() {
   return (
@@ -37,22 +49,38 @@ export default function Home() {
                   <AreaFilterContainer />
                 </PropertyFilters.Area>
               </PropertyFilters.AvailabilityAndArea>
-              <PropertyFilters.PriceRange>-</PropertyFilters.PriceRange>
-              <PropertyFilters.Bedrooms>-</PropertyFilters.Bedrooms>
-              <PropertyFilters.Bathrooms>-</PropertyFilters.Bathrooms>
-              <PropertyFilters.View>-</PropertyFilters.View>
-              <PropertyFilters.IndoorFeatures>-</PropertyFilters.IndoorFeatures>
+              <PropertyFilters.PriceRange>
+                <PriceRangeViewContainer />
+              </PropertyFilters.PriceRange>
+              <PropertyFilters.Bedrooms>
+                <BedsFilterViewContainer />
+              </PropertyFilters.Bedrooms>
+              <PropertyFilters.Bathrooms>
+                <BathroomsFilterViewContainer />
+              </PropertyFilters.Bathrooms>
+              <PropertyFilters.View>
+                <ViewTypeFiltersContainer />
+              </PropertyFilters.View>
+              <PropertyFilters.IndoorFeatures>
+                <IndoorFeatureFiltersContainer />
+              </PropertyFilters.IndoorFeatures>
               <PropertyFilters.OutdoorFeatures>
-                -
+                <OutdoorFeatureFiltersContainer />
               </PropertyFilters.OutdoorFeatures>
-              <PropertyFilters.LotFeatures>-</PropertyFilters.LotFeatures>
-              <PropertyFilters.LivingArea>-</PropertyFilters.LivingArea>
-              <PropertyFilters.LotSize>-</PropertyFilters.LotSize>
+              <PropertyFilters.LotFeatures>
+                <LotFeatureFiltersContainer />
+              </PropertyFilters.LotFeatures>
+              <PropertyFilters.LivingArea>
+                <LivingAreaFiltersViewContainer />
+              </PropertyFilters.LivingArea>
+              <PropertyFilters.LotSize>
+                <LotSizeFiltersViewContainer />
+              </PropertyFilters.LotSize>
               <PropertyFilters.NearestMRTStation>
-                -
+                <NearestMRTStationFilterContainer />
               </PropertyFilters.NearestMRTStation>
               <PropertyFilters.NearestBTSStation>
-                -
+                <NearestBTSStationFilterContainer />
               </PropertyFilters.NearestBTSStation>
             </FilterDialogViewContainer>
           </FilterBar.FilterDialog>

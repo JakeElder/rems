@@ -1,32 +1,27 @@
 import React from "react";
 import css from "./NearestMRTStationFilter.module.css";
 import Select from "../../Elements/Select";
-import { useFilters } from "../../Utils/FiltersContext";
-import { useRealEstateQuery } from "../RealEstateQueryController";
+import { MRTStation, RealEstateQuery } from "@rems/types";
 
-type Props = {};
+type Props = {
+  stations: MRTStation[];
+  value: RealEstateQuery["nearest-mrt-station"];
+  onChange: (value: RealEstateQuery["nearest-mrt-station"]) => void;
+};
 
-const NearestMRTStationFilter = ({}: Props) => {
-  const { mrtStations } = useFilters();
-  const { query, onValueChange } = useRealEstateQuery();
-
+const NearestMRTStationFilter = ({ value, stations, onChange }: Props) => {
   return (
     <Select
-      value={`${
-        query["nearest-mrt-station"] ? query["nearest-mrt-station"] : ""
-      }`}
+      value={`${value ? value : ""}`}
       options={[
         { label: "Any", value: "" },
-        ...mrtStations.map((l) => ({
+        ...stations.map((l) => ({
           value: `${l.slug}`,
           label: l.name
         }))
       ]}
       onChange={(e) =>
-        onValueChange(
-          "nearest-mrt-station",
-          e.currentTarget.value ? e.currentTarget.value : null
-        )
+        onChange(e.currentTarget.value ? e.currentTarget.value : null)
       }
     />
   );

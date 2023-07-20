@@ -1,14 +1,14 @@
 import React from "react";
 import css from "./BathroomsFilter.module.css";
 import ToggleGroup from "../ToggleGroup";
-import { useRealEstateQuery } from "../RealEstateQueryController";
+import { RealEstateQuery } from "@rems/types";
 
-type Props = {};
+type Props = {
+  value: RealEstateQuery["min-bedrooms"];
+  onChange: (min: RealEstateQuery["min-bathrooms"]) => void;
+};
 
-const BathroomsFilter = ({}: Props) => {
-  const { query, onMinBathsChange } = useRealEstateQuery();
-  const value = query["min-bathrooms"];
-
+const BathroomsFilter = ({ value, onChange }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["toggle-group"]}>
@@ -16,11 +16,7 @@ const BathroomsFilter = ({}: Props) => {
           width={54}
           value={`${value}`}
           onValueChange={(val) => {
-            if (val === "") {
-              onMinBathsChange(0);
-              return;
-            }
-            onMinBathsChange(parseInt(val, 10));
+            val === "" ? onChange(0) : onChange(parseInt(val, 10));
           }}
           items={[
             { value: "0", label: "Any" },

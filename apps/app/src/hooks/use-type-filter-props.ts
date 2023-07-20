@@ -7,8 +7,9 @@ const useTypeFilterProps = (): Omit<
 > => {
   const { onCheckedChange, query } = useRealEstateQuery();
   return {
-    onChange: (value, checked) => onCheckedChange("view-types", value, checked),
-    isChecked: (value) => query["view-types"].includes(value)
+    onChange: (value, checked) =>
+      onCheckedChange("property-type", value, checked),
+    isChecked: (value) => query["property-type"].includes(value)
   };
 };
 

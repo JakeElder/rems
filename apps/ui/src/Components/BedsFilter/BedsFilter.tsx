@@ -7,8 +7,8 @@ import { RealEstateQuery } from "@rems/types";
 type Props = {
   minBedrooms: RealEstateQuery["min-bedrooms"];
   maxBedrooms: RealEstateQuery["max-bedrooms"];
-  onMinChange: (value: number) => void;
-  onMaxChange: (value: number) => void;
+  onMinChange: (value: RealEstateQuery["min-bedrooms"]) => void;
+  onMaxChange: (value: RealEstateQuery["max-bedrooms"]) => void;
 };
 
 const label = (n: number, exact: boolean) => (exact ? `${n}` : `${n}+`);

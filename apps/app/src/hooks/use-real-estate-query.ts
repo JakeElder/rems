@@ -41,6 +41,7 @@ type UseRealEstateQueryReturn = {
     max: RealEstateQuery["max-price"]
   ) => void;
   onAvailabilityChange: (availability: RealEstateQuery["availability"]) => void;
+  onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
   reset: () => void;
 };
 
@@ -199,6 +200,14 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
     reset: () => {
       commit(realEstateQuerySchema.parse({}));
+    },
+
+    onMinBathsChange: (min) => {
+      const nextQuery = update(query, {
+        "min-bathrooms": { $set: min },
+        page: { $set: 1 }
+      });
+      commit(nextQuery);
     }
   };
 };

@@ -1,26 +1,26 @@
 import React from "react";
 import css from "./IndoorFeatureFilters.module.css";
 import Checkbox from "../../Elements/Checkbox";
-import { useFilters } from "../../Utils/FiltersContext";
-import { useRealEstateQuery } from "../RealEstateQueryController";
 import CheckboxGrid from "../CheckboxGrid";
+import { IndoorFeature } from "@rems/types";
 
-type Props = {};
+type Props = {
+  features: IndoorFeature[];
+  onChange: (value: string, checked: boolean) => void;
+  isChecked: (value: string) => boolean;
+};
 
-const IndoorFeatureFilters = ({}: Props) => {
-  const { indoorFeatures } = useFilters();
-  const { query, onCheckedChange } = useRealEstateQuery();
-
+const IndoorFeatureFilters = ({ features, onChange, isChecked }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["types"]}>
         <CheckboxGrid
-          items={indoorFeatures.map((t) => (
+          items={features.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onCheckedChange("indoor-features", t.slug, checked)
+                onChange(t.slug, checked !== "indeterminate" && checked)
               }
-              checked={query["indoor-features"].includes(t.slug)}
+              checked={isChecked(t.slug)}
               key={t.slug}
               name="indoor-features[]"
               value={t.slug}
