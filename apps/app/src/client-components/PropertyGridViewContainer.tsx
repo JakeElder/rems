@@ -18,7 +18,7 @@ const PropertyGridViewContainer = ({}: Props) => {
   return (
     <PropertyGrid loading={isLoading}>
       {(data?.data || []).map((p) => (
-        <PropertyCard key={p.id} type="sale" property={p} />
+        <PropertyCard key={p.id} type={data!.query.availability} property={p} />
       ))}
     </PropertyGrid>
   );

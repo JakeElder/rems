@@ -9,12 +9,17 @@ import BedsFilterPopoverViewContainer from "../../client-components/BedsFilterPo
 import PriceFilterPopoverViewContainer from "../../client-components/PriceFilterPopoverViewContainer";
 import AvailabilityFilterPopoverViewContainer from "../../client-components/AvailabilityFilterPopoverViewContainer";
 import TypeFilterPopoverContainer from "../../server-components/TypeFilterPopoverContainer";
+import FilterDialogViewContainer from "../../client-components/FilterDialogViewContainer";
 
 export default function Home() {
   return (
     <Page.Root>
       <Page.Header>
         <FilterBar.Root>
+          <FilterBar.FilterDialog>
+            <FilterDialogViewContainer />
+          </FilterBar.FilterDialog>
+          <FilterBar.Separator />
           <FilterBar.KeyFilters>
             <TypeFilterPopoverContainer />
             <AvailabilityFilterPopoverViewContainer />

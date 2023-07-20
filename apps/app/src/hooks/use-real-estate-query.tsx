@@ -41,6 +41,7 @@ type UseRealEstateQueryReturn = {
     max: RealEstateQuery["max-price"]
   ) => void;
   onAvailabilityChange: (availability: RealEstateQuery["availability"]) => void;
+  reset: () => void;
 };
 
 export const removeDefaults = (
@@ -194,6 +195,10 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
         page: { $set: 1 }
       });
       commit(nextQuery);
+    },
+
+    reset: () => {
+      commit(realEstateQuerySchema.parse({}));
     }
   };
 };
