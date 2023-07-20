@@ -3,6 +3,7 @@ import FooterContainer from "../../server-components/FooterContainer";
 import PropertyGridViewContainer from "../../client-components/PropertyGridViewContainer";
 import ListingMapViewContainer from "../../client-components/ListingMapViewContainer";
 import QuickFiltersContainer from "../../server-components/QuickFiltersContainer";
+import CountAndSortViewContainer from "../../client-components/CountAndSortViewContainer";
 
 const AsyncComp = async () => {
   await new Promise((resolve) => setTimeout(resolve, 0));
@@ -30,6 +31,9 @@ export default function Home() {
             />
           </Page.Breadcrumbs>
           <Page.Title />
+          <Page.CountAndSort>
+            <CountAndSortViewContainer />
+          </Page.CountAndSort>
           <Page.Properties>
             <PropertyGridViewContainer />
           </Page.Properties>

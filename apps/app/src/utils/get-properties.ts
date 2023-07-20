@@ -1,9 +1,9 @@
-import { Property } from "@rems/types";
+import { GetPropertiesResult } from "@rems/types";
 
 export default async function getProperties(
   query: string
-): Promise<Property[]> {
+): Promise<GetPropertiesResult> {
   const res = await fetch(`/api/properties${query}`);
   const json = await res.json();
-  return json.data;
+  return json;
 }

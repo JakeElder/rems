@@ -15,7 +15,7 @@ const ListingMapViewContainer = ({}: Props) => {
     keepPreviousData: true
   });
 
-  return <ListingMap properties={data || []} />;
+  return <ListingMap properties={data?.data || []} />;
 };
 
 export default ListingMapViewContainer;

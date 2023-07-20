@@ -19,6 +19,10 @@ type UseRealEstateQueryReturn = {
     value: string,
     on: boolean
   ) => void;
+  onValueChange: (
+    param: keyof RealEstateQuery,
+    value: string | number | null
+  ) => void;
 };
 
 export const generateQueryString = (
@@ -65,6 +69,14 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
         [key]: on
           ? { $push: [value] }
           : { $apply: (p: any) => p.filter((v: any) => v !== value) },
+        page: { $set: 1 }
+      });
+      commit(nextQuery);
+    },
+
+    onValueChange: (param, value) => {
+      const nextQuery = update(query, {
+        [param]: { $set: value },
         page: { $set: 1 }
       });
       commit(nextQuery);
