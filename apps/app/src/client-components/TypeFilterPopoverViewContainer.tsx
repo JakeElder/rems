@@ -12,7 +12,9 @@ type Props = {
 const TypeFilterPopoverViewContainer = ({ types }: Props) => {
   const { has } = useRealEstateQuery();
   const props = useTypeFilterProps();
-  return <TypeFilterPopover on={has("view-types")} types={types} {...props} />;
+  return (
+    <TypeFilterPopover on={has("property-type")} types={types} {...props} />
+  );
 };
 
 export default TypeFilterPopoverViewContainer;

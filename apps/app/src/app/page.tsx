@@ -1,6 +1,5 @@
 import {
   HomePage as Page,
-  Header,
   MailingListModule,
   ServerActionProvider,
   ToastHub
@@ -15,6 +14,7 @@ import Analytics from "../components/Analytics";
 import { Suspense } from "react";
 import { submitContactForm, submitMailingListForm } from "./actions";
 import { ServerActions } from "@rems/types";
+import HeaderViewContainer from "../client-components/HeaderViewContainer";
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await api.get.appConfig();
@@ -36,9 +36,7 @@ export default async function Home() {
       <ToastHub>
         <Analytics />
         <Page.Header>
-          <ServerActionProvider value={serverActions}>
-            <Header mode="hero" />
-          </ServerActionProvider>
+          <HeaderViewContainer mode="hero" />
         </Page.Header>
         <Page.Hero>
           <Suspense>
