@@ -89,14 +89,8 @@ export type LotSize = {
   label: string;
 };
 
-export type QuickFilterType =
-  | "INDOOR_FEATURE"
-  | "LOT_FEATURE"
-  | "OUTDOOR_FEATURE"
-  | "VIEW_TYPE";
-
 export type QuickFilter = {
-  type: QuickFilterType;
+  key: QuickFilterQueryKey;
   filter: Filter;
 };
 

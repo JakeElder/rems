@@ -14,11 +14,11 @@ import {
   Property,
   PropertyType,
   QuickFilter,
-  QuickFilterType,
   AppConfig,
   SortType,
   ViewType,
-  realEstateQuerySchema
+  realEstateQuerySchema,
+  QuickFilterQueryKey
 } from "@rems/types";
 
 const get = {
@@ -40,12 +40,12 @@ const get = {
     const res = await fetch(url);
     const json = await res.json();
 
-    const mapType = (component: string): QuickFilterType => {
-      const map: Record<string, QuickFilterType> = {
-        "quick-filters.indoor-feature": "INDOOR_FEATURE",
-        "quick-filters.lot-feature": "LOT_FEATURE",
-        "quick-filters.outdoor-feature": "OUTDOOR_FEATURE",
-        "quick-filters.view-type": "VIEW_TYPE"
+    const mapKey = (component: string): QuickFilterQueryKey => {
+      const map: Record<string, QuickFilterQueryKey> = {
+        "quick-filters.indoor-feature": "indoor-features",
+        "quick-filters.lot-feature": "lot-features",
+        "quick-filters.outdoor-feature": "outdoor-features",
+        "quick-filters.view-type": "view-types"
       };
       return map[component];
     };
@@ -53,7 +53,7 @@ const get = {
     const quickFilters = (
       json.data.attributes.filters as any[]
     ).map<QuickFilter>((d: any) => ({
-      type: mapType(d.__component),
+      key: mapKey(d.__component),
       filter: d.filter.data.attributes
     }));
 
