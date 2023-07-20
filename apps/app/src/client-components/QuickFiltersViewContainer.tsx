@@ -2,12 +2,9 @@
 
 import React from "react";
 import useRealEstateQuery from "../hooks/use-real-estate-query";
-import { QuickFilter } from "@rems/types";
 import { QuickFilters } from "@rems/ui";
 
-type Props = {
-  filters: QuickFilter[];
-};
+type Props = Pick<React.ComponentProps<typeof QuickFilters>, "filters">;
 
 const QuickFiltersViewContainer = ({ filters }: Props) => {
   const { isQuickFilterOn, onQuickFilterChange } = useRealEstateQuery();

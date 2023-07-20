@@ -11,6 +11,8 @@ import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
 
 type UseRealEstateQueryReturn = {
+  query: RealEstateQuery;
+  queryString: string;
   isQuickFilterOn: (key: QuickFilterQueryKey, value: string) => boolean;
   onQuickFilterChange: (
     key: QuickFilterQueryKey,
@@ -48,8 +50,12 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
   const q = qs.parse(params.toString(), { arrayFormat: "bracket" });
   const query = realEstateQuerySchema.parse(q);
+  const queryString = generateQueryString(query);
 
   return {
+    query,
+    queryString,
+
     isQuickFilterOn(key, value) {
       return query[key].includes(value);
     },

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import css from "./RealEstateIndexPage.module.css";
-import { useRealEstateQuery } from "../../Components/RealEstateQueryController";
+import IndexConnector from "../../Components/IndexConnector";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["root"]}>{children}</div>;
@@ -13,7 +13,11 @@ export const Header = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
-  return <div className={css["main"]}>{children}</div>;
+  return (
+    <div className={css["main"]}>
+      <IndexConnector>{children}</IndexConnector>
+    </div>
+  );
 };
 
 export const Content = ({ children }: { children: React.ReactNode }) => {
@@ -24,15 +28,8 @@ export const Breadcrumbs = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["breadcrumbs"]}>{children}</div>;
 };
 
-export const Title = ({ }: {}) => {
-  const { state, query } = useRealEstateQuery();
-  const title = `Homes for ${state.initialLoad ? query.availability : state.query.availability
-    } in Thailand`;
-
-  useEffect(() => {
-    document.title = title;
-  }, [query]);
-
+export const Title = ({}: {}) => {
+  const title = `Homes for sale in Thailand`;
   return <h1 className={css["title"]}>{title}</h1>;
 };
 
