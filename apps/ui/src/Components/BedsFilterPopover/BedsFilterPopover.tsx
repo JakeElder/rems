@@ -3,14 +3,16 @@ import FilterPopover from "../FilterPopover";
 import css from "./BedsFilterPopover.module.css";
 import BedsFilter from "../BedsFilter/BedsFilter";
 
-type Props = { on?: boolean };
+type Props = React.ComponentProps<typeof BedsFilter> & {
+  on: boolean;
+};
 
-const BedsFilterPopover = ({ on }: Props) => {
+const BedsFilterPopover = ({ on, ...props }: Props) => {
   return (
     <div className={css["root"]}>
       <FilterPopover label="Beds" on={on}>
         <div className={css["content"]}>
-          <BedsFilter />
+          <BedsFilter {...props} />
         </div>
       </FilterPopover>
     </div>

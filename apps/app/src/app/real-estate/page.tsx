@@ -5,17 +5,23 @@ import ListingMapViewContainer from "../../client-components/ListingMapViewConta
 import QuickFiltersContainer from "../../server-components/QuickFiltersContainer";
 import CountAndSortViewContainer from "../../client-components/CountAndSortViewContainer";
 import PaginationViewContainer from "../../client-components/PaginationViewContainer";
-
-const AsyncComp = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 0));
-  return null;
-};
+import BedsFilterPopoverViewContainer from "../../client-components/BedsFilterPopoverViewContainer";
+import PriceFilterPopoverViewContainer from "../../client-components/PriceFilterPopoverViewContainer";
+import AvailabilityFilterPopoverViewContainer from "../../client-components/AvailabilityFilterPopoverViewContainer";
+import TypeFilterPopoverContainer from "../../server-components/TypeFilterPopoverContainer";
 
 export default function Home() {
   return (
     <Page.Root>
       <Page.Header>
         <FilterBar.Root>
+          <FilterBar.KeyFilters>
+            <TypeFilterPopoverContainer />
+            <AvailabilityFilterPopoverViewContainer />
+            <PriceFilterPopoverViewContainer />
+            <BedsFilterPopoverViewContainer />
+          </FilterBar.KeyFilters>
+          <FilterBar.Separator />
           <FilterBar.QuickFilters>
             <QuickFiltersContainer />
           </FilterBar.QuickFilters>

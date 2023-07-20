@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ComponentProps } from "react";
 import * as CB from "@radix-ui/react-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

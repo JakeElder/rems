@@ -2,17 +2,25 @@ import React from "react";
 import css from "./BedsFilter.module.css";
 import ToggleGroup from "../ToggleGroup";
 import Checkbox from "../../Elements/Checkbox";
-import { useRealEstateQuery } from "../RealEstateQueryController";
+import { RealEstateQuery } from "@rems/types";
 
-type Props = {};
+type Props = {
+  minBedrooms: RealEstateQuery["min-bedrooms"];
+  maxBedrooms: RealEstateQuery["max-bedrooms"];
+  onMinChange: (value: number) => void;
+  onMaxChange: (value: number) => void;
+};
 
 const label = (n: number, exact: boolean) => (exact ? `${n}` : `${n}+`);
 
-const BedsFilter = ({}: Props) => {
-  const { query, onMinBedsChange, onMaxBedsChange } = useRealEstateQuery();
-
-  const min = query["min-bedrooms"];
-  const max = query["max-bedrooms"];
+const BedsFilter = ({
+  minBedrooms,
+  maxBedrooms,
+  onMinChange,
+  onMaxChange
+}: Props) => {
+  const min = minBedrooms;
+  const max = maxBedrooms;
   const exact = max !== null;
 
   return (
@@ -23,10 +31,10 @@ const BedsFilter = ({}: Props) => {
           value={`${min}`}
           onValueChange={(val) => {
             if (val === "") {
-              onMinBedsChange(0);
+              onMinChange(0);
               return;
             }
-            onMinBedsChange(parseInt(val, 10));
+            onMinChange(parseInt(val, 10));
           }}
           items={[
             { value: "0", label: "Any" },
@@ -44,7 +52,7 @@ const BedsFilter = ({}: Props) => {
         checked={exact}
         disabled={min === 0}
         onCheckedChange={(checked) => {
-          onMaxBedsChange(checked ? min : null);
+          onMaxChange(checked ? min : null);
         }}
       />
     </div>

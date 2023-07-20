@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import * as TG from "@radix-ui/react-toggle-group";
 import cn from "classnames";

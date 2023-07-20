@@ -45,6 +45,11 @@ export const Root = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+export const Separator = () => <div className={css["separator"]} />;
+
+export const KeyFilters = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["key-filters"]}>{children}</div>;
+};
 export const QuickFilters = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["toggles"]}>{children}</div>;
 };

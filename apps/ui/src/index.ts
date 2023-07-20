@@ -9,6 +9,8 @@ export * as RealEstatePage from "./Pages/RealEstatePage";
 
 export { default as AiSearch } from "./Components/AiSearch";
 export { default as AskAQuestionForm } from "./Components/AskAQuestionForm";
+export { default as AvailabilityFilterPopover } from "./Components/AvailabilityFilterPopover";
+export { default as BedsFilterPopover } from "./Components/BedsFilterPopover";
 export { default as Breadcrumbs } from "./Components/Breadcrumbs";
 export { default as ContactAgentModule } from "./Components/ContactAgentModule";
 export * as ContactForm from "./Components/ContactForm";
@@ -23,12 +25,14 @@ export { default as HeroCarousel } from "./Components/HeroCarousel";
 export { default as ListingMap } from "./Components/ListingMap";
 export { default as MailingListModule } from "./Components/MailingListModule";
 export { default as Pagination } from "./Components/Pagination";
+export { default as PriceFilterPopover } from "./Components/PriceFilterPopover";
 export { default as PropertyCard } from "./Components/PropertyCard";
 export { default as PropertyGrid } from "./Components/PropertyGrid";
 export { default as PropertySlider } from "./Components/PropertySlider";
 export { default as RealEstateQueryController } from "./Components/RealEstateQueryController";
 export { default as SimpleImageCarousel } from "./Components/SimpleImageCarousel";
 export { default as ToastHub } from "./Components/ToastHub";
+export { default as TypeFilterPopover } from "./Components/TypeFilterPopover";
 export { default as QuickFilters } from "./Components/QuickFilters";
 
 export { default as Button } from "./Elements/Button";
