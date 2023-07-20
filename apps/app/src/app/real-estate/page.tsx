@@ -16,6 +16,8 @@ import AvailabilityFilterPopoverViewContainer from "../../client-components/Avai
 import TypeFilterPopoverContainer from "../../server-components/TypeFilterPopoverContainer";
 import FilterDialogViewContainer from "../../client-components/FilterDialogViewContainer";
 import TypeFiltersContainer from "../../server-components/TypeFiltersContainer";
+import AvailabilityFilterViewContainer from "../../client-components/AvailabilityFilterViewContainer";
+import AreaFilterContainer from "../../server-components/AreaFilterContainer";
 
 export default function Home() {
   return (
@@ -28,8 +30,12 @@ export default function Home() {
                 <TypeFiltersContainer id="filters" />
               </PropertyFilters.PropertyType>
               <PropertyFilters.AvailabilityAndArea>
-                <PropertyFilters.Availability>-</PropertyFilters.Availability>
-                <PropertyFilters.Area>-</PropertyFilters.Area>
+                <PropertyFilters.Availability>
+                  <AvailabilityFilterViewContainer />
+                </PropertyFilters.Availability>
+                <PropertyFilters.Area>
+                  <AreaFilterContainer />
+                </PropertyFilters.Area>
               </PropertyFilters.AvailabilityAndArea>
               <PropertyFilters.PriceRange>-</PropertyFilters.PriceRange>
               <PropertyFilters.Bedrooms>-</PropertyFilters.Bedrooms>
