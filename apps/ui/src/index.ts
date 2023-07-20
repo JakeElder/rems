@@ -28,12 +28,14 @@ export { default as MailingListModule } from "./Components/MailingListModule";
 export { default as Pagination } from "./Components/Pagination";
 export { default as PriceFilterPopover } from "./Components/PriceFilterPopover";
 export { default as PropertyCard } from "./Components/PropertyCard";
+export * as PropertyFilters from "./Components/PropertyFilters";
 export { default as PropertyGrid } from "./Components/PropertyGrid";
 export { default as PropertySlider } from "./Components/PropertySlider";
 export { default as RealEstateQueryController } from "./Components/RealEstateQueryController";
 export { default as SimpleImageCarousel } from "./Components/SimpleImageCarousel";
 export { default as ToastHub } from "./Components/ToastHub";
 export { default as TypeFilterPopover } from "./Components/TypeFilterPopover";
+export { default as TypeFilters } from "./Components/TypeFilters";
 export { default as QuickFilters } from "./Components/QuickFilters";
 
 export { default as Button } from "./Elements/Button";

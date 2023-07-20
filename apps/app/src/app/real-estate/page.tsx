@@ -1,4 +1,9 @@
-import { Breadcrumbs, FilterBar, RealEstateIndexPage as Page } from "@rems/ui";
+import {
+  Breadcrumbs,
+  FilterBar,
+  RealEstateIndexPage as Page,
+  PropertyFilters
+} from "@rems/ui";
 import FooterContainer from "../../server-components/FooterContainer";
 import PropertyGridViewContainer from "../../client-components/PropertyGridViewContainer";
 import ListingMapViewContainer from "../../client-components/ListingMapViewContainer";
@@ -10,6 +15,7 @@ import PriceFilterPopoverViewContainer from "../../client-components/PriceFilter
 import AvailabilityFilterPopoverViewContainer from "../../client-components/AvailabilityFilterPopoverViewContainer";
 import TypeFilterPopoverContainer from "../../server-components/TypeFilterPopoverContainer";
 import FilterDialogViewContainer from "../../client-components/FilterDialogViewContainer";
+import TypeFiltersContainer from "../../server-components/TypeFiltersContainer";
 
 export default function Home() {
   return (
@@ -17,7 +23,32 @@ export default function Home() {
       <Page.Header>
         <FilterBar.Root>
           <FilterBar.FilterDialog>
-            <FilterDialogViewContainer />
+            <FilterDialogViewContainer>
+              <PropertyFilters.PropertyType>
+                <TypeFiltersContainer id="filters" />
+              </PropertyFilters.PropertyType>
+              <PropertyFilters.AvailabilityAndArea>
+                <PropertyFilters.Availability>-</PropertyFilters.Availability>
+                <PropertyFilters.Area>-</PropertyFilters.Area>
+              </PropertyFilters.AvailabilityAndArea>
+              <PropertyFilters.PriceRange>-</PropertyFilters.PriceRange>
+              <PropertyFilters.Bedrooms>-</PropertyFilters.Bedrooms>
+              <PropertyFilters.Bathrooms>-</PropertyFilters.Bathrooms>
+              <PropertyFilters.View>-</PropertyFilters.View>
+              <PropertyFilters.IndoorFeatures>-</PropertyFilters.IndoorFeatures>
+              <PropertyFilters.OutdoorFeatures>
+                -
+              </PropertyFilters.OutdoorFeatures>
+              <PropertyFilters.LotFeatures>-</PropertyFilters.LotFeatures>
+              <PropertyFilters.LivingArea>-</PropertyFilters.LivingArea>
+              <PropertyFilters.LotSize>-</PropertyFilters.LotSize>
+              <PropertyFilters.NearestMRTStation>
+                -
+              </PropertyFilters.NearestMRTStation>
+              <PropertyFilters.NearestBTSStation>
+                -
+              </PropertyFilters.NearestBTSStation>
+            </FilterDialogViewContainer>
           </FilterBar.FilterDialog>
           <FilterBar.Separator />
           <FilterBar.KeyFilters>

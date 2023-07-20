@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import useRealEstateQuery from "../hooks/use-real-estate-query";
-import { FilterDialog } from "@rems/ui";
+import { FilterDialog, PropertyFilters } from "@rems/ui";
 import useSWR from "swr";
 import getProperties from "../utils/get-properties";
 
-type Props = {};
+type Props = { children: React.ReactNode };
 
-const FilterDialogViewContainer = ({}: Props) => {
+const FilterDialogViewContainer = ({ children }: Props) => {
   const { queryString, activeFilters, reset } = useRealEstateQuery();
   const key = queryString || "?";
   const { data, isLoading } = useSWR(key, getProperties, {
@@ -25,7 +25,9 @@ const FilterDialogViewContainer = ({}: Props) => {
       open={open}
       count={data?.pagination.total}
       onClearClick={() => reset()}
-    />
+    >
+      <PropertyFilters.Root>{children}</PropertyFilters.Root>
+    </FilterDialog>
   );
 };
 

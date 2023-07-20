@@ -1,25 +1,18 @@
 "use client";
 
 import React from "react";
-import useRealEstateQuery from "../hooks/use-real-estate-query";
 import { TypeFilterPopover } from "@rems/ui";
+import useRealEstateQuery from "../hooks/use-real-estate-query";
+import useTypeFilterProps from "../hooks/use-type-filter-props";
 
 type Props = {
   types: React.ComponentProps<typeof TypeFilterPopover>["types"];
 };
 
 const TypeFilterPopoverViewContainer = ({ types }: Props) => {
-  const { has, onCheckedChange, query } = useRealEstateQuery();
-  return (
-    <TypeFilterPopover
-      types={types}
-      on={has("view-types")}
-      onChange={(value, checked) =>
-        onCheckedChange("view-types", value, checked)
-      }
-      isChecked={(value) => query["view-types"].includes(value)}
-    />
-  );
+  const { has } = useRealEstateQuery();
+  const props = useTypeFilterProps();
+  return <TypeFilterPopover on={has("view-types")} types={types} {...props} />;
 };
 
 export default TypeFilterPopoverViewContainer;

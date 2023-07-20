@@ -1,120 +1,161 @@
 import React from "react";
 import css from "./PropertyFilters.module.css";
-import TypeFilters from "../TypeFilters";
-import PriceRange from "../PriceRange";
-import BedsFilter from "../BedsFilter";
-import BathroomsFilter from "../BathroomsFilter";
 import Split from "../../Elements/Split";
-import ViewTypeFilters from "../ViewTypeFilters";
-import IndoorFeatureFilters from "../IndoorFeatureFilters";
-import OutdoorFeatureFilters from "../OutdoorFeatureFilters";
-import LotFeatureFilters from "../LotFeatureFilters";
-import LivingAreaFilters from "../LivingAreaFilters/LivingAreaFilters";
-import NearestMRTStationFilter from "../NearestMRTStationFilter";
-import NearestBTSStationFilter from "../NearestBTSStationFilter";
-import AreaFilter from "../AreaFilter/AreaFilter";
-import LotSizeFilters from "../LotSizeFilters";
-import AvailabilityFilter from "../AvailabilityFilter/AvailabilityFilter";
 
-type Props = {};
+export const Root = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["root"]}>{children}</div>;
+};
 
-const PropertyFilters = ({}: Props) => {
+export const PropertyType = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className={css["root"]}>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Property Type</div>
-        <div className={css["filters"]}>
-          <TypeFilters id="dialog" />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <Split>
-          <div>
-            <div className={css["header"]}>Availability</div>
-            <div className={css["filters"]}>
-              <AvailabilityFilter />
-            </div>
-          </div>
-          <div>
-            <div className={css["header"]}>Area</div>
-            <div className={css["filters"]}>
-              <AreaFilter />
-            </div>
-          </div>
-        </Split>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Price Range</div>
-        <div className={css["filters"]}>
-          <PriceRange />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Bedrooms</div>
-        <div className={css["filters"]}>
-          <BedsFilter />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Bathrooms</div>
-        <div className={css["filters"]}>
-          <BathroomsFilter />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>View</div>
-        <div className={css["filters"]}>
-          <ViewTypeFilters />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Indoor Features</div>
-        <div className={css["filters"]}>
-          <IndoorFeatureFilters />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Outdoor Features</div>
-        <div className={css["filters"]}>
-          <OutdoorFeatureFilters />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Lot Features</div>
-        <div className={css["filters"]}>
-          <LotFeatureFilters />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Living Area</div>
-        <div className={css["filters"]}>
-          <LivingAreaFilters />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Lot Size</div>
-        <div className={css["filters"]}>
-          <LotSizeFilters />
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Nearest MRT Station</div>
-        <div className={css["filters"]}>
-          <Split>
-            <NearestMRTStationFilter />
-          </Split>
-        </div>
-      </div>
-      <div className={css["section"]}>
-        <div className={css["header"]}>Nearest BTS Station</div>
-        <div className={css["filters"]}>
-          <Split>
-            <NearestBTSStationFilter />
-          </Split>
-        </div>
+    <div className={css["section"]}>
+      <div className={css["header"]}>Property Type</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const AvailabilityAndArea = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className={css["section"]}>
+      <Split>{children}</Split>
+    </div>
+  );
+};
+
+export const Availability = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div>
+      <div className={css["header"]}>Availability</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const Area = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div>
+      <div className={css["header"]}>Area</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const PriceRange = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Price Range</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const Bedrooms = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Bedrooms</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const Bathrooms = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Bathrooms</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const View = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>View</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const IndoorFeatures = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Indoor Features</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const OutdoorFeatures = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Outdoor Features</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const LotFeatures = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Lot Features</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const LivingArea = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Living Area</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const LotSize = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Lot Size</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
+export const NearestMRTStation = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Nearest MRT Station</div>
+      <div className={css["filters"]}>
+        <Split>{children}</Split>
       </div>
     </div>
   );
 };
 
-export default PropertyFilters;
+export const NearestBTSStation = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Nearest BTS Station</div>
+      <div className={css["filters"]}>
+        <Split>{children}</Split>
+      </div>
+    </div>
+  );
+};
