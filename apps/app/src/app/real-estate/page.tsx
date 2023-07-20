@@ -1,11 +1,11 @@
-import { Suspense } from "react";
 import { Breadcrumbs, FilterBar, RealEstateIndexPage as Page } from "@rems/ui";
-import QuickFiltersContainer from "../../server-components/QuickFiltersContainer";
+import FooterContainer from "../../server-components/FooterContainer";
 import PropertyGridViewContainer from "../../client-components/PropertyGridViewContainer";
 import ListingMapViewContainer from "../../client-components/ListingMapViewContainer";
+import QuickFiltersContainer from "../../server-components/QuickFiltersContainer";
 
 const AsyncComp = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 0));
   return null;
 };
 
@@ -38,9 +38,9 @@ export default function Home() {
           <ListingMapViewContainer />
         </Page.Map>
       </Page.Main>
-      <Suspense>
-        <AsyncComp />
-      </Suspense>
+      <Page.Footer>
+        <FooterContainer full />
+      </Page.Footer>
     </Page.Root>
   );
 }
