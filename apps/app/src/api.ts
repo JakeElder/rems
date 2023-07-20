@@ -1,5 +1,5 @@
 import qs from "qs";
-import { fetch } from "./utils";
+import fetch from "./utils/fetch";
 import adapters from "./adapters";
 import {
   Area,

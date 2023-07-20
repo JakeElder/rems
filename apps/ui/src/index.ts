@@ -16,7 +16,7 @@ export { default as ContactModal } from "./Components/ContactModal";
 export { default as CountAndSort } from "./Components/CountAndSort";
 export { default as EntryCardGrid } from "./Components/EntryCardGrid";
 export { default as FeaturedCarousel } from "./Components/FeaturedCarousel";
-export { default as FilterBar } from "./Components/FilterBar";
+export * as FilterBar from "./Components/FilterBar";
 export { default as Footer } from "./Components/Footer";
 export { default as Header } from "./Components/Header";
 export { default as HeroCarousel } from "./Components/HeroCarousel";
@@ -29,6 +29,7 @@ export { default as PropertySlider } from "./Components/PropertySlider";
 export { default as RealEstateQueryController } from "./Components/RealEstateQueryController";
 export { default as SimpleImageCarousel } from "./Components/SimpleImageCarousel";
 export { default as ToastHub } from "./Components/ToastHub";
+export { default as QuickFilters } from "./Components/QuickFilters";
 
 export { default as Button } from "./Elements/Button";
 

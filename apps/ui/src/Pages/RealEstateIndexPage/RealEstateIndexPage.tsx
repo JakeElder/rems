@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import css from "./RealEstateIndexPage.module.css";
-import IndexConnector from "../../Components/IndexConnector";
 import { useRealEstateQuery } from "../../Components/RealEstateQueryController";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
@@ -14,11 +13,7 @@ export const Header = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className={css["main"]}>
-      <IndexConnector>{children}</IndexConnector>
-    </div>
-  );
+  return <div className={css["main"]}>{children}</div>;
 };
 
 export const Content = ({ children }: { children: React.ReactNode }) => {
@@ -29,11 +24,10 @@ export const Breadcrumbs = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["breadcrumbs"]}>{children}</div>;
 };
 
-export const Title = ({}: {}) => {
+export const Title = ({ }: {}) => {
   const { state, query } = useRealEstateQuery();
-  const title = `Homes for ${
-    state.initialLoad ? query.availability : state.query.availability
-  } in Thailand`;
+  const title = `Homes for ${state.initialLoad ? query.availability : state.query.availability
+    } in Thailand`;
 
   useEffect(() => {
     document.title = title;

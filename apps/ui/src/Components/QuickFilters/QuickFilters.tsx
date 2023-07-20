@@ -1,11 +1,17 @@
 import React from "react";
-import css from "./QuickFilters.module.css";
-import { useFilters } from "../../Utils/FiltersContext";
-import { useRealEstateQuery } from "../RealEstateQueryController";
 import Toggle from "../../Elements/Toggle";
-import { QuickFilterQueryKey, QuickFilterType } from "@rems/types";
+import {
+  QuickFilter,
+  QuickFilterQueryKey,
+  QuickFilterType,
+  RealEstateQuery
+} from "@rems/types";
 
-type Props = {};
+type Props = {
+  filters: QuickFilter[];
+  isOn: (key: QuickFilterQueryKey, value: string) => boolean;
+  onChange?: (key: keyof RealEstateQuery, value: string, on: boolean) => void;
+};
 
 const mapTypeToQueryKey = (type: QuickFilterType): QuickFilterQueryKey => {
   const map: Record<QuickFilterType, QuickFilterQueryKey> = {
@@ -18,21 +24,20 @@ const mapTypeToQueryKey = (type: QuickFilterType): QuickFilterQueryKey => {
   return map[type];
 };
 
-const QuickFilters = ({}: Props) => {
-  const { quickFilters } = useFilters();
-  const { query, onCheckedChange } = useRealEstateQuery();
-
+const QuickFilters = ({ filters, onChange, isOn }: Props) => {
   return (
     <>
-      {quickFilters.map((f) => {
+      {filters.map((f) => {
         const key = mapTypeToQueryKey(f.type);
-        const pressed = query[key].includes(f.filter.slug);
+        const value = f.filter.slug;
+        const on = isOn(key, value);
+
         return (
           <Toggle
             key={`${key}.${f.filter.slug}`}
-            pressed={pressed}
+            pressed={on}
             onPressedChange={(pressed) => {
-              onCheckedChange(key, f.filter.slug, pressed);
+              onChange?.(key, f.filter.slug, pressed);
             }}
           >
             {f.filter.name}

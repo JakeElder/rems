@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import css from "./RealEstatePage.module.css";
 import { Property } from "@rems/types";

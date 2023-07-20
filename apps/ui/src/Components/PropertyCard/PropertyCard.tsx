@@ -6,11 +6,11 @@ import css from "./PropertyCard.module.css";
 import { Property, RealEstateQuery } from "@rems/types";
 import SimpleImageCarousel from "../SimpleImageCarousel/SimpleImageCarousel";
 import { propertyToCarouselImages } from "../../adapters";
-import { useRealEstateQuery } from "../RealEstateQueryController/RealEstateQueryController";
 import ArrowNav from "../ArrowNav/ArrowNav";
 
 type Props = {
   property: Property;
+  type: RealEstateQuery["availability"];
   link?: string;
 };
 
@@ -37,8 +37,7 @@ const Price = ({
   );
 };
 
-const PropertyCard = ({ property, link = "#" }: Props) => {
-  const { state } = useRealEstateQuery();
+const PropertyCard = ({ property, link = "#", type }: Props) => {
   const [image, setImage] = useState(0);
 
   const images = propertyToCarouselImages(property);
@@ -70,7 +69,7 @@ const PropertyCard = ({ property, link = "#" }: Props) => {
       </div>
       <Link href={link} draggable="false" className={css["link"]}>
         <div className={css["spec"]}>
-          <Price property={property} type={state.query!["availability"]} />
+          <Price property={property} type={type} />
           <div className={css["beds-baths-area"]}>
             <span className={css["beds"]}>{property.bedrooms} beds</span>
             <span className={css["separator"]}>&bull;</span>

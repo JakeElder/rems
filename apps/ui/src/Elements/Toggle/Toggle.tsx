@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ComponentProps } from "react";
 import * as RadixToggle from "@radix-ui/react-toggle";
 import css from "./Toggle.module.css";

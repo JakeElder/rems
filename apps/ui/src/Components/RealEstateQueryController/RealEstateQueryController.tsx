@@ -9,14 +9,18 @@ import {
 import React, { createContext, useContext, useEffect, useState } from "react";
 import qs from "query-string";
 import update from "immutability-helper";
-import { omitBy, equals } from "remeda";
-import { usePathname } from "next/navigation";
+import { omitBy, equals, flatten } from "remeda";
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+  useSearchParams
+} from "next/navigation";
 import eq from "fast-deep-equal";
 import useScrollTo from "react-spring-scroll-to-hook";
 import { setCookie } from "typescript-cookie";
 
 type Props = {
-  query: RealEstateQuery;
   children: React.ReactNode;
 };
 
@@ -74,6 +78,28 @@ export const useRealEstateQuery = () => {
   return handlers;
 };
 
+const searchParamsToPartialQuery = (
+  params: ReadonlyURLSearchParams
+): RealEstateQuery => {
+  const arrayKeys = [
+    "indoor-features",
+    "lot-features",
+    "outdoor-features",
+    "property-type",
+    "view-types"
+  ];
+
+  const p = Array.from(params.keys()).reduce((acc, key) => {
+    const k = key.replace(/\[\]$/, "");
+    const val = arrayKeys.includes(k)
+      ? flatten([...[params.getAll(key)]])
+      : params.get(key);
+    return { ...acc, [k]: val };
+  }, {});
+
+  return realEstateQuerySchema.parse(p);
+};
+
 export const generateQueryString = (
   query: RealEstateQuery,
   page?: number,
@@ -90,12 +116,13 @@ export const generateQueryString = (
   return qs.stringify(final, { arrayFormat: "bracket" });
 };
 
-const RealEstateQueryController = ({
-  query: initialQuery,
-  children
-}: Props) => {
-  const [query, setQuery] = useState<RealEstateQuery>(initialQuery);
+const RealEstateQueryController = ({ children }: Props) => {
+  const initialQuery = useSearchParams();
+  const [query, setQuery] = useState<RealEstateQuery>(
+    searchParamsToPartialQuery(initialQuery)
+  );
   const pathname = usePathname();
+  const router = useRouter();
 
   const defaults = realEstateQuerySchema.parse({});
   const queryWithoutDefaults = omitBy(query, (v, k) => equals(defaults[k], v));
@@ -104,7 +131,8 @@ const RealEstateQueryController = ({
     React.startTransition(() => setQuery(query));
     const string = generateQueryString(query);
     const q = `?${string}`;
-    window.history.pushState("", "", `${pathname}${q === "?" ? "" : q}`);
+    router.push(`${pathname}${q === "?" ? "" : q}`);
+    // window.history.pushState("", "",);
   };
 
   const [loadingState, setLoadingState] = useState<LoadingState>({

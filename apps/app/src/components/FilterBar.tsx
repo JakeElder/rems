@@ -64,10 +64,9 @@ const FilterBar = async ({}: Props) => {
         },
         quickFilters
       }}
-    >
-      <FilterBarView />
-    </FiltersContext>
+    ></FiltersContext>
   );
 };
+// <FilterBarView />
 
 export default FilterBar;
