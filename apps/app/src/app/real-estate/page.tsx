@@ -4,6 +4,7 @@ import PropertyGridViewContainer from "../../client-components/PropertyGridViewC
 import ListingMapViewContainer from "../../client-components/ListingMapViewContainer";
 import QuickFiltersContainer from "../../server-components/QuickFiltersContainer";
 import CountAndSortViewContainer from "../../client-components/CountAndSortViewContainer";
+import PaginationViewContainer from "../../client-components/PaginationViewContainer";
 
 const AsyncComp = async () => {
   await new Promise((resolve) => setTimeout(resolve, 0));
@@ -37,6 +38,9 @@ export default function Home() {
           <Page.Properties>
             <PropertyGridViewContainer />
           </Page.Properties>
+          <Page.Pagination>
+            <PaginationViewContainer />
+          </Page.Pagination>
         </Page.Content>
         <Page.Map>
           <ListingMapViewContainer />

@@ -7,46 +7,40 @@ import {
   faChevronLeft
 } from "@fortawesome/free-solid-svg-icons";
 import css from "./Pagination.module.css";
-import {
-  generateQueryString,
-  useRealEstateQuery
-} from "../RealEstateQueryController";
 import ReactPaginate from "react-paginate";
 import Link from "next/link";
 
-type Props = {};
+type Props = {
+  loading: boolean;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+  createLink: (page: number) => string;
+  total?: number;
+  pageSize?: number;
+};
 
-const Pagination = ({}: Props) => {
-  const { state, query, onPageChange } = useRealEstateQuery();
-
-  const pageCount = Math.max(
-    state.initialLoad
-      ? 1
-      : Math.ceil(
-          state.result.pagination.total / state.result.pagination.pageSize
-        ),
-    1
-  );
-
-  if (!state.initialLoad && state.result.pagination.total === 0) {
+const Pagination = ({
+  loading,
+  total,
+  pageSize,
+  currentPage,
+  onPageChange,
+  createLink
+}: Props) => {
+  if (!total) {
     return null;
   }
+
+  const pageCount = total ? Math.ceil(total! / pageSize!) : 1;
 
   return (
     <div className={css["root"]}>
       <div className={css["next"]}>
-        {pageCount > query["page"] ? (
+        {pageCount > currentPage ? (
           <Link
             className={css["button"]}
             children="Next"
-            onClick={(e) => {
-              e.preventDefault();
-              onPageChange(query["page"] + 1);
-            }}
-            href={`/real-estate/?${generateQueryString(
-              query,
-              query["page"] + 1
-            )}`}
+            href={createLink(currentPage + 1)}
           />
         ) : (
           <div className={`${css["button"]} ${css["inactive"]}`}>Next</div>
@@ -65,14 +59,11 @@ const Pagination = ({}: Props) => {
           pageLinkClassName={css["page"]}
           containerClassName={css["pages"]}
           activeLinkClassName={css["active"]}
-          hrefBuilder={(page) => {
-            const qs = generateQueryString(query, page);
-            return `/real-estate${qs ? `?${qs}` : ""}`;
-          }}
+          hrefBuilder={(page) => createLink(page)}
           onClick={({ nextSelectedPage, event }) => {
             (event as any).preventDefault();
 
-            if (state.initialLoad || state.result.pagination.total === 0) {
+            if (loading || total === 0) {
               return false;
             }
 
@@ -83,7 +74,7 @@ const Pagination = ({}: Props) => {
             return false;
           }}
           pageCount={pageCount}
-          forcePage={query["page"] - 1}
+          forcePage={currentPage - 1}
         />
       </div>
     </div>

@@ -9,6 +9,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
 import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
+import { setCookie } from "typescript-cookie";
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
@@ -23,6 +24,8 @@ type UseRealEstateQueryReturn = {
     param: keyof RealEstateQuery,
     value: string | number | null
   ) => void;
+  onPageChange: (page: RealEstateQuery["page"]) => void;
+  createLink: (page?: number, sort?: RealEstateQuery["sort"]) => string;
 };
 
 export const generateQueryString = (
@@ -50,6 +53,13 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const commit = (query: RealEstateQuery) => {
     const qs = generateQueryString(query);
     router.push(`${pathname}${qs}`);
+
+    const expires = new Date();
+    expires.setSeconds(expires.getSeconds() + 60 * 5);
+    setCookie("referer", qs ? `/real-estate?${qs}` : "", {
+      expires,
+      path: "/"
+    });
   };
 
   const q = qs.parse(params.toString(), { arrayFormat: "bracket" });
@@ -80,6 +90,15 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
         page: { $set: 1 }
       });
       commit(nextQuery);
+    },
+
+    onPageChange: (page) => {
+      const nextQuery = update(query, { page: { $set: page } });
+      commit(nextQuery);
+    },
+
+    createLink(page, sort) {
+      return `/real-estate${generateQueryString(query, page, sort)}`;
     }
   };
 };
