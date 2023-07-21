@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactNode, createContext, useEffect, useState } from "react";
-import Logo from "../../Elements/Logo";
+import LogoElement from "../../Elements/Logo";
 import Container from "../../Elements/Container";
 import css from "./Header.module.css";
 import {
@@ -133,34 +133,48 @@ export const Root = ({
   );
 };
 
-export const Main = ({}: {}) => {
-  const { style, styles, full, onContactUsClick, onNavIconClick } =
-    useContext();
+export const Logo = () => {
+  return (
+    <Link href="/" className={css["logo"]}>
+      <LogoElement />
+    </Link>
+  );
+};
 
+export const AiSearch = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["ai-search"]}>{children}</div>;
+};
+
+export const NavAndContact = () => {
+  const { style, styles, onContactUsClick, onNavIconClick } = useContext();
+  return (
+    <>
+      <div className={css["nav-and-contact-button"]}>
+        <nav className={css["nav"]}>
+          <A href="/" style={style}>
+            Home
+          </A>
+          <A href="/real-estate" style={style}>
+            Real Estate
+          </A>
+        </nav>
+        <Button style={style} onClick={() => onContactUsClick()}>
+          Contact Us
+        </Button>
+      </div>
+      <div className={css["nav-icon"]} onClick={() => onNavIconClick()}>
+        <NavIcon color={styles.fill} />
+      </div>
+    </>
+  );
+};
+
+export const Main = ({ children }: { children: React.ReactNode }) => {
+  const { full, styles } = useContext();
   return (
     <animated.div className={css["main"]} style={styles}>
       <Container full={full}>
-        <div className={css["container"]}>
-          <Link href="/" className={css["logo"]}>
-            <Logo />
-          </Link>
-          <div className={css["nav-and-contact-button"]}>
-            <nav className={css["nav"]}>
-              <A href="/" style={style}>
-                Home
-              </A>
-              <A href="/real-estate" style={style}>
-                Real Estate
-              </A>
-            </nav>
-            <Button style={style} onClick={() => onContactUsClick()}>
-              Contact Us
-            </Button>
-          </div>
-          <div className={css["nav-icon"]} onClick={() => onNavIconClick()}>
-            <NavIcon color={styles.fill} />
-          </div>
-        </div>
+        <div className={css["container"]}>{children}</div>
       </Container>
     </animated.div>
   );

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ContactModal, Header, SlideNav } from "@rems/ui";
 import { submitContactForm } from "../app/actions";
 import useContactForm from "../hooks/use-contact-form";
+import AiSearchViewContainer from "./AiSearchViewContainer";
 
 type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode">;
 
@@ -35,7 +36,13 @@ const HeaderViewContainer = (props: Props) => {
       onContactUsClick={() => setContactOpen(true)}
       onNavIconClick={() => setSlideNavOpen(true)}
     >
-      <Header.Main />
+      <Header.Main>
+        <Header.Logo />
+        <Header.AiSearch>
+          <AiSearchViewContainer />
+        </Header.AiSearch>
+        <Header.NavAndContact />
+      </Header.Main>
     </Header.Root>
   ];
 };

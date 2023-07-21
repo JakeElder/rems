@@ -1,21 +1,24 @@
-.root {
-  display: flex;
-  justify-content: center;
-  padding-top: 100px;
-}
-
-.form {
-  width: 600px;
-}
-
-.input-and-spinner {
-  display: flex;
-  align-items: center;
-  border: 1px solid #e0e0e0;
-  padding-right: 14px;
+.input-container {
+  border-radius: 18px;
+  height: 36px;
+  text-shadow: 0 0 2px 1px rgba(0, 0, 0, 1);
+  border: 1px solid #ccc;
+  font-family: var(--font-inter);
+  background: #f9f9f9;
 }
 
 .input {
-  margin-right: 8px;
-  flex: 1;
+  border-radius: 18px;
+  height: 36px;
+  width: 100%;
+  line-height: 36px;
+  background: none;
+  padding: 0 16px;
+  font-size: 13px;
+}
+
+.mic {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
 }

@@ -15,6 +15,7 @@ import { setCookie } from "typescript-cookie";
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
   queryString: string;
+  commit: (query: PartialRealEstateQuery) => void;
   has: (param: keyof RealEstateQuery) => boolean;
   activeFilters: number;
   isQuickFilterOn: (key: QuickFilterQueryKey, value: string) => boolean;
@@ -53,7 +54,7 @@ export const removeDefaults = (
 };
 
 export const generateQueryString = (
-  query: RealEstateQuery,
+  query: PartialRealEstateQuery,
   page?: number,
   sort?: RealEstateQuery["sort"]
 ) => {
@@ -73,7 +74,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const params = useSearchParams();
   const pathname = usePathname();
 
-  const commit = (query: RealEstateQuery) => {
+  const commit = (query: PartialRealEstateQuery) => {
     const qs = generateQueryString(query);
     router.push(`${pathname}${qs}`);
 
@@ -201,6 +202,8 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     reset: () => {
       commit(realEstateQuerySchema.parse({}));
     },
+
+    commit,
 
     onMinBathsChange: (min) => {
       const nextQuery = update(query, {

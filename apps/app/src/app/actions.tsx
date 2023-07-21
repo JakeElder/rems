@@ -1,6 +1,6 @@
 "use server";
 
-import { ContactFormData, ServerAction } from "@rems/types";
+import { ContactFormData } from "@rems/types";
 import { sendMail } from "../utils";
 import nlToQueryUtil from "../utils/nl-to-query";
 
@@ -14,10 +14,7 @@ export const submitContactForm = async (data: ContactFormData) => {
   return {};
 };
 
-export const nlToQuery: ServerAction<{ query: string }> = async (
-  { query },
-  uuid
-) => {
+export const nlToQuery = async (query: string) => {
   const res = await nlToQueryUtil(query);
-  return { ok: true, uuid, data: res };
+  return res;
 };

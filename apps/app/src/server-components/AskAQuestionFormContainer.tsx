@@ -8,12 +8,7 @@ type Props = {
 
 const AskAQuestionFormContainer = async ({ propertyId }: Props) => {
   const property = await api.get.property(propertyId);
-  return (
-    <AskAQuestionFormViewContainer
-      uid={property.uid}
-      defaultMessage={`I'm intered in ${property.title}`}
-    />
-  );
+  return <AskAQuestionFormViewContainer uid={property.uid} />;
 };
 
 export default AskAQuestionFormContainer;

@@ -23,7 +23,7 @@
 }
 
 .button {
-  border-radius: 19px;
+  border-radius: 18px;
   height: 36px;
   padding: 0 20px;
   text-shadow: 0 0 2px 1px rgba(0, 0, 0, 1);
@@ -32,6 +32,11 @@
   cursor: pointer;
   display: none;
   margin-left: 16px;
+}
+
+.ai-search {
+  flex: 1;
+  max-width: 400px;
 }
 
 .nav {
