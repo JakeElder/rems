@@ -1,20 +1,14 @@
-import {
-  HomePage as Page,
-  MailingListModule,
-  ServerActionProvider,
-  ToastHub
-} from "@rems/ui";
+import { HomePage as Page, ToastHub } from "@rems/ui";
 import PopularSearches from "../components/PopularSearches";
 import LatestProperties from "../components/LatestProperties";
 import Hero from "../components/Hero";
 import { Metadata } from "next";
 import api from "../api";
-import Footer from "../components/Footer";
 import Analytics from "../components/Analytics";
 import { Suspense } from "react";
-import { submitContactForm, submitMailingListForm } from "./actions";
-import { ServerActions } from "@rems/types";
 import HeaderViewContainer from "../client-components/HeaderViewContainer";
+import MailingListModuleViewContainer from "../client-components/MailingListModuleViewContainer";
+import FooterContainer from "../server-components/FooterContainer";
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await api.get.appConfig();
@@ -24,11 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
     description: config.defaultDescription
   };
 }
-
-const serverActions: Partial<ServerActions> = {
-  "submit-contact-form": submitContactForm,
-  "submit-mailing-list-form": submitMailingListForm
-};
 
 export default async function Home() {
   return (
@@ -45,25 +34,17 @@ export default async function Home() {
         </Page.Hero>
         <Page.Content>
           <Page.PopularSearches>
-            <Suspense>
-              <PopularSearches />
-            </Suspense>
+            <PopularSearches />
           </Page.PopularSearches>
           <Page.EmailCollector>
-            <ServerActionProvider value={serverActions}>
-              <MailingListModule />
-            </ServerActionProvider>
+            <MailingListModuleViewContainer />
           </Page.EmailCollector>
           <Page.LatestProperties>
-            <Suspense>
-              <LatestProperties />
-            </Suspense>
+            <LatestProperties />
           </Page.LatestProperties>
         </Page.Content>
         <Page.Footer>
-          <Suspense>
-            <Footer />
-          </Suspense>
+          <FooterContainer />
         </Page.Footer>
       </ToastHub>
     </Page.Root>

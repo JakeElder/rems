@@ -120,6 +120,19 @@ export type Filters = {
   quickFilters: QuickFilter[];
 };
 
+export const contactFormDataSchema = z
+  .object({
+    name: z.string(),
+    email: z.string(),
+    uid: z.string().default(""),
+    message: z.string().default(""),
+    phone: z.string().default("")
+  })
+  .partial()
+  .required({ name: true, email: true });
+
+export type ContactFormData = z.infer<typeof contactFormDataSchema>;
+
 export const realEstateQuerySchema = z.object({
   "indoor-features": z.string().array().default([]).catch([]),
   "lot-features": z.string().array().default([]).catch([]),
@@ -213,14 +226,6 @@ type SuccessfulServerActionResult<T = Record<string, any>> = {
 export type ServerActionResult =
   | FailedServerActionResult
   | SuccessfulServerActionResult;
-
-export type ContactFormData = {
-  name: string;
-  uid: string;
-  email: string;
-  phone: string;
-  message: string;
-};
 
 type DormantUseWrappedServerActionState = {
   state: "dormant";

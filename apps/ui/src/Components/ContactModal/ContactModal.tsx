@@ -10,22 +10,21 @@ import * as Dialog from "../../Components/Dialog";
 import Monogram from "../../Elements/Monogram";
 import { RemoveScroll } from "react-remove-scroll";
 import cn from "classnames";
-import { Property } from "@rems/types";
 
-type Props = React.ComponentProps<typeof RadixDialog.Root> & {
-  onMessageSent?: () => void;
-  defaultMessage?: string;
-  mode?: "contact" | "question";
-  uid?: Property["uid"];
-};
+type Props = React.ComponentProps<typeof RadixDialog.Root> &
+  Pick<
+    React.ComponentProps<typeof ContactForm.Root>,
+    "mode" | "uid" | "defaultMessage" | "onSubmit" | "isSubmitting"
+  >;
 
 const ContactModal = ({
   open,
   onOpenChange,
-  onMessageSent,
-  defaultMessage,
   mode = "contact",
-  uid
+  uid,
+  defaultMessage,
+  onSubmit,
+  isSubmitting
 }: Props) => {
   const transitions = useTransition(open, {
     from: {
@@ -75,9 +74,10 @@ const ContactModal = ({
                   <Dialog.Root>
                     <ContactForm.Root
                       uid={uid}
-                      onMessageSent={onMessageSent}
-                      defaultMessage={defaultMessage}
                       mode={mode}
+                      defaultMessage={defaultMessage}
+                      onSubmit={onSubmit}
+                      isSubmitting={isSubmitting}
                     >
                       <Dialog.Header>
                         <div className={css["header"]}>

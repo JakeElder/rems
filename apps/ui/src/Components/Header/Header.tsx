@@ -166,12 +166,6 @@ export const Main = ({}: {}) => {
   );
 };
 
-// <ContactModal
-//   open={contactOpen}
-//   onOpenChange={setContactOpen}
-//   onMessageSent={() => setTimeout(() => setContactOpen(false), 2000)}
-// />
-
 export const Back = ({ href }: { href: string }) => {
   const { full, styles } = useContext();
   const cookieHref = getCookie("referer");

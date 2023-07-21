@@ -55,3 +55,4 @@ export { default as QuickFilters } from "./Components/QuickFilters";
 export { default as Button } from "./Elements/Button";
 
 export { useRealEstateQuery } from "./Components/RealEstateQueryController";
+export { useToast } from "./Components/ToastHub";
