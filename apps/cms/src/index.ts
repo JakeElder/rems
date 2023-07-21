@@ -9,7 +9,7 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/*{ strapi }*/) { },
+  register(/*{ strapi }*/) {},
 
   /**
    * An asynchronous bootstrap function that runs before
@@ -18,7 +18,7 @@ export default {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  async bootstrap({ }) {
+  async bootstrap({}) {
     if (process.env.SEED) {
       console.log("seeding");
 
@@ -37,7 +37,8 @@ export default {
         { name: "Elevator", slug: "elevator" },
         { name: "Steam Room", slug: "steam-room" },
         { name: "Indoor Pool", slug: "indoor-pool" },
-        { name: "Library", slug: "library" }
+        { name: "Library", slug: "library" },
+        { name: "Pet Friendly", slug: "pet-friendly" }
       ]);
 
       seed("lot-feature.lot-feature", [
@@ -60,7 +61,9 @@ export default {
         { name: "Equestrian", slug: "equestrian" },
         { name: "Lakefront", slug: "lakefront" },
         { name: "Riverfront", slug: "riverfront" },
-        { name: "Ski-In / Ski-Out", slug: "ski-in-ski-out" }
+        { name: "Ski-In / Ski-Out", slug: "ski-in-ski-out" },
+        { name: "Meeting Room", slug: "meeting-room" },
+        { name: "Co-Working Space", slug: "coworking-space" }
       ]);
 
       seed("outdoor-feature.outdoor-feature", [
@@ -92,7 +95,11 @@ export default {
         { name: "Land", slug: "land" },
         { name: "Castle", slug: "castle" },
         { name: "Chateau", slug: "chateau" },
-        { name: "Farm Ranch", slug: "farm-ranch" }
+        { name: "Farm Ranch", slug: "farm-ranch" },
+        { name: "Residence", slug: "residence" },
+        { name: "Commercial", slug: "commercial" },
+        { name: "Shop", slug: "shop" },
+        { name: "Office", slug: "office" }
       ]);
 
       seed("view-type.view-type", [
@@ -103,7 +110,13 @@ export default {
         { name: "Sea View", slug: "sea-view" },
         { name: "Lake View", slug: "lake-view" },
         { name: "River View", slug: "river-view" },
-        { name: "Golf View", slug: "golf-view" }
+        { name: "Golf View", slug: "golf-view" },
+        { name: "City View", slug: "city-view" },
+        { name: "Unblocked View", slug: "unblocked-view" },
+        { name: "North Facing", slug: "north-facing" },
+        { name: "South Facing", slug: "south-facing" },
+        { name: "East Facing", slug: "east-facing" },
+        { name: "West Facing", slug: "west-facing" }
       ]);
     }
   }
