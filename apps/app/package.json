@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cli": "ts-node -r ./src/cli/loader ./src/cli"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^13.4.9",
@@ -40,6 +41,9 @@
   },
   "devDependencies": {
     "@types/nodemailer": "^6.4.8",
-    "@types/prettyjson": "^0.0.30"
+    "@types/prettyjson": "^0.0.30",
+    "commander": "^11.0.0",
+    "dotenv": "^16.3.1",
+    "ts-node": "^10.9.1"
   }
 }

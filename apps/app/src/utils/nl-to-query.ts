@@ -10,6 +10,7 @@ const openai = new OpenAIApi(configuration);
 async function generateSchema() {
   const jsonSchema = zodToJsonSchema(realEstateQuerySchema);
 
+  console.log("????");
   const [
     btsStations,
     indoorFeatures,

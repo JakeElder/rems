@@ -1,5 +1,5 @@
 import { PluginUploadFile } from "./generated/contentTypes";
-import { z } from "zod";
+import { ZodRawShape, z } from "zod";
 
 export type Pagination = {
   page: number;
@@ -29,11 +29,14 @@ export type CarouselImage = Image & {
   alt: string;
 };
 
-export const filterSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  slug: z.string()
-});
+const filterSchemaFactory = () =>
+  z.object({
+    id: z.number(),
+    name: z.string(),
+    slug: z.string()
+  });
+
+export const filterSchema = filterSchemaFactory();
 
 export const propertySchema = z
   .object({
@@ -48,7 +51,8 @@ export const propertySchema = z
     ),
     description: z.string().describe(
       `A long(ish) form description of the property. It should be easy to read and
-      well structured. It should contain key details about the property`
+      well structured. It should contain key details about the property and be
+      between 3 and 7 paragraphs long.`
     ),
     purchasePrice: z.number().describe(
       `The price, set by the owner that someone may purchase the property
@@ -69,22 +73,27 @@ export const propertySchema = z
       lng: z.number().describe(`The longitude of the properties location`),
       lat: z.number().describe(`The latitude of the properties location`)
     }),
-    indoorFeatures: z.array(filterSchema).describe(
+    indoorFeatures: z.array(filterSchemaFactory()).describe(
       `A list of indoor features that may be attractive to the end user,
       people seeking rental or purchase properties`
     ),
-    lotFeatures: z.array(filterSchema).describe(
+    lotFeatures: z.array(filterSchemaFactory()).describe(
       `A list of lot features, IE features of the condo building or
       project that contains the property`
     ),
-    outdoorFeatures: z.array(filterSchema).describe(
+    outdoorFeatures: z.array(filterSchemaFactory()).describe(
       `A list of outdoor features, IE features of the condo building or
       project that contains the property`
     ),
     viewTypes: z
-      .array(filterSchema)
+      .array(filterSchemaFactory())
       .describe(`A list of view types that the property has`),
-    address: z.string()
+    address: z.string(),
+    area: filterSchemaFactory().describe(`The area the property is in.`)
+  })
+  .partial({
+    purchasePrice: true,
+    rentalPrice: true
   })
   .describe(
     `A schema that encapsulates all of the information of a single property`
@@ -100,9 +109,9 @@ export type Property = {
   formattedPurchasePrice: string | null;
   rentalPrice?: number;
   formattedRentalPrice: string | null;
-  bedrooms?: number;
-  bathrooms?: number;
-  livingArea?: number;
+  bedrooms: number;
+  bathrooms: number;
+  livingArea: number;
   images: Image[];
   location: null | {
     lng: number;
