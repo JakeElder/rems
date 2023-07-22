@@ -8,7 +8,7 @@ const nextConfig = {
   experimental: {
     serverActions: true
   },
-  transpilePackages: ["@rems/ui"],
+  transpilePackages: ["@rems/ui", "@rems/types"],
   images: {
     remotePatterns: [
       { hostname: "127.0.0.1" },

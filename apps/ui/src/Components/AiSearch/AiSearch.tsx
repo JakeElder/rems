@@ -23,6 +23,7 @@ const AiSearch = ({ onChange, value }: Props) => {
               value={value}
               onChange={onChange}
             />
+            <button type="button" className={css["mic"]}></button>
           </div>
           {false && (
             <Oval

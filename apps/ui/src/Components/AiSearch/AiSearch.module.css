@@ -5,6 +5,8 @@
   border: 1px solid #ccc;
   font-family: var(--font-inter);
   background: #f9f9f9;
+  display: flex;
+  align-items: center;
 }
 
 .input {
@@ -18,7 +20,9 @@
 }
 
 .mic {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 16px;
+  background: black;
+  margin-right: 4px;
 }

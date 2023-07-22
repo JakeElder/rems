@@ -15,7 +15,6 @@ const AiSearchViewContainer = ({}: Props) => {
   const search = async (nl: string) => {
     if (nl.length > 10) {
       const query = await nlToQuery(nl);
-      console.log(query);
       commit(query);
     } else if (!nl.length) {
       commit({});

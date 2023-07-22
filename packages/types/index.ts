@@ -29,6 +29,67 @@ export type CarouselImage = Image & {
   alt: string;
 };
 
+export const filterSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  slug: z.string()
+});
+
+export const propertySchema = z
+  .object({
+    id: z.number().describe(`A automatically generated unique identifier`),
+    uid: z.string().describe(
+      `A unique identifier, entered by the real estate agent. Used so that
+      the estate agent can correlate the property with their internal record`
+    ),
+    title: z.string().describe(
+      `An SEO friendly description of the property. It should be evocative,
+      attractive to potential buyers. It should be succint`
+    ),
+    description: z.string().describe(
+      `A long(ish) form description of the property. It should be easy to read and
+      well structured. It should contain key details about the property`
+    ),
+    purchasePrice: z.number().describe(
+      `The price, set by the owner that someone may purchase the property
+      for, if for sale. Every property must have either a purchasePrice,
+      rentalPrice or both. The price is specified in Thai Baht`
+    ),
+    rentalPrice: z.number().describe(
+      `The price, set by the owner that someone may rent the property
+      for, if available for rent. Every property must have either a purchasePrice,
+      rentalPrice or both. The price is specified in Thai Baht`
+    ),
+    bedrooms: z.number().describe(`The number of bathrooms in the property`),
+    bathrooms: z.number().describe(`The number of bathrooms in the property`),
+    livingArea: z
+      .number()
+      .describe(`The living area of the property, specified in m²`),
+    location: z.object({
+      lng: z.number().describe(`The longitude of the properties location`),
+      lat: z.number().describe(`The latitude of the properties location`)
+    }),
+    indoorFeatures: z.array(filterSchema).describe(
+      `A list of indoor features that may be attractive to the end user,
+      people seeking rental or purchase properties`
+    ),
+    lotFeatures: z.array(filterSchema).describe(
+      `A list of lot features, IE features of the condo building or
+      project that contains the property`
+    ),
+    outdoorFeatures: z.array(filterSchema).describe(
+      `A list of outdoor features, IE features of the condo building or
+      project that contains the property`
+    ),
+    viewTypes: z
+      .array(filterSchema)
+      .describe(`A list of view types that the property has`),
+    address: z.string()
+  })
+  .describe(
+    `A schema that encapsulates all of the information of a single property`
+  );
+
 export type Property = {
   id: number;
   uid: string;
@@ -39,8 +100,6 @@ export type Property = {
   formattedPurchasePrice: string | null;
   rentalPrice?: number;
   formattedRentalPrice: string | null;
-  latitude?: number;
-  longitude?: number;
   bedrooms?: number;
   bathrooms?: number;
   livingArea?: number;
