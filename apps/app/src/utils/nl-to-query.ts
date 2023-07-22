@@ -7,10 +7,9 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 const configuration = new Configuration({ apiKey: KEY });
 const openai = new OpenAIApi(configuration);
 
-async function generateSchema() {
+export async function generateRealEstateQuerySchema() {
   const jsonSchema = zodToJsonSchema(realEstateQuerySchema);
 
-  console.log("????");
   const [
     btsStations,
     indoorFeatures,
@@ -121,7 +120,7 @@ export default async function nlToQuery(
       {
         name: "queryProperties",
         description: "Searches for properties based on a set of filters",
-        parameters: await generateSchema()
+        parameters: await generateRealEstateQuerySchema()
       }
     ]
   });
