@@ -271,3 +271,30 @@ export type AppConfig = {
   linkedInURL?: string;
   facebookURL?: string;
 };
+
+type BaseQueryStateEntry = {
+  hash: string;
+  queryString: string;
+  nl: string;
+};
+
+export type InteractionQueryState = {
+  origin: "interaction";
+  loading: boolean;
+} & BaseQueryStateEntry;
+
+export type NlQueryState = {
+  origin: "nl";
+} & BaseQueryStateEntry;
+
+export type QueryStateHistoryEntry = InteractionQueryState | NlQueryState;
+
+export type QueryStateHistory = QueryStateHistoryEntry[];
+
+export type AiSearchInputState =
+  | "inactive"
+  | "inputting"
+  | "listening"
+  | "resolving"
+  | "resolved"
+  | "committed";

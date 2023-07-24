@@ -29,6 +29,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hotkeys-hook": "^4.4.1",
+    "react-speech-recognition": "^3.10.0",
     "remeda": "^1.24.0",
     "slugify": "^1.6.6",
     "swr": "^2.2.0",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@types/nodemailer": "^6.4.8",
     "@types/prettyjson": "^0.0.30",
+    "@types/react-speech-recognition": "^3.9.2",
     "commander": "^11.0.0",
     "dotenv": "^16.3.1",
     "ts-node": "^10.9.1"

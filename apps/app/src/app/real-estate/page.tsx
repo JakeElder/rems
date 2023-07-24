@@ -6,6 +6,7 @@ import CountAndSortViewContainer from "../../client-components/CountAndSortViewC
 import PaginationViewContainer from "../../client-components/PaginationViewContainer";
 import FilterBar from "../../server-components/FilterBar";
 import HeaderViewContainer from "../../client-components/HeaderViewContainer";
+import RealEstateIndexPageTitleViewContainer from "../../client-components/RealEstateIndexPageTitleViewContainer";
 
 export default function Home() {
   return (
@@ -25,7 +26,7 @@ export default function Home() {
                 ]}
               />
             </Page.Breadcrumbs>
-            <Page.Title />
+            <RealEstateIndexPageTitleViewContainer />
             <Page.CountAndSort>
               <CountAndSortViewContainer />
             </Page.CountAndSort>

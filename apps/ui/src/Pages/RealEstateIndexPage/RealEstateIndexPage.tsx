@@ -28,9 +28,8 @@ export const Breadcrumbs = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["breadcrumbs"]}>{children}</div>;
 };
 
-export const Title = ({}: {}) => {
-  const title = `Homes for sale in Thailand`;
-  return <h1 className={css["title"]}>{title}</h1>;
+export const Title = ({ children }: { children: React.ReactNode }) => {
+  return <h1 className={css["title"]}>{children}</h1>;
 };
 
 export const CountAndSort = ({ children }: { children: React.ReactNode }) => {
