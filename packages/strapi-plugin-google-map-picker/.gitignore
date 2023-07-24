@@ -66,6 +66,8 @@ $RECYCLE.BIN/
 # Node.js
 ############################
 
+build/tsconfig.tsbuildinfo
+
 node_modules
 .node_history
 tsconfig.tsbuildinfo
