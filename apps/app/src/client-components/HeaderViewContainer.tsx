@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { ContactModal, Header, SlideNav } from "@rems/ui";
-import { submitContactForm } from "../app/actions";
+// import { submitContactForm } from "../app/actions";
 import useContactForm from "../hooks/use-contact-form";
 import AiSearchViewContainer from "./AiSearchViewContainer";
 
@@ -24,8 +24,9 @@ const HeaderViewContainer = (props: Props) => {
   const [slideNavOpen, setSlideNavOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
 
-  const { isSubmitting, onSubmit } = useContactForm(submitContactForm, () =>
-    setTimeout(() => setContactOpen(false), 2000)
+  const { isSubmitting, onSubmit } = useContactForm(
+    () => Promise.resolve({}),
+    () => setTimeout(() => setContactOpen(false), 2000)
   );
 
   return [
