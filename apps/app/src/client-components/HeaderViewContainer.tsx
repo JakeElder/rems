@@ -8,6 +8,18 @@ import AiSearchViewContainer from "./AiSearchViewContainer";
 
 type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode">;
 
+const AiSearch = () => {
+  if (process.env.NEXT_PUBLIC_AI_SEARCH_ENABLED !== "true") {
+    return null;
+  }
+
+  return (
+    <Header.AiSearch>
+      <AiSearchViewContainer />
+    </Header.AiSearch>
+  );
+};
+
 const HeaderViewContainer = (props: Props) => {
   const [slideNavOpen, setSlideNavOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -38,9 +50,7 @@ const HeaderViewContainer = (props: Props) => {
     >
       <Header.Main>
         <Header.Logo />
-        <Header.AiSearch>
-          <AiSearchViewContainer />
-        </Header.AiSearch>
+        <AiSearch />
         <Header.NavAndContact />
       </Header.Main>
     </Header.Root>
