@@ -7,7 +7,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 const configuration = new Configuration({ apiKey: KEY });
 const openai = new OpenAIApi(configuration);
 
-async function generateSchema() {
+export async function generateRealEstateQuerySchema() {
   const jsonSchema = zodToJsonSchema(realEstateQuerySchema);
 
   const [
@@ -108,6 +108,7 @@ export default async function nlToQuery(
           Search for properties based on the following query.
           Set both the min-price and max-price within a 10% range of the users budget, unless the user specifies a range already
           Set availability to rent if the user specifies a monthly price
+          Ensure the property-type array includes one or two entries at most
         `
       },
       {
@@ -119,7 +120,7 @@ export default async function nlToQuery(
       {
         name: "queryProperties",
         description: "Searches for properties based on a set of filters",
-        parameters: await generateSchema()
+        parameters: await generateRealEstateQuerySchema()
       }
     ]
   });

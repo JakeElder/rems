@@ -3,15 +3,13 @@
 import React from "react";
 import css from "./MailingListModule.module.css";
 import Button from "../../Elements/Button";
-import { useServerAction } from "../../Utils/ServerActionProvider";
-import { useToast } from "../ToastHub";
 
-type Props = {};
+type Props = {
+  isSubmitting: boolean;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+};
 
-const MailingListModule = ({ }: Props) => {
-  const sa = useServerAction("submit-mailing-list-form");
-  const { message } = useToast();
-
+const MailingListModule = ({ isSubmitting, onSubmit }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["content"]}>
@@ -22,27 +20,7 @@ const MailingListModule = ({ }: Props) => {
           mailling list to be amongst the first notified when we update our
           listings.
         </p>
-        <form
-          className={css["form"]}
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const data = new FormData(e.currentTarget);
-            const email = data.get("email")!.toString();
-            const res = await sa.commit({ email });
-            if (res.ok) {
-              message({
-                title: "Mailing List Joined!",
-                message: (
-                  <>
-                    We've added <span style={{ fontWeight: 600 }}>{email}</span>{" "}
-                    to our mailing list
-                  </>
-                ),
-                timeout: 5000
-              });
-            }
-          }}
-        >
+        <form className={css["form"]} onSubmit={onSubmit}>
           <input
             type="email"
             required
@@ -51,9 +29,9 @@ const MailingListModule = ({ }: Props) => {
           />
           <div className={css["submit"]}>
             <Button
-              disabled={sa.pending}
+              disabled={isSubmitting}
               type="submit"
-              loading={sa.pending}
+              loading={isSubmitting}
               fit
             >
               Submit

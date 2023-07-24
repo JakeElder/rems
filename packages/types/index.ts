@@ -1,5 +1,5 @@
 import { PluginUploadFile } from "./generated/contentTypes";
-import { z } from "zod";
+import { ZodRawShape, z } from "zod";
 
 export type Pagination = {
   page: number;
@@ -29,6 +29,76 @@ export type CarouselImage = Image & {
   alt: string;
 };
 
+const filterSchemaFactory = () =>
+  z.object({
+    id: z.number(),
+    name: z.string(),
+    slug: z.string()
+  });
+
+export const filterSchema = filterSchemaFactory();
+
+export const propertySchema = z
+  .object({
+    id: z.number().describe(`A automatically generated unique identifier`),
+    uid: z.string().describe(
+      `A unique identifier, entered by the real estate agent. Used so that
+      the estate agent can correlate the property with their internal record`
+    ),
+    title: z.string().describe(
+      `An SEO friendly description of the property. It should be evocative,
+      attractive to potential buyers. It should be succint`
+    ),
+    description: z.string().describe(
+      `A long(ish) form description of the property. It should be easy to read and
+      well structured. It should contain key details about the property and be
+      between 3 and 7 paragraphs long.`
+    ),
+    purchasePrice: z.number().describe(
+      `The price, set by the owner that someone may purchase the property
+      for, if for sale. Every property must have either a purchasePrice,
+      rentalPrice or both. The price is specified in Thai Baht`
+    ),
+    rentalPrice: z.number().describe(
+      `The price, set by the owner that someone may rent the property
+      for, if available for rent. Every property must have either a purchasePrice,
+      rentalPrice or both. The price is specified in Thai Baht`
+    ),
+    bedrooms: z.number().describe(`The number of bathrooms in the property`),
+    bathrooms: z.number().describe(`The number of bathrooms in the property`),
+    livingArea: z
+      .number()
+      .describe(`The living area of the property, specified in m²`),
+    location: z.object({
+      lng: z.number().describe(`The longitude of the properties location`),
+      lat: z.number().describe(`The latitude of the properties location`)
+    }),
+    indoorFeatures: z.array(filterSchemaFactory()).describe(
+      `A list of indoor features that may be attractive to the end user,
+      people seeking rental or purchase properties`
+    ),
+    lotFeatures: z.array(filterSchemaFactory()).describe(
+      `A list of lot features, IE features of the condo building or
+      project that contains the property`
+    ),
+    outdoorFeatures: z.array(filterSchemaFactory()).describe(
+      `A list of outdoor features, IE features of the condo building or
+      project that contains the property`
+    ),
+    viewTypes: z
+      .array(filterSchemaFactory())
+      .describe(`A list of view types that the property has`),
+    address: z.string(),
+    area: filterSchemaFactory().describe(`The area the property is in.`)
+  })
+  .partial({
+    purchasePrice: true,
+    rentalPrice: true
+  })
+  .describe(
+    `A schema that encapsulates all of the information of a single property`
+  );
+
 export type Property = {
   id: number;
   uid: string;
@@ -39,11 +109,9 @@ export type Property = {
   formattedPurchasePrice: string | null;
   rentalPrice?: number;
   formattedRentalPrice: string | null;
-  latitude?: number;
-  longitude?: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  livingArea?: number;
+  bedrooms: number;
+  bathrooms: number;
+  livingArea: number;
   images: Image[];
   location: null | {
     lng: number;
@@ -89,14 +157,8 @@ export type LotSize = {
   label: string;
 };
 
-export type QuickFilterType =
-  | "INDOOR_FEATURE"
-  | "LOT_FEATURE"
-  | "OUTDOOR_FEATURE"
-  | "VIEW_TYPE";
-
 export type QuickFilter = {
-  type: QuickFilterType;
+  key: QuickFilterQueryKey;
   filter: Filter;
 };
 
@@ -125,6 +187,19 @@ export type Filters = {
   };
   quickFilters: QuickFilter[];
 };
+
+export const contactFormDataSchema = z
+  .object({
+    name: z.string(),
+    email: z.string(),
+    uid: z.string().default(""),
+    message: z.string().default(""),
+    phone: z.string().default("")
+  })
+  .partial()
+  .required({ name: true, email: true });
+
+export type ContactFormData = z.infer<typeof contactFormDataSchema>;
 
 export const realEstateQuerySchema = z.object({
   "indoor-features": z.string().array().default([]).catch([]),
@@ -197,78 +272,29 @@ export type AppConfig = {
   facebookURL?: string;
 };
 
-export type ServerAction<T> = (
-  params: T,
-  uuid: string
-) => Promise<ServerActionResult>;
-
-type FailedServerActionResult = {
-  ok: false;
-  uuid: string;
-  data: {
-    message: string;
-  };
+type BaseQueryStateEntry = {
+  hash: string;
+  queryString: string;
+  nl: string;
 };
 
-type SuccessfulServerActionResult<T = Record<string, any>> = {
-  ok: true;
-  uuid: string;
-  data: T;
-};
+export type InteractionQueryState = {
+  origin: "interaction";
+  loading: boolean;
+} & BaseQueryStateEntry;
 
-export type ServerActionResult =
-  | FailedServerActionResult
-  | SuccessfulServerActionResult;
+export type NlQueryState = {
+  origin: "nl";
+} & BaseQueryStateEntry;
 
-export type ContactFormData = {
-  name: string;
-  uid: string;
-  email: string;
-  phone: string;
-  message: string;
-};
+export type QueryStateHistoryEntry = InteractionQueryState | NlQueryState;
 
-type DormantUseWrappedServerActionState = {
-  state: "dormant";
-  count: 0;
-  stale: null;
-  pending: false;
-  result: null;
-};
+export type QueryStateHistory = QueryStateHistoryEntry[];
 
-type ActivatingUseWrappedServerActionState = {
-  state: "activating";
-  count: number;
-  stale: boolean;
-  pending: boolean;
-  result: null | ServerActionResult;
-};
-
-type ActivatedUseWrappedServerActionState = {
-  state: "activated";
-  count: number;
-  stale: boolean;
-  pending: boolean;
-  result: ServerActionResult;
-};
-
-export type UseWrappedServerActionState =
-  | DormantUseWrappedServerActionState
-  | ActivatingUseWrappedServerActionState
-  | ActivatedUseWrappedServerActionState;
-
-export type UseWrappedServerActionReturn<T> = UseWrappedServerActionState & {
-  commit: (params: T) => Promise<ServerActionResult>;
-};
-
-export type ServerActionData = {
-  "submit-mailing-list-form": { email: string };
-  "submit-contact-form": ContactFormData;
-  "nl-to-query": { query: string };
-};
-
-export type ServerActions = {
-  [ActionId in keyof ServerActionData]: ServerAction<
-    ServerActionData[ActionId]
-  >;
-};
+export type AiSearchInputState =
+  | "inactive"
+  | "inputting"
+  | "listening"
+  | "resolving"
+  | "resolved"
+  | "committed";

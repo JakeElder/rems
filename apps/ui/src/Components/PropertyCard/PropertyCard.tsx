@@ -4,23 +4,17 @@ import React, { useState } from "react";
 import Link from "next/link";
 import css from "./PropertyCard.module.css";
 import { Property, RealEstateQuery } from "@rems/types";
-import SimpleImageCarousel from "../SimpleImageCarousel/SimpleImageCarousel";
+import SimpleImageCarousel from "../SimpleImageCarousel";
 import { propertyToCarouselImages } from "../../adapters";
-import { useRealEstateQuery } from "../RealEstateQueryController/RealEstateQueryController";
-import ArrowNav from "../ArrowNav/ArrowNav";
+import ArrowNav from "../ArrowNav";
+import { useIndexConnector } from "../IndexConnector/IndexConnector";
 
 type Props = {
   property: Property;
-  link?: string;
+  type: RealEstateQuery["availability"];
 };
 
-const Price = ({
-  property,
-  type
-}: {
-  property: Property;
-  type: RealEstateQuery["availability"];
-}) => {
+const Price = ({ property, type }: Props) => {
   if (type === "sale") {
     return (
       <div className={css["price"]}>{property.formattedPurchasePrice}</div>
@@ -37,29 +31,28 @@ const Price = ({
   );
 };
 
-const PropertyCard = ({ property, link = "#" }: Props) => {
-  const { state } = useRealEstateQuery();
+const PropertyCard = ({ property, type }: Props) => {
   const [image, setImage] = useState(0);
 
+  const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
   const images = propertyToCarouselImages(property);
-  const [mouseOver, setMouseOver] = useState(false);
 
   return (
     <div
       className={css["root"]}
-      onMouseEnter={() => setMouseOver(true)}
-      onMouseLeave={() => setMouseOver(false)}
+      onMouseEnter={() => setMouseOver(property.id)}
+      onMouseLeave={() => setMouseOut()}
     >
       <div className={css["images"]}>
         <SimpleImageCarousel
           images={images}
           index={image}
           onIndexChange={setImage}
-          link={link}
+          link={property.url}
         >
           <div className={css["arrow-nav"]}>
             <ArrowNav
-              show={mouseOver}
+              show={activeProperty === property.id}
               hasNext={image !== images.length - 1}
               hasPrev={image !== 0}
               onNext={() => setImage(image + 1)}
@@ -68,9 +61,9 @@ const PropertyCard = ({ property, link = "#" }: Props) => {
           </div>
         </SimpleImageCarousel>
       </div>
-      <Link href={link} draggable="false" className={css["link"]}>
+      <Link href={property.url} draggable="false" className={css["link"]}>
         <div className={css["spec"]}>
-          <Price property={property} type={state.query!["availability"]} />
+          <Price property={property} type={type} />
           <div className={css["beds-baths-area"]}>
             <span className={css["beds"]}>{property.bedrooms} beds</span>
             <span className={css["separator"]}>&bull;</span>

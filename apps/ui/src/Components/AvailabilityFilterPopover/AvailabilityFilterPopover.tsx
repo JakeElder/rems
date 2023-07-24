@@ -3,14 +3,14 @@ import FilterPopover from "../FilterPopover";
 import css from "./AvailabilityFilterPopover.module.css";
 import AvailabilityFilter from "../AvailabilityFilter";
 
-type Props = {};
+type Props = React.ComponentProps<typeof AvailabilityFilter> & {};
 
-const AvailabilityFilterPopover = ({}: Props) => {
+const AvailabilityFilterPopover = (props: Props) => {
   return (
     <div className={css["root"]}>
       <FilterPopover label="Availability">
         <div className={css["content"]}>
-          <AvailabilityFilter type="toggle" />
+          <AvailabilityFilter type="toggle" {...props} />
         </div>
       </FilterPopover>
     </div>

@@ -1,21 +1,81 @@
-.root {
-  display: flex;
-  justify-content: center;
-  padding-top: 100px;
-}
-
-.form {
-  width: 600px;
-}
-
-.input-and-spinner {
+.input-container {
+  position: relative;
+  border-radius: 18px;
+  height: 36px;
+  text-shadow: 0 0 2px 1px rgba(0, 0, 0, 1);
+  border: 1px solid #ccc;
+  font-family: var(--font-inter);
+  background: #f9f9f9;
   display: flex;
   align-items: center;
-  border: 1px solid #e0e0e0;
-  padding-right: 14px;
 }
 
 .input {
-  margin-right: 8px;
+  border-radius: 18px;
+  height: 36px;
+  width: 100%;
+  line-height: 36px;
+  background: none;
+  padding: 0 16px;
+  font-size: 13px;
+  margin-right: 38px;
+}
+
+.input-state-and-controls {
+  display: flex;
+  align-items: center;
+}
+
+.input-state {
   flex: 1;
+}
+
+.input[disabled]{
+  user-select: none;
+}
+
+.state {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.loader {
+  position: absolute;
+  top: -2px;
+  right: 0;
+}
+
+.resolved {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+}
+
+.debug-root {
+  font-family: var(--font-inter);
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 300px;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid blue;
+}
+
+.mic {
+  width: 30px;
+  height: 36px;
+  position: relative;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.listen-button {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

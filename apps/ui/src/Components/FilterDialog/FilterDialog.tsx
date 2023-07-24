@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+"use client";
+
+import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import CloseIcon from "../../Elements/CloseIcon";
 import css from "./FilterDialog.module.css";
 import { animated, useTransition } from "@react-spring/web";
-import PropertyFilters from "../PropertyFilters";
 import Split from "../../Elements/Split";
 import Button from "../../Elements/Button";
-import { useRealEstateQuery } from "../RealEstateQueryController";
 import { Oval } from "react-loader-spinner";
 import cn from "classnames";
 
-type Props = {
-  defaultOpen?: boolean;
+type Props = React.ComponentProps<typeof Dialog.Root> & {
+  loading: boolean;
+  activeFilters: number;
+  onClearClick: () => void;
+  count?: number;
 };
 
 const Indicator = ({ amount }: { amount: number }) => {
@@ -23,10 +26,16 @@ const Indicator = ({ amount }: { amount: number }) => {
   return <span className={css["indicator"]}>{amount}</span>;
 };
 
-const SidePanel = ({ defaultOpen = false }: Props) => {
-  const [open, setOpen] = useState(defaultOpen);
-  const { reset, state, activeFilters } = useRealEstateQuery();
-
+const SidePanel = ({
+  children,
+  activeFilters,
+  open,
+  onOpenChange,
+  onClearClick,
+  count,
+  loading,
+  ...props
+}: Props) => {
   const transitions = useTransition(open, {
     from: {
       opacity: 0,
@@ -46,7 +55,7 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
   });
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root open={open} onOpenChange={onOpenChange} {...props}>
       <Dialog.Trigger asChild>
         <a className={cn(css["control"], { [css["on"]]: activeFilters > 0 })}>
           <div className={css["icon"]}>
@@ -67,10 +76,7 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
             <Dialog.Content forceMount asChild>
               <animated.div
                 className={css["content"]}
-                style={{
-                  x: styles.x,
-                  boxShadow: styles.boxShadow
-                }}
+                style={{ x: styles.x, boxShadow: styles.boxShadow }}
               >
                 <div className={css["header"]}>
                   <Dialog.Title className={css["title"]}>Filters</Dialog.Title>
@@ -78,16 +84,14 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                     <CloseIcon />
                   </Dialog.Close>
                 </div>
-                <div className={css["filters"]}>
-                  <PropertyFilters />
-                </div>
+                <div className={css["filters"]}>{children}</div>
                 <div className={css["footer"]}>
                   <Split>
-                    <Button secondary onClick={() => reset()}>
+                    <Button secondary onClick={() => onClearClick()}>
                       Clear all
                     </Button>
-                    <Button type="submit" onClick={() => setOpen(false)}>
-                      {state.initialLoad || state.loading ? (
+                    <Button type="submit" onClick={() => onOpenChange?.(false)}>
+                      {loading ? (
                         <Oval
                           height={22}
                           width={22}
@@ -95,7 +99,7 @@ const SidePanel = ({ defaultOpen = false }: Props) => {
                           secondaryColor="#fff"
                         />
                       ) : (
-                        `Show ${state.result.pagination.total} homes`
+                        `Show ${count} homes`
                       )}
                     </Button>
                   </Split>

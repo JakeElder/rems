@@ -1,18 +1,18 @@
 import React from "react";
 import css from "./AreaFilter.module.css";
 import Select from "../../Elements/Select";
-import { useFilters } from "../../Utils/FiltersContext";
-import { useRealEstateQuery } from "../RealEstateQueryController";
+import { Area, RealEstateQuery } from "@rems/types";
 
-type Props = {};
+type Props = {
+  areas: Area[];
+  value: RealEstateQuery["area"];
+  onChange: (value: RealEstateQuery["area"]) => void;
+};
 
-const AreaFilter = ({}: Props) => {
-  const { areas } = useFilters();
-  const { query, onValueChange } = useRealEstateQuery();
-
+const AreaFilter = ({ value, areas, onChange }: Props) => {
   return (
     <Select
-      value={`${query["area"] ? query["area"] : ""}`}
+      value={`${value ? value : ""}`}
       options={[
         { label: "Any", value: "" },
         ...areas.map((l) => ({
@@ -21,10 +21,7 @@ const AreaFilter = ({}: Props) => {
         }))
       ]}
       onChange={(e) =>
-        onValueChange(
-          "area",
-          e.currentTarget.value ? e.currentTarget.value : null
-        )
+        onChange(e.currentTarget.value ? e.currentTarget.value : null)
       }
     />
   );

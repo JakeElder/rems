@@ -5,27 +5,22 @@ import css from "./ContactForm.module.css";
 import Button from "../../Elements/Button";
 import TextInput from "../../Elements/TextInput/TextInput";
 import Textarea from "../../Elements/Textarea/Textarea";
-import {
-  ContactFormData,
-  Property,
-  UseWrappedServerActionReturn
-} from "@rems/types";
-import { useServerAction } from "../../Utils/ServerActionProvider";
-import { useToast } from "../ToastHub";
+import { Property } from "@rems/types";
 
 type Props = {
   uid?: Property["uid"];
   children: React.ReactNode;
   defaultMessage?: string;
-  onMessageSent?: () => void;
   mode?: "contact" | "question";
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  isSubmitting: boolean;
 };
 
 type ContactFormContext = {
   uid?: Property["uid"];
-  sa: UseWrappedServerActionReturn<ContactFormData>;
   defaultMessage?: string;
   mode: Props["mode"];
+  isSubmitting: Props["isSubmitting"];
 };
 
 const Context = createContext<ContactFormContext | null>(null);
@@ -39,36 +34,16 @@ const useContext = () => {
 };
 
 export const Root = ({
-  children,
   uid,
+  children,
   defaultMessage,
-  onMessageSent,
-  mode = "contact"
+  mode = "contact",
+  onSubmit,
+  isSubmitting
 }: Props) => {
-  const sa = useServerAction("submit-contact-form");
-  const { message } = useToast();
-
   return (
-    <Context.Provider value={{ uid, sa, defaultMessage, mode }}>
-      <form
-        className={css["root"]}
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const data = new FormData(e.currentTarget);
-          const res = await sa.commit(
-            Object.fromEntries(data) as ContactFormData
-          );
-          if (res.ok) {
-            onMessageSent?.();
-            message({
-              title: "Message Sent",
-              message:
-                "One of our agents will get back to you as soon as possible.",
-              timeout: 5000
-            });
-          }
-        }}
-      >
+    <Context.Provider value={{ uid, defaultMessage, mode, isSubmitting }}>
+      <form className={css["root"]} onSubmit={onSubmit}>
         {children}
       </form>
     </Context.Provider>
@@ -102,10 +77,10 @@ export const Controls = () => {
 };
 
 export const Submit = () => {
-  const { sa, mode } = useContext();
+  const { mode, isSubmitting } = useContext();
   return (
     <div className={css["control"]}>
-      <Button type="submit" loading={sa.pending} fit>
+      <Button type="submit" loading={isSubmitting} fit>
         Send {mode === "question" ? "Question" : "Message"}
       </Button>
     </div>

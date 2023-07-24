@@ -4,14 +4,6 @@ import nodemailer from "nodemailer";
 import api from "../api";
 import prettyjson from "prettyjson";
 
-export async function fetch(input: RequestInfo | URL, init: RequestInit = {}) {
-  return global.fetch(input, {
-    ...init,
-    next: { revalidate: 10 },
-    headers: { Authorization: `Bearer ${process.env.API_TOKEN}` }
-  });
-}
-
 const FROM_EMAIL = `"Rems" <mailer@mindfulstudio.io>`;
 
 const transporter = nodemailer.createTransport({

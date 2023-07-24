@@ -1,38 +1,43 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import css from "./PriceRange.module.css";
 import Slider from "../../Elements/Slider";
-import { useRealEstateQuery } from "../RealEstateQueryController";
-import { useFilters } from "../../Utils/FiltersContext";
+import { RealEstateQuery } from "@rems/types";
 
-type Props = {};
+type Props = {
+  availability: RealEstateQuery["availability"];
+  minPurchasePrice: number;
+  maxPurchasePrice: number;
+  minRentalPrice: number;
+  maxRentalPrice: number;
+  minPrice: RealEstateQuery["min-price"];
+  maxPrice: RealEstateQuery["max-price"];
+  onChange: (
+    min: RealEstateQuery["min-price"],
+    max: RealEstateQuery["max-price"]
+  ) => void;
+};
 
-const PriceRange = ({}: Props) => {
-  const { query, onPriceRangeChange } = useRealEstateQuery();
-  const { priceRange } = useFilters();
+const PriceRange = ({
+  availability,
+  minPurchasePrice,
+  maxPurchasePrice,
+  minRentalPrice,
+  maxRentalPrice,
+  minPrice,
+  maxPrice,
+  onChange
+}: Props) => {
+  const MIN = availability === "sale" ? minPurchasePrice : minRentalPrice;
+  const MAX = availability === "sale" ? maxPurchasePrice : maxRentalPrice;
+  const STEP = availability === "sale" ? 1000 : 100;
 
-  const MIN =
-    query["availability"] === "sale"
-      ? priceRange.minPurchasePrice
-      : priceRange.minRentalPrice;
-
-  const MAX =
-    query["availability"] === "sale"
-      ? priceRange.maxPurchasePrice
-      : priceRange.maxRentalPrice;
-
-  const STEP = query["availability"] === "sale" ? 1000 : 100;
-
-  const [value, setValue] = useState([
-    query["min-price"],
-    query["max-price"] ? query["max-price"] : MAX
-  ]);
+  const [value, setValue] = useState([minPrice, maxPrice ? maxPrice : MAX]);
 
   useEffect(() => {
-    setValue([
-      query["min-price"],
-      query["max-price"] ? query["max-price"] : MAX
-    ]);
-  }, [query["min-price"], query["max-price"], query["availability"]]);
+    setValue([minPrice, maxPrice ? maxPrice : MAX]);
+  }, [minPrice, maxPrice, availability]);
 
   const formatted = [
     `฿ ${value[0].toLocaleString()}`,
@@ -49,7 +54,7 @@ const PriceRange = ({}: Props) => {
           value={value}
           onValueChange={setValue}
           onValueCommit={([min, max]) =>
-            onPriceRangeChange(min, max === MAX ? null : max)
+            onChange(min, max === MAX ? null : max)
           }
           name="price-range"
         />

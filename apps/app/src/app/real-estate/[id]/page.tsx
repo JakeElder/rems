@@ -1,21 +1,17 @@
 import {
   RealEstatePage as Page,
-  Header,
   Breadcrumbs as BreadcrumbsView,
-  ServerActionProvider,
   ToastHub,
   HeroCarousel
 } from "@rems/ui";
 import api from "../../../api";
 import { Metadata } from "next";
-import { Property, SearchParams, ServerActions } from "@rems/types";
-import Footer from "../../../components/Footer";
-import { cookies } from "next/headers";
+import { Property, SearchParams } from "@rems/types";
 import Analytics from "../../../components/Analytics";
-import { Suspense } from "react";
-import ContactAgentModule from "../../../components/ContactAgentModule";
-import { submitContactForm } from "../../actions";
-import AskAQuestionForm from "../../../components/AskAQuestionForm";
+import HeaderViewContainer from "../../../client-components/HeaderViewContainer";
+import ContactAgentModuleContainer from "../../../server-components/ContactAgentModuleContainer";
+import FooterContainer from "../../../server-components/FooterContainer";
+import AskAQuestionFormContainer from "../../../server-components/AskAQuestionFormContainer";
 
 type Props = {
   params: { id: string };
@@ -74,62 +70,38 @@ const Carousel = async ({ propertyId }: { propertyId: Property["id"] }) => {
   return <HeroCarousel images={images} />;
 };
 
-export const revalidate = 0;
-
 export default async function RealEstatePage({ params }: Props) {
   const parts = params.id.split("-");
   const id = parseInt(parts[parts.length - 1], 10);
-
-  const backHref = cookies().get("referer");
-
-  const serverActions: Partial<ServerActions> = {
-    "submit-contact-form": submitContactForm
-  };
 
   return (
     <Page.Root>
       <ToastHub>
         <Analytics />
         <Page.Header>
-          <ServerActionProvider value={serverActions}>
-            <Header mode="hero" back={true} backHref={backHref?.value} />
-          </ServerActionProvider>
+          <HeaderViewContainer mode="hero" />
         </Page.Header>
         <Page.Carousel>
-          <Suspense>
-            <Carousel propertyId={id} />
-          </Suspense>
+          <Carousel propertyId={id} />
         </Page.Carousel>
         <Page.Content>
           <Page.Main>
             <Page.Breadcrumbs>
-              <Suspense>
-                <Breadcrumbs propertyId={id} />
-              </Suspense>
+              <Breadcrumbs propertyId={id} />
             </Page.Breadcrumbs>
-            <Suspense>
-              <TitleAndDescription propertyId={id} />
-            </Suspense>
+            <TitleAndDescription propertyId={id} />
             <Features propertyId={id} />
             <Page.AskAQuestion>
-              <ServerActionProvider value={serverActions}>
-                <AskAQuestionForm propertyId={id} />
-              </ServerActionProvider>
+              <AskAQuestionFormContainer propertyId={id} />
             </Page.AskAQuestion>
-            <Suspense>
-              <TheArea propertyId={id} />
-            </Suspense>
+            <TheArea propertyId={id} />
           </Page.Main>
-          <Page.Contact hasBackHref={!!backHref}>
-            <ServerActionProvider value={serverActions}>
-              <ContactAgentModule propertyId={id} />
-            </ServerActionProvider>
+          <Page.Contact hasBackHref={false}>
+            <ContactAgentModuleContainer propertyId={id} />
           </Page.Contact>
         </Page.Content>
         <Page.Footer>
-          <Suspense>
-            <Footer />
-          </Suspense>
+          <FooterContainer />
         </Page.Footer>
       </ToastHub>
     </Page.Root>

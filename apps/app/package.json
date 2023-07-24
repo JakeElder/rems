@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cli": "ts-node -r ./src/cli/loader ./src/cli"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^13.4.9",
@@ -16,25 +17,35 @@
     "@types/react": "18.2.14",
     "@types/react-dom": "18.0.11",
     "fast-deep-equal": "^3.1.3",
+    "immutability-helper": "^3.1.1",
     "mailersend": "^2.1.2",
     "mapbox-gl": "^2.13.0",
-    "next": "13.4.7",
+    "next": "13.4.10",
     "nodemailer": "^6.9.3",
     "openai": "^3.3.0",
     "prettyjson": "^1.2.5",
     "qs": "^6.11.1",
+    "query-string": "^8.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hotkeys-hook": "^4.4.1",
-    "remeda": "^1.23.0",
+    "react-speech-recognition": "^3.10.0",
+    "remeda": "^1.24.0",
     "slugify": "^1.6.6",
+    "swr": "^2.2.0",
     "the-new-css-reset": "^1.8.4",
+    "throttle-debounce": "^5.0.0",
     "typescript": "5.1.6",
+    "typescript-cookie": "^1.0.6",
     "zod": "^3.21.4",
     "zod-to-json-schema": "^3.21.4"
   },
   "devDependencies": {
     "@types/nodemailer": "^6.4.8",
-    "@types/prettyjson": "^0.0.30"
+    "@types/prettyjson": "^0.0.30",
+    "@types/react-speech-recognition": "^3.9.2",
+    "commander": "^11.0.0",
+    "dotenv": "^16.3.1",
+    "ts-node": "^10.9.1"
   }
 }

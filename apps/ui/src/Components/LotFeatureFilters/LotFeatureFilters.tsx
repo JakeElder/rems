@@ -1,26 +1,26 @@
 import React from "react";
 import css from "./LotFeatureFilters.module.css";
 import Checkbox from "../../Elements/Checkbox";
-import { useFilters } from "../../Utils/FiltersContext";
-import { useRealEstateQuery } from "../RealEstateQueryController";
 import CheckboxGrid from "../CheckboxGrid";
+import { LotFeature } from "@rems/types";
 
-type Props = {};
+type Props = {
+  features: LotFeature[];
+  onChange: (value: string, checked: boolean) => void;
+  isChecked: (value: string) => boolean;
+};
 
-const LotFeatureFilters = ({}: Props) => {
-  const { lotFeatures } = useFilters();
-  const { query, onCheckedChange } = useRealEstateQuery();
-
+const LotFeatureFilters = ({ features, onChange, isChecked }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["types"]}>
         <CheckboxGrid
-          items={lotFeatures.map((t) => (
+          items={features.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onCheckedChange("lot-features", t.slug, checked)
+                onChange(t.slug, checked !== "indeterminate" && checked)
               }
-              checked={query["lot-features"].includes(t.slug)}
+              checked={isChecked(t.slug)}
               key={t.slug}
               name="lot-features[]"
               value={t.slug}

@@ -1,26 +1,26 @@
 import React from "react";
 import css from "./OutdoorFeatureFilters.module.css";
 import Checkbox from "../../Elements/Checkbox";
-import { useFilters } from "../../Utils/FiltersContext";
-import { useRealEstateQuery } from "../RealEstateQueryController";
 import CheckboxGrid from "../CheckboxGrid";
+import { OutdoorFeature } from "@rems/types";
 
-type Props = {};
+type Props = {
+  features: OutdoorFeature[];
+  onChange: (value: string, checked: boolean) => void;
+  isChecked: (value: string) => boolean;
+};
 
-const OutdoorFeatureFilters = ({}: Props) => {
-  const { outdoorFeatures } = useFilters();
-  const { query, onCheckedChange } = useRealEstateQuery();
-
+const OutdoorFeatureFilters = ({ features, onChange, isChecked }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["types"]}>
         <CheckboxGrid
-          items={outdoorFeatures.map((t) => (
+          items={features.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onCheckedChange("outdoor-features", t.slug, checked)
+                onChange(t.slug, checked !== "indeterminate" && checked)
               }
-              checked={query["outdoor-features"].includes(t.slug)}
+              checked={isChecked(t.slug)}
               key={t.slug}
               name="outdoor-features[]"
               value={t.slug}

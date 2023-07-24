@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import css from "./RealEstateIndexPage.module.css";
 import IndexConnector from "../../Components/IndexConnector";
-import { useRealEstateQuery } from "../../Components/RealEstateQueryController";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["root"]}>{children}</div>;
@@ -29,17 +28,8 @@ export const Breadcrumbs = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["breadcrumbs"]}>{children}</div>;
 };
 
-export const Title = ({}: {}) => {
-  const { state, query } = useRealEstateQuery();
-  const title = `Homes for ${
-    state.initialLoad ? query.availability : state.query.availability
-  } in Thailand`;
-
-  useEffect(() => {
-    document.title = title;
-  }, [query]);
-
-  return <h1 className={css["title"]}>{title}</h1>;
+export const Title = ({ children }: { children: React.ReactNode }) => {
+  return <h1 className={css["title"]}>{children}</h1>;
 };
 
 export const CountAndSort = ({ children }: { children: React.ReactNode }) => {

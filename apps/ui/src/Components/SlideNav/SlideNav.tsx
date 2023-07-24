@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import CloseIcon from "../../Elements/CloseIcon";
@@ -7,8 +9,7 @@ import {
   faEnvelope
 } from "@fortawesome/free-regular-svg-icons";
 import css from "./SlideNav.module.css";
-import { SpringValue, animated, useTransition } from "@react-spring/web";
-import NavIcon from "../../Elements/NavIcon";
+import { animated, useTransition } from "@react-spring/web";
 import Logo from "../../Elements/Logo";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -21,7 +22,6 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 type Props = React.ComponentProps<typeof Dialog.Root> & {
-  navIconColor: SpringValue<string>;
   onContactUsClick?: () => void;
 };
 
@@ -35,7 +35,7 @@ const L = ({ href, children }: { href: string; children: React.ReactNode }) => {
   );
 };
 
-const SlideNav = ({ navIconColor, onContactUsClick, ...props }: Props) => {
+const SlideNav = ({ onContactUsClick, ...props }: Props) => {
   const transitions = useTransition(props.open, {
     from: {
       opacity: 0,
@@ -56,9 +56,6 @@ const SlideNav = ({ navIconColor, onContactUsClick, ...props }: Props) => {
 
   return (
     <Dialog.Root {...props}>
-      <Dialog.Trigger>
-        <NavIcon color={navIconColor} />
-      </Dialog.Trigger>
       {transitions((styles, show) =>
         show ? (
           <>

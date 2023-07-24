@@ -1,28 +1,27 @@
 import React from "react";
 import css from "./TypeFilters.module.css";
 import Checkbox from "../../Elements/Checkbox";
-import { useFilters } from "../../Utils/FiltersContext";
-import { useRealEstateQuery } from "../RealEstateQueryController";
 import CheckboxGrid from "../CheckboxGrid";
+import { PropertyType } from "@rems/types";
 
 type Props = {
   id: string;
+  types: PropertyType[];
+  onChange: (value: string, checked: boolean) => void;
+  isChecked: (value: string) => boolean;
 };
 
-const TypeFilters = ({ id }: Props) => {
-  const { propertyTypes } = useFilters();
-  const { query, onCheckedChange } = useRealEstateQuery();
-
+const TypeFilters = ({ id, types, onChange, isChecked }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["types"]}>
         <CheckboxGrid
-          items={propertyTypes.map((t) => (
+          items={types.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onCheckedChange("property-type", t.slug, checked)
+                onChange(t.slug, checked !== "indeterminate" && checked)
               }
-              checked={query["property-type"].includes(t.slug)}
+              checked={isChecked(t.slug)}
               key={t.slug}
               name="property-type[]"
               value={t.slug}

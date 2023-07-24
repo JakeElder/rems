@@ -1,26 +1,26 @@
 import React from "react";
 import css from "./ViewTypeFilters.module.css";
 import Checkbox from "../../Elements/Checkbox";
-import { useFilters } from "../../Utils/FiltersContext";
-import { useRealEstateQuery } from "../RealEstateQueryController";
 import CheckboxGrid from "../CheckboxGrid";
+import { ViewType } from "@rems/types";
 
-type Props = {};
+type Props = {
+  types: ViewType[];
+  onChange: (value: string, checked: boolean) => void;
+  isChecked: (value: string) => boolean;
+};
 
-const ViewTypeFilters = ({}: Props) => {
-  const { viewTypes } = useFilters();
-  const { query, onCheckedChange } = useRealEstateQuery();
-
+const ViewTypeFilters = ({ types, onChange, isChecked }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["types"]}>
         <CheckboxGrid
-          items={viewTypes.map((t) => (
+          items={types.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onCheckedChange("view-types", t.slug, checked)
+                onChange(t.slug, checked !== "indeterminate" && checked)
               }
-              checked={query["view-types"].includes(t.slug)}
+              checked={isChecked(t.slug)}
               key={t.slug}
               name="view-type[]"
               value={t.slug}

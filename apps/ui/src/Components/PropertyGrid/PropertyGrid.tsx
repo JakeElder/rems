@@ -2,19 +2,15 @@
 
 import React from "react";
 import css from "./PropertyGrid.module.css";
-import { useRealEstateQuery } from "../RealEstateQueryController";
-import PropertyCard from "../PropertyCard";
 import { animated, useTransition } from "@react-spring/web";
-import { useIndexConnector } from "../IndexConnector";
 
-type Props = {};
+type Props = {
+  loading: boolean;
+  children: React.ReactNode;
+};
 
-const PropertyGrid = ({}: Props) => {
-  const { state } = useRealEstateQuery();
-  const properties = state.result?.data || [];
-  const { setMouseOver, setMouseOut } = useIndexConnector();
-
-  const transition = useTransition(state.loading, {
+const PropertyGrid = ({ loading, children }: Props) => {
+  const transition = useTransition(loading, {
     from: { backgroundColor: "rgba(255, 255, 255, 0)" },
     enter: { backgroundColor: "rgba(255, 255, 255, .7)" },
     leave: { backgroundColor: "rgba(255, 255, 255, 0)" }
@@ -22,17 +18,7 @@ const PropertyGrid = ({}: Props) => {
 
   return (
     <div className={css["root"]}>
-      <div className={css["properties"]}>
-        {properties.map((p) => (
-          <div
-            key={p.id}
-            onMouseOver={() => setMouseOver(p.id)}
-            onMouseOut={() => setMouseOut()}
-          >
-            <PropertyCard property={p} link={p.url} />
-          </div>
-        ))}
-      </div>
+      <div className={css["properties"]}>{children}</div>
       {transition(
         (styles, show) =>
           show && <animated.div className={css["loading"]} style={styles} />

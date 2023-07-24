@@ -2,14 +2,13 @@ import React from "react";
 import css from "./ContactAgentModule.module.css";
 import * as ContactForm from "../ContactForm";
 import Monogram from "../../Elements/Monogram";
-import { Property } from "@rems/types";
 
-type Props = {
-  uid: Property["uid"];
-  defaultMessage?: string;
-};
+type Props = Pick<
+  React.ComponentProps<typeof ContactForm.Root>,
+  "onSubmit" | "isSubmitting" | "uid" | "defaultMessage"
+>;
 
-const ContactAgentModule = ({ uid, defaultMessage }: Props) => {
+const ContactAgentModule = (props: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["header"]}>
@@ -24,7 +23,7 @@ const ContactAgentModule = ({ uid, defaultMessage }: Props) => {
         </div>
       </div>
       <div className={css["form"]}>
-        <ContactForm.Root uid={uid} defaultMessage={defaultMessage}>
+        <ContactForm.Root {...props}>
           <ContactForm.Controls />
           <ContactForm.Submit />
         </ContactForm.Root>

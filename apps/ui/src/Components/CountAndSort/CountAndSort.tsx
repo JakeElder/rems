@@ -4,11 +4,15 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import css from "./CountAndSort.module.css";
-import { SortType } from "@rems/types";
-import { useRealEstateQuery } from "../RealEstateQueryController";
+import { RealEstateQuery, SortType } from "@rems/types";
 import { Oval } from "react-loader-spinner";
 
-type Props = {};
+type Props = {
+  loading: boolean;
+  sort: RealEstateQuery["sort"];
+  onChange: (value: RealEstateQuery["sort"]) => void;
+  listings?: number;
+};
 
 const label = (sort: SortType) => {
   const map: Record<SortType, string> = {
@@ -21,13 +25,11 @@ const label = (sort: SortType) => {
   return map[sort];
 };
 
-const CountAndSort = ({}: Props) => {
-  const { query, state, onValueChange } = useRealEstateQuery();
-
+const CountAndSort = ({ sort, loading, listings, onChange }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["count"]}>
-        {state.initialLoad || state.loading ? (
+        {loading ? (
           <Oval
             height={16}
             width={16}
@@ -36,14 +38,16 @@ const CountAndSort = ({}: Props) => {
             visible={true}
           />
         ) : (
-          `${state.result.pagination.total} listings`
+          `${listings} listings`
         )}
       </div>
       <div className={css["sort"]}>
         <select
           className={css["select"]}
-          value={query["sort"]}
-          onChange={(e) => onValueChange("sort", e.currentTarget.value)}
+          value={sort}
+          onChange={(e) => {
+            onChange(e.currentTarget.value as RealEstateQuery["sort"]);
+          }}
         >
           <option value="newest-first">{label("newest-first")}</option>
           <option value="lowest-price-first">
@@ -61,7 +65,7 @@ const CountAndSort = ({}: Props) => {
         </select>
         <div className={css["active"]}>
           <span className={css["label"]}>Sort:</span>
-          <span className={css["selection"]}>{label(query["sort"])}</span>
+          <span className={css["selection"]}>{label(sort)}</span>
           <span className={css["icon"]}>
             <FontAwesomeIcon icon={faChevronDown} size="sm" />
           </span>
