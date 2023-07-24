@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { ContactModal, Header, SlideNav } from "@rems/ui";
 import { submitContactForm } from "../app/actions";
 import useContactForm from "../hooks/use-contact-form";
-import AiSearchViewContainer from "./AiSearchViewContainer";
+import dynamic from "next/dynamic";
 
 type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode">;
 
@@ -12,6 +12,10 @@ const AiSearch = () => {
   if (process.env.NEXT_PUBLIC_AI_SEARCH_ENABLED !== "true") {
     return null;
   }
+
+  const AiSearchViewContainer = dynamic(
+    () => import("./AiSearchViewContainer")
+  );
 
   return (
     <Header.AiSearch>
