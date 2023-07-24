@@ -16,6 +16,7 @@ type Props = {};
 const ListingMap = ({}: Props) => {
   const { state } = useRealEstateQuery();
   const properties = state.initialLoad ? [] : state.result.data;
+  const withGeo = properties.filter((p) => !!p.location);
   const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
 
   return (
@@ -32,7 +33,7 @@ const ListingMap = ({}: Props) => {
               zoom: 9
             }}
           >
-            {properties.map((p) => (
+            {withGeo.map((p) => (
               <Link
                 key={p.id}
                 href={p.url}

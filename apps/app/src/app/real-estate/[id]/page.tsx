@@ -62,6 +62,9 @@ const Features = async ({ propertyId }: { propertyId: Property["id"] }) => {
 
 const TheArea = async ({ propertyId }: { propertyId: Property["id"] }) => {
   const property = await api.get.property(propertyId);
+  if (!property.location) {
+    return null;
+  }
   return <Page.TheArea property={property} />;
 };
 
