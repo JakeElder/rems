@@ -80,7 +80,7 @@ const adapters = {
       purchasePrice,
       rentalPrice,
       url: `/real-estate/${slugify(title, { strict: true })}-${res.id}`,
-      location: JSON.parse(location),
+      location,
       formattedPurchasePrice: purchasePrice
         ? `฿${purchasePrice.toLocaleString()}`
         : null,
