@@ -4,20 +4,20 @@ import css from "./ListingMap.module.css";
 import Map, { Marker } from "react-map-gl";
 import MapPropertyMarker from "../MapPropertyMarker/MapPropertyMarker";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useRealEstateQuery } from "../RealEstateQueryController";
 import { useIndexConnector } from "../IndexConnector/IndexConnector";
 import Link from "next/link";
+import { Property } from "@rems/types";
 
 const TOKEN =
   "pk.eyJ1IjoiamFrZS1lbGRlciIsImEiOiJjbGZtbm12d28wZGp3M3JyemlrNnp1cmRvIn0.ovmQBkbXdCh-w_rUJ82GZA";
 
-type Props = {};
+type Props = {
+  properties: Property[];
+};
 
-const ListingMap = ({}: Props) => {
-  const { state } = useRealEstateQuery();
-  const properties = state.initialLoad ? [] : state.result.data;
-  const withGeo = properties.filter((p) => !!p.location);
+const ListingMap = ({ properties }: Props) => {
   const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
+  const withGeo = properties.filter((p) => !!p.location);
 
   return (
     <div className={css["root"]}>
