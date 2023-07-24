@@ -13,7 +13,7 @@ import SpeechRecognition, {
 
 type Props = {};
 
-const AiSearchViewContainer = ({}: Props) => {
+const AiSearchViewContainer = ({ }: Props) => {
   const [value, setValue] = useState("");
   const { commit } = useRealEstateQuery();
   const [state, setState] = useState<AiSearchInputState>("inactive");
