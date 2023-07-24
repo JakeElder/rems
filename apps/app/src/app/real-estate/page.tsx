@@ -8,6 +8,8 @@ import FilterBar from "../../server-components/FilterBar";
 import HeaderViewContainer from "../../client-components/HeaderViewContainer";
 import RealEstateIndexPageTitleViewContainer from "../../client-components/RealEstateIndexPageTitleViewContainer";
 
+export const dynamic = "error";
+
 export default function Home() {
   return (
     <Page.Root>
