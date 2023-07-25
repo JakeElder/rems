@@ -2,7 +2,7 @@
 
 import React from "react";
 import css from "./AiSearch.module.css";
-import { ColorRing } from "react-loader-spinner";
+import { ColorRing, LineWave } from "react-loader-spinner";
 import { AiSearchInputState, QueryStateHistory } from "@rems/types";
 import { animated, useSpring, useTransition } from "@react-spring/web";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,6 +37,7 @@ const useHideShow = (show: boolean) => {
 const Status = ({ state }: { state: AiSearchInputState }) => {
   const loader = useHideShow(state === "resolving");
   const check = useHideShow(state === "resolved");
+  const listening = useHideShow(state === "listening");
 
   return (
     <div className={css["state"]}>
@@ -61,6 +62,25 @@ const Status = ({ state }: { state: AiSearchInputState }) => {
           show && (
             <animated.div style={style} className={css["resolved"]}>
               <FontAwesomeIcon icon={faCheck} />
+            </animated.div>
+          )
+      )}
+      {listening(
+        (style, show) =>
+          show && (
+            <animated.div style={style} className={css["listening"]}>
+              <LineWave
+                height={34}
+                width={34}
+                color="#ad3dbf"
+                ariaLabel="line-wave"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                firstLineColor=""
+                middleLineColor=""
+                lastLineColor=""
+              />
             </animated.div>
           )
       )}

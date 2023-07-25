@@ -30,7 +30,7 @@
   flex: 1;
 }
 
-.input[disabled]{
+.input[disabled] {
   user-select: none;
 }
 
@@ -46,10 +46,16 @@
   right: 0;
 }
 
-.resolved {
+.loading {
   position: absolute;
   right: 12px;
   top: 8px;
+}
+
+.listening {
+  position: absolute;
+  right: -3px;
+  top: -4px;
 }
 
 .debug-root {
