@@ -137,7 +137,6 @@ const ControlledImageCarousel = ({
       <Images className={css["images"]} {...bind()} link={link} style={props}>
         {images.map((i) => (
           <Img
-            priority
             key={i.id}
             draggable={false}
             className={css["image"]}
