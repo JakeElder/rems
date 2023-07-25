@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { ContactModal, Header, SlideNav } from "@rems/ui";
-import { submitContactForm } from "../app/actions";
+// import { submitContactForm } from "../app/actions";
+import AiSearchViewContainer from "./AiSearchViewContainer";
 import useContactForm from "../hooks/use-contact-form";
-import dynamic from "next/dynamic";
 
 type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode">;
 
@@ -13,13 +13,8 @@ const AiSearch = () => {
     return null;
   }
 
-  const AiSearchViewContainer = dynamic(
-    () => import("./AiSearchViewContainer")
-  );
-
   return (
     <Header.AiSearch>
-      <AiSearchViewContainer />
     </Header.AiSearch>
   );
 };
@@ -28,8 +23,9 @@ const HeaderViewContainer = (props: Props) => {
   const [slideNavOpen, setSlideNavOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
 
-  const { isSubmitting, onSubmit } = useContactForm(submitContactForm, () =>
-    setTimeout(() => setContactOpen(false), 2000)
+  const { isSubmitting, onSubmit } = useContactForm(
+    () => Promise.resolve({}),
+    () => setTimeout(() => setContactOpen(false), 2000)
   );
 
   return [

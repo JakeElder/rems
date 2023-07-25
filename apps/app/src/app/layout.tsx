@@ -1,5 +1,5 @@
 import "the-new-css-reset/css/reset.css";
-import "./globals.css";
+import "../globals.css";
 import { FontLoader, IconLoader } from "@rems/ui";
 
 export const metadata = {

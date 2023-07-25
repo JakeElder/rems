@@ -6,6 +6,7 @@ type Props = Pick<React.ComponentProps<typeof Footer>, "full">;
 const FooterContainer = async ({ full }: Props) => {
   const [{ lineURL, facebookURL, linkedInURL, instagramURL }, searches] =
     await Promise.all([api.get.appConfig(), api.get.popularSearches()]);
+
   return (
     <Footer
       full={full}

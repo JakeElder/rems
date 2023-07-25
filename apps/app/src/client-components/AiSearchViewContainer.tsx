@@ -4,7 +4,7 @@ import "regenerator-runtime";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiSearch } from "@rems/ui";
 import { debounce } from "throttle-debounce";
-import { nlToQuery } from "../app/actions";
+// import { nlToQuery } from "../app/actions";
 import useRealEstateQuery from "../hooks/use-real-estate-query";
 import { AiSearchInputState } from "@rems/types";
 import SpeechRecognition, {
@@ -13,7 +13,7 @@ import SpeechRecognition, {
 
 type Props = {};
 
-const AiSearchViewContainer = ({ }: Props) => {
+const AiSearchViewContainer = ({}: Props) => {
   const [value, setValue] = useState("");
   const { commit } = useRealEstateQuery();
   const [state, setState] = useState<AiSearchInputState>("inactive");
@@ -33,7 +33,8 @@ const AiSearchViewContainer = ({ }: Props) => {
     }
 
     if (value.length > 10) {
-      const query = await nlToQuery(value);
+      // const query = await nlToQuery(value);
+      const query = await Promise.resolve({});
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setState("resolved");
       commit(query);

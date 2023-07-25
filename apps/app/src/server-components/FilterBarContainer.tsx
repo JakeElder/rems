@@ -23,7 +23,7 @@ import QuickFiltersContainer from "./QuickFiltersContainer";
 
 type Props = {};
 
-const FilterBar = ({}: Props) => {
+const FilterBarContainer = ({}: Props) => {
   return (
     <Layout.Root>
       <Layout.FilterDialog>
@@ -89,4 +89,4 @@ const FilterBar = ({}: Props) => {
   );
 };
 
-export default FilterBar;
+export default FilterBarContainer;

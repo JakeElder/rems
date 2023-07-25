@@ -1,12 +1,12 @@
 import { Breadcrumbs, RealEstateIndexPage as Page, ToastHub } from "@rems/ui";
-import FooterContainer from "../../server-components/FooterContainer";
 import PropertyGridViewContainer from "../../client-components/PropertyGridViewContainer";
 import ListingMapViewContainer from "../../client-components/ListingMapViewContainer";
 import CountAndSortViewContainer from "../../client-components/CountAndSortViewContainer";
 import PaginationViewContainer from "../../client-components/PaginationViewContainer";
-import FilterBar from "../../server-components/FilterBar";
 import HeaderViewContainer from "../../client-components/HeaderViewContainer";
 import RealEstateIndexPageTitleViewContainer from "../../client-components/RealEstateIndexPageTitleViewContainer";
+import FooterContainer from "../../server-components/FooterContainer";
+import FilterBarContainer from "../../server-components/FilterBarContainer";
 
 export const dynamic = "error";
 
@@ -16,7 +16,7 @@ export default function Home() {
       <ToastHub>
         <Page.Header>
           <HeaderViewContainer full mode="standard" />
-          <FilterBar />
+          <FilterBarContainer />
         </Page.Header>
         <Page.Main>
           <Page.Content>

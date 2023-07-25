@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import cn from "classnames";
-import { Inter, Libre_Baskerville } from "@next/font/google";
+import { Inter, Libre_Baskerville } from "next/font/google";
 
 export const inter = Inter({
   subsets: ["latin"],

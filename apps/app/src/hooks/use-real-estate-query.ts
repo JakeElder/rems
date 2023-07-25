@@ -6,7 +6,7 @@ import {
   RealEstateQuery,
   realEstateQuerySchema
 } from "@rems/types";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import qs from "query-string";
 import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
@@ -71,12 +71,10 @@ export const generateQueryString = (
 
 const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const router = useRouter();
-  const params = useSearchParams();
-  const pathname = usePathname();
 
   const commit = (query: PartialRealEstateQuery) => {
     const qs = generateQueryString(query);
-    router.push(`${pathname}${qs}`);
+    router.push(`${router.pathname}${qs}`, "", { shallow: true });
 
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + 60 * 5);
@@ -86,8 +84,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     });
   };
 
-  const q = qs.parse(params.toString(), { arrayFormat: "bracket" });
-  const query = realEstateQuerySchema.parse(q);
+  const query = realEstateQuerySchema.parse(router.query);
   const queryString = generateQueryString(query);
 
   const defaults = realEstateQuerySchema.parse({});
