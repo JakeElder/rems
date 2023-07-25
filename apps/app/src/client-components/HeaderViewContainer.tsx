@@ -6,20 +6,23 @@ import { ContactModal, Header, SlideNav } from "@rems/ui";
 import AiSearchViewContainer from "./AiSearchViewContainer";
 import useContactForm from "../hooks/use-contact-form";
 
-type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode">;
+type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode"> & {
+  search?: boolean;
+};
 
-const AiSearch = () => {
-  if (process.env.NEXT_PUBLIC_AI_SEARCH_ENABLED !== "true") {
+const AiSearch = ({ show }: { show?: boolean }) => {
+  if (process.env.NEXT_PUBLIC_AI_SEARCH_ENABLED !== "true" || !show) {
     return null;
   }
 
   return (
     <Header.AiSearch>
+      <AiSearchViewContainer />
     </Header.AiSearch>
   );
 };
 
-const HeaderViewContainer = (props: Props) => {
+const HeaderViewContainer = ({ search, ...props }: Props) => {
   const [slideNavOpen, setSlideNavOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
 
@@ -50,7 +53,7 @@ const HeaderViewContainer = (props: Props) => {
     >
       <Header.Main>
         <Header.Logo />
-        <AiSearch />
+        <AiSearch show={search} />
         <Header.NavAndContact />
       </Header.Main>
     </Header.Root>

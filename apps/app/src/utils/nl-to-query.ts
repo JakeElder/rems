@@ -108,7 +108,7 @@ export default async function nlToQuery(
           Search for properties based on the following query.
           Set both the min-price and max-price within a 10% range of the users budget, unless the user specifies a range already
           Set availability to rent if the user specifies a monthly price
-          Ensure the property-type array includes one or two entries at most
+          Leave the property-type array empty unless a property type is specified
         `
       },
       {

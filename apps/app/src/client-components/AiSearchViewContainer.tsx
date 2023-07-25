@@ -4,12 +4,13 @@ import "regenerator-runtime";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiSearch } from "@rems/ui";
 import { debounce } from "throttle-debounce";
-// import { nlToQuery } from "../app/actions";
 import useRealEstateQuery from "../hooks/use-real-estate-query";
 import { AiSearchInputState } from "@rems/types";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
+import { resolveNl } from "../api.client";
+import useSWR from "swr";
 
 type Props = {};
 
@@ -17,59 +18,56 @@ const AiSearchViewContainer = ({}: Props) => {
   const [value, setValue] = useState("");
   const { commit } = useRealEstateQuery();
   const [state, setState] = useState<AiSearchInputState>("inactive");
+  const [activeSearch, setActiveSearch] = useState<null | string>(null);
   const $input = useRef<HTMLInputElement>(null);
 
   const { transcript, resetTranscript } = useSpeechRecognition();
 
+  useSWR(
+    activeSearch ? ["nl", activeSearch] : null,
+    ([_, query]) => resolveNl(query),
+    {
+      onSuccess: (query) => {
+        commit(query);
+        setState("resolved");
+        setTimeout(() => setState("inactive"), 2000);
+      }
+    }
+  );
+
   useEffect(() => {
-    onInputReceived(transcript, true);
+    if (state === "listening") {
+      onInputReceived(transcript, true);
+    }
   }, [transcript]);
 
-  const search = async (value: string) => {
-    if (!value) {
-      commit({});
-      setState("inactive");
-      return;
-    }
-
-    if (value.length > 10) {
-      // const query = await nlToQuery(value);
-      const query = await Promise.resolve({});
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setState("resolved");
-      commit(query);
-      setTimeout(() => setState("inactive"), 2000);
-    }
-  };
-
   const onInputReceived = (value: string, fromSpeech: boolean = false) => {
-    if (!fromSpeech) {
-      resetTranscript();
-      setState("inputting");
-    }
-
     setValue(value);
 
     if (fromSpeech) {
       const $el = $input.current!;
-      setTimeout(() => {
-        $el.scrollLeft = 10000;
-      });
+      setTimeout(() => ($el.scrollLeft = 10000), 100);
+    } else {
+      resetTranscript();
+      setState("inputting");
     }
 
     debouncedProcessInput(value);
   };
 
+  const processInput = (value: string) => {
+    SpeechRecognition.stopListening();
+    if (value.length === 0) {
+      commit({});
+      setState("inactive");
+    } else {
+      setState("resolving");
+      setActiveSearch(value);
+    }
+  };
+
   const debouncedProcessInput = useCallback(
-    debounce(
-      3000,
-      (value: string) => {
-        setState("resolving");
-        SpeechRecognition.stopListening();
-        search(value);
-      },
-      { atBegin: false }
-    ),
+    debounce(3000, processInput, { atBegin: false }),
     []
   );
 

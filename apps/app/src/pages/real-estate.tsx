@@ -42,7 +42,7 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
     <Layout.Root>
       <ToastHub>
         <Layout.Header>
-          <HeaderViewContainer full mode="standard" />
+          <HeaderViewContainer full mode="standard" search={true} />
           <FilterBarViewContainer {...filterBarProps} />
         </Layout.Header>
         <Layout.Main>
