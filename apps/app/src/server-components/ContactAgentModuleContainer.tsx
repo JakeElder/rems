@@ -11,7 +11,7 @@ const ContactAgentModuleContainer = async ({ propertyId }: Props) => {
   return (
     <ContactAgentModuleViewContainer
       uid={property.uid}
-      defaultMessage={`I'm intered in ${property.title}`}
+      defaultMessage={`I'm interested in ${property.title}`}
     />
   );
 };

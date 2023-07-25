@@ -1,9 +1,8 @@
-import { ContactFormData, contactFormDataSchema } from "@rems/types";
 import { ContactForm, useToast } from "@rems/ui";
 import { useState } from "react";
 
 type ContactFormProps = React.ComponentProps<typeof ContactForm.Root>;
-type Fetcher = (data: ContactFormData) => Promise<{}>;
+type Fetcher = (data: FormData) => Promise<{}>;
 
 const useContactForm = (fetcher: Fetcher, onComplete?: () => void) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -11,11 +10,9 @@ const useContactForm = (fetcher: Fetcher, onComplete?: () => void) => {
 
   const onSubmit: ContactFormProps["onSubmit"] = async (e) => {
     e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    const data = contactFormDataSchema.parse(Object.fromEntries(form));
 
     setIsSubmitting(true);
-    await fetcher(data);
+    await fetcher(new FormData(e.currentTarget));
 
     message({
       title: "Message Sent",

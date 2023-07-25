@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { ContactModal, Header, SlideNav } from "@rems/ui";
-// import { submitContactForm } from "../app/actions";
 import AiSearchViewContainer from "./AiSearchViewContainer";
 import useContactForm from "../hooks/use-contact-form";
 
@@ -27,7 +26,7 @@ const HeaderViewContainer = ({ search, ...props }: Props) => {
   const [contactOpen, setContactOpen] = useState(false);
 
   const { isSubmitting, onSubmit } = useContactForm(
-    () => Promise.resolve({}),
+    (body) => fetch("/api/contact-form", { method: "POST", body }),
     () => setTimeout(() => setContactOpen(false), 2000)
   );
 

@@ -1,6 +1,6 @@
 "use server";
 
-import { ContactFormData } from "@rems/types";
+import { contactFormDataSchema } from "@rems/types";
 import { sendMail } from "../utils";
 import nlToQueryUtil from "../utils/nl-to-query";
 
@@ -9,7 +9,8 @@ export const submitMailingListForm = async (data: { email: string }) => {
   return {};
 };
 
-export const submitContactForm = async (data: ContactFormData) => {
+export const submitContactForm = async (form: FormData) => {
+  const data = contactFormDataSchema.parse(Object.fromEntries(form));
   await sendMail({ subject: "New contact form submission", data });
   return {};
 };
