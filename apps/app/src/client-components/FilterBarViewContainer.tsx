@@ -10,34 +10,64 @@ import BathroomsFilterViewContainer from "./BathroomsFilterViewContainer";
 import LivingAreaFiltersViewContainer from "./LivingAreaFiltersViewContainer";
 import LotSizeFiltersViewContainer from "./LotSizeFiltersViewContainer";
 import { PropertyFilters, FilterBar as Layout } from "@rems/ui";
+import TypeFiltersViewContainer from "./TypeFiltersViewContainer";
+import {
+  Area,
+  BTSStation,
+  IndoorFeature,
+  LotFeature,
+  MRTStation,
+  OutdoorFeature,
+  PropertyType,
+  QuickFilter,
+  ViewType
+} from "@rems/types";
+import TypeFilterPopoverViewContainer from "./TypeFilterPopoverViewContainer";
+import AreaFilterViewContainer from "./AreaFilterViewContainer";
+import ViewTypeFiltersViewContainer from "./ViewTypeFiltersViewContainer";
+import IndoorFeatureFiltersViewContainer from "./IndoorFeatureFiltersViewContainer";
+import OutdoorFeatureFiltersViewContainer from "./OutdoorFeatureFiltersViewContainer";
+import LotFeatureFiltersViewContainer from "./LotFeatureFiltersViewContainer";
+import NearestMRTStationFilterViewContainer from "./NearestMRTStationFilterViewContainer";
+import NearestBTSStationFilterViewContainer from "./NearestBTSStationFilterViewContainer";
+import QuickFiltersViewContainer from "./QuickFiltersViewContainer";
 
-import TypeFilterPopoverContainer from "../server-components/TypeFilterPopoverContainer";
-import TypeFiltersContainer from "../server-components/TypeFiltersContainer";
-import AreaFilterContainer from "../server-components/AreaFilterContainer";
-import ViewTypeFiltersContainer from "../server-components/ViewTypeFiltersContainer";
-import IndoorFeatureFiltersContainer from "../server-components/IndoorFeatureFiltersContainer";
-import OutdoorFeatureFiltersContainer from "../server-components/OutdoorFeatureFiltersContainer";
-import LotFeatureFiltersContainer from "../server-components/LotFeatureFiltersContainer";
-import NearestMRTStationFilterContainer from "../server-components/NearestMRTStationFilter";
-import NearestBTSStationFilterContainer from "../server-components/NearestBTSStationFilter";
-import QuickFiltersContainer from "../server-components/QuickFiltersContainer";
+type Props = {
+  propertyTypes: PropertyType[];
+  areas: Area[];
+  viewTypes: ViewType[];
+  indoorFeatures: IndoorFeature[];
+  outdoorFeatures: OutdoorFeature[];
+  lotFeatures: LotFeature[];
+  mrtStations: MRTStation[];
+  btsStations: BTSStation[];
+  quickFilters: QuickFilter[];
+};
 
-type Props = {};
-
-const FilterBarViewContainer = ({}: Props) => {
+const FilterBarViewContainer = ({
+  propertyTypes,
+  areas,
+  viewTypes,
+  indoorFeatures,
+  outdoorFeatures,
+  lotFeatures,
+  mrtStations,
+  btsStations,
+  quickFilters
+}: Props) => {
   return (
     <Layout.Root>
       <Layout.FilterDialog>
         <FilterDialogViewContainer>
           <PropertyFilters.PropertyType>
-            <TypeFiltersContainer id="filters" />
+            <TypeFiltersViewContainer id="filter-bar" types={propertyTypes} />
           </PropertyFilters.PropertyType>
           <PropertyFilters.AvailabilityAndArea>
             <PropertyFilters.Availability>
               <AvailabilityFilterViewContainer />
             </PropertyFilters.Availability>
             <PropertyFilters.Area>
-              <AreaFilterContainer />
+              <AreaFilterViewContainer areas={areas} />
             </PropertyFilters.Area>
           </PropertyFilters.AvailabilityAndArea>
           <PropertyFilters.PriceRange>
@@ -50,16 +80,16 @@ const FilterBarViewContainer = ({}: Props) => {
             <BathroomsFilterViewContainer />
           </PropertyFilters.Bathrooms>
           <PropertyFilters.View>
-            <ViewTypeFiltersContainer />
+            <ViewTypeFiltersViewContainer types={viewTypes} />
           </PropertyFilters.View>
           <PropertyFilters.IndoorFeatures>
-            <IndoorFeatureFiltersContainer />
+            <IndoorFeatureFiltersViewContainer features={indoorFeatures} />
           </PropertyFilters.IndoorFeatures>
           <PropertyFilters.OutdoorFeatures>
-            <OutdoorFeatureFiltersContainer />
+            <OutdoorFeatureFiltersViewContainer features={outdoorFeatures} />
           </PropertyFilters.OutdoorFeatures>
           <PropertyFilters.LotFeatures>
-            <LotFeatureFiltersContainer />
+            <LotFeatureFiltersViewContainer features={lotFeatures} />
           </PropertyFilters.LotFeatures>
           <PropertyFilters.LivingArea>
             <LivingAreaFiltersViewContainer />
@@ -68,23 +98,23 @@ const FilterBarViewContainer = ({}: Props) => {
             <LotSizeFiltersViewContainer />
           </PropertyFilters.LotSize>
           <PropertyFilters.NearestMRTStation>
-            <NearestMRTStationFilterContainer />
+            <NearestMRTStationFilterViewContainer stations={mrtStations} />
           </PropertyFilters.NearestMRTStation>
           <PropertyFilters.NearestBTSStation>
-            <NearestBTSStationFilterContainer />
+            <NearestBTSStationFilterViewContainer stations={btsStations} />
           </PropertyFilters.NearestBTSStation>
         </FilterDialogViewContainer>
       </Layout.FilterDialog>
       <Layout.Separator />
       <Layout.KeyFilters>
-        <TypeFilterPopoverContainer />
+        <TypeFilterPopoverViewContainer types={propertyTypes} />
         <AvailabilityFilterPopoverViewContainer />
         <PriceFilterPopoverViewContainer />
         <BedsFilterPopoverViewContainer />
       </Layout.KeyFilters>
       <Layout.Separator />
       <Layout.QuickFilters>
-        <QuickFiltersContainer />
+        <QuickFiltersViewContainer filters={quickFilters} />
       </Layout.QuickFilters>
     </Layout.Root>
   );

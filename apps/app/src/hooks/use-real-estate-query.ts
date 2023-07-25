@@ -11,6 +11,7 @@ import qs from "query-string";
 import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
 import { setCookie } from "typescript-cookie";
+import adapters from "../adapters";
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
@@ -84,7 +85,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     });
   };
 
-  const query = realEstateQuerySchema.parse(router.query);
+  const query = adapters.searchParamsToPartialQuery(router.query);
   const queryString = generateQueryString(query);
 
   const defaults = realEstateQuerySchema.parse({});
