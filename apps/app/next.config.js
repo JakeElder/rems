@@ -15,6 +15,12 @@ const nextConfig = {
       { hostname: "cms.stage.jyoproperty.com" },
       { hostname: "res.cloudinary.com" }
     ]
+  },
+  webpack: (config) => {
+    return {
+      ...config,
+      externals: [...config.externals, { sequelize: "commonjs sequelize" }]
+    };
   }
 };
 

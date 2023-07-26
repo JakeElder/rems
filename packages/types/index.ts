@@ -1,5 +1,5 @@
 import { PluginUploadFile } from "./generated/contentTypes";
-import { ZodRawShape, z } from "zod";
+import { z } from "zod";
 
 export type Pagination = {
   page: number;

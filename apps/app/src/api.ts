@@ -97,8 +97,6 @@ const get = {
       ...pq
     };
 
-    const property_type = { slug: { $in: query["property-type"] } };
-
     const purchasePrice =
       query["availability"] === "sale"
         ? {
@@ -122,6 +120,27 @@ const get = {
 
     const bathrooms = { $gte: query["min-bathrooms"] };
 
+    const livingArea = {
+      $gte: query["min-living-area"],
+      ...(query["max-living-area"] ? { $lte: query["max-living-area"] } : {})
+    };
+
+    const lotSize =
+      query["min-lot-size"] || query["max-lot-size"]
+        ? {
+            $gte: query["min-lot-size"],
+            ...(query["max-lot-size"] ? { $lte: query["max-lot-size"] } : {})
+          }
+        : {};
+
+    const availableToPurchase =
+      query["availability"] === "sale" ? { $eq: true } : {};
+
+    const availableToRent =
+      query["availability"] === "rent" ? { $eq: true } : {};
+
+    const property_type = { slug: { $in: query["property-type"] } };
+
     const view_types = query["view-types"].map((t) => ({
       view_types: { slug: { $in: t } }
     }));
@@ -138,19 +157,6 @@ const get = {
       lot_features: { slug: { $in: t } }
     }));
 
-    const livingArea = {
-      $gte: query["min-living-area"],
-      ...(query["max-living-area"] ? { $lte: query["max-living-area"] } : {})
-    };
-
-    const lotSize =
-      query["min-lot-size"] || query["max-lot-size"]
-        ? {
-            $gte: query["min-lot-size"],
-            ...(query["max-lot-size"] ? { $lte: query["max-lot-size"] } : {})
-          }
-        : {};
-
     const nearest_mrt_station = query["nearest-mrt-station"]
       ? { slug: { $eq: query["nearest-mrt-station"] } }
       : {};
@@ -160,12 +166,6 @@ const get = {
       : {};
 
     const area = query["area"] ? { slug: { $eq: query["area"] } } : {};
-
-    const availableToPurchase =
-      query["availability"] === "sale" ? { $eq: true } : {};
-
-    const availableToRent =
-      query["availability"] === "rent" ? { $eq: true } : {};
 
     const sort = (() => {
       const map: Record<SortType, string> = {

@@ -45,8 +45,8 @@ const adapters = {
   image(res: any): Image {
     return {
       id: res.id,
-      src: `${process.env.ASSET_URL}${res.attributes.url}`,
-      ...res.attributes
+      src: `${process.env.ASSET_URL}${res.url}`,
+      ...res
     };
   },
 
@@ -70,7 +70,7 @@ const adapters = {
       view_types,
       address,
       publishedAt
-    } = res.attributes;
+    } = res;
 
     return {
       id: res.id,
@@ -95,7 +95,7 @@ const adapters = {
       viewTypes: (view_types?.data || []).map(adapters.filter),
       address,
       livingArea,
-      images: (images.data || []).map(adapters.image),
+      images: (images || []).map(adapters.image),
       createdAt,
       updatedAt,
       publishedAt

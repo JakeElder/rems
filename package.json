@@ -4,13 +4,16 @@
     "apps/app",
     "apps/ui",
     "apps/cms",
-    "packages/types"
+    "packages/types",
+    "packages/strapi-plugin-google-map-picker",
+    "packages/strapi"
   ],
   "engines": {
     "node": "18.x"
   },
   "scripts": {
     "postinstall": "./postinstall",
-    "start": "cd apps/cms && npm run start"
-  }
+    "start": "cd apps/cms && yarn start"
+  },
+  "packageManager": "yarn@3.6.1"
 }

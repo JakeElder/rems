@@ -23,6 +23,7 @@
     "next": "13.4.10",
     "nodemailer": "^6.9.3",
     "openai": "^3.3.0",
+    "pg": "^8.11.1",
     "prettyjson": "^1.2.5",
     "qs": "^6.11.1",
     "query-string": "^8.1.0",
@@ -31,6 +32,7 @@
     "react-hotkeys-hook": "^4.4.1",
     "react-speech-recognition": "^3.10.0",
     "remeda": "^1.24.0",
+    "sequelize": "^6.32.1",
     "slugify": "^1.6.6",
     "swr": "^2.2.0",
     "the-new-css-reset": "^1.8.4",
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "@types/nodemailer": "^6.4.8",
+    "@types/pg": "^8.10.2",
     "@types/prettyjson": "^0.0.30",
     "@types/react-speech-recognition": "^3.9.2",
     "commander": "^11.0.0",

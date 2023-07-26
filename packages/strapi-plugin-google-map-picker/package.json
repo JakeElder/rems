@@ -48,14 +48,14 @@
     "coordinates"
   ],
   "dependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
     "@react-google-maps/api": "^2.13.1",
     "@strapi/design-system": "^1.5.0",
     "@strapi/helper-plugin": "^4.5.6",
     "@strapi/icons": "^1.5.0",
     "@strapi/strapi": "4.11.6",
     "immer": "^9.0.18",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-intl": "^6.2.5",
     "react-redux": "^8.0.5",
     "strapi-typed": "^1.0.15",
