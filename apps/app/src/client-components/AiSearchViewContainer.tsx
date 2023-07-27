@@ -1,9 +1,8 @@
 "use client";
 
 import "regenerator-runtime";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiSearch } from "@rems/ui";
-import { debounce } from "throttle-debounce";
 import useRealEstateQuery from "../hooks/use-real-estate-query";
 import { AiSearchInputState } from "@rems/types";
 import SpeechRecognition, {
@@ -11,6 +10,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { resolveNl } from "../api.client";
 import useSWR from "swr";
+import { useDebouncedCallback } from "use-debounce";
 
 type Props = {};
 
@@ -21,11 +21,13 @@ const AiSearchViewContainer = ({}: Props) => {
   const [activeSearch, setActiveSearch] = useState<null | string>(null);
   const $input = useRef<HTMLInputElement>(null);
 
-  const { transcript, resetTranscript } = useSpeechRecognition();
+  const { transcript } = useSpeechRecognition({
+    clearTranscriptOnListen: true
+  });
 
   useSWR(
-    activeSearch ? ["nl", activeSearch] : null,
-    ([_, nl]) => resolveNl(query, nl),
+    activeSearch ? [activeSearch, "nl"] : null,
+    ([nl]) => resolveNl(query, nl),
     {
       onSuccess: (query) => {
         commit(query);
@@ -48,17 +50,15 @@ const AiSearchViewContainer = ({}: Props) => {
       const $el = $input.current!;
       setTimeout(() => ($el.scrollLeft = 10000), 100);
     } else {
-      resetTranscript();
       setState("inputting");
     }
 
-    debouncedProcessInput(value);
+    debouncedExecute();
   };
 
-  const processInput = (value: string) => {
+  const execute = () => {
     SpeechRecognition.stopListening();
     if (value.length === 0) {
-      commit({});
       setState("inactive");
     } else {
       setState("resolving");
@@ -66,22 +66,23 @@ const AiSearchViewContainer = ({}: Props) => {
     }
   };
 
-  const debouncedProcessInput = useCallback(
-    debounce(3000, processInput, { atBegin: false }),
-    []
-  );
+  const debouncedExecute = useDebouncedCallback(execute, 2500);
 
   const onMicClick = () => {
-    resetTranscript();
     SpeechRecognition.startListening({ continuous: true });
     setState("listening");
-    debouncedProcessInput(value);
+    debouncedExecute();
   };
 
   return (
     <AiSearch
       ref={$input}
       onMicClick={onMicClick}
+      onSubmit={(e) => {
+        e.preventDefault();
+        debouncedExecute.cancel();
+        execute();
+      }}
       history={[]}
       state={state}
       value={value}

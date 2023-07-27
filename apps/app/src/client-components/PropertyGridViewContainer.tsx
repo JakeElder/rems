@@ -1,19 +1,13 @@
 "use client";
 
 import React from "react";
-import useRealEstateQuery from "../hooks/use-real-estate-query";
 import { PropertyCard, PropertyGrid } from "@rems/ui";
-import useSWR from "swr";
-import getProperties from "../utils/get-properties";
+import useProperties from "../hooks/use-properties";
 
 type Props = {};
 
 const PropertyGridViewContainer = ({}: Props) => {
-  const { queryString } = useRealEstateQuery();
-  const key = queryString || "?";
-  const { data, isLoading } = useSWR(key, getProperties, {
-    keepPreviousData: true
-  });
+  const { data, isLoading } = useProperties();
 
   return (
     <PropertyGrid loading={isLoading}>

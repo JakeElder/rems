@@ -16,6 +16,7 @@ type InputHTMLProps = React.DetailedHTMLProps<
 
 type Props = {
   onChange?: InputHTMLProps["onChange"];
+  onSubmit?: React.FormHTMLAttributes<HTMLFormElement>["onSubmit"];
   onMicClick?: () => void;
   value?: InputHTMLProps["value"];
   debug?: boolean;
@@ -37,7 +38,7 @@ const useHideShow = (show: boolean) => {
 const Status = ({ state }: { state: AiSearchInputState }) => {
   const loader = useHideShow(state === "resolving");
   const check = useHideShow(state === "resolved");
-  const listening = useHideShow(state === "listening");
+  const inputting = useHideShow(state === "listening" || state === "inputting");
 
   return (
     <div className={css["state"]}>
@@ -65,10 +66,10 @@ const Status = ({ state }: { state: AiSearchInputState }) => {
             </animated.div>
           )
       )}
-      {listening(
+      {inputting(
         (style, show) =>
           show && (
-            <animated.div style={style} className={css["listening"]}>
+            <animated.div style={style} className={css["inputting"]}>
               <LineWave
                 height={34}
                 width={34}
@@ -174,11 +175,11 @@ const AiSearch = React.forwardRef<HTMLInputElement, Props>(
       return <DebugAiSearch {...props} />;
     }
 
-    const { onChange, value, onMicClick, state } = props;
+    const { onChange, value, onMicClick, state, onSubmit } = props;
 
     return (
       <div className={css["root"]}>
-        <form className={css["form"]}>
+        <form className={css["form"]} onSubmit={onSubmit}>
           <div className={css["input-state-and-controls"]}>
             <div className={css["input-state"]}>
               <Input

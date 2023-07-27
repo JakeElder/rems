@@ -1,4 +1,8 @@
-import { PartialRealEstateQuery } from "@rems/types";
+import {
+  Filter,
+  PartialAiRealEstateQuery,
+  PartialRealEstateQuery
+} from "@rems/types";
 import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
 import api from "../api";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -14,10 +18,13 @@ const message = (node: React.ReactNode) => {
   return NodeHtmlMarkdown.translate(renderToStaticMarkup(node));
 };
 
-const enumArray = (key: keyof PartialRealEstateQuery, values: string[]) => ({
+const enumArray = (key: keyof PartialRealEstateQuery, filters: Filter[]) => ({
   [key]: {
     type: "array",
-    items: { type: "string", enum: values },
+    items: {
+      type: "string",
+      enum: filters.map((i) => i.slug)
+    },
     default: []
   }
 });
@@ -38,26 +45,11 @@ const enumProperties = async () => {
   ]);
 
   return {
-    ...enumArray(
-      "indoor-features",
-      indoorFeatures.map((i) => i.slug)
-    ),
-    ...enumArray(
-      "lot-features",
-      lotFeatures.map((i) => i.slug)
-    ),
-    ...enumArray(
-      "outdoor-features",
-      outdoorFeatures.map((i) => i.slug)
-    ),
-    ...enumArray(
-      "property-type",
-      propertyTypes.map((i) => i.slug)
-    ),
-    ...enumArray(
-      "view-types",
-      viewTypes.map((i) => i.slug)
-    )
+    ...enumArray("indoor-features", indoorFeatures),
+    ...enumArray("lot-features", lotFeatures),
+    ...enumArray("outdoor-features", outdoorFeatures),
+    ...enumArray("property-type", propertyTypes),
+    ...enumArray("view-types", viewTypes)
   };
 };
 
@@ -80,7 +72,7 @@ const generateSchema = async () => {
 export default async function nlToQuery(
   query: PartialRealEstateQuery,
   nl: string
-): Promise<PartialRealEstateQuery | undefined> {
+): Promise<PartialAiRealEstateQuery | null> {
   const request: CreateChatCompletionRequest = {
     model: "gpt-3.5-turbo",
     temperature: 0.1,
@@ -179,9 +171,10 @@ export default async function nlToQuery(
     const choice = res.data.choices[0];
     const message = choice.message!;
     const function_call = message.function_call!;
-    return JSON.parse(function_call.arguments!);
+    return JSON.parse(function_call.arguments!).nextQuery;
   } catch (e) {
     console.error("Error with call");
+    return null;
   }
 }
 

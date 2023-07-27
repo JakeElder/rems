@@ -3,17 +3,13 @@
 import React from "react";
 import useRealEstateQuery from "../hooks/use-real-estate-query";
 import { CountAndSort } from "@rems/ui";
-import useSWR from "swr";
-import getProperties from "../utils/get-properties";
+import useProperties from "../hooks/use-properties";
 
 type Props = {};
 
 const CountAndSortViewContainer = ({}: Props) => {
-  const { query, queryString, onValueChange } = useRealEstateQuery();
-  const key = queryString || "?";
-  const { data, isLoading } = useSWR(key, getProperties, {
-    keepPreviousData: true
-  });
+  const { query, onValueChange } = useRealEstateQuery();
+  const { data, isLoading } = useProperties();
 
   return (
     <CountAndSort

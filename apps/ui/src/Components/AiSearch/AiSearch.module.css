@@ -46,13 +46,13 @@
   right: 0;
 }
 
-.loading {
+.resolved {
   position: absolute;
   right: 12px;
   top: 8px;
 }
 
-.listening {
+.inputting {
   position: absolute;
   right: -3px;
   top: -4px;

@@ -30,16 +30,38 @@ const base = () =>
     "max-living-area": z.coerce.number().nullable().default(null).catch(null),
     availability: z.enum(["sale", "rent"]).default("sale").catch("sale"),
     "min-lot-size": z.coerce.number().default(0).catch(0),
-    "max-lot-size": z.coerce.number().nullable().default(null).catch(null)
+    "max-lot-size": z.coerce.number().nullable().default(null).catch(null),
+    "search-radius": z.coerce
+      .number()
+      .nullable()
+      .default(null)
+      .catch(null)
+      .describe(
+        txt(
+          <>
+            The radius from `search-origin`, defining the area to search for
+            properties within. It should be specified in meters squared.
+          </>
+        )
+      ),
+    "search-origin-lat": z.coerce.number().default(13.736717).catch(13.736717),
+    "search-origin-lng": z.coerce
+      .number()
+      .default(100.523186)
+      .catch(100.523186),
+    "map-zoom": z.coerce
+      .number()
+      .default(9)
+      .catch(9)
+      .describe(txt(<>The zoom level of the map. A number between 0 and 22</>))
   });
 
 export const RealEstateQuerySchema = base().extend({
-  "search-origin-lat": z.coerce.number().nullable().default(null).catch(null),
-  "search-origin-long": z.coerce.number().nullable().default(null).catch(null),
-  "search-radius": z.coerce.number().nullable().default(null).catch(null),
-  "search-origin-id": z.coerce.number().nullable().default(null).catch(null),
+  "search-origin-id": z.string().nullable().default(null).catch(null),
   "nearest-mrt-station": z.string().nullable().default(null).catch(null),
   "nearest-bts-station": z.string().nullable().default(null).catch(null),
+  "map-lat": z.coerce.number().nullable().default(null).catch(null),
+  "map-lng": z.coerce.number().nullable().default(null).catch(null),
   area: z.string().nullable().default(null).catch(null)
 });
 
@@ -68,19 +90,6 @@ export const AiRealEstateQuerySchema = base().extend({
           A natural language range from which properties should be within in
           relation from the search origin. Could be "near", "close to", "within
           walking distance", etc
-        </>
-      )
-    ),
-  "search-radius": z
-    .string()
-    .nullable()
-    .default(null)
-    .catch(null)
-    .describe(
-      txt(
-        <>
-          A natural language description of the location from which properties
-          should be near
         </>
       )
     )

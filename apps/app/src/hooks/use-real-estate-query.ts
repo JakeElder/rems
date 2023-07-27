@@ -12,6 +12,7 @@ import { omitBy, equals } from "remeda";
 import { setCookie } from "typescript-cookie";
 import adapters from "../adapters";
 import { RealEstateQuerySchema } from "@rems/schemas";
+import { useDebouncedCallback } from "use-debounce";
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
@@ -44,7 +45,10 @@ type UseRealEstateQueryReturn = {
   ) => void;
   onAvailabilityChange: (availability: RealEstateQuery["availability"]) => void;
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
+  onMapZoomChange: (zoom: number) => void;
+  onMapMove: (lat: number, lng: number) => void;
   reset: () => void;
+  isReady: boolean;
 };
 
 export const removeDefaults = (
@@ -111,7 +115,27 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     has("nearest-bts-station")
   ].filter((i) => i).length;
 
+  const onMapZoomChange = useDebouncedCallback<
+    UseRealEstateQueryReturn["onMapZoomChange"]
+  >((zoom) => {
+    const nextQuery = update(query, { "map-zoom": { $set: zoom } });
+    commit(nextQuery);
+  }, 500);
+
+  const onMapMove = useDebouncedCallback<UseRealEstateQueryReturn["onMapMove"]>(
+    (lat, lng) => {
+      const nextQuery = update(query, {
+        "map-lat": { $set: lat },
+        "map-lng": { $set: lng }
+      });
+      commit(nextQuery);
+    },
+    500
+  );
+
   return {
+    isReady: router.isReady,
+
     query,
     queryString,
 
@@ -202,6 +226,8 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     },
 
     commit,
+    onMapZoomChange,
+    onMapMove,
 
     onMinBathsChange: (min) => {
       const nextQuery = update(query, {
