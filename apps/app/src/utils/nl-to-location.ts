@@ -1,7 +1,6 @@
 import qs from "query-string";
 
 const PLACES_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
-const GOOGLE_API_KEY = "AIzaSyAnbY57UVXAVg2i4npH-DKiR5G0c5JP_UA";
 const BIAS = "18.796143,98.979263"; // Chiang Mai
 
 export default async function nlToLocation(
@@ -9,7 +8,7 @@ export default async function nlToLocation(
 ): Promise<{ lat: number; lng: number; placeId: string } | null> {
   const q = qs.stringify({
     query: nl,
-    key: GOOGLE_API_KEY,
+    key: process.env.PLACES_API_KEY,
     location: BIAS
   });
 

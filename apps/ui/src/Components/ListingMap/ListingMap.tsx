@@ -1,23 +1,74 @@
 "use client";
 
 import css from "./ListingMap.module.css";
-import Map, { MapRef, Marker } from "react-map-gl";
+import Map, { Layer, MapRef, Marker, Source } from "react-map-gl";
 import MapPropertyMarker from "../MapPropertyMarker/MapPropertyMarker";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useIndexConnector } from "../IndexConnector/IndexConnector";
 import Link from "next/link";
-import { Property } from "@rems/types";
+import { Property, RealEstateQuery } from "@rems/types";
 import React from "react";
+import { circle, lineString } from "@turf/turf";
+import { Required } from "utility-types";
 
 const TOKEN =
   "pk.eyJ1IjoiamFrZS1lbGRlciIsImEiOiJjbGZtbm12d28wZGp3M3JyemlrNnp1cmRvIn0.ovmQBkbXdCh-w_rUJ82GZA";
 
-type Props = React.ComponentProps<typeof Map> & {
+type Props = Required<
+  React.ComponentProps<typeof Map>,
+  "longitude" | "latitude"
+> & {
   properties: Property[];
+  radius: RealEstateQuery["search-radius"];
+  searchLat: RealEstateQuery["search-origin-lat"];
+  searchLng: RealEstateQuery["search-origin-lng"];
+};
+
+type RadiusProps = {
+  lat: RealEstateQuery["search-origin-lat"];
+  lng: RealEstateQuery["search-origin-lng"];
+  radius: RealEstateQuery["search-radius"];
+};
+
+const Radius = ({ lat, lng, radius }: RadiusProps) => {
+  const c = circle([lng, lat], radius, { units: "meters" });
+  const line = lineString(c.geometry.coordinates[0]);
+
+  return (
+    <>
+      <Source type="geojson" data={c}>
+        <Layer
+          type="fill"
+          paint={{ "fill-color": "#fff", "fill-opacity": 0.25 }}
+        />
+      </Source>
+      <Source type="geojson" data={line}>
+        <Layer
+          type="line"
+          paint={{
+            "line-color": "#000",
+            "line-opacity": 0.6
+          }}
+        />
+      </Source>
+    </>
+  );
 };
 
 const ListingMap = React.forwardRef<MapRef, Props>(
-  ({ properties, longitude, latitude, zoom, ...props }, ref) => {
+  (
+    {
+      properties,
+      longitude,
+      latitude,
+      zoom,
+      radius,
+      searchLat,
+      searchLng,
+      ...props
+    },
+    ref
+  ) => {
     const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
     const withGeo = properties.filter((p) => !!p.location);
 
@@ -33,6 +84,7 @@ const ListingMap = React.forwardRef<MapRef, Props>(
               initialViewState={{ longitude, latitude, zoom }}
               {...props}
             >
+              <Radius lat={searchLat} lng={searchLng} radius={radius} />
               {withGeo.map((p) => (
                 <Link
                   key={p.id}

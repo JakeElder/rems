@@ -31,6 +31,7 @@ import LotFeatureFiltersViewContainer from "./LotFeatureFiltersViewContainer";
 import NearestMRTStationFilterViewContainer from "./NearestMRTStationFilterViewContainer";
 import NearestBTSStationFilterViewContainer from "./NearestBTSStationFilterViewContainer";
 import QuickFiltersViewContainer from "./QuickFiltersViewContainer";
+import PlacesAutocompleteViewContainer from "./PlacesAutocompleteViewContainer";
 
 type Props = {
   propertyTypes: PropertyType[];
@@ -62,6 +63,9 @@ const FilterBarViewContainer = ({
           <PropertyFilters.PropertyType>
             <TypeFiltersViewContainer id="filter-bar" types={propertyTypes} />
           </PropertyFilters.PropertyType>
+          <PropertyFilters.Location>
+            <PlacesAutocompleteViewContainer />
+          </PropertyFilters.Location>
           <PropertyFilters.AvailabilityAndArea>
             <PropertyFilters.Availability>
               <AvailabilityFilterViewContainer />

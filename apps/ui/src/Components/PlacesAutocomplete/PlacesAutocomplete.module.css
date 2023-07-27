@@ -1,0 +1,17 @@
+.root {
+  font-family: var(--font-inter);
+  font-weight: 300;
+}
+
+.select {
+  height: 48px;
+  box-shadow: none !important;
+}
+
+.indicator {
+  padding: 10px !important;
+}
+
+.value {
+  padding: 8px 12px !important;
+}

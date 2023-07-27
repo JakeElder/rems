@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 type Props = {};
 
 const ListingMapViewContainer = ({}: Props) => {
-  const mapRef = useRef<MapRef | undefined>();
+  const mapRef = useRef<MapRef>();
   const { query, onMapZoomChange, onMapMove, isReady } = useRealEstateQuery();
   const previousQuery = usePrevious(query);
   const { data } = useProperties();
@@ -20,10 +20,12 @@ const ListingMapViewContainer = ({}: Props) => {
     if (!isReady || !previousQuery || !mapRef.current) {
       return;
     }
-    mapRef.current.panTo([
-      query["search-origin-lng"],
-      query["search-origin-lat"]
-    ]);
+    setTimeout(() => {
+      mapRef.current!.panTo([
+        query["search-origin-lng"],
+        query["search-origin-lat"]
+      ]);
+    }, 200);
   }, [query["search-origin-lat"], query["search-origin-lng"]]);
 
   useEffect(() => {
@@ -39,11 +41,14 @@ const ListingMapViewContainer = ({}: Props) => {
 
   return (
     <ListingMap
-      ref={mapRef}
+      ref={mapRef as any}
       properties={data?.data || []}
       latitude={query["map-lat"] || query["search-origin-lat"]}
       longitude={query["map-lng"] || query["search-origin-lng"]}
+      searchLat={query["search-origin-lat"]}
+      searchLng={query["search-origin-lng"]}
       zoom={query["map-zoom"]}
+      radius={query["search-radius"]}
       onZoom={(e) => {
         onMapZoomChange(e.viewState.zoom);
       }}

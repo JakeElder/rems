@@ -33,9 +33,8 @@ const base = () =>
     "max-lot-size": z.coerce.number().nullable().default(null).catch(null),
     "search-radius": z.coerce
       .number()
-      .nullable()
-      .default(null)
-      .catch(null)
+      .default(2000)
+      .catch(2000)
       .describe(
         txt(
           <>
@@ -76,20 +75,6 @@ export const AiRealEstateQuerySchema = base().extend({
         <>
           A natural language description of the location from which properties
           should be near
-        </>
-      )
-    ),
-  "search-proximity": z
-    .string()
-    .nullable()
-    .default(null)
-    .catch(null)
-    .describe(
-      txt(
-        <>
-          A natural language range from which properties should be within in
-          relation from the search origin. Could be "near", "close to", "within
-          walking distance", etc
         </>
       )
     )

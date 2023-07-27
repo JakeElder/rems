@@ -46,6 +46,7 @@ type UseRealEstateQueryReturn = {
   onAvailabilityChange: (availability: RealEstateQuery["availability"]) => void;
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
   onMapZoomChange: (zoom: number) => void;
+  onSearchOriginChange: (id: string, lng: number, lat: number) => void;
   onMapMove: (lat: number, lng: number) => void;
   reset: () => void;
   isReady: boolean;
@@ -166,6 +167,15 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
     onPageChange: (page) => {
       const nextQuery = update(query, { page: { $set: page } });
+      commit(nextQuery);
+    },
+
+    onSearchOriginChange: (id, lng, lat) => {
+      const nextQuery = update(query, {
+        "search-origin-id": { $set: id },
+        "search-origin-lat": { $set: lat },
+        "search-origin-lng": { $set: lng }
+      });
       commit(nextQuery);
     },
 

@@ -70,6 +70,7 @@ const AiSearchViewContainer = ({}: Props) => {
 
   const onMicClick = () => {
     SpeechRecognition.startListening({ continuous: true });
+    setValue("");
     setState("listening");
     debouncedExecute();
   };

@@ -15,6 +15,15 @@ export const PropertyType = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+export const Location = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Location</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
 export const AvailabilityAndArea = ({
   children
 }: {

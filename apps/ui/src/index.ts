@@ -35,6 +35,7 @@ export { default as NearestBTSStationFilter } from "./Components/NearestBTSStati
 export { default as NearestMRTStationFilter } from "./Components/NearestMRTStationFilter";
 export { default as OutdoorFeatureFilters } from "./Components/OutdoorFeatureFilters";
 export { default as Pagination } from "./Components/Pagination";
+export { default as PlacesAutocomplete } from "./Components/PlacesAutocomplete";
 export { default as PriceRange } from "./Components/PriceRange";
 export { default as PriceFilterPopover } from "./Components/PriceFilterPopover";
 export { default as PropertyCard } from "./Components/PropertyCard";

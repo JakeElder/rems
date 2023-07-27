@@ -1,7 +1,6 @@
 "use server";
 
 import { Configuration, OpenAIApi } from "openai";
-import { generateRealEstateQuerySchema } from "./nl-to-query";
 import { PartialRealEstateQuery } from "@rems/types";
 
 const openai = new OpenAIApi(
@@ -26,7 +25,7 @@ const queryToNlTitle = async (
       },
       {
         role: "user",
-        content: JSON.stringify(await generateRealEstateQuerySchema())
+        content: JSON.stringify({})
       },
       {
         role: "user",

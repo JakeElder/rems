@@ -20,6 +20,7 @@ import NearestMRTStationFilterContainer from "../server-components/NearestMRTSta
 import NearestBTSStationFilterContainer from "../server-components/NearestBTSStationFilter";
 import { PropertyFilters, FilterBar as Layout } from "@rems/ui";
 import QuickFiltersContainer from "./QuickFiltersContainer";
+import PlacesAutocompleteViewContainer from "../client-components/PlacesAutocompleteViewContainer";
 
 type Props = {};
 
@@ -31,6 +32,9 @@ const FilterBarContainer = ({}: Props) => {
           <PropertyFilters.PropertyType>
             <TypeFiltersContainer id="filters" />
           </PropertyFilters.PropertyType>
+          <PropertyFilters.Location>
+            <PlacesAutocompleteViewContainer />
+          </PropertyFilters.Location>
           <PropertyFilters.AvailabilityAndArea>
             <PropertyFilters.Availability>
               <AvailabilityFilterViewContainer />

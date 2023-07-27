@@ -8,6 +8,7 @@
   "dependencies": {
     "@rems/types": "*",
     "react": "18.2.0",
+    "react-google-places-autocomplete": "^4.0.1",
     "typescript": "^5.0.2",
     "zod": "^3.21.4"
   }
