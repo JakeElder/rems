@@ -1,3 +1,10 @@
+import {
+  PartialRealEstateQuerySchema,
+  RealEstateQuerySchema,
+  ContactFormSchema,
+  AiRealEstateQuerySchema,
+  PartialAiRealEstateQuerySchema
+} from "@rems/schemas";
 import { PluginUploadFile } from "./generated/contentTypes";
 import { z } from "zod";
 
@@ -188,55 +195,17 @@ export type Filters = {
   quickFilters: QuickFilter[];
 };
 
-export const contactFormDataSchema = z
-  .object({
-    name: z.string(),
-    email: z.string(),
-    uid: z.string().default(""),
-    message: z.string().default(""),
-    phone: z.string().default("")
-  })
-  .partial()
-  .required({ name: true, email: true });
+export type ContactFormData = z.infer<typeof ContactFormSchema>;
 
-export type ContactFormData = z.infer<typeof contactFormDataSchema>;
+export type RealEstateQuery = z.infer<typeof RealEstateQuerySchema>;
+export type PartialRealEstateQuery = z.infer<
+  typeof PartialRealEstateQuerySchema
+>;
 
-export const realEstateQuerySchema = z.object({
-  "indoor-features": z.string().array().default([]).catch([]),
-  "lot-features": z.string().array().default([]).catch([]),
-  "outdoor-features": z.string().array().default([]).catch([]),
-  "property-type": z.string().array().default([]).catch([]),
-  "view-types": z.string().array().default([]).catch([]),
-  page: z.coerce.number().default(1).catch(1),
-  sort: z
-    .enum([
-      "newest-first",
-      "lowest-price-first",
-      "highest-price-first",
-      "smallest-living-area-first",
-      "largest-living-area-first"
-    ])
-    .default("newest-first")
-    .catch("newest-first"),
-  "min-price": z.coerce.number().default(0).catch(0),
-  "max-price": z.coerce.number().nullable().default(null).catch(null),
-  "min-bedrooms": z.coerce.number().default(0).catch(0),
-  "max-bedrooms": z.coerce.number().nullable().default(null).catch(null),
-  "min-bathrooms": z.coerce.number().default(0).catch(0),
-  "min-living-area": z.coerce.number().default(0).catch(0),
-  "max-living-area": z.coerce.number().nullable().default(null).catch(null),
-  "nearest-mrt-station": z.string().nullable().default(null).catch(null),
-  "nearest-bts-station": z.string().nullable().default(null).catch(null),
-  area: z.string().nullable().default(null).catch(null),
-  availability: z.enum(["sale", "rent"]).default("sale").catch("sale"),
-  "min-lot-size": z.coerce.number().default(0).catch(0),
-  "max-lot-size": z.coerce.number().nullable().default(null).catch(null)
-});
-
-export type RealEstateQuery = z.infer<typeof realEstateQuerySchema>;
-
-const partialRealEstateQuery = realEstateQuerySchema.partial();
-export type PartialRealEstateQuery = z.infer<typeof partialRealEstateQuery>;
+export type AiRealEstateQuery = z.infer<typeof AiRealEstateQuerySchema>;
+export type PartialAiRealEstateQuery = z.infer<
+  typeof PartialAiRealEstateQuerySchema
+>;
 
 export type QuickFilterQueryKey = keyof Pick<
   RealEstateQuery,

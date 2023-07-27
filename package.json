@@ -1,12 +1,8 @@
 {
   "name": "rems",
   "workspaces": [
-    "apps/app",
-    "apps/ui",
-    "apps/cms",
-    "packages/types",
-    "packages/strapi-plugin-google-map-picker",
-    "packages/strapi"
+    "apps/*",
+    "packages/*"
   ],
   "engines": {
     "node": "18.x"

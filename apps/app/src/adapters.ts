@@ -4,9 +4,9 @@ import {
   Image,
   Property,
   RealEstateQuery,
-  SearchParams,
-  realEstateQuerySchema
+  SearchParams
 } from "@rems/types";
+import { RealEstateQuerySchema } from "@rems/schemas";
 import slugify from "slugify";
 import { flatten } from "remeda";
 
@@ -28,7 +28,7 @@ const adapters = {
       return { ...acc, [k]: val };
     }, {});
 
-    return realEstateQuerySchema.parse(p);
+    return RealEstateQuerySchema.parse(p);
   },
 
   filterSet(res: any): FilterSet {

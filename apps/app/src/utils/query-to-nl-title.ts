@@ -1,10 +1,12 @@
 "use server";
 
 import { Configuration, OpenAIApi } from "openai";
-const KEY = "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";
-const openai = new OpenAIApi(new Configuration({ apiKey: KEY }));
 import { generateRealEstateQuerySchema } from "./nl-to-query";
 import { PartialRealEstateQuery } from "@rems/types";
+
+const openai = new OpenAIApi(
+  new Configuration({ apiKey: process.env.OPENAI_KEY })
+);
 
 const queryToNlTitle = async (
   query: PartialRealEstateQuery

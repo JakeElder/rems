@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import qs from "qs";
-import { RealEstateQuery, realEstateQuerySchema } from "@rems/types";
+import { RealEstateQuery } from "@rems/types";
 import {
   File,
   FileRelatedMorph,
@@ -10,6 +10,7 @@ import {
 } from "../../../models";
 import adapters from "../../../adapters";
 import { Op } from "sequelize";
+import { RealEstateQuerySchema } from "@rems/schemas";
 
 const PROPERTIES_PER_PAGE = 2;
 
@@ -159,7 +160,7 @@ const order = (query: RealEstateQuery) => {
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const params = qs.parse(url.search.substring(1));
-  const query = realEstateQuerySchema.parse(params);
+  const query = RealEstateQuerySchema.parse(params);
 
   const base = {
     where: {

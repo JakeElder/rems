@@ -1,13 +1,14 @@
 {
-  "name": "@rems/types",
+  "name": "@rems/schemas",
   "version": "0.1.0",
   "scripts": {
     "dev": "tsc --watch"
   },
+  "main": "./src",
   "dependencies": {
-    "@rems/schemas": "*",
+    "@rems/types": "*",
     "react": "18.2.0",
-    "typescript": "^5.1.6",
+    "typescript": "^5.0.2",
     "zod": "^3.21.4"
   }
 }

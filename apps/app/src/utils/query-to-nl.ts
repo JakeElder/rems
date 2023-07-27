@@ -1,14 +1,15 @@
-import { PartialRealEstateQuery, realEstateQuerySchema } from "@rems/types";
+import { PartialRealEstateQuery } from "@rems/types";
 import { Configuration, OpenAIApi } from "openai";
 import api from "../api";
-const KEY = "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";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import { RealEstateQuerySchema } from "@rems/schemas";
 
-const configuration = new Configuration({ apiKey: KEY });
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAIApi(
+  new Configuration({ apiKey: process.env.OPENAI_KEY })
+);
 
 async function generateSchema() {
-  const jsonSchema = zodToJsonSchema(realEstateQuerySchema);
+  const jsonSchema = zodToJsonSchema(RealEstateQuerySchema);
 
   const [
     btsStations,

@@ -16,7 +16,7 @@ type Props = {};
 
 const AiSearchViewContainer = ({}: Props) => {
   const [value, setValue] = useState("");
-  const { commit } = useRealEstateQuery();
+  const { commit, query } = useRealEstateQuery();
   const [state, setState] = useState<AiSearchInputState>("inactive");
   const [activeSearch, setActiveSearch] = useState<null | string>(null);
   const $input = useRef<HTMLInputElement>(null);
@@ -25,7 +25,7 @@ const AiSearchViewContainer = ({}: Props) => {
 
   useSWR(
     activeSearch ? ["nl", activeSearch] : null,
-    ([_, query]) => resolveNl(query),
+    ([_, nl]) => resolveNl(query, nl),
     {
       onSuccess: (query) => {
         commit(query);

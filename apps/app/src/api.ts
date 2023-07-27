@@ -10,16 +10,16 @@ import {
   LotFeature,
   MRTStation,
   OutdoorFeature,
-  PartialRealEstateQuery,
   Property,
   PropertyType,
   QuickFilter,
   AppConfig,
   SortType,
   ViewType,
-  realEstateQuerySchema,
-  QuickFilterQueryKey
+  QuickFilterQueryKey,
+  PartialRealEstateQuery
 } from "@rems/types";
+import { RealEstateQuerySchema } from "@rems/schemas";
 
 const get = {
   async quickFilters(): Promise<QuickFilter[]> {
@@ -93,7 +93,7 @@ const get = {
 
   async properties(pq: PartialRealEstateQuery): Promise<GetPropertiesResult> {
     const query = {
-      ...realEstateQuerySchema.parse({}),
+      ...RealEstateQuerySchema.parse({}),
       ...pq
     };
 

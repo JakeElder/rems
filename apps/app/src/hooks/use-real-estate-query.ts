@@ -3,8 +3,7 @@
 import {
   PartialRealEstateQuery,
   QuickFilterQueryKey,
-  RealEstateQuery,
-  realEstateQuerySchema
+  RealEstateQuery
 } from "@rems/types";
 import { useRouter } from "next/router";
 import qs from "query-string";
@@ -12,6 +11,7 @@ import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
 import { setCookie } from "typescript-cookie";
 import adapters from "../adapters";
+import { RealEstateQuerySchema } from "@rems/schemas";
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
@@ -50,7 +50,7 @@ type UseRealEstateQueryReturn = {
 export const removeDefaults = (
   query: PartialRealEstateQuery
 ): PartialRealEstateQuery => {
-  const defaults = realEstateQuerySchema.parse({});
+  const defaults = RealEstateQuerySchema.parse({});
   return omitBy(query, (v, k) => equals(defaults[k], v));
 };
 
@@ -88,7 +88,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const query = adapters.searchParamsToPartialQuery(router.query);
   const queryString = generateQueryString(query);
 
-  const defaults = realEstateQuerySchema.parse({});
+  const defaults = RealEstateQuerySchema.parse({});
   const queryWithoutDefaults = omitBy(query, (v, k) => equals(defaults[k], v));
 
   const has: UseRealEstateQueryReturn["has"] = (param) => {
@@ -198,7 +198,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     },
 
     reset: () => {
-      commit(realEstateQuerySchema.parse({}));
+      commit(RealEstateQuerySchema.parse({}));
     },
 
     commit,

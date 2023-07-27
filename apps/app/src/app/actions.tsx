@@ -1,8 +1,9 @@
 "use server";
 
-import { contactFormDataSchema } from "@rems/types";
+import { ContactFormSchema } from "@rems/schemas";
 import { sendMail } from "../utils";
 import nlToQueryUtil from "../utils/nl-to-query";
+import { PartialRealEstateQuery } from "@rems/types";
 
 export const submitMailingListForm = async (data: { email: string }) => {
   await sendMail({ subject: "New mailing list submission", data });
@@ -10,12 +11,12 @@ export const submitMailingListForm = async (data: { email: string }) => {
 };
 
 export const submitContactForm = async (form: FormData) => {
-  const data = contactFormDataSchema.parse(Object.fromEntries(form));
+  const data = ContactFormSchema.parse(Object.fromEntries(form));
   await sendMail({ subject: "New contact form submission", data });
   return {};
 };
 
-export const nlToQuery = async (query: string) => {
-  const res = await nlToQueryUtil(query);
+export const nlToQuery = async (query: PartialRealEstateQuery, nl: string) => {
+  const res = await nlToQueryUtil(query, nl);
   return res;
 };
