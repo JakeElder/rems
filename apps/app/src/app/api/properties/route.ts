@@ -12,7 +12,7 @@ import adapters from "../../../adapters";
 import { Op } from "sequelize";
 import { RealEstateQuerySchema } from "@rems/schemas";
 
-const PROPERTIES_PER_PAGE = 2;
+const PROPERTIES_PER_PAGE = 14;
 
 const propertyType = (q: RealEstateQuery) => {
   return q["property-type"].length
@@ -177,7 +177,18 @@ export async function GET(req: Request) {
         ...viewTypes(query),
         ...indoorFeatures(query),
         ...outdoorFeatures(query),
-        ...lotFeatures(query)
+        ...lotFeatures(query),
+        {
+          location: {
+            [Op.and]: [
+              { [Op.not]: null },
+              { lat: { [Op.not]: null } },
+              { lng: { [Op.not]: null } },
+              { lat: { [Op.between]: [-90, 90] } },
+              { lng: { [Op.between]: [-180, 180] } }
+            ]
+          }
+        }
       ]
     },
     include: [...propertyType(query)]

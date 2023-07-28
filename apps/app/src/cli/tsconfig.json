@@ -1,7 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "CommonJS",
+    "lib": ["dom", "esnext"],
+    "rootDir": "..",
+    "jsx": "react-jsx",
     "esModuleInterop": true,
-    "jsx": "react-jsx"
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "ts-node": {
+    "files": true
   }
 }

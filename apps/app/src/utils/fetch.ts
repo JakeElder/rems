@@ -4,6 +4,9 @@ export default async function fetch(
 ) {
   return global.fetch(input, {
     ...init,
-    headers: { Authorization: `Bearer ${process.env.API_TOKEN}` }
+    headers: {
+      ...init.headers,
+      Authorization: `Bearer ${process.env.API_TOKEN}`
+    }
   });
 }

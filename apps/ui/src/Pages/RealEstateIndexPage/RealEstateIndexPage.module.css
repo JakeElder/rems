@@ -7,7 +7,7 @@
 }
 
 .content {
-  min-height: calc(100vh - 138px);
+  min-height: calc(100vh - 140px);
   padding: 20px;
 }
 
@@ -70,8 +70,8 @@
   .map-inner {
     position: sticky;
     width: 100%;
-    height: calc(100vh - 138px);
+    height: calc(100vh - 140px);
     left: 0;
-    top: 138px;
+    top: 140px;
   }
 }

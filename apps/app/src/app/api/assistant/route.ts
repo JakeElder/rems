@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import nlToLocation from "../../../utils/nl-to-location";
-import nlToQuery from "../../../utils/nl-to-query";
+import { nlToQuery } from "../../../lib/Remi";
 import { PartialRealEstateQuery } from "@rems/types";
 
 export async function POST(req: Request) {

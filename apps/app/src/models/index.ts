@@ -9,10 +9,9 @@ import snakeCase from "snake-case";
 const sequelize = new Sequelize(process.env.DATABASE_URL!, {
   dialectModule: pg,
   dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
+    ssl: process.env.DATABASE_SSL
+      ? { require: true, rejectUnauthorized: false }
+      : null
   },
   logging: false
 });

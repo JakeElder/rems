@@ -69,13 +69,19 @@ const adapters = {
       outdoor_features,
       view_types,
       address,
+      availableToRent,
+      availableToPurchase,
+      propertyType,
       publishedAt
     } = res;
 
     return {
+      propertyType,
       id: res.id,
       uid,
       title,
+      availableToRent,
+      availableToPurchase,
       description,
       purchasePrice,
       rentalPrice,
