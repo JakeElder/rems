@@ -32,6 +32,7 @@ import NearestMRTStationFilterViewContainer from "./NearestMRTStationFilterViewC
 import NearestBTSStationFilterViewContainer from "./NearestBTSStationFilterViewContainer";
 import QuickFiltersViewContainer from "./QuickFiltersViewContainer";
 import PlacesAutocompleteViewContainer from "./PlacesAutocompleteViewContainer";
+import SearchRadiusViewContainer from "./SearchRadiusViewContainer";
 
 type Props = {
   propertyTypes: PropertyType[];
@@ -66,6 +67,9 @@ const FilterBarViewContainer = ({
           <PropertyFilters.Location>
             <PlacesAutocompleteViewContainer />
           </PropertyFilters.Location>
+          <PropertyFilters.SearchRadius>
+            <SearchRadiusViewContainer />
+          </PropertyFilters.SearchRadius>
           <PropertyFilters.AvailabilityAndArea>
             <PropertyFilters.Availability>
               <AvailabilityFilterViewContainer />

@@ -22,6 +22,7 @@ import {
   ViewType
 } from "@rems/types";
 import api from "../api";
+import { RealEstateIndexPageStateProvider } from "../hooks/use-real-estate-index-page-state";
 
 type Props = {
   config: AppConfig;
@@ -41,38 +42,40 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
   return (
     <Layout.Root>
       <ToastHub>
-        <Layout.Header>
-          <HeaderViewContainer full mode="standard" search={true} />
-          <FilterBarViewContainer {...filterBarProps} />
-        </Layout.Header>
-        <Layout.Main>
-          <Layout.Content>
-            <Layout.Breadcrumbs>
-              <Breadcrumbs
-                items={[
-                  { children: "Home", href: "/" },
-                  { children: "Real Estate", href: "/real-estate" }
-                ]}
-              />
-            </Layout.Breadcrumbs>
-            <RealEstateIndexPageTitleViewContainer />
-            <Layout.CountAndSort>
-              <CountAndSortViewContainer />
-            </Layout.CountAndSort>
-            <Layout.Properties>
-              <PropertyGridViewContainer />
-            </Layout.Properties>
-            <Layout.Pagination>
-              <PaginationViewContainer />
-            </Layout.Pagination>
-          </Layout.Content>
-          <Layout.Map>
-            <ListingMapViewContainer />
-          </Layout.Map>
-        </Layout.Main>
-        <Layout.Footer>
-          <FooterViewContainer config={config} searches={searches} full />
-        </Layout.Footer>
+        <RealEstateIndexPageStateProvider>
+          <Layout.Header>
+            <HeaderViewContainer full mode="standard" search={true} />
+            <FilterBarViewContainer {...filterBarProps} />
+          </Layout.Header>
+          <Layout.Main>
+            <Layout.Content>
+              <Layout.Breadcrumbs>
+                <Breadcrumbs
+                  items={[
+                    { children: "Home", href: "/" },
+                    { children: "Real Estate", href: "/real-estate" }
+                  ]}
+                />
+              </Layout.Breadcrumbs>
+              <RealEstateIndexPageTitleViewContainer />
+              <Layout.CountAndSort>
+                <CountAndSortViewContainer />
+              </Layout.CountAndSort>
+              <Layout.Properties>
+                <PropertyGridViewContainer />
+              </Layout.Properties>
+              <Layout.Pagination>
+                <PaginationViewContainer />
+              </Layout.Pagination>
+            </Layout.Content>
+            <Layout.Map>
+              <ListingMapViewContainer />
+            </Layout.Map>
+          </Layout.Main>
+          <Layout.Footer>
+            <FooterViewContainer config={config} searches={searches} full />
+          </Layout.Footer>
+        </RealEstateIndexPageStateProvider>
       </ToastHub>
     </Layout.Root>
   );

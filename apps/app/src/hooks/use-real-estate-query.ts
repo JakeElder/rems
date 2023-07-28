@@ -50,6 +50,8 @@ type UseRealEstateQueryReturn = {
   onMapMove: (lat: number, lng: number) => void;
   reset: () => void;
   isReady: boolean;
+  onSearchRadiusChange: (value: number) => void;
+  onSearchRadiusEnabledChange: (enabled: boolean) => void;
 };
 
 export const removeDefaults = (
@@ -238,6 +240,22 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     commit,
     onMapZoomChange,
     onMapMove,
+
+    onSearchRadiusChange: (value) => {
+      const nextQuery = update(query, {
+        "search-radius": { $set: value },
+        page: { $set: 1 }
+      });
+      commit(nextQuery);
+    },
+
+    onSearchRadiusEnabledChange: (enabled) => {
+      const nextQuery = update(query, {
+        "search-radius-enabled": { $set: enabled ? "true" : null },
+        page: { $set: 1 }
+      });
+      commit(nextQuery);
+    },
 
     onMinBathsChange: (min) => {
       const nextQuery = update(query, {

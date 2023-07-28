@@ -10,6 +10,7 @@
     "cli": "ts-node -r ./src/cli/loader ./src/cli"
   },
   "dependencies": {
+    "@legendapp/state": "^1.6.4",
     "@next/bundle-analyzer": "^13.4.9",
     "@rems/schemas": "*",
     "@rems/types": "*",

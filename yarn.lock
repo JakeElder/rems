@@ -3098,6 +3098,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@legendapp/state@npm:^1.6.4":
+  version: 1.6.4
+  resolution: "@legendapp/state@npm:1.6.4"
+  dependencies:
+    use-sync-external-store: ^1.2.0
+  checksum: 19f9f824cc269b010d199e309769fc7da6f041d505f326e48f4dd6747d56f4cfb1ec0adaf14822215f0ce38afd0966a3d3ba726fac86ef4e0f5b27b1efcada68
+  languageName: node
+  linkType: hard
+
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.4
   resolution: "@leichtgewicht/ip-codec@npm:2.0.4"
@@ -4479,6 +4488,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rems/app@workspace:apps/app"
   dependencies:
+    "@legendapp/state": ^1.6.4
     "@next/bundle-analyzer": ^13.4.9
     "@rems/schemas": "*"
     "@rems/types": "*"

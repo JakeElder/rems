@@ -22,15 +22,21 @@ type Props = Required<
   radius: RealEstateQuery["search-radius"];
   searchLat: RealEstateQuery["search-origin-lat"];
   searchLng: RealEstateQuery["search-origin-lng"];
+  showRadius: boolean;
 };
 
 type RadiusProps = {
   lat: RealEstateQuery["search-origin-lat"];
   lng: RealEstateQuery["search-origin-lng"];
   radius: RealEstateQuery["search-radius"];
+  show: boolean;
 };
 
-const Radius = ({ lat, lng, radius }: RadiusProps) => {
+const Radius = ({ lat, lng, radius, show }: RadiusProps) => {
+  if (!show) {
+    return null;
+  }
+
   const c = circle([lng, lat], radius, { units: "meters" });
   const line = lineString(c.geometry.coordinates[0]);
 
@@ -65,6 +71,7 @@ const ListingMap = React.forwardRef<MapRef, Props>(
       radius,
       searchLat,
       searchLng,
+      showRadius,
       ...props
     },
     ref
@@ -84,7 +91,12 @@ const ListingMap = React.forwardRef<MapRef, Props>(
               initialViewState={{ longitude, latitude, zoom }}
               {...props}
             >
-              <Radius lat={searchLat} lng={searchLng} radius={radius} />
+              <Radius
+                lat={searchLat}
+                lng={searchLng}
+                radius={radius}
+                show={showRadius}
+              />
               {withGeo.map((p) => (
                 <Link
                   key={p.id}

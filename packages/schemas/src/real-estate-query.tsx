@@ -43,6 +43,11 @@ const base = () =>
           </>
         )
       ),
+    "search-radius-enabled": z
+      .enum(["true"])
+      .nullable()
+      .default(null)
+      .catch(null),
     "search-origin-lat": z.coerce.number().default(13.736717).catch(13.736717),
     "search-origin-lng": z.coerce
       .number()

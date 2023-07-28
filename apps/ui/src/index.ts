@@ -42,6 +42,7 @@ export { default as PropertyCard } from "./Components/PropertyCard";
 export * as PropertyFilters from "./Components/PropertyFilters";
 export { default as PropertyGrid } from "./Components/PropertyGrid";
 export { default as PropertySlider } from "./Components/PropertySlider";
+export { default as SearchRadius } from "./Components/SearchRadius";
 export { default as SimpleImageCarousel } from "./Components/SimpleImageCarousel";
 export { default as SlideNav } from "./Components/SlideNav";
 export { default as ToastHub } from "./Components/ToastHub";

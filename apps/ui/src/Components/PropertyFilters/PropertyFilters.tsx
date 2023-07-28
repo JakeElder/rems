@@ -24,6 +24,15 @@ export const Location = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+export const SearchRadius = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className={css["section"]}>
+      <div className={css["header"]}>Search Radius</div>
+      <div className={css["filters"]}>{children}</div>
+    </div>
+  );
+};
+
 export const AvailabilityAndArea = ({
   children
 }: {

@@ -14,8 +14,9 @@ const Slider = (props: Props) => {
       <RadixSlider.Track className={css["track"]}>
         <RadixSlider.Range className={css["range"]} />
       </RadixSlider.Track>
-      <RadixSlider.Thumb className={css["thumb"]} />
-      <RadixSlider.Thumb className={css["thumb"]} />
+      {props.value?.map((_v, idx) => {
+        return <RadixSlider.Thumb key={idx} className={css["thumb"]} />;
+      })}
     </RadixSlider.Root>
   );
 };
