@@ -5,7 +5,6 @@ import Link from "next/link";
 import css from "./PropertyCard.module.css";
 import { Property, RealEstateQuery } from "@rems/types";
 import SimpleImageCarousel from "../SimpleImageCarousel";
-import { propertyToCarouselImages } from "../../adapters";
 import ArrowNav from "../ArrowNav";
 import { useIndexConnector } from "../IndexConnector/IndexConnector";
 
@@ -35,7 +34,6 @@ const PropertyCard = ({ property, type }: Props) => {
   const [image, setImage] = useState(0);
 
   const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
-  const images = propertyToCarouselImages(property);
 
   return (
     <div
@@ -45,7 +43,7 @@ const PropertyCard = ({ property, type }: Props) => {
     >
       <div className={css["images"]}>
         <SimpleImageCarousel
-          images={images}
+          images={property.images!}
           index={image}
           onIndexChange={setImage}
           link={property.url}
@@ -53,7 +51,7 @@ const PropertyCard = ({ property, type }: Props) => {
           <div className={css["arrow-nav"]}>
             <ArrowNav
               show={activeProperty === property.id}
-              hasNext={image !== images.length - 1}
+              hasNext={image !== property.images!.length - 1}
               hasPrev={image !== 0}
               onNext={() => setImage(image + 1)}
               onPrev={() => setImage(image - 1)}

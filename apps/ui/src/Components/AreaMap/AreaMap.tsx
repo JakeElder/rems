@@ -4,7 +4,7 @@ import React from "react";
 import css from "./AreaMap.module.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Map, { Marker } from "react-map-gl";
-import { Property } from "@rems/types";
+import { Image, Property } from "@rems/types";
 import MapPropertyMarker from "../MapPropertyMarker/MapPropertyMarker";
 
 const TOKEN =
@@ -12,9 +12,10 @@ const TOKEN =
 
 type Props = {
   property: Property;
+  image: Image;
 };
 
-const AreaMap = ({ property }: Props) => {
+const AreaMap = ({ property, image }: Props) => {
   return (
     <div className={css["root"]}>
       <div className={css["content"]}>
@@ -23,16 +24,20 @@ const AreaMap = ({ property }: Props) => {
             mapboxAccessToken={TOKEN}
             mapStyle="mapbox://styles/jake-elder/clfmqca38006901pcm2wsjgqr"
             initialViewState={{
-              longitude: property.location!.lng,
-              latitude: property.location!.lat,
+              longitude: property.location.lng,
+              latitude: property.location.lat,
               zoom: 16
             }}
           >
             <Marker
-              longitude={property.location!.lng}
-              latitude={property.location!.lat}
+              longitude={property.location.lng}
+              latitude={property.location.lat}
             >
-              <MapPropertyMarker property={property} open={false} />
+              <MapPropertyMarker
+                property={property}
+                image={image}
+                open={false}
+              />
             </Marker>
           </Map>
         </div>

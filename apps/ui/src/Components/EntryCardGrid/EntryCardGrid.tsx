@@ -16,7 +16,7 @@ const Item = ({ card }: { card: EntryCard }) => {
     <a className={css["item"]} href={card.url}>
       <div className={css["img"]}>
         <Image
-          src={image.src}
+          src={image.url}
           alt={card.title}
           width={image.width}
           height={image.height}

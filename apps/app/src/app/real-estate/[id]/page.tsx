@@ -4,14 +4,14 @@ import {
   ToastHub,
   HeroCarousel
 } from "@rems/ui";
-import api from "../../../api";
 import { Metadata } from "next";
 import { Property, SearchParams } from "@rems/types";
-import Analytics from "../../../components/Analytics";
-import HeaderViewContainer from "../../../client-components/HeaderViewContainer";
-import ContactAgentModuleContainer from "../../../server-components/ContactAgentModuleContainer";
-import FooterContainer from "../../../server-components/FooterContainer";
-import AskAQuestionFormContainer from "../../../server-components/AskAQuestionFormContainer";
+import Analytics from "@/components/Analytics";
+import ContactAgentModuleContainer from "@/components/server/ContactAgentModuleContainer";
+import FooterContainer from "@/components/server/FooterContainer";
+import AskAQuestionFormContainer from "@/components/server/AskAQuestionFormContainer";
+import HeaderViewContainer from "@/components/client/HeaderViewContainer";
+import fetch from "@/fetch";
 
 type Props = {
   params: { id: string };
@@ -21,7 +21,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const parts = params.id.split("-");
   const id = parseInt(parts[parts.length - 1], 10);
-  const property = await api.get.property(id);
+  const property = await fetch("property", id);
 
   return {
     title: property.title,
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const Breadcrumbs = async ({ propertyId }: { propertyId: Property["id"] }) => {
-  const property = await api.get.property(propertyId);
+  const property = await fetch("property", propertyId);
   return (
     <BreadcrumbsView
       items={[
@@ -47,26 +47,28 @@ const TitleAndDescription = async ({
 }: {
   propertyId: Property["id"];
 }) => {
-  const property = await api.get.property(propertyId);
+  const property = await fetch("property", propertyId);
   return <Page.TitleAndDescription property={property} />;
 };
 
 const Features = async ({ propertyId }: { propertyId: Property["id"] }) => {
-  const property = await api.get.property(propertyId);
-  return <Page.Features property={property} />;
+  const [indoor, outdoor, lot, view] = await Promise.all([
+    fetch("properties/[id]/indoor-features", propertyId),
+    fetch("properties/[id]/outdoor-features", propertyId),
+    fetch("properties/[id]/lot-features", propertyId),
+    fetch("properties/[id]/view-types", propertyId)
+  ]);
+  return <Page.Features features={[...indoor, ...outdoor, ...lot, ...view]} />;
 };
 
 const TheArea = async ({ propertyId }: { propertyId: Property["id"] }) => {
-  const property = await api.get.property(propertyId);
-  if (!property.location) {
-    return null;
-  }
-  return <Page.TheArea property={property} />;
+  const property = await fetch("property", propertyId);
+  const images = await fetch("properties/[id]/images", propertyId);
+  return <Page.TheArea property={property} image={images[0]} />;
 };
 
 const Carousel = async ({ propertyId }: { propertyId: Property["id"] }) => {
-  const property = await api.get.property(propertyId);
-  const images = property.images.map((i) => ({ ...i, alt: property.title }));
+  const images = await fetch("properties/[id]/images", propertyId);
   return <HeroCarousel images={images} />;
 };
 

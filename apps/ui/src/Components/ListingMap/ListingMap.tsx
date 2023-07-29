@@ -110,6 +110,7 @@ const ListingMap = React.forwardRef<MapRef, Props>(
                     style={{ zIndex: activeProperty === p.id ? 1 : 0 }}
                   >
                     <MapPropertyMarker
+                      image={p.images![0]}
                       property={p}
                       open={activeProperty === p.id}
                     />

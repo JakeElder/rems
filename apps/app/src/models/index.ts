@@ -5,6 +5,7 @@ import property from "./Property";
 import file from "./File";
 import fileRelatedMorph from "./FileRelatedMorph";
 import snakeCase from "snake-case";
+import camelCase from "camelcase";
 
 const sequelize = new Sequelize(process.env.DATABASE_URL!, {
   dialectModule: pg,
@@ -74,23 +75,39 @@ const filter = (model: string, link: string) => {
     { underscored: true, timestamps: false }
   );
 
-  Property.belongsToMany(Model, { through: Link });
+  Property.belongsToMany(Model, { through: Link, as: `${camelCase(model)}s` });
   Model.belongsToMany(Property, { through: Link });
 
-  return Model;
+  Link.belongsTo(Model);
+  Model.hasMany(Link);
+
+  return [Model, Link];
 };
 
 const Property = property(sequelize);
 const File = file(sequelize);
 const FileRelatedMorph = fileRelatedMorph(sequelize);
-const PropertyType = filter("PropertyType", "PropertiesPropertyTypeLink");
-const ViewType = filter("ViewType", "PropertiesViewTypesLink");
-const IndoorFeature = filter("IndoorFeature", "PropertiesIndoorFeaturesLink");
-const OutdoorFeature = filter(
+
+const [PropertyType, PropertiesPropertyTypeLink] = filter(
+  "PropertyType",
+  "PropertiesPropertyTypeLink"
+);
+const [ViewType, PropertiesViewTypesLink] = filter(
+  "ViewType",
+  "PropertiesViewTypesLink"
+);
+const [IndoorFeature, PropertiesIndoorFeaturesLink] = filter(
+  "IndoorFeature",
+  "PropertiesIndoorFeaturesLink"
+);
+const [OutdoorFeature, PropertiesOutdoorFeaturesLink] = filter(
   "OutdoorFeature",
   "PropertiesOutdoorFeaturesLink"
 );
-const LotFeature = filter("LotFeature", "PropertiesLotFeaturesLink");
+const [LotFeature, PropertiesLotFeaturesLink] = filter(
+  "LotFeature",
+  "PropertiesLotFeaturesLink"
+);
 
 File.belongsToMany(Property, {
   through: {
@@ -133,5 +150,10 @@ export {
   PropertyType,
   IndoorFeature,
   OutdoorFeature,
-  LotFeature
+  LotFeature,
+  PropertiesIndoorFeaturesLink,
+  PropertiesPropertyTypeLink,
+  PropertiesViewTypesLink,
+  PropertiesLotFeaturesLink,
+  PropertiesOutdoorFeaturesLink
 };

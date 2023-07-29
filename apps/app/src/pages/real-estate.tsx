@@ -1,16 +1,15 @@
 import { GetStaticProps, NextPage } from "next";
 import { Breadcrumbs, RealEstateIndexPage as Layout, ToastHub } from "@rems/ui";
-import PropertyGridViewContainer from "../client-components/PropertyGridViewContainer";
-import ListingMapViewContainer from "../client-components/ListingMapViewContainer";
-import CountAndSortViewContainer from "../client-components/CountAndSortViewContainer";
-import PaginationViewContainer from "../client-components/PaginationViewContainer";
-import HeaderViewContainer from "../client-components/HeaderViewContainer";
-import RealEstateIndexPageTitleViewContainer from "../client-components/RealEstateIndexPageTitleViewContainer";
-import FilterBarViewContainer from "../client-components/FilterBarViewContainer";
-import FooterViewContainer from "../client-components/FooterViewContainer";
+import PropertyGridViewContainer from "@/components/client/PropertyGridViewContainer";
+import ListingMapViewContainer from "@/components/client/ListingMapViewContainer";
+import CountAndSortViewContainer from "@/components/client/CountAndSortViewContainer";
+import PaginationViewContainer from "@/components/client/PaginationViewContainer";
+import HeaderViewContainer from "@/components/client/HeaderViewContainer";
+import RealEstateIndexPageTitleViewContainer from "@/components/client/RealEstateIndexPageTitleViewContainer";
+import FilterBarViewContainer from "@/components/client/FilterBarViewContainer";
+import FooterViewContainer from "@/components/client/FooterViewContainer";
 import {
   AppConfig,
-  Area,
   BTSStation,
   FilterSet,
   IndoorFeature,
@@ -21,14 +20,13 @@ import {
   QuickFilter,
   ViewType
 } from "@rems/types";
+import { RealEstateIndexPageStateProvider } from "@/hooks/use-real-estate-index-page-state";
 import api from "../api";
-import { RealEstateIndexPageStateProvider } from "../hooks/use-real-estate-index-page-state";
 
 type Props = {
   config: AppConfig;
   searches: FilterSet[];
   propertyTypes: PropertyType[];
-  areas: Area[];
   viewTypes: ViewType[];
   indoorFeatures: IndoorFeature[];
   outdoorFeatures: OutdoorFeature[];
@@ -86,7 +84,6 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     config,
     searches,
     propertyTypes,
-    areas,
     viewTypes,
     indoorFeatures,
     outdoorFeatures,
@@ -98,7 +95,6 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     api.get.appConfig(),
     api.get.popularSearches(),
     api.get.propertyTypes(),
-    api.get.areas(),
     api.get.viewTypes(),
     api.get.indoorFeatures(),
     api.get.outdoorFeatures(),
@@ -113,7 +109,6 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
       config,
       searches,
       propertyTypes,
-      areas,
       viewTypes,
       indoorFeatures,
       outdoorFeatures,

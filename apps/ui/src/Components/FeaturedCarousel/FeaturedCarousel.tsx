@@ -54,12 +54,12 @@ const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
   return (
     <div className={css["root"]} {...bind()}>
       {transitions((style, i) => {
-        const img = properties[i].images[0];
+        const img = properties[i].images![0];
         return (
           <animated.div className={css["image"]} style={style}>
             <Image
               alt={properties[i].title}
-              src={img.src}
+              src={img.url}
               width={img.width}
               height={img.height}
             />

@@ -2,12 +2,10 @@ import {
   Filter,
   FilterSet,
   Image,
-  Property,
   RealEstateQuery,
   SearchParams
 } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
-import slugify from "slugify";
 import { flatten } from "remeda";
 
 const adapters = {
@@ -45,66 +43,8 @@ const adapters = {
   image(res: any): Image {
     return {
       id: res.id,
-      src: `${process.env.ASSET_URL}${res.url}`,
-      ...res
-    };
-  },
-
-  property(res: any): Property {
-    const {
-      title,
-      uid,
-      purchasePrice,
-      rentalPrice,
-      images,
-      location,
-      bedrooms,
-      bathrooms,
-      livingArea,
-      description,
-      createdAt,
-      updatedAt,
-      indoor_features,
-      lot_features,
-      outdoor_features,
-      view_types,
-      address,
-      availableToRent,
-      availableToPurchase,
-      propertyType,
-      publishedAt
-    } = res;
-
-    return {
-      propertyType,
-      id: res.id,
-      uid,
-      title,
-      availableToRent,
-      availableToPurchase,
-      description,
-      purchasePrice,
-      rentalPrice,
-      url: `/real-estate/${slugify(title, { strict: true })}-${res.id}`,
-      location,
-      formattedPurchasePrice: purchasePrice
-        ? `฿${purchasePrice.toLocaleString()}`
-        : null,
-      formattedRentalPrice: rentalPrice
-        ? `฿${rentalPrice.toLocaleString()}`
-        : null,
-      bedrooms,
-      bathrooms,
-      indoorFeatures: (indoor_features?.data || []).map(adapters.filter),
-      lotFeatures: (lot_features?.data || []).map(adapters.filter),
-      outdoorFeatures: (outdoor_features?.data || []).map(adapters.filter),
-      viewTypes: (view_types?.data || []).map(adapters.filter),
-      address,
-      livingArea,
-      images: (images || []).map(adapters.image),
-      createdAt,
-      updatedAt,
-      publishedAt
+      ...res.attributes,
+      url: `${process.env.ASSET_URL}${res.attributes.url}`
     };
   },
 

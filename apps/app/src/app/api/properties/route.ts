@@ -8,9 +8,13 @@ import {
   PropertyType,
   sequelize
 } from "../../../models";
-import adapters from "../../../adapters";
 import { Op } from "sequelize";
-import { RealEstateQuerySchema } from "@rems/schemas";
+import {
+  ImageSchema,
+  PropertySchema,
+  RealEstateQuerySchema
+} from "@rems/schemas";
+import slugify from "slugify";
 
 const PROPERTIES_PER_PAGE = 14;
 
@@ -162,7 +166,9 @@ export async function GET(req: Request) {
   const params = qs.parse(url.search.substring(1));
   const query = RealEstateQuerySchema.parse(params);
 
-  const base = {
+  // TODO: At least one image
+
+  const res = await Property.findAndCountAll({
     where: {
       [Op.and]: [
         { publishedAt: { [Op.ne]: null } },
@@ -191,11 +197,7 @@ export async function GET(req: Request) {
         }
       ]
     },
-    include: [...propertyType(query)]
-  };
-
-  const res = await Property.findAndCountAll({
-    ...base,
+    include: [...propertyType(query)],
     limit: PROPERTIES_PER_PAGE,
     offset: (query["page"] - 1) * PROPERTIES_PER_PAGE,
     order: order(query)
@@ -216,12 +218,25 @@ export async function GET(req: Request) {
     ]
   });
 
-  const data = res.rows.map((p) => {
-    return adapters.property({
-      ...p.toJSON(),
-      images: images.filter(
-        (i: any) => p.dataValues.id === i["FileRelatedMorphs.related_id"]
-      )
+  const format = (val: number | null) =>
+    val ? `฿${val.toLocaleString()}` : null;
+
+  const data = res.rows.map((row: any) => {
+    const p = row.toJSON();
+    const slug = slugify(p.title, { strict: true });
+    return PropertySchema.parse({
+      ...p,
+      url: `/real-estate/${slug}-${p.id}`,
+      formattedPurchasePrice: format(p.purchasePrice),
+      formattedRentalPrice: format(p.rentalPrice),
+      images: images
+        .filter((i: any) => p.id === i["FileRelatedMorphs.related_id"])
+        .map((i: any) =>
+          ImageSchema.parse({
+            ...i,
+            url: `${process.env.ASSET_URL}${i.url}`
+          })
+        )
     });
   });
 

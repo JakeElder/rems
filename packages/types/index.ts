@@ -4,9 +4,10 @@ import {
   ContactFormSchema,
   AiRealEstateQuerySchema,
   PartialAiRealEstateQuerySchema,
-  PropertySchema
+  PropertySchema,
+  FileSchema,
+  ImageSchema
 } from "@rems/schemas";
-import { PluginUploadFile } from "./generated/contentTypes";
 import { z } from "zod";
 
 export type Pagination = {
@@ -23,45 +24,8 @@ type CMSAttributes = {
   updatedAt: string;
 };
 
-export type Image = Partial<
-  Omit<PluginUploadFile["attributes"], "width" | "height">
-> & {
-  id: ResourceId;
-  width: number;
-  height: number;
-  src: string;
-  formats?: any;
-};
-
-export type CarouselImage = Image & {
-  alt: string;
-};
-
-// export type Property = {
-//   id: number;
-//   uid: string;
-//   title: string;
-//   description: string;
-//   url: string;
-//   purchasePrice?: number;
-//   formattedPurchasePrice: string | null;
-//   rentalPrice?: number;
-//   formattedRentalPrice: string | null;
-//   bedrooms: number;
-//   bathrooms: number;
-//   livingArea: number;
-//   images: Image[];
-//   location: null | {
-//     lng: number;
-//     lat: number;
-//   };
-//   indoorFeatures: IndoorFeature[];
-//   lotFeatures: LotFeature[];
-//   outdoorFeatures: OutdoorFeature[];
-//   viewTypes: ViewType[];
-//   address: string;
-//   publishedAt: string;
-// } & CMSAttributes;
+export type File = z.infer<typeof FileSchema>;
+export type Image = z.infer<typeof ImageSchema>;
 
 export type EntryCard = {
   title: string;
@@ -126,13 +90,7 @@ export type Filters = {
   quickFilters: QuickFilter[];
 };
 
-export type Property = z.infer<typeof PropertySchema> & {
-  images: any[];
-  url: string;
-  formattedPurchasePrice: string | null;
-  formattedRentalPrice: string | null;
-  publishedAt: string | null;
-} & CMSAttributes;
+export type Property = z.infer<typeof PropertySchema>;
 
 export type ContactFormData = z.infer<typeof ContactFormSchema>;
 

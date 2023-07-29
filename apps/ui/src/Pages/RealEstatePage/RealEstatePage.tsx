@@ -2,7 +2,7 @@
 
 import React from "react";
 import css from "./RealEstatePage.module.css";
-import { Property } from "@rems/types";
+import { Filter, Image, Property } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import * as Layout from "../../Layouts/StandardHeroLayout";
@@ -90,14 +90,7 @@ export const TitleAndDescription = ({ property }: { property: Property }) => {
   );
 };
 
-export const Features = ({ property }: { property: Property }) => {
-  const features = [
-    ...property.indoorFeatures,
-    ...property.lotFeatures,
-    ...property.outdoorFeatures,
-    ...property.viewTypes
-  ];
-
+export const Features = ({ features }: { features: Filter[] }) => {
   return (
     <>
       <h2 className={css["heading"]}>Features</h2>
@@ -128,14 +121,20 @@ export const AskAQuestion = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const TheArea = ({ property }: { property: Property }) => {
+export const TheArea = ({
+  property,
+  image
+}: {
+  property: Property;
+  image: Image;
+}) => {
   return (
     <>
       <div className={css["the-area"]}>
         <h2 className={css["heading"]}>The Area</h2>
         <div className={css["address"]}>{property.address}</div>
         <div className={css["map"]}>
-          <AreaMap property={property} />
+          <AreaMap property={property} image={image} />
         </div>
       </div>
       <div className={css["hr"]}>

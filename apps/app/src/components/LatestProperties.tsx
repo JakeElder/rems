@@ -1,12 +1,15 @@
-import api from "../api";
-import { PropertySlider } from "@rems/ui";
 import React from "react";
+import { PropertySlider } from "@rems/ui";
+import fetch from "@/fetch";
 
 type Props = {};
 
 const LatestProperties = async ({}: Props) => {
-  const latest = await api.get.properties({ sort: "newest-first" });
-  return <PropertySlider properties={latest.data} />;
+  const { data: properties } = await fetch("properties", {
+    sort: "newest-first"
+  });
+  console.log(properties[0].images)
+  return <PropertySlider properties={properties} />;
 };
 
 export default LatestProperties;

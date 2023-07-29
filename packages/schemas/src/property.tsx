@@ -1,16 +1,8 @@
 import React from "react";
 import { z } from "zod";
+import { ImageSchema } from "./image";
 
 const txt = (node: React.ReactElement): string => node.props.children;
-
-const filterSchemaFactory = () =>
-  z.object({
-    id: z.number(),
-    name: z.string(),
-    slug: z.string()
-  });
-
-export const FilterSchema = filterSchemaFactory();
 
 export const PropertySchema = z
   .object({
@@ -28,9 +20,6 @@ export const PropertySchema = z
           </>
         )
       ),
-    propertyType: filterSchemaFactory().describe(
-      txt(<>The type of property it is</>)
-    ),
     title: z
       .string()
       .describe(
@@ -54,6 +43,7 @@ export const PropertySchema = z
       ),
     purchasePrice: z
       .number()
+      .nullable()
       .describe(
         txt(
           <>
@@ -67,6 +57,7 @@ export const PropertySchema = z
     availableToRent: z.boolean(),
     rentalPrice: z
       .number()
+      .nullable()
       .describe(
         txt(
           <>
@@ -79,62 +70,29 @@ export const PropertySchema = z
       ),
     bedrooms: z
       .number()
-      .describe(txt(<> The number of bathrooms in the property`</>)),
+      .describe(txt(<>The number of bathrooms in the property</>)),
     bathrooms: z
       .number()
-      .describe(txt(<> The number of bathrooms in the property`</>)),
+      .describe(txt(<>The number of bathrooms in the property</>)),
     livingArea: z
       .number()
-      .describe(txt(<> The living area of the property, specified in m²`</>)),
+      .describe(txt(<>The living area of the property, specified in m²</>)),
     location: z.object({
       lng: z
         .number()
-        .describe(txt(<> The longitude of the properties location`</>)),
+        .describe(txt(<>The longitude of the properties location</>)),
       lat: z
         .number()
-        .describe(txt(<> The latitude of the properties location`</>))
+        .describe(txt(<>The latitude of the properties location</>))
     }),
-    indoorFeatures: z
-      .array(filterSchemaFactory())
-      .describe(
-        txt(
-          <>
-            A list of indoor features that may be attractive to the end user,
-            people seeking rental or purchase properties
-          </>
-        )
-      ),
-    lotFeatures: z
-      .array(filterSchemaFactory())
-      .describe(
-        txt(
-          <>
-            A list of lot features, IE features of the condo building or project
-            that contains the property
-          </>
-        )
-      ),
-    outdoorFeatures: z
-      .array(filterSchemaFactory())
-      .describe(
-        txt(
-          <>
-            A list of outdoor features, IE features of the condo building or
-            project that contains the property
-          </>
-        )
-      ),
-    viewTypes: z
-      .array(filterSchemaFactory())
-      .describe(txt(<> A list of view types that the property has`</>)),
     address: z.string(),
-    area: filterSchemaFactory().describe(
-      txt(<> The area the property is in.`</>)
-    )
-  })
-  .partial({
-    purchasePrice: true,
-    rentalPrice: true
+    url: z.string(),
+    formattedPurchasePrice: z.string().nullable(),
+    formattedRentalPrice: z.string().nullable(),
+    images: z.array(ImageSchema).nullable().default(null),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+    publishedAt: z.date()
   })
   .describe(
     txt(

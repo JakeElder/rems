@@ -1,20 +1,19 @@
 import React, { forwardRef } from "react";
 import css from "./MapPropertyMarker.module.css";
-import { Property } from "@rems/types";
-import Image from "next/image";
+import { Property, Image } from "@rems/types";
+import NextImage from "next/image";
 import { useSpring, animated } from "@react-spring/web";
 
 type Props = {
   open: boolean;
   property: Property;
+  image: Image;
 };
 
 const Bullet = () => <span className={css["bullet"]}>&bull;</span>;
 
 const MapPropertyMarker = forwardRef<HTMLDivElement, Props>(
-  ({ property, open }, ref) => {
-    const image = property.images[0];
-
+  ({ property, image, open }, ref) => {
     const { outlineWidth } = useSpring(
       open ? { outlineWidth: 20 } : { outlineWidth: 0 }
     );
@@ -27,8 +26,8 @@ const MapPropertyMarker = forwardRef<HTMLDivElement, Props>(
             <div className={css["popup"]}>
               <div className={css["property"]}>
                 <div className={css["image-container"]}>
-                  <Image
-                    src={image.src}
+                  <NextImage
+                    src={image.url}
                     alt={property.title}
                     width={image.width}
                     height={image.height}

@@ -9,12 +9,12 @@ import css from "./PropertySlider.module.css";
 type Props = { properties: Property[] };
 
 const Card = ({ property }: { property: Property }) => {
-  const img = property.images[0];
+  const img = property.images![0];
   return (
     <a className={css["card"]} href={property.url}>
       <Image
         alt={property.title}
-        src={img.src}
+        src={img.url}
         width={img.width}
         height={img.height}
       />

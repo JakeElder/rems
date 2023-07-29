@@ -5,7 +5,6 @@ import {
   Area,
   BTSStation,
   FilterSet,
-  GetPropertiesResult,
   IndoorFeature,
   LotFeature,
   MRTStation,
@@ -14,12 +13,9 @@ import {
   PropertyType,
   QuickFilter,
   AppConfig,
-  SortType,
   ViewType,
-  QuickFilterQueryKey,
-  PartialRealEstateQuery
+  QuickFilterQueryKey
 } from "@rems/types";
-import { RealEstateQuerySchema } from "@rems/schemas";
 
 const get = {
   async quickFilters(): Promise<QuickFilter[]> {
@@ -36,7 +32,7 @@ const get = {
       }
     });
 
-    const url = `${process.env.API_URL}/quick-filter-list?${q}`;
+    const url = `${process.env.CMS_API_URL}/quick-filter-list?${q}`;
     const res = await fetch(url);
     const json = await res.json();
 
@@ -64,7 +60,7 @@ const get = {
     const q = qs.stringify({
       populate: ["filter_sets", "filter_sets.image"]
     });
-    const url = `${process.env.API_URL}/popular-searches-list?${q}`;
+    const url = `${process.env.CMS_API_URL}/popular-searches-list?${q}`;
     const res = await fetch(url);
     const json = await res.json();
 
@@ -72,175 +68,19 @@ const get = {
   },
 
   async appConfig(): Promise<AppConfig> {
-    const url = `${process.env.API_URL}/app-config`;
+    const url = `${process.env.CMS_API_URL}/app-config`;
     const res = await fetch(url);
     const json = await res.json();
     return json.data.attributes;
   },
 
-  async featuredProperties(): Promise<Property[]> {
-    const q = qs.stringify({
-      populate: ["properties", "properties.images"]
-    });
-    const url = `${process.env.API_URL}/featured-property-list?${q}`;
+  async featuredProperties(): Promise<Property["id"][]> {
+    const q = qs.stringify({ populate: ["properties"] });
+    const url = `${process.env.CMS_API_URL}/featured-property-list?${q}`;
     const res = await fetch(url);
     const json = await res.json();
 
-    return json.data.attributes.properties.data
-      .map(adapters.property)
-      .filter((p: Property) => !!p.images.length);
-  },
-
-  async properties(pq: PartialRealEstateQuery): Promise<GetPropertiesResult> {
-    const query = {
-      ...RealEstateQuerySchema.parse({}),
-      ...pq
-    };
-
-    const purchasePrice =
-      query["availability"] === "sale"
-        ? {
-            $gte: query["min-price"],
-            ...(query["max-price"] ? { $lte: query["max-price"] } : {})
-          }
-        : {};
-
-    const rentalPrice =
-      query["availability"] === "rent"
-        ? {
-            $gte: query["min-price"],
-            ...(query["max-price"] ? { $lte: query["max-price"] } : {})
-          }
-        : {};
-
-    const bedrooms = {
-      $gte: query["min-bedrooms"],
-      ...(query["max-bedrooms"] ? { $lte: query["max-bedrooms"] } : {})
-    };
-
-    const bathrooms = { $gte: query["min-bathrooms"] };
-
-    const livingArea = {
-      $gte: query["min-living-area"],
-      ...(query["max-living-area"] ? { $lte: query["max-living-area"] } : {})
-    };
-
-    const lotSize =
-      query["min-lot-size"] || query["max-lot-size"]
-        ? {
-            $gte: query["min-lot-size"],
-            ...(query["max-lot-size"] ? { $lte: query["max-lot-size"] } : {})
-          }
-        : {};
-
-    const availableToPurchase =
-      query["availability"] === "sale" ? { $eq: true } : {};
-
-    const availableToRent =
-      query["availability"] === "rent" ? { $eq: true } : {};
-
-    const property_type = { slug: { $in: query["property-type"] } };
-
-    const view_types = query["view-types"].map((t) => ({
-      view_types: { slug: { $in: t } }
-    }));
-
-    const indoor_features = query["indoor-features"].map((t) => ({
-      indoor_features: { slug: { $in: t } }
-    }));
-
-    const outdoor_features = query["outdoor-features"].map((t) => ({
-      outdoor_features: { slug: { $in: t } }
-    }));
-
-    const lot_features = query["lot-features"].map((t) => ({
-      lot_features: { slug: { $in: t } }
-    }));
-
-    const nearest_mrt_station = query["nearest-mrt-station"]
-      ? { slug: { $eq: query["nearest-mrt-station"] } }
-      : {};
-
-    const nearest_bts_station = query["nearest-bts-station"]
-      ? { slug: { $eq: query["nearest-bts-station"] } }
-      : {};
-
-    const area = query["area"] ? { slug: { $eq: query["area"] } } : {};
-
-    const sort = (() => {
-      const map: Record<SortType, string> = {
-        "newest-first": "createdAt:desc",
-        "lowest-price-first": "purchasePrice",
-        "highest-price-first": "purchasePrice:desc",
-        "smallest-living-area-first": "livingArea",
-        "largest-living-area-first": "livingArea:desc"
-      };
-      return map[query["sort"]];
-    })();
-
-    const q = qs.stringify({
-      populate: [
-        "images",
-        "property_type",
-        "indoor_features",
-        "lot_features",
-        "outdoor_features",
-        "view_types",
-        "area"
-      ],
-      filters: {
-        $and: [
-          {
-            property_type,
-            purchasePrice,
-            rentalPrice,
-            bedrooms,
-            bathrooms,
-            livingArea,
-            lotSize,
-            nearest_mrt_station,
-            nearest_bts_station,
-            area,
-            availableToRent,
-            availableToPurchase
-          },
-          ...view_types,
-          ...indoor_features,
-          ...outdoor_features,
-          ...lot_features
-        ]
-      },
-      sort,
-      pagination: {
-        pageSize: 4,
-        page: query["page"]
-      }
-    });
-
-    const res = await fetch(`${process.env.API_URL}/properties?${q}`);
-    const json = await res.json();
-
-    return {
-      data: json.data.map((p: any) => adapters.property(p)),
-      pagination: json.meta.pagination,
-      query
-    };
-  },
-
-  async property(id: Property["id"]): Promise<Property> {
-    const q = qs.stringify({
-      populate: [
-        "images",
-        "indoor_features",
-        "lot_features",
-        "outdoor_features",
-        "view_types"
-      ]
-    });
-    const url = `${process.env.API_URL}/properties/${id}?${q}`;
-    const res = await fetch(url);
-    const json = await res.json();
-    return adapters.property(json.data);
+    return json.data.attributes.properties.data.map((p: any) => p.id);
   },
 
   async btsStations(): Promise<BTSStation[]> {
@@ -284,7 +124,7 @@ const get = {
   },
 
   async generic(resource: string) {
-    const url = `${process.env.API_URL}/${resource}`;
+    const url = `${process.env.CMS_API_URL}/${resource}`;
     const res = await fetch(url);
     const data = await res.json();
     return data;

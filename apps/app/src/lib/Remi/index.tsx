@@ -305,3 +305,5 @@ export const nlToQuery = async (query: PartialRealEstateQuery, nl: string) => {
 
   return res.nextQuery;
 };
+
+export const getModels = async () => openai.listModels();
