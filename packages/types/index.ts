@@ -6,8 +6,10 @@ import {
   PartialAiRealEstateQuerySchema,
   PropertySchema,
   FileSchema,
-  ImageSchema
+  ImageSchema,
+  ServerRealEstateQuerySchema
 } from "@rems/schemas";
+import { PartialServerRealEstateQuerySchema } from "@rems/schemas/src/real-estate-query";
 import { z } from "zod";
 
 export type Pagination = {
@@ -97,6 +99,21 @@ export type ContactFormData = z.infer<typeof ContactFormSchema>;
 export type RealEstateQuery = z.infer<typeof RealEstateQuerySchema>;
 export type PartialRealEstateQuery = z.infer<
   typeof PartialRealEstateQuerySchema
+>;
+
+export type LngLat = {
+  lng: number;
+  lat: number;
+};
+
+export type MapBounds = {
+  sw: LngLat;
+  ne: LngLat;
+};
+
+export type ServerRealEstateQuery = z.infer<typeof ServerRealEstateQuerySchema>;
+export type PartialServerRealEstateQuery = z.infer<
+  typeof PartialServerRealEstateQuerySchema
 >;
 
 export type AiRealEstateQuery = z.infer<typeof AiRealEstateQuerySchema>;

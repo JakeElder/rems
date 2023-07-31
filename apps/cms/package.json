@@ -8,7 +8,8 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "generate-types": "strapi ts:generate-types --out-dir ../../packages/types"
+    "generate-types": "strapi ts:generate-types --out-dir ../../packages/types",
+    "pg-repl": "heroku pg:psql DATABASE_URL -a rems-cms-stage"
   },
   "dependencies": {
     "@strapi/plugin-i18n": "4.11.1",

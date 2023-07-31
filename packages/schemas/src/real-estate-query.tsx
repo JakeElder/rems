@@ -44,10 +44,9 @@ const base = () =>
         )
       ),
     "search-radius-enabled": z
-      .enum(["true"])
-      .nullable()
-      .default(null)
-      .catch(null),
+      .enum(["true", "false"])
+      .default("false")
+      .catch("false"),
     "search-origin-lat": z.coerce.number().default(13.736717).catch(13.736717),
     "search-origin-lng": z.coerce
       .number()
@@ -61,7 +60,10 @@ const base = () =>
   });
 
 export const RealEstateQuerySchema = base().extend({
-  "search-origin-id": z.string().nullable().default(null).catch(null),
+  "search-origin-id": z
+    .string()
+    .default("ChIJ82ENKDJgHTERIEjiXbIAAQE")
+    .catch("ChIJ82ENKDJgHTERIEjiXbIAAQE"),
   "nearest-mrt-station": z.string().nullable().default(null).catch(null),
   "nearest-bts-station": z.string().nullable().default(null).catch(null),
   "map-lat": z.coerce.number().nullable().default(null).catch(null),
@@ -82,8 +84,33 @@ export const AiRealEstateQuerySchema = base().extend({
           should be near
         </>
       )
+    ),
+  "new-search-origin": z
+    .boolean()
+    .describe(
+      txt(
+        <>
+          Whether or not the user has specified a new search location in this
+          change request
+        </>
+      )
     )
 });
+
+export const ServerRealEstateQuerySchema = RealEstateQuerySchema.extend({
+  "map-bound-sw-lng": z.coerce.number().nullable().default(null),
+  "map-bound-sw-lat": z.coerce.number().nullable().default(null),
+  "map-bound-ne-lng": z.coerce.number().nullable().default(null),
+  "map-bound-ne-lat": z.coerce.number().nullable().default(null),
+  limit: z.enum(["true", "false"]).default("true").catch("true")
+}).omit({
+  "map-zoom": true,
+  "map-lng": true,
+  "map-lat": true
+});
+
+export const PartialServerRealEstateQuerySchema =
+  ServerRealEstateQuerySchema.partial();
 
 export const PartialRealEstateQuerySchema = RealEstateQuerySchema.partial();
 export const PartialAiRealEstateQuerySchema = AiRealEstateQuerySchema.partial();

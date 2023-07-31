@@ -87,7 +87,7 @@ const ListingMap = React.forwardRef<MapRef, Props>(
             <Map
               ref={ref}
               mapboxAccessToken={TOKEN}
-              mapStyle="mapbox://styles/jake-elder/clfmqca38006901pcm2wsjgqr"
+              mapStyle="mapbox://styles/jake-elder/clkpaxw5d00ly01qyah2jbomw"
               initialViewState={{ longitude, latitude, zoom }}
               {...props}
             >

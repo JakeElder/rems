@@ -20,7 +20,7 @@ const SearchRadiusViewContainer = ({}: Props) => {
       value={radius.get()}
       onValueChange={([value]) => radius.set(value)}
       onValueCommit={([value]) => onSearchRadiusChange(value)}
-      enabled={!!query["search-radius-enabled"]}
+      enabled={query["search-radius-enabled"] === "true"}
       onEnabledChange={onSearchRadiusEnabledChange}
     />
   );

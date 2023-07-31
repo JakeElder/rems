@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import qs from "qs";
-import { RealEstateQuery } from "@rems/types";
+import { ServerRealEstateQuery } from "@rems/types";
 import {
   File,
   FileRelatedMorph,
@@ -8,28 +8,29 @@ import {
   PropertyType,
   sequelize
 } from "../../../models";
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import {
   ImageSchema,
   PropertySchema,
-  RealEstateQuerySchema
+  ServerRealEstateQuerySchema
 } from "@rems/schemas";
 import slugify from "slugify";
 
 const PROPERTIES_PER_PAGE = 14;
 
-const propertyType = (q: RealEstateQuery) => {
+const propertyType = (q: ServerRealEstateQuery) => {
   return q["property-type"].length
     ? [
         {
           model: PropertyType,
+          as: "propertyTypes",
           where: { slug: { [Op.in]: q["property-type"] } }
         }
       ]
     : [];
 };
 
-const purchasePrice = (q: RealEstateQuery) => {
+const purchasePrice = (q: ServerRealEstateQuery) => {
   return q["availability"] === "sale"
     ? [
         {
@@ -42,7 +43,7 @@ const purchasePrice = (q: RealEstateQuery) => {
     : [];
 };
 
-const rentalPrice = (q: RealEstateQuery) => {
+const rentalPrice = (q: ServerRealEstateQuery) => {
   return q["availability"] === "rent"
     ? [
         {
@@ -55,7 +56,7 @@ const rentalPrice = (q: RealEstateQuery) => {
     : [];
 };
 
-const bedrooms = (q: RealEstateQuery) => {
+const bedrooms = (q: ServerRealEstateQuery) => {
   return [
     {
       bedrooms: {
@@ -66,11 +67,11 @@ const bedrooms = (q: RealEstateQuery) => {
   ];
 };
 
-const bathrooms = (q: RealEstateQuery) => {
+const bathrooms = (q: ServerRealEstateQuery) => {
   return [{ bathrooms: { [Op.gte]: q["min-bathrooms"] } }];
 };
 
-const livingArea = (q: RealEstateQuery) => {
+const livingArea = (q: ServerRealEstateQuery) => {
   return [
     {
       livingArea: {
@@ -81,7 +82,7 @@ const livingArea = (q: RealEstateQuery) => {
   ];
 };
 
-const lotSize = (q: RealEstateQuery) => {
+const lotSize = (q: ServerRealEstateQuery) => {
   return q["min-lot-size"] || q["max-lot-size"]
     ? [
         {
@@ -94,13 +95,13 @@ const lotSize = (q: RealEstateQuery) => {
     : [];
 };
 
-const availableToRent = (q: RealEstateQuery) => {
+const availableToRent = (q: ServerRealEstateQuery) => {
   return q["availability"] === "rent"
     ? [{ availableToRent: { [Op.eq]: true } }]
     : [];
 };
 
-const availableToPurchase = (q: RealEstateQuery) => {
+const availableToPurchase = (q: ServerRealEstateQuery) => {
   return q["availability"] === "sale"
     ? [{ availableToPurchase: { [Op.eq]: true } }]
     : [];
@@ -128,20 +129,20 @@ const filterSubquery = (slugs: string[], relation: string) => {
   ];
 };
 
-const viewTypes = (q: RealEstateQuery) =>
+const viewTypes = (q: ServerRealEstateQuery) =>
   filterSubquery(q["view-types"], "view_type");
 
-const indoorFeatures = (q: RealEstateQuery) =>
+const indoorFeatures = (q: ServerRealEstateQuery) =>
   filterSubquery(q["indoor-features"], "indoor_feature");
 
-const outdoorFeatures = (q: RealEstateQuery) =>
+const outdoorFeatures = (q: ServerRealEstateQuery) =>
   filterSubquery(q["outdoor-features"], "outdoor_feature");
 
-const lotFeatures = (q: RealEstateQuery) =>
+const lotFeatures = (q: ServerRealEstateQuery) =>
   filterSubquery(q["lot-features"], "lot_feature");
 
-const order = (query: RealEstateQuery) => {
-  const orders: Record<RealEstateQuery["sort"], any> = {
+const order = (query: ServerRealEstateQuery) => {
+  const orders: Record<ServerRealEstateQuery["sort"], any> = {
     "newest-first": [["createdAt", "DESC"]],
     "lowest-price-first": [
       [
@@ -161,10 +162,64 @@ const order = (query: RealEstateQuery) => {
   return orders[query["sort"]];
 };
 
+const radius = (query: ServerRealEstateQuery) => {
+  if (query["search-radius-enabled"] === "false") {
+    return [];
+  }
+
+  return [
+    Sequelize.literal(`ST_DWithin(
+      ST_MakePoint((location->>'lng')::double precision, (location->>'lat')::double precision)::geography,
+      ST_MakePoint(${query["search-origin-lng"]}, ${query["search-origin-lat"]})::geography,
+      ${query["search-radius"]}
+    )`)
+  ];
+};
+
+const hasBounds = (query: ServerRealEstateQuery) => {
+  return (
+    query["map-bound-ne-lat"] &&
+    query["map-bound-ne-lng"] &&
+    query["map-bound-sw-lat"] &&
+    query["map-bound-sw-lng"]
+  );
+};
+
+const bounds = (query: ServerRealEstateQuery) => {
+  if (query["search-radius-enabled"] === "true" || !hasBounds(query)) {
+    return [];
+  }
+
+  return [
+    {
+      "location.lat": {
+        [Op.gte]: query["map-bound-sw-lat"],
+        [Op.lte]: query["map-bound-ne-lng"]
+      },
+      "location.lng": {
+        [Op.gte]: query["map-bound-sw-lng"],
+        [Op.lte]: query["map-bound-ne-lng"]
+      }
+    }
+  ];
+};
+
+export const limit = (query: ServerRealEstateQuery) => {
+  if (query["limit"] === "true") {
+    return PROPERTIES_PER_PAGE;
+  }
+};
+
+export const offset = (query: ServerRealEstateQuery) => {
+  if (query["limit"] === "true") {
+    return (query["page"] - 1) * PROPERTIES_PER_PAGE;
+  }
+};
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const params = qs.parse(url.search.substring(1));
-  const query = RealEstateQuerySchema.parse(params);
+  const query = ServerRealEstateQuerySchema.parse(params);
 
   // TODO: At least one image
 
@@ -184,6 +239,8 @@ export async function GET(req: Request) {
         ...indoorFeatures(query),
         ...outdoorFeatures(query),
         ...lotFeatures(query),
+        ...radius(query),
+        ...bounds(query),
         {
           location: {
             [Op.and]: [
@@ -198,8 +255,8 @@ export async function GET(req: Request) {
       ]
     },
     include: [...propertyType(query)],
-    limit: PROPERTIES_PER_PAGE,
-    offset: (query["page"] - 1) * PROPERTIES_PER_PAGE,
+    limit: limit(query),
+    offset: offset(query),
     order: order(query)
   });
 

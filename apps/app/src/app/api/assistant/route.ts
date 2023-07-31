@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import nlToLocation from "../../../utils/nl-to-location";
 import { nlToQuery } from "../../../lib/Remi";
-import { PartialRealEstateQuery } from "@rems/types";
+import { RealEstateQuerySchema } from "@rems/schemas";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -11,11 +11,10 @@ export async function POST(req: Request) {
     return NextResponse.error();
   }
 
-  const { "search-origin": searchOrigin, ...rest } = aiQuery;
-  const query: PartialRealEstateQuery = rest;
+  const query = RealEstateQuerySchema.parse(aiQuery);
 
-  if (searchOrigin) {
-    const location = await nlToLocation(searchOrigin);
+  if (aiQuery["search-origin"]) {
+    const location = await nlToLocation(aiQuery["search-origin"]);
     if (location) {
       query["search-origin-id"] = location.placeId;
       query["search-origin-lat"] = location.lat;

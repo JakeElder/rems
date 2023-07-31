@@ -4,7 +4,8 @@ export {
   PartialRealEstateQuerySchema,
   RealEstateQuerySchema,
   AiRealEstateQuerySchema,
-  PartialAiRealEstateQuerySchema
+  PartialAiRealEstateQuerySchema,
+  ServerRealEstateQuerySchema
 } from "./real-estate-query";
 
 export { ContactFormSchema } from "./contact-form";
@@ -20,6 +21,11 @@ const filterSchemaFactory = () =>
   });
 
 export const FilterSchema = filterSchemaFactory();
+export const IndoorFeature = filterSchemaFactory();
+export const LotFeature = filterSchemaFactory();
+export const OutdoorFeature = filterSchemaFactory();
+export const ViewType = filterSchemaFactory();
+export const PropertyType = filterSchemaFactory();
 
 // propertyType: filterSchemaFactory().describe(
 //   txt(<>The type of property it is</>)

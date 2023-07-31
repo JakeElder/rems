@@ -251,7 +251,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
     onSearchRadiusEnabledChange: (enabled) => {
       const nextQuery = update(query, {
-        "search-radius-enabled": { $set: enabled ? "true" : null },
+        "search-radius-enabled": { $set: enabled ? "true" : "false" },
         page: { $set: 1 }
       });
       commit(nextQuery);
