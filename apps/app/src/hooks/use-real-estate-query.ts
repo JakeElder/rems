@@ -2,8 +2,10 @@
 
 import {
   PartialRealEstateQuery,
+  PartialServerRealEstateQuery,
   QuickFilterQueryKey,
-  RealEstateQuery
+  RealEstateQuery,
+  ServerRealEstateQuery
 } from "@rems/types";
 import { useRouter } from "next/router";
 import qs from "query-string";
@@ -11,11 +13,16 @@ import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
 import { setCookie } from "typescript-cookie";
 import adapters from "../adapters";
-import { RealEstateQuerySchema } from "@rems/schemas";
+import {
+  RealEstateQuerySchema,
+  ServerRealEstateQuerySchema
+} from "@rems/schemas";
 import { useDebouncedCallback } from "use-debounce";
+import useRealEstateIndexPageState from "./use-real-estate-index-page-state";
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
+  serverQuery: ServerRealEstateQuery;
   queryString: string;
   commit: (query: PartialRealEstateQuery) => void;
   has: (param: keyof RealEstateQuery) => boolean;
@@ -79,6 +86,7 @@ export const generateQueryString = (
 
 const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const router = useRouter();
+  const pageState = useRealEstateIndexPageState();
 
   const commit = (query: PartialRealEstateQuery) => {
     const qs = generateQueryString(query);
@@ -136,10 +144,36 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     500
   );
 
+  const bounds = (() => {
+    if (pageState === null) {
+      return {};
+    }
+
+    const b = pageState.mapBounds.get();
+
+    if (b === null) {
+      return {};
+    }
+
+    // TODO: Change to map-size
+    return {
+      "map-bound-sw-lng": b.sw.lng,
+      "map-bound-sw-lat": b.sw.lat,
+      "map-bound-ne-lng": b.ne.lng,
+      "map-bound-ne-lat": b.ne.lat
+    };
+  })();
+
+  const serverQuery = ServerRealEstateQuerySchema.parse({
+    ...query,
+    ...bounds
+  });
+
   return {
     isReady: router.isReady,
 
     query,
+    serverQuery,
     queryString,
 
     has,

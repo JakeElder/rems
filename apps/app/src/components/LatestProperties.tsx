@@ -8,7 +8,6 @@ const LatestProperties = async ({}: Props) => {
   const { data: properties } = await fetch("properties", {
     sort: "newest-first"
   });
-  console.log(properties[0].images)
   return <PropertySlider properties={properties} />;
 };
 

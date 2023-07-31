@@ -58,6 +58,7 @@ const AiSearchViewContainer = ({}: Props) => {
 
   const execute = () => {
     SpeechRecognition.stopListening();
+    resetTranscript();
     if (value.length === 0) {
       setState("inactive");
     } else {
@@ -69,8 +70,8 @@ const AiSearchViewContainer = ({}: Props) => {
   const debouncedExecute = useDebouncedCallback(execute, 2500);
 
   const onMicClick = () => {
-    SpeechRecognition.startListening({ continuous: true });
     setValue("");
+    SpeechRecognition.startListening({ continuous: true });
     setState("listening");
     debouncedExecute();
   };
