@@ -10,6 +10,7 @@ import FilterBarViewContainer from "@/components/client/FilterBarViewContainer";
 import FooterViewContainer from "@/components/client/FooterViewContainer";
 import {
   AppConfig,
+  Area,
   BTSStation,
   FilterSet,
   IndoorFeature,
@@ -20,13 +21,14 @@ import {
   QuickFilter,
   ViewType
 } from "@rems/types";
-import { RealEstateIndexPageStateProvider } from "@/hooks/use-real-estate-index-page-state";
 import api from "../api";
+import { RealEstateIndexPageStateProvider } from "../hooks/use-real-estate-index-page-state";
 
 type Props = {
   config: AppConfig;
   searches: FilterSet[];
   propertyTypes: PropertyType[];
+  areas: Area[];
   viewTypes: ViewType[];
   indoorFeatures: IndoorFeature[];
   outdoorFeatures: OutdoorFeature[];
@@ -84,6 +86,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     config,
     searches,
     propertyTypes,
+    areas,
     viewTypes,
     indoorFeatures,
     outdoorFeatures,
@@ -95,6 +98,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     api.get.appConfig(),
     api.get.popularSearches(),
     api.get.propertyTypes(),
+    api.get.areas(),
     api.get.viewTypes(),
     api.get.indoorFeatures(),
     api.get.outdoorFeatures(),
@@ -109,6 +113,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
       config,
       searches,
       propertyTypes,
+      areas,
       viewTypes,
       indoorFeatures,
       outdoorFeatures,

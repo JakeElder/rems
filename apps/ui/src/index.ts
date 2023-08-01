@@ -7,6 +7,7 @@ export * as RealEstatePage from "./Pages/RealEstatePage";
 
 export { default as AiSearch } from "./Components/AiSearch";
 export { default as AskAQuestionForm } from "./Components/AskAQuestionForm";
+export { default as AreaFilter } from "./Components/AreaFilter";
 export { default as AvailabilityFilter } from "./Components/AvailabilityFilter";
 export { default as AvailabilityFilterPopover } from "./Components/AvailabilityFilterPopover";
 export { default as BathroomsFilter } from "./Components/BathroomsFilter";

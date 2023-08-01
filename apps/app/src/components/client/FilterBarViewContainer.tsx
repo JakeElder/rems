@@ -12,6 +12,7 @@ import LotSizeFiltersViewContainer from "./LotSizeFiltersViewContainer";
 import { PropertyFilters, FilterBar as Layout } from "@rems/ui";
 import TypeFiltersViewContainer from "./TypeFiltersViewContainer";
 import {
+  Area,
   BTSStation,
   IndoorFeature,
   LotFeature,
@@ -31,9 +32,11 @@ import NearestBTSStationFilterViewContainer from "./NearestBTSStationFilterViewC
 import QuickFiltersViewContainer from "./QuickFiltersViewContainer";
 import PlacesAutocompleteViewContainer from "./PlacesAutocompleteViewContainer";
 import SearchRadiusViewContainer from "./SearchRadiusViewContainer";
+import AreaFilterViewContainer from "./AreaFilterViewContainer";
 
 type Props = {
   propertyTypes: PropertyType[];
+  areas: Area[];
   viewTypes: ViewType[];
   indoorFeatures: IndoorFeature[];
   outdoorFeatures: OutdoorFeature[];
@@ -45,6 +48,7 @@ type Props = {
 
 const FilterBarViewContainer = ({
   propertyTypes,
+  areas,
   viewTypes,
   indoorFeatures,
   outdoorFeatures,
@@ -70,6 +74,9 @@ const FilterBarViewContainer = ({
             <PropertyFilters.Availability>
               <AvailabilityFilterViewContainer />
             </PropertyFilters.Availability>
+            <PropertyFilters.Area>
+              <AreaFilterViewContainer areas={areas} />
+            </PropertyFilters.Area>
           </PropertyFilters.AvailabilityAndArea>
           <PropertyFilters.PriceRange>
             <PriceRangeViewContainer />
