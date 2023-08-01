@@ -21,7 +21,7 @@ const AiSearchViewContainer = ({}: Props) => {
   const [activeSearch, setActiveSearch] = useState<null | string>(null);
   const $input = useRef<HTMLInputElement>(null);
 
-  const { transcript } = useSpeechRecognition({
+  const { transcript, resetTranscript } = useSpeechRecognition({
     clearTranscriptOnListen: true
   });
 

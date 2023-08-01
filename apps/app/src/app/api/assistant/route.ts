@@ -5,7 +5,7 @@ import { RealEstateQuerySchema } from "@rems/schemas";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  const aiQuery = await nlToQuery(data.query, data.nl);
+  const aiQuery: any = await nlToQuery(data.query, data.nl);
 
   if (!aiQuery) {
     return NextResponse.error();
