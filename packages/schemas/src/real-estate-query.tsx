@@ -66,8 +66,8 @@ export const RealEstateQuerySchema = base().extend({
     .catch("ChIJ82ENKDJgHTERIEjiXbIAAQE"),
   "nearest-mrt-station": z.string().nullable().default(null).catch(null),
   "nearest-bts-station": z.string().nullable().default(null).catch(null),
-  "map-lat": z.coerce.number().nullable().default(null).catch(null),
-  "map-lng": z.coerce.number().nullable().default(null).catch(null),
+  "map-lat": z.coerce.number().nullable().default(13.736717).catch(13.736717),
+  "map-lng": z.coerce.number().nullable().default(100.523186).catch(100.523186),
   area: z.string().nullable().default(null).catch(null)
 });
 

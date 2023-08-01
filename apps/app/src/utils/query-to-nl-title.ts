@@ -2,6 +2,7 @@
 
 import { Configuration, OpenAIApi } from "openai";
 import { PartialRealEstateQuery } from "@rems/types";
+import { generateSchema } from "lib/Remi";
 
 const openai = new OpenAIApi(
   new Configuration({ apiKey: process.env.OPENAI_KEY })
@@ -17,7 +18,7 @@ const queryToNlTitle = async (
       {
         role: "user",
         content:
-          "Convert this json query object in to a short, natural language Title, suitable for SEO on a property website. Keep it short"
+          "Convert this json query object in to a short, natural language Title, suitable for SEO on a property website. Keep it short but descriptive, including key points like bedrooms and key features/view types and location."
       },
       {
         role: "user",
@@ -25,7 +26,7 @@ const queryToNlTitle = async (
       },
       {
         role: "user",
-        content: JSON.stringify({})
+        content: JSON.stringify(await generateSchema())
       },
       {
         role: "user",
@@ -43,7 +44,7 @@ const queryToNlTitle = async (
             title: {
               type: "string",
               description:
-                "A short, natural language, SEO friendly title for a real estate search query"
+                "A short, but descriptive natural language, SEO friendly title for a real estate search query"
             }
           }
         }

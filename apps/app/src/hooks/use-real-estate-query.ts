@@ -145,7 +145,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   );
 
   const bounds = (() => {
-    if (pageState === null) {
+    if (pageState === null || !process.env.NEXT_PUBLIC_ENABLE_LOCATION_RADIUS) {
       return {};
     }
 

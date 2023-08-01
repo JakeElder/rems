@@ -58,7 +58,7 @@ const getQueryProperties = async () => {
   };
 };
 
-const generateSchema = async () => {
+export const generateSchema = async () => {
   const schema = zodToJsonSchema(AiRealEstateQuerySchema);
   return {
     ...schema,

@@ -46,6 +46,35 @@ type Props = {
   quickFilters: QuickFilter[];
 };
 
+const LocationAndRadius = () => {
+  if (!process.env.NEXT_PUBLIC_ENABLE_LOCATION_RADIUS) {
+    return null;
+  }
+
+  return (
+    <>
+      <PropertyFilters.Location>
+        <PlacesAutocompleteViewContainer />
+      </PropertyFilters.Location>
+      <PropertyFilters.SearchRadius>
+        <SearchRadiusViewContainer />
+      </PropertyFilters.SearchRadius>
+    </>
+  );
+};
+
+const Area = ({ areas }: { areas: Area[] }) => {
+  if (process.env.NEXT_PUBLIC_ENABLE_LOCATION_RADIUS) {
+    return null;
+  }
+
+  return (
+    <PropertyFilters.Area>
+      <AreaFilterViewContainer areas={areas} />
+    </PropertyFilters.Area>
+  );
+};
+
 const FilterBarViewContainer = ({
   propertyTypes,
   areas,
@@ -64,19 +93,12 @@ const FilterBarViewContainer = ({
           <PropertyFilters.PropertyType>
             <TypeFiltersViewContainer id="filter-bar" types={propertyTypes} />
           </PropertyFilters.PropertyType>
-          <PropertyFilters.Location>
-            <PlacesAutocompleteViewContainer />
-          </PropertyFilters.Location>
-          <PropertyFilters.SearchRadius>
-            <SearchRadiusViewContainer />
-          </PropertyFilters.SearchRadius>
+          <LocationAndRadius />
           <PropertyFilters.AvailabilityAndArea>
             <PropertyFilters.Availability>
               <AvailabilityFilterViewContainer />
             </PropertyFilters.Availability>
-            <PropertyFilters.Area>
-              <AreaFilterViewContainer areas={areas} />
-            </PropertyFilters.Area>
+            <Area areas={areas} />
           </PropertyFilters.AvailabilityAndArea>
           <PropertyFilters.PriceRange>
             <PriceRangeViewContainer />
