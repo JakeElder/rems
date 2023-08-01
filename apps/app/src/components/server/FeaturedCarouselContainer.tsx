@@ -1,7 +1,7 @@
 import React from "react";
-import api from "../../api";
 import { FeaturedCarousel } from "@rems/ui";
 import fetch from "@/fetch";
+import api from "@/api";
 
 type Props = {};
 

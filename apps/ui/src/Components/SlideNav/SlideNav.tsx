@@ -26,7 +26,7 @@ type Props = React.ComponentProps<typeof Dialog.Root> & {
 };
 
 const L = ({ href, children }: { href: string; children: React.ReactNode }) => {
-  const active = usePathname().split("/")[1] === href.replace(/^\//, "");
+  const active = usePathname()!.split("/")[1] === href.replace(/^\//, "");
   const className = active ? css["active-link"] : css["link"];
   return (
     <Link href={href} className={className}>

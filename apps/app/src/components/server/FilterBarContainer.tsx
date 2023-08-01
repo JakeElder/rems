@@ -1,4 +1,5 @@
 import React from "react";
+import { PropertyFilters, FilterBar as Layout } from "@rems/ui";
 import BedsFilterPopoverViewContainer from "@/components/client/BedsFilterPopoverViewContainer";
 import PriceFilterPopoverViewContainer from "@/components/client/PriceFilterPopoverViewContainer";
 import AvailabilityFilterPopoverViewContainer from "@/components/client/AvailabilityFilterPopoverViewContainer";
@@ -17,8 +18,7 @@ import LivingAreaFiltersViewContainer from "@/components/client/LivingAreaFilter
 import LotSizeFiltersViewContainer from "@/components/client/LotSizeFiltersViewContainer";
 import NearestMRTStationFilterContainer from "@/components/server/NearestMRTStationFilter";
 import NearestBTSStationFilterContainer from "@/components/server/NearestBTSStationFilter";
-import { PropertyFilters, FilterBar as Layout } from "@rems/ui";
-import QuickFiltersContainer from "./QuickFiltersContainer";
+import QuickFiltersContainer from "@/components/server//QuickFiltersContainer";
 import PlacesAutocompleteViewContainer from "@/components/client/PlacesAutocompleteViewContainer";
 
 type Props = {};

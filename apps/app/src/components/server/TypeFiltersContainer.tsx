@@ -1,6 +1,6 @@
 "use server";
 
-import api from "../../api";
+import api from "@/api";
 import TypeFiltersViewContainer from "@/components/client/TypeFiltersViewContainer";
 
 type Props = { id: string };

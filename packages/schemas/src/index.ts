@@ -12,6 +12,7 @@ export { ContactFormSchema } from "./contact-form";
 export { FileSchema } from "./file";
 export { ImageSchema } from "./image";
 export { PropertySchema } from "./property";
+export { AppConfigSchema } from "./app-config";
 
 const filterSchemaFactory = () =>
   z.object({

@@ -1,0 +1,9 @@
+name: "API"
+pre_window: nvm use
+tmux_options: -L rems
+attach: false
+
+windows:
+  - Vim: vim
+  - Terminal:
+  - Server: yarn dev

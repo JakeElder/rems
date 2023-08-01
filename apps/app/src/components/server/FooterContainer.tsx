@@ -1,5 +1,5 @@
 import { Footer } from "@rems/ui";
-import api from "../../api";
+import api from "@/api";
 
 type Props = Pick<React.ComponentProps<typeof Footer>, "full">;
 

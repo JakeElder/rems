@@ -1,4 +1,4 @@
-import api from "../../api";
+import api from "@/api";
 import TypeFilterPopoverViewContainer from "@/components/client/TypeFilterPopoverViewContainer";
 
 const TypeFilterPopoverContainer = async () => {

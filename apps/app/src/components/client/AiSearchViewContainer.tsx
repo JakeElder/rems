@@ -4,15 +4,31 @@ import "regenerator-runtime";
 import React, { useEffect, useRef, useState } from "react";
 import { AiSearch } from "@rems/ui";
 import useRealEstateQuery from "@/hooks/use-real-estate-query";
-import { AiSearchInputState } from "@rems/types";
+import {
+  AiSearchInputState,
+  PartialRealEstateQuery,
+  RealEstateQuery
+} from "@rems/types";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
-import { resolveNl } from "../../api.client";
 import useSWR from "swr";
 import { useDebouncedCallback } from "use-debounce";
 
 type Props = {};
+
+type Fetcher = (
+  query: PartialRealEstateQuery,
+  nl: string
+) => Promise<RealEstateQuery>;
+
+const fetcher: Fetcher = async (query, nl) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
+    method: "POST",
+    body: JSON.stringify({ query, nl })
+  });
+  return res.json();
+};
 
 const AiSearchViewContainer = ({}: Props) => {
   const [value, setValue] = useState("");
@@ -27,7 +43,7 @@ const AiSearchViewContainer = ({}: Props) => {
 
   useSWR(
     activeSearch ? [activeSearch, "nl"] : null,
-    ([nl]) => resolveNl(query, nl),
+    ([nl]) => fetcher(query, nl),
     {
       onSuccess: (query) => {
         commit(query);

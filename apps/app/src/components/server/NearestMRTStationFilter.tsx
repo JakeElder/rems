@@ -1,6 +1,6 @@
 "use server";
 
-import api from "../../api";
+import api from "@/api";
 import NearestMRTStationFilterViewContainer from "@/components/client/NearestMRTStationFilterViewContainer";
 
 type Props = {};

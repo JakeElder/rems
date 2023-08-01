@@ -1,12 +1,20 @@
 import useSWR from "swr";
 import useRealEstateQuery from "./use-real-estate-query";
-import getProperties from "../utils/get-properties";
 import qs from "query-string";
 import { GetPropertiesResult } from "@rems/types";
 
 type UsePropertiesHook = (props?: { limit: boolean }) => {
   data: GetPropertiesResult | undefined;
   isLoading: boolean;
+};
+
+const fetcher = async (query: string): Promise<GetPropertiesResult> => {
+  console.log(process.env.NEXT_PUBLIC_REMS_API_URL);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_REMS_API_URL}/properties${query}`
+  );
+  const json = await res.json();
+  return json;
 };
 
 const useProperties: UsePropertiesHook = (props) => {
@@ -22,7 +30,7 @@ const useProperties: UsePropertiesHook = (props) => {
 
   const { data, isLoading } = useSWR(
     [q, "properties"],
-    ([q]) => getProperties(`?${q}`),
+    ([q]) => fetcher(`?${q}`),
     { keepPreviousData: true }
   );
 

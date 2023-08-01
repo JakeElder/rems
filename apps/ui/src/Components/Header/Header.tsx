@@ -30,7 +30,7 @@ const A = ({
 }) => {
   const pathname = usePathname();
   const active = pathname
-    ? usePathname().split("/")[1] === href.replace(/^\//, "")
+    ? usePathname()!.split("/")[1] === href.replace(/^\//, "")
     : false;
 
   const opacity = active ? "1" : "0.7";

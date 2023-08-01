@@ -6,4 +6,4 @@ attach: false
 windows:
   - Vim: vim
   - Terminal:
-  - Check: npm run dev
+  - Check: yarn dev

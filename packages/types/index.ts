@@ -7,7 +7,8 @@ import {
   PropertySchema,
   FileSchema,
   ImageSchema,
-  ServerRealEstateQuerySchema
+  ServerRealEstateQuerySchema,
+  AppConfigSchema
 } from "@rems/schemas";
 import { PartialServerRealEstateQuerySchema } from "@rems/schemas/src/real-estate-query";
 import { z } from "zod";
@@ -92,6 +93,7 @@ export type Filters = {
   quickFilters: QuickFilter[];
 };
 
+export type AppConfig = z.infer<typeof AppConfigSchema>;
 export type Property = z.infer<typeof PropertySchema>;
 
 export type ContactFormData = z.infer<typeof ContactFormSchema>;
@@ -143,16 +145,6 @@ export type FilterSet = {
 
 export type SearchParams = {
   [key: string]: string | string[] | undefined;
-};
-
-export type AppConfig = {
-  defaultTitle: string;
-  defaultDescription: string;
-  notificationEmail: string;
-  lineURL?: string;
-  instagramURL?: string;
-  linkedInURL?: string;
-  facebookURL?: string;
 };
 
 type BaseQueryStateEntry = {

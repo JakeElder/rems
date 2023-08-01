@@ -15,7 +15,9 @@ type Place = {
 };
 
 const fetcher = async (id: string): Promise<Place> => {
-  const res = await fetch(`/api/places/${id}`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_REMS_API_URL}api/places/${id}`
+  );
   return res.json();
 };
 

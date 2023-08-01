@@ -5,6 +5,8 @@ packages=(
   apps/app
   apps/ui
   apps/cms
+  apps/api
+  packages/ts-api
   packages/types
   packages/schemas
   packages/strapi-plugin-google-map-picker

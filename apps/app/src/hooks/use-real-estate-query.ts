@@ -2,17 +2,16 @@
 
 import {
   PartialRealEstateQuery,
-  PartialServerRealEstateQuery,
   QuickFilterQueryKey,
   RealEstateQuery,
+  SearchParams,
   ServerRealEstateQuery
 } from "@rems/types";
 import { useRouter } from "next/router";
 import qs from "query-string";
 import update from "immutability-helper";
-import { omitBy, equals } from "remeda";
+import { omitBy, equals, flatten } from "remeda";
 import { setCookie } from "typescript-cookie";
-import adapters from "../adapters";
 import {
   RealEstateQuerySchema,
   ServerRealEstateQuerySchema
@@ -84,6 +83,26 @@ export const generateQueryString = (
   return string ? `?${string}` : "";
 };
 
+const searchParamsToPartialQuery = (params: SearchParams): RealEstateQuery => {
+  const arrayKeys = [
+    "indoor-features",
+    "lot-features",
+    "outdoor-features",
+    "property-type",
+    "view-types"
+  ];
+
+  const p = Object.keys(params).reduce((acc, key) => {
+    const k = key.replace(/\[\]$/, "");
+    const val = arrayKeys.includes(k)
+      ? flatten([...[params[key]]])
+      : params[key];
+    return { ...acc, [k]: val };
+  }, {});
+
+  return RealEstateQuerySchema.parse(p);
+};
+
 const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const router = useRouter();
   const pageState = useRealEstateIndexPageState();
@@ -100,7 +119,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     });
   };
 
-  const query = adapters.searchParamsToPartialQuery(router.query);
+  const query = searchParamsToPartialQuery(router.query);
   const queryString = generateQueryString(query);
 
   const defaults = RealEstateQuerySchema.parse({});

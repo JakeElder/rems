@@ -1,6 +1,6 @@
 "use server";
 
-import api from "../../api";
+import api from "@/api";
 import IndoorFeatureFiltersViewContainer from "@/components/client/IndoorFeatureFiltersViewContainer";
 
 type Props = {};
