@@ -1,20 +1,20 @@
 import { Footer } from "@rems/ui";
-import api from "@/api";
+import fetch from "@/fetch";
 
 type Props = Pick<React.ComponentProps<typeof Footer>, "full">;
 
 const FooterContainer = async ({ full }: Props) => {
-  const [{ lineURL, facebookURL, linkedInURL, instagramURL }, searches] =
-    await Promise.all([api.get.appConfig(), api.get.popularSearches()]);
+  const [{ lineUrl, facebookUrl, linkedInUrl, instagramUrl }, searches] =
+    await Promise.all([fetch("app-config"), fetch("popular-searches")]);
 
   return (
     <Footer
       full={full}
       popularSearches={searches.map((s) => ({ children: s.name, href: "#" }))}
-      lineURL={lineURL || "#"}
-      facebookURL={facebookURL || "#"}
-      linkedInURL={linkedInURL || "#"}
-      instagramURL={instagramURL || "#"}
+      lineURL={lineUrl || "#"}
+      facebookURL={facebookUrl || "#"}
+      linkedInURL={linkedInUrl || "#"}
+      instagramURL={instagramUrl || "#"}
     />
   );
 };

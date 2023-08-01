@@ -2,7 +2,7 @@ import { HomePage as Page, ToastHub } from "@rems/ui";
 import PopularSearches from "../components/PopularSearches";
 import LatestProperties from "../components/LatestProperties";
 import { Metadata } from "next";
-import api from "../api";
+import fetch from "@/fetch";
 import Analytics from "@/components/Analytics";
 import HeaderViewContainer from "@/components/client/HeaderViewContainer";
 import MailingListModuleViewContainer from "@/components/client/MailingListModuleViewContainer";
@@ -10,7 +10,7 @@ import FooterContainer from "@/components/server/FooterContainer";
 import FeaturedCarouselContainer from "@/components/server/FeaturedCarouselContainer";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const config = await api.get.appConfig();
+  const config = await fetch("app-config");
 
   return {
     title: config.defaultTitle,

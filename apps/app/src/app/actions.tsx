@@ -2,7 +2,7 @@
 
 import { ContactFormSchema } from "@rems/schemas";
 import nodemailer from "nodemailer";
-import api from "@/api";
+import fetch from "@/fetch";
 import prettyjson from "prettyjson";
 
 const FROM_EMAIL = `"Rems" <mailer@mindfulstudio.io>`;
@@ -23,7 +23,7 @@ const sendMail = async ({
   subject: string;
   data: Record<string, any>;
 }) => {
-  const { notificationEmail } = await api.get.appConfig();
+  const { notificationEmail } = await fetch("app-config");
   const { renderToString } = await import("react-dom/server");
   return transporter.sendMail({
     from: FROM_EMAIL,

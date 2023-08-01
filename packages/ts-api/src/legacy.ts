@@ -87,55 +87,6 @@ const adapters = {
 };
 
 export const get = {
-  async quickFilters(): Promise<QuickFilter[]> {
-    const q = qs.stringify({
-      populate: {
-        filters: {
-          on: {
-            "quick-filters.indoor-feature": { populate: ["filter"] },
-            "quick-filters.lot-feature": { populate: ["filter"] },
-            "quick-filters.outdoor-feature": { populate: ["filter"] },
-            "quick-filters.view-type": { populate: ["filter"] }
-          }
-        }
-      }
-    });
-
-    const url = `${URL}/quick-filter-list?${q}`;
-    const res = await fetch(url);
-    const json = await res.json();
-
-    const mapKey = (component: string): QuickFilterQueryKey => {
-      const map: Record<string, QuickFilterQueryKey> = {
-        "quick-filters.indoor-feature": "indoor-features",
-        "quick-filters.lot-feature": "lot-features",
-        "quick-filters.outdoor-feature": "outdoor-features",
-        "quick-filters.view-type": "view-types"
-      };
-      return map[component];
-    };
-
-    const quickFilters = (
-      json.data.attributes.filters as any[]
-    ).map<QuickFilter>((d: any) => ({
-      key: mapKey(d.__component),
-      filter: d.filter.data.attributes
-    }));
-
-    return quickFilters;
-  },
-
-  async popularSearches(): Promise<FilterSet[]> {
-    const q = qs.stringify({
-      populate: ["filter_sets", "filter_sets.image"]
-    });
-    const url = `${URL}/popular-searches-list?${q}`;
-    const res = await fetch(url);
-    const json = await res.json();
-
-    return json.data.attributes.filter_sets.data.map(adapters.filterSet);
-  },
-
   async featuredProperties(): Promise<Property["id"][]> {
     const q = qs.stringify({ populate: ["properties"] });
     const url = `${URL}/featured-property-list?${q}`;

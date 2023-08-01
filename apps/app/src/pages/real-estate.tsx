@@ -84,9 +84,10 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const config = await fetch("app-config");
-  console.log(config);
+  const searches = await fetch("popular-searches");
+  const quickFilters = await fetch("quick-filters");
+
   const [
-    searches,
     propertyTypes,
     areas,
     viewTypes,
@@ -94,10 +95,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     outdoorFeatures,
     lotFeatures,
     mrtStations,
-    btsStations,
-    quickFilters
+    btsStations
   ] = await Promise.all([
-    api.get.popularSearches(),
     api.get.propertyTypes(),
     api.get.areas(),
     api.get.viewTypes(),
@@ -105,8 +104,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     api.get.outdoorFeatures(),
     api.get.lotFeatures(),
     api.get.mrtStations(),
-    api.get.btsStations(),
-    api.get.quickFilters()
+    api.get.btsStations()
   ]);
 
   return {

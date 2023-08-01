@@ -9,7 +9,9 @@ import {
   ViewType,
   RealEstateQuery,
   GetPropertiesResult,
-  AppConfig
+  AppConfig,
+  FilterSet,
+  QuickFilter
 } from "@rems/types";
 import qs from "query-string";
 import { omitBy, equals } from "remeda";
@@ -22,6 +24,8 @@ type Route<Route extends string, ReturnType, Args extends any[] = []> = {
 
 type Routes =
   | Route<"app-config", AppConfig>
+  | Route<"popular-searches", FilterSet[]>
+  | Route<"quick-filters", QuickFilter[]>
   | Route<"property", Property, [Property["id"]]>
   | Route<"properties", GetPropertiesResult, [query?: PartialRealEstateQuery]>
   | Route<"properties/[id]/images", Image[], [propertyId?: Property["id"]]>
@@ -98,6 +102,16 @@ const wrapper = async <T extends Routes["route"]>(
 
   if (route === "app-config") {
     const res = await fetch(url(`app-config`));
+    return res.json();
+  }
+
+  if (route === "popular-searches") {
+    const res = await fetch(url(`popular-searches`));
+    return res.json();
+  }
+
+  if (route === "quick-filters") {
+    const res = await fetch(url(`quick-filters`));
     return res.json();
   }
 

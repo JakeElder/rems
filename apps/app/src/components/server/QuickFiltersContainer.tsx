@@ -1,8 +1,8 @@
 import QuickFiltersViewContainer from "@/components/client/QuickFiltersViewContainer";
-import api from "@/api";
+import fetch from "@/fetch";
 
 const QuickFiltersContainer = async () => {
-  const filters = await api.get.quickFilters();
+  const filters = await fetch("quick-filters");
   return <QuickFiltersViewContainer filters={filters} />;
 };
 

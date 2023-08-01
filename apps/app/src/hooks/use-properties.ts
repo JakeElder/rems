@@ -9,7 +9,6 @@ type UsePropertiesHook = (props?: { limit: boolean }) => {
 };
 
 const fetcher = async (query: string): Promise<GetPropertiesResult> => {
-  console.log(process.env.NEXT_PUBLIC_REMS_API_URL);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_REMS_API_URL}/properties${query}`
   );

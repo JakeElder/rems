@@ -14,10 +14,10 @@ const FooterViewContainer = ({ config, searches, full }: Props) => {
     <Footer
       full={full}
       popularSearches={searches.map((s) => ({ children: s.name, href: "#" }))}
-      lineURL={config.lineURL || "#"}
-      facebookURL={config.facebookURL || "#"}
-      linkedInURL={config.linkedInURL || "#"}
-      instagramURL={config.instagramURL || "#"}
+      lineURL={config.lineUrl || "#"}
+      facebookURL={config.facebookUrl || "#"}
+      linkedInURL={config.linkedInUrl || "#"}
+      instagramURL={config.instagramUrl || "#"}
     />
   );
 };

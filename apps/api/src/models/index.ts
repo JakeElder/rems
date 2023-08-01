@@ -1,94 +1,28 @@
-import { DataTypes, Sequelize } from "sequelize";
-import * as pg from "pg";
-
 import property from "./Property";
 import file from "./File";
 import fileRelatedMorph from "./FileRelatedMorph";
 import appConfig from "./AppConfig";
-import snakeCase from "snake-case";
-import camelCase from "camelcase";
-
-const sequelize = new Sequelize(process.env.DATABASE_URL!, {
-  dialectModule: pg,
-  dialectOptions: {
-    ssl: process.env.DATABASE_SSL
-      ? { require: true, rejectUnauthorized: false }
-      : null
-  },
-  logging: false
-});
-
-const filter = (model: string, link: string) => {
-  const Model = sequelize.define(
-    model,
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      name: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-      },
-      slug: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-      }
-    },
-    { underscored: true }
-  );
-
-  const Link = sequelize.define(
-    link,
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      property_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: "properties",
-          key: "id"
-        },
-        onDelete: "CASCADE"
-      },
-
-      [`${snakeCase(model)}_id`]: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: `${snakeCase(model)}s`,
-          key: "id"
-        },
-        onDelete: "CASCADE"
-      },
-      property_order: {
-        type: DataTypes.FLOAT,
-        allowNull: true
-      }
-    },
-    { underscored: true, timestamps: false }
-  );
-
-  Property.belongsToMany(Model, { through: Link, as: `${camelCase(model)}s` });
-  Model.belongsToMany(Property, { through: Link });
-
-  Link.belongsTo(Model);
-  Model.hasMany(Link);
-
-  return [Model, Link];
-};
+import filterSet from "./FilterSet";
+import popularSearch from "./PopularSearch";
+import popularSearchesFilterSetsLink from "./PopularSearchesFilterSetsLink";
+import quickFiltersComponent from "./QuickFiltersComponent";
+import sequelize from "./sequelize";
+import filterFactory from "./filter-factory";
+import relateImagesFactory from "./relate-images-factory";
+import componentFilterLinkFactory from "./component-filter-link-factory";
 
 const Property = property(sequelize);
 const File = file(sequelize);
 const FileRelatedMorph = fileRelatedMorph(sequelize);
 const AppConfig = appConfig(sequelize);
+const FilterSet = filterSet(sequelize);
+const PopularSearch = popularSearch(sequelize);
+const PopularSearchesFilterSetsLink = popularSearchesFilterSetsLink(sequelize);
+const QuickFiltersComponent = quickFiltersComponent(sequelize);
+
+const componentFilterLink = componentFilterLinkFactory(sequelize);
+const filter = filterFactory(sequelize, Property);
+const relateImages = relateImagesFactory(File, FileRelatedMorph);
 
 const [PropertyType, PropertiesPropertyTypeLink] = filter(
   "PropertyType",
@@ -111,52 +45,85 @@ const [LotFeature, PropertiesLotFeaturesLink] = filter(
   "PropertiesLotFeaturesLink"
 );
 
-File.belongsToMany(Property, {
-  through: {
-    model: FileRelatedMorph,
-    unique: false,
-    scope: {
-      relatedType: "api::property.property",
-      field: "images"
-    }
-  },
-  foreignKey: "fileId",
-  otherKey: "related_id",
-  as: "properties"
-});
+const ComponentsQuickFiltersIndoorFeaturesFilterLink = componentFilterLink(
+  "ComponentsQuickFiltersIndoorFeaturesFilterLink",
+  IndoorFeature
+);
 
-Property.belongsToMany(File, {
-  through: {
-    model: FileRelatedMorph,
-    unique: false,
-    scope: {
-      relatedType: "api::property.property",
-      field: "images"
-    }
-  },
-  foreignKey: "relatedId",
-  otherKey: "file_id",
-  constraints: false,
-  as: "images"
-});
+const ComponentsQuickFiltersOutdoorFeaturesFilterLink = componentFilterLink(
+  "ComponentsQuickFiltersOutdoorFeaturesFilterLink",
+  OutdoorFeature
+);
+
+const ComponentsQuickFiltersViewTypesFilterLink = componentFilterLink(
+  "ComponentsQuickFiltersViewTypesFilterLink",
+  ViewType
+);
+
+const ComponentsQuickFiltersLotFeaturesFilterLink = componentFilterLink(
+  "ComponentsQuickFiltersLotFeaturesFilterLink",
+  LotFeature
+);
 
 File.hasMany(FileRelatedMorph, { foreignKey: "file_id" });
 FileRelatedMorph.belongsTo(File, { foreignKey: "file_id" });
 
+relateImages({
+  Model: Property,
+  relatedType: "api::property.property",
+  as: "properties",
+  field: "images"
+});
+
+relateImages({
+  Model: FilterSet,
+  relatedType: "api::filter-set.filter-set",
+  as: "filterSets",
+  field: "image"
+});
+
+PopularSearch.hasMany(PopularSearchesFilterSetsLink, {
+  foreignKey: "popular_searches_list_id",
+  onDelete: "CASCADE"
+});
+
+FilterSet.hasMany(PopularSearchesFilterSetsLink, {
+  foreignKey: "filter_set_id",
+  onDelete: "CASCADE"
+});
+
+PopularSearchesFilterSetsLink.belongsTo(PopularSearch, {
+  foreignKey: "popular_searches_list_id",
+  onDelete: "CASCADE"
+});
+
+PopularSearchesFilterSetsLink.belongsTo(FilterSet, {
+  foreignKey: "filter_set_id",
+  onDelete: "CASCADE"
+});
+
 export {
   sequelize,
   AppConfig,
-  Property,
   File,
   FileRelatedMorph,
-  ViewType,
-  PropertyType,
+  FilterSet,
   IndoorFeature,
-  OutdoorFeature,
   LotFeature,
+  OutdoorFeature,
   PropertiesIndoorFeaturesLink,
+  PropertiesLotFeaturesLink,
+  PropertiesOutdoorFeaturesLink,
   PropertiesPropertyTypeLink,
   PropertiesViewTypesLink,
-  PropertiesLotFeaturesLink,
-  PropertiesOutdoorFeaturesLink
+  Property,
+  PropertyType,
+  ViewType,
+  PopularSearch,
+  PopularSearchesFilterSetsLink,
+  QuickFiltersComponent,
+  ComponentsQuickFiltersIndoorFeaturesFilterLink,
+  ComponentsQuickFiltersViewTypesFilterLink,
+  ComponentsQuickFiltersOutdoorFeaturesFilterLink,
+  ComponentsQuickFiltersLotFeaturesFilterLink
 };

@@ -1,4 +1,4 @@
-import api from "../api";
+import fetch from "@/fetch";
 import React from "react";
 import { EntryCardGrid } from "@rems/ui";
 import { EntryCard, FilterSet } from "@rems/types";
@@ -15,7 +15,7 @@ const filterSetToCard = async (f: FilterSet): Promise<EntryCard> => {
 };
 
 const PopularSearches = async ({}: Props) => {
-  const filterSets = await api.get.popularSearches();
+  const filterSets = await fetch("popular-searches");
   const cards = await Promise.all(filterSets.map(filterSetToCard));
   return <EntryCardGrid cards={cards} />;
 };

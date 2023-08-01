@@ -43,5 +43,6 @@ export default (sequelize: Sequelize) =>
   AppConfig.init(attributes, {
     sequelize,
     tableName: "app_config_options",
-    underscored: true
+    underscored: true,
+    timestamps: false
   });
