@@ -4493,7 +4493,6 @@ __metadata:
     "@rems/schemas": "*"
     "@rems/types": "*"
     "@rems/ui": "*"
-    "@sequelize/core": ^7.0.0-alpha.27
     "@types/node": 18.15.3
     "@types/nodemailer": ^6.4.8
     "@types/pg": ^8.10.2
@@ -4727,50 +4726,6 @@ __metadata:
     "@sentry/types": 6.19.7
     tslib: ^1.9.3
   checksum: a000223b9c646c64e3565e79cace1eeb75114342b768367c4dddd646476c215eb1bddfb70c63f05e2352d3bce2d7d415344e4757a001605d0e01ac74da5dd306
-  languageName: node
-  linkType: hard
-
-"@sequelize/core@npm:^7.0.0-alpha.27":
-  version: 7.0.0-alpha.27
-  resolution: "@sequelize/core@npm:7.0.0-alpha.27"
-  dependencies:
-    "@types/debug": ^4.1.7
-    "@types/validator": ^13.7.5
-    bnf-parser: 3.1.4
-    dayjs: ^1.11.5
-    debug: ^4.3.4
-    dottie: ^2.0.2
-    fast-glob: ^3.2.12
-    inflection: ^2.0.0
-    lodash: ^4.17.21
-    pg-connection-string: ^2.5.0
-    pg-hstore: ^2.3.4
-    retry-as-promised: ^7.0.3
-    semver: ^7.3.7
-    sequelize-pool: ^8.0.0
-    toposort-class: ^1.0.1
-    type-fest: ^3.0.0
-    uuid: ^9.0.0
-    validator: ^13.7.0
-    wkx: ^0.5.0
-  peerDependenciesMeta:
-    ibm_db:
-      optional: true
-    mariadb:
-      optional: true
-    mysql2:
-      optional: true
-    odbc:
-      optional: true
-    pg:
-      optional: true
-    snowflake-sdk:
-      optional: true
-    sqlite3:
-      optional: true
-    tedious:
-      optional: true
-  checksum: ebf36f326e7c92f1a4c99cc758edf781a69890afa4f16a375ad91c901b9f1b20697d598cd804e167f25c9b7eea7a9ab8dabe24a77ad2cd11c95344833ea49b54
   languageName: node
   linkType: hard
 
@@ -8779,7 +8734,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/debug@npm:^4.1.7, @types/debug@npm:^4.1.8":
+"@types/debug@npm:^4.1.8":
   version: 4.1.8
   resolution: "@types/debug@npm:4.1.8"
   dependencies:
@@ -9547,7 +9502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/validator@npm:^13.7.17, @types/validator@npm:^13.7.5":
+"@types/validator@npm:^13.7.17":
   version: 13.7.17
   resolution: "@types/validator@npm:13.7.17"
   checksum: a827e480c09b957fe1e773e15a18e79930c546c21044ca99d9fb832268d85536cd3577391b6a3c6ebdb38eee244439056ebeed0886123e248d6b8be318c8374e
@@ -11057,13 +11012,6 @@ __metadata:
   version: 5.2.1
   resolution: "bn.js@npm:5.2.1"
   checksum: 3dd8c8d38055fedfa95c1d5fc3c99f8dd547b36287b37768db0abab3c239711f88ff58d18d155dd8ad902b0b0cee973747b7ae20ea12a09473272b0201c9edd3
-  languageName: node
-  linkType: hard
-
-"bnf-parser@npm:3.1.4":
-  version: 3.1.4
-  resolution: "bnf-parser@npm:3.1.4"
-  checksum: 52c7a59b64408bf7a53c979301d6855a874409583c615c7355780a38073023075f907d4d3bb4844853be8a47442a50b2ebcda1038947a60fca1725ac322b207e
   languageName: node
   linkType: hard
 
@@ -12740,13 +12688,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.11.5":
-  version: 1.11.9
-  resolution: "dayjs@npm:1.11.9"
-  checksum: a4844d83dc87f921348bb9b1b93af851c51e6f71fa259604809cfe1b49d1230e6b0212dab44d1cb01994c096ad3a77ea1cf18fa55154da6efcc9d3610526ac38
-  languageName: node
-  linkType: hard
-
 "debug@npm:2.6.9, debug@npm:^2.2.0, debug@npm:^2.3.3, debug@npm:^2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -13393,7 +13334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dottie@npm:^2.0.2, dottie@npm:^2.0.4":
+"dottie@npm:^2.0.4":
   version: 2.0.6
   resolution: "dottie@npm:2.0.6"
   checksum: 4c778df9dc631a1108a32ef390916836814999a7411d10883f4151bd49c9c6934dc329b3f50fc7692849aa75ba87dba880fd54be501a3b39a6b9c23d6f772a09
@@ -14500,7 +14441,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.0.3, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
+"fast-glob@npm:^3.0.3, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
   version: 3.3.1
   resolution: "fast-glob@npm:3.3.1"
   dependencies:
@@ -16475,13 +16416,6 @@ __metadata:
   version: 1.13.4
   resolution: "inflection@npm:1.13.4"
   checksum: 6744feede9998ad8abd2b1db4af79f494a166e656a0aa949d90c8f4a945c1d07038a3756bf7af78c8f6fce368ba213a7ebf35da3edeffd39f1da0ff465eed6eb
-  languageName: node
-  linkType: hard
-
-"inflection@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "inflection@npm:2.0.1"
-  checksum: bb095b495e10a77afc043cc349ae0f7c8c53e4d1fbcd7781111c18d17bde87ce31ea08bd883774bcbb2ff50c301dd4835b5448c80eb50b5e4e080165b6030f3b
   languageName: node
   linkType: hard
 
@@ -20646,19 +20580,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:2.6.1, pg-connection-string@npm:^2.5.0, pg-connection-string@npm:^2.6.0, pg-connection-string@npm:^2.6.1":
+"pg-connection-string@npm:2.6.1, pg-connection-string@npm:^2.6.0, pg-connection-string@npm:^2.6.1":
   version: 2.6.1
   resolution: "pg-connection-string@npm:2.6.1"
   checksum: 882344a47e1ecf3a91383e0809bf2ac48facea97fcec0358d6e060e1cbcb8737acde419b4c86f05da4ce4a16634ee50fff1d2bb787d73b52ccbfde697243ad8a
-  languageName: node
-  linkType: hard
-
-"pg-hstore@npm:^2.3.4":
-  version: 2.3.4
-  resolution: "pg-hstore@npm:2.3.4"
-  dependencies:
-    underscore: ^1.13.1
-  checksum: bb370d1086f2a726b40e892e03677f4d37cd9ec8e8a00d64cb32be422f1487badb20268894aca8683879ed4d96c556502a00c5da28aca88d01098bf61606c7c9
   languageName: node
   linkType: hard
 
@@ -22734,7 +22659,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"retry-as-promised@npm:^7.0.3, retry-as-promised@npm:^7.0.4":
+"retry-as-promised@npm:^7.0.4":
   version: 7.0.4
   resolution: "retry-as-promised@npm:7.0.4"
   checksum: 2b0dcddb06649d42b1384ec1f933c7cb4461939c28004460b0c4be0c8ae16cabaed2411aa5d46e734a320f33f4a1d480078a19b97c743c754bd32e896b3f8ea2
@@ -23110,13 +23035,6 @@ __metadata:
   version: 7.1.0
   resolution: "sequelize-pool@npm:7.1.0"
   checksum: b11d06d02de9e8fc428ba3020b86f05fe7adad764e57f23c5901f924e31867901a5e7a090180337dc3b90de3934b64f34ae552fde37b0f3d37b09c0c8ecbddc7
-  languageName: node
-  linkType: hard
-
-"sequelize-pool@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "sequelize-pool@npm:8.0.0"
-  checksum: 075139f7edeff103a42ed18e718d8f9c57ae7fda0184f3396e87fea4900ab35dba4026938098d4ca96aa52ae118293353a5f11affe09ddd03c0ac40849699498
   languageName: node
   linkType: hard
 
@@ -24970,7 +24888,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^3.0.0, type-fest@npm:^3.11.0":
+"type-fest@npm:^3.11.0":
   version: 3.13.1
   resolution: "type-fest@npm:3.13.1"
   checksum: c06b0901d54391dc46de3802375f5579868949d71f93b425ce564e19a428a0d411ae8d8cb0e300d330071d86152c3ea86e744c3f2860a42a79585b6ec2fdae8e
@@ -25159,13 +25077,6 @@ __metadata:
   version: 0.1.2
   resolution: "unc-path-regex@npm:0.1.2"
   checksum: a05fa2006bf4606051c10fc7968f08ce7b28fa646befafa282813aeb1ac1a56f65cb1b577ca7851af2726198d59475bb49b11776036257b843eaacee2860a4ec
-  languageName: node
-  linkType: hard
-
-"underscore@npm:^1.13.1":
-  version: 1.13.6
-  resolution: "underscore@npm:1.13.6"
-  checksum: d5cedd14a9d0d91dd38c1ce6169e4455bb931f0aaf354108e47bd46d3f2da7464d49b2171a5cf786d61963204a42d01ea1332a903b7342ad428deaafaf70ec36
   languageName: node
   linkType: hard
 
@@ -25605,7 +25516,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"validator@npm:^13.7.0, validator@npm:^13.9.0":
+"validator@npm:^13.9.0":
   version: 13.9.0
   resolution: "validator@npm:13.9.0"
   checksum: e2c936f041f61faa42bafd17c6faddf939498666cd82e88d733621c286893730b008959f4cb12ab3e236148a4f3805c30b85e3dcf5e0efd8b0cbcd36c02bfc0c
