@@ -4556,7 +4556,7 @@ __metadata:
     "@strapi/strapi": 4.11.1
     better-sqlite3: 8.0.1
     pg: ^8.10.0
-    strapi-plugin-google-map-picker: ../../packages/strapi-plugin-google-map-picker
+    strapi-plugin-google-map-picker: "*"
   languageName: unknown
   linkType: soft
 
@@ -23812,30 +23812,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strapi-plugin-google-map-picker@file:../../packages/strapi-plugin-google-map-picker::locator=%40rems%2Fcms%40workspace%3Aapps%2Fcms":
-  version: 1.0.8
-  resolution: "strapi-plugin-google-map-picker@file:../../packages/strapi-plugin-google-map-picker#../../packages/strapi-plugin-google-map-picker::hash=af78e7&locator=%40rems%2Fcms%40workspace%3Aapps%2Fcms"
-  dependencies:
-    "@react-google-maps/api": ^2.13.1
-    "@strapi/design-system": ^1.5.0
-    "@strapi/helper-plugin": ^4.5.6
-    "@strapi/icons": ^1.5.0
-    "@strapi/strapi": 4.11.6
-    immer: ^9.0.18
-    react: 18.2.0
-    react-dom: 18.2.0
-    react-intl: ^6.2.5
-    react-redux: ^8.0.5
-    strapi-typed: ^1.0.15
-    styled-components: ^5.3.6
-    ts-node: ^10.9.1
-  peerDependencies:
-    "@strapi/strapi": ^4.4.0
-  checksum: 03b6ed271f3874ad2c0e4ef0077d6a84c3b7012630230e71ea441a3d7a8822c66b31f3a8d3123ca665da53f78773f82c3c73cbfe7c9bbe321a35b0a894bf2a48
-  languageName: node
-  linkType: hard
-
-"strapi-plugin-google-map-picker@workspace:packages/strapi-plugin-google-map-picker":
+"strapi-plugin-google-map-picker@*, strapi-plugin-google-map-picker@workspace:packages/strapi-plugin-google-map-picker":
   version: 0.0.0-use.local
   resolution: "strapi-plugin-google-map-picker@workspace:packages/strapi-plugin-google-map-picker"
   dependencies:
