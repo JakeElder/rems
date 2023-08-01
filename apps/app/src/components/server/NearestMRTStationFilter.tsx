@@ -1,12 +1,12 @@
 "use server";
 
-import api from "@/api";
+import fetch from "@/fetch";
 import NearestMRTStationFilterViewContainer from "@/components/client/NearestMRTStationFilterViewContainer";
 
 type Props = {};
 
-const NearestMRTStationFilterContainer = async ({}: Props) => {
-  const stations = await api.get.mrtStations();
+const NearestMRTStationFilterContainer = async ({ }: Props) => {
+  const stations = await fetch("mrt-stations");
   return <NearestMRTStationFilterViewContainer stations={stations} />;
 };
 

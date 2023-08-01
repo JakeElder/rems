@@ -1,12 +1,12 @@
 "use server";
 
-import api from "@/api";
+import fetch from "@/fetch";
 import NearestBTSStationFilterViewContainer from "@/components/client/NearestBTSStationFilterViewContainer";
 
 type Props = {};
 
-const NearestBTSStationFilterContainer = async ({}: Props) => {
-  const stations = await api.get.btsStations();
+const NearestBTSStationFilterContainer = async ({ }: Props) => {
+  const stations = await fetch("bts-stations");
   return <NearestBTSStationFilterViewContainer stations={stations} />;
 };
 

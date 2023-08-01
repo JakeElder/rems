@@ -1,12 +1,12 @@
 "use server";
 
-import api from "@/api";
+import fetch from "@/fetch";
 import ViewTypeFiltersViewContainer from "@/components/client/ViewTypeFiltersViewContainer";
 
 type Props = {};
 
-const ViewTypeFiltersContainer = async ({}: Props) => {
-  const types = await api.get.viewTypes();
+const ViewTypeFiltersContainer = async ({ }: Props) => {
+  const types = await fetch("view-types");
   return <ViewTypeFiltersViewContainer types={types} />;
 };
 

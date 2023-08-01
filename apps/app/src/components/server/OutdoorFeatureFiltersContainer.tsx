@@ -1,12 +1,12 @@
 "use server";
 
-import api from "@/api";
+import fetch from "@/fetch";
 import OutdoorFeatureFiltersViewContainer from "@/components/client/OutdoorFeatureFiltersViewContainer";
 
 type Props = {};
 
-const OutdoorFeatureFiltersContainer = async ({}: Props) => {
-  const features = await api.get.outdoorFeatures();
+const OutdoorFeatureFiltersContainer = async ({ }: Props) => {
+  const features = await fetch("outdoor-features");
   return <OutdoorFeatureFiltersViewContainer features={features} />;
 };
 

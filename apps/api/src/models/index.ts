@@ -10,6 +10,7 @@ import sequelize from "./sequelize";
 import filterFactory from "./filter-factory";
 import relateImagesFactory from "./relate-images-factory";
 import componentFilterLinkFactory from "./component-filter-link-factory";
+import featuredPropertyListsPropertiesLink from "./FeaturedPropertyListsPropertiesLink";
 
 const Property = property(sequelize);
 const File = file(sequelize);
@@ -18,6 +19,8 @@ const AppConfig = appConfig(sequelize);
 const FilterSet = filterSet(sequelize);
 const PopularSearch = popularSearch(sequelize);
 const PopularSearchesFilterSetsLink = popularSearchesFilterSetsLink(sequelize);
+const FeaturedPropertyListsPropertiesLink =
+  featuredPropertyListsPropertiesLink(sequelize);
 const QuickFiltersComponent = quickFiltersComponent(sequelize);
 
 const componentFilterLink = componentFilterLinkFactory(sequelize);
@@ -44,6 +47,15 @@ const [LotFeature, PropertiesLotFeaturesLink] = filter(
   "LotFeature",
   "PropertiesLotFeaturesLink"
 );
+const [MrtStation, PropertiesNearestMrtStationLink] = filter(
+  "MrtStation",
+  "PropertiesNearestMRTStationLink"
+);
+const [BtsStation, PropertiesNearestBtsStationLink] = filter(
+  "BtsStation",
+  "PropertiesNearestBtsStationLink"
+);
+const [Area, PropertiesAreaLink] = filter("Area", "PropertiesAreaLink");
 
 const ComponentsQuickFiltersIndoorFeaturesFilterLink = componentFilterLink(
   "ComponentsQuickFiltersIndoorFeaturesFilterLink",
@@ -102,20 +114,34 @@ PopularSearchesFilterSetsLink.belongsTo(FilterSet, {
   onDelete: "CASCADE"
 });
 
+FeaturedPropertyListsPropertiesLink.belongsTo(Property, {
+  foreignKey: "property_id"
+});
+
+Property.hasOne(FeaturedPropertyListsPropertiesLink, {
+  foreignKey: "property_id"
+});
+
 export {
   sequelize,
   AppConfig,
+  Area,
   File,
   FileRelatedMorph,
   FilterSet,
   IndoorFeature,
   LotFeature,
   OutdoorFeature,
+  MrtStation,
+  BtsStation,
+  PropertiesAreaLink,
   PropertiesIndoorFeaturesLink,
   PropertiesLotFeaturesLink,
   PropertiesOutdoorFeaturesLink,
   PropertiesPropertyTypeLink,
   PropertiesViewTypesLink,
+  PropertiesNearestMrtStationLink,
+  PropertiesNearestBtsStationLink,
   Property,
   PropertyType,
   ViewType,
@@ -125,5 +151,6 @@ export {
   ComponentsQuickFiltersIndoorFeaturesFilterLink,
   ComponentsQuickFiltersViewTypesFilterLink,
   ComponentsQuickFiltersOutdoorFeaturesFilterLink,
-  ComponentsQuickFiltersLotFeaturesFilterLink
+  ComponentsQuickFiltersLotFeaturesFilterLink,
+  FeaturedPropertyListsPropertiesLink
 };

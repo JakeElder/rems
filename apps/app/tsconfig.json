@@ -3,18 +3,9 @@
   "compilerOptions": {
     "baseUrl": "src/",
     "paths": {
-      "@/components/*": [
-        "components/*"
-      ],
-      "@/fetch": [
-        "fetch"
-      ],
-      "@/api": [
-        "api"
-      ],
-      "@/hooks/*": [
-        "hooks/*"
-      ]
+      "@/components/*": ["components/*"],
+      "@/fetch": ["fetch"],
+      "@/hooks/*": ["hooks/*"]
     },
     "jsx": "preserve",
     "plugins": [
@@ -24,13 +15,6 @@
     ],
     "strictNullChecks": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

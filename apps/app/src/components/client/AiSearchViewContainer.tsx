@@ -30,7 +30,7 @@ const fetcher: Fetcher = async (query, nl) => {
   return res.json();
 };
 
-const AiSearchViewContainer = ({}: Props) => {
+const AiSearchViewContainer = ({ }: Props) => {
   const [value, setValue] = useState("");
   const { commit, query } = useRealEstateQuery();
   const [state, setState] = useState<AiSearchInputState>("inactive");
@@ -101,7 +101,6 @@ const AiSearchViewContainer = ({}: Props) => {
         debouncedExecute.cancel();
         execute();
       }}
-      history={[]}
       state={state}
       value={value}
       onChange={(e) => {

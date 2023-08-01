@@ -11,7 +11,11 @@ import {
   GetPropertiesResult,
   AppConfig,
   FilterSet,
-  QuickFilter
+  QuickFilter,
+  PropertyType,
+  Area,
+  MRTStation,
+  BTSStation
 } from "@rems/types";
 import qs from "query-string";
 import { omitBy, equals } from "remeda";
@@ -25,8 +29,17 @@ type Route<Route extends string, ReturnType, Args extends any[] = []> = {
 type Routes =
   | Route<"app-config", AppConfig>
   | Route<"popular-searches", FilterSet[]>
+  | Route<"featured-properties", Property[]>
   | Route<"quick-filters", QuickFilter[]>
   | Route<"property", Property, [Property["id"]]>
+  | Route<"property-types", PropertyType[]>
+  | Route<"areas", Area[]>
+  | Route<"view-types", ViewType[]>
+  | Route<"indoor-features", IndoorFeature[]>
+  | Route<"outdoor-features", OutdoorFeature[]>
+  | Route<"lot-features", LotFeature[]>
+  | Route<"mrt-stations", MRTStation[]>
+  | Route<"bts-stations", BTSStation[]>
   | Route<"properties", GetPropertiesResult, [query?: PartialRealEstateQuery]>
   | Route<"properties/[id]/images", Image[], [propertyId?: Property["id"]]>
   | Route<
@@ -107,6 +120,32 @@ const wrapper = async <T extends Routes["route"]>(
 
   if (route === "popular-searches") {
     const res = await fetch(url(`popular-searches`));
+    return res.json();
+  }
+
+  if (route === "featured-properties") {
+    const res = await fetch(url(`featured-properties`));
+    return res.json();
+  }
+
+  if (route === "quick-filters") {
+    const res = await fetch(url(`quick-filters`));
+    return res.json();
+  }
+
+  const filters = [
+    "property-types",
+    "areas",
+    "view-types",
+    "indoor-features",
+    "outdoor-features",
+    "lot-features",
+    "mrt-stations",
+    "bts-stations"
+  ];
+
+  if (filters.includes(route)) {
+    const res = await fetch(url(route));
     return res.json();
   }
 

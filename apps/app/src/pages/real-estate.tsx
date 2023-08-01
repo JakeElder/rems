@@ -21,7 +21,6 @@ import {
   QuickFilter,
   ViewType
 } from "@rems/types";
-import api from "@/api";
 import fetch from "@/fetch";
 import { RealEstateIndexPageStateProvider } from "../hooks/use-real-estate-index-page-state";
 
@@ -83,11 +82,10 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const config = await fetch("app-config");
-  const searches = await fetch("popular-searches");
-  const quickFilters = await fetch("quick-filters");
-
   const [
+    config,
+    searches,
+    quickFilters,
     propertyTypes,
     areas,
     viewTypes,
@@ -97,14 +95,17 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     mrtStations,
     btsStations
   ] = await Promise.all([
-    api.get.propertyTypes(),
-    api.get.areas(),
-    api.get.viewTypes(),
-    api.get.indoorFeatures(),
-    api.get.outdoorFeatures(),
-    api.get.lotFeatures(),
-    api.get.mrtStations(),
-    api.get.btsStations()
+    fetch("app-config"),
+    fetch("popular-searches"),
+    fetch("quick-filters"),
+    fetch("property-types"),
+    fetch("areas"),
+    fetch("view-types"),
+    fetch("indoor-features"),
+    fetch("outdoor-features"),
+    fetch("lot-features"),
+    fetch("mrt-stations"),
+    fetch("bts-stations")
   ]);
 
   return {

@@ -2,14 +2,9 @@
   "compilerOptions": {
     "module": "CommonJS",
     "paths": {
-      "@/fetch": [
-        "lib/fetch"
-      ]
+      "@/fetch": ["lib/fetch"]
     },
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
     "baseUrl": "..",
     "rootDir": "..",
     "jsx": "react-jsx",

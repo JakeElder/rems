@@ -1,12 +1,12 @@
 "use server";
 
-import api from "@/api";
+import fetch from "@/fetch";
 import LotFeatureFiltersViewContainer from "@/components/client/LotFeatureFiltersViewContainer";
 
 type Props = {};
 
-const LotFeatureFiltersContainer = async ({}: Props) => {
-  const features = await api.get.lotFeatures();
+const LotFeatureFiltersContainer = async ({ }: Props) => {
+  const features = await fetch("lot-features");
   return <LotFeatureFiltersViewContainer features={features} />;
 };
 

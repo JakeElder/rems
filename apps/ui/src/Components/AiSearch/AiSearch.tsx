@@ -3,7 +3,7 @@
 import React from "react";
 import css from "./AiSearch.module.css";
 import { ColorRing, LineWave } from "react-loader-spinner";
-import { AiSearchInputState, QueryStateHistory } from "@rems/types";
+import { AiSearchInputState } from "@rems/types";
 import { animated, useSpring, useTransition } from "@react-spring/web";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faMicrophoneLines } from "@fortawesome/free-solid-svg-icons";
@@ -20,7 +20,6 @@ type Props = {
   onMicClick?: () => void;
   value?: InputHTMLProps["value"];
   debug?: boolean;
-  history: QueryStateHistory;
   state: AiSearchInputState;
 };
 
@@ -153,17 +152,9 @@ const Input = React.forwardRef<
   );
 });
 
-const DebugAiSearch = ({
-  onChange,
-  value,
-  history,
-  state
-}: Omit<Props, "debug">) => {
+const DebugAiSearch = ({ onChange, value, state }: Omit<Props, "debug">) => {
   return (
     <div className={css["debug-root"]}>
-      {history.map((h) => {
-        return <Input state="committed" value={h.nl} />;
-      })}
       <Input state={state} value={value} onChange={onChange} />
     </div>
   );

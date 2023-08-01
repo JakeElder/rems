@@ -1,8 +1,8 @@
-import api from "@/api";
+import fetch from "@/fetch";
 import TypeFilterPopoverViewContainer from "@/components/client/TypeFilterPopoverViewContainer";
 
 const TypeFilterPopoverContainer = async () => {
-  const types = await api.get.propertyTypes();
+  const types = await fetch("property-types");
   return <TypeFilterPopoverViewContainer types={types} />;
 };
 

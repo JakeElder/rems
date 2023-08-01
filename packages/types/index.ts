@@ -142,25 +142,6 @@ export type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
 
-type BaseQueryStateEntry = {
-  hash: string;
-  queryString: string;
-  nl: string;
-};
-
-export type InteractionQueryState = {
-  origin: "interaction";
-  loading: boolean;
-} & BaseQueryStateEntry;
-
-export type NlQueryState = {
-  origin: "nl";
-} & BaseQueryStateEntry;
-
-export type QueryStateHistoryEntry = InteractionQueryState | NlQueryState;
-
-export type QueryStateHistory = QueryStateHistoryEntry[];
-
 export type AiSearchInputState =
   | "inactive"
   | "inputting"
