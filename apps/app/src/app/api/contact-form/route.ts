@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import sendMail from "../../../utils";
+import { sendMail } from "../../actions";
 import { ContactFormSchema } from "@rems/schemas/src/contact-form";
 
 export async function POST(req: Request) {
