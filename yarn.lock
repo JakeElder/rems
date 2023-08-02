@@ -10236,7 +10236,6 @@ __metadata:
     "@types/node": 20.4.5
     "@types/react": 18.2.18
     "@types/react-dom": 18.2.7
-    client-only: ^0.0.1
     next: 13.4.12
     query-string: ^8.1.0
     react: 18.2.0
@@ -11788,7 +11787,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"client-only@npm:0.0.1, client-only@npm:^0.0.1":
+"client-only@npm:0.0.1":
   version: 0.0.1
   resolution: "client-only@npm:0.0.1"
   checksum: 0c16bf660dadb90610553c1d8946a7fdfb81d624adea073b8440b7d795d5b5b08beb3c950c6a2cf16279365a3265158a236876d92bce16423c485c322d7dfaf8
