@@ -6,14 +6,13 @@ import {
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
 import {
-  AiRealEstateQuerySchema,
   FilterSchema,
   PartialAiRealEstateQuerySchema,
   PropertySchema
 } from "@rems/schemas";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import * as Models from "@/models";
-import getProperties from "../app/api/properties/resolve";
+import getProperties from "../app/properties/resolve";
 
 const txt = (node: React.ReactNode) => {
   const { renderToStaticMarkup } = require("react-dom/server");

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import qs from "query-string";
-import { nlToQuery } from "../../../remi";
+import { nlToQuery } from "../../remi";
 
 const PLACES_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
 
