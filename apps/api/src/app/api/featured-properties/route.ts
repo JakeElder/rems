@@ -2,6 +2,7 @@ import * as Models from "@/models";
 import { PropertySchema } from "@rems/schemas";
 import { NextResponse } from "next/server";
 import slugify from "slugify";
+import { Op } from "sequelize";
 
 export async function GET() {
   const raw = await Models.FeaturedPropertyListsPropertiesLink.findAll({
@@ -9,6 +10,7 @@ export async function GET() {
     include: [
       {
         model: Models.Property,
+        where: { location: { [Op.ne]: null } },
         include: [{ model: Models.File, as: "images" }]
       }
     ],
