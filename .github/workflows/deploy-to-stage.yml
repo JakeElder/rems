@@ -31,4 +31,4 @@ jobs:
       - name: Deploy Project Artifacts to Vercel
         run: |
           url="$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})"
-          vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" your-alias.app
+          vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" api.stage.jyoproperty.com
