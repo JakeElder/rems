@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
-import snakeCase from "snake-case";
+import { snakeCase } from "snake-case";
 import camelCase from "camelcase";
 import property from "./Property";
 

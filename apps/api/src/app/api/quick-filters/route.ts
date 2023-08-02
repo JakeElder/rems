@@ -1,6 +1,7 @@
 import * as Models from "@/models";
 import { FilterSchema } from "@rems/schemas";
 import { NextResponse } from "next/server";
+import { snakeCase } from "snake-case";
 
 export async function GET() {
   const raw = await Models.QuickFiltersComponent.findAll({
@@ -36,7 +37,11 @@ export async function GET() {
       const entity = modelMap[c.componentType];
       if (entity) {
         const [Link, Model, key] = entity;
-        const r: any = await Link.findByPk(c.componentId, {
+        const r: any = await Link.findOne({
+          where: {
+            [`${snakeCase(Model.name)}_id`]: c.componentId
+          },
+          attributes: [],
           include: [{ model: Model }]
         });
         return {

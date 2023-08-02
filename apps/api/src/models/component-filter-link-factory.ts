@@ -25,7 +25,9 @@ export default (sequelize: Sequelize) => {
       { underscored: true, timestamps: false }
     );
 
-    Link.belongsTo(Filter, { foreignKey: `inv${Filter.name}Id` });
+    Link.belongsTo(Filter, {
+      foreignKey: `inv${Filter.name}Id`
+    });
 
     return Link;
   };
