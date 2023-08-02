@@ -9,7 +9,8 @@ import {
   ImageSchema,
   ServerRealEstateQuerySchema,
   AppConfigSchema,
-  FilterSetSchema
+  FilterSetSchema,
+  FilterSchema
 } from "@rems/schemas";
 import { PartialServerRealEstateQuerySchema } from "@rems/schemas/src/real-estate-query";
 import { z } from "zod";
@@ -23,14 +24,11 @@ export type Pagination = {
 
 export type ResourceId = string;
 
-type CMSAttributes = {
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type File = z.infer<typeof FileSchema>;
 export type Image = z.infer<typeof ImageSchema>;
 export type FilterSet = z.infer<typeof FilterSetSchema>;
+
+export type Filter = z.infer<typeof FilterSchema>;
 
 export type EntryCard = {
   title: string;
@@ -38,12 +36,6 @@ export type EntryCard = {
   url: string;
   image: Image;
 };
-
-export type Filter = {
-  id: number;
-  name: string;
-  slug: string;
-} & CMSAttributes;
 
 export type Area = Filter;
 export type BTSStation = Filter;
@@ -133,7 +125,7 @@ export type QuickFilterQueryKey = keyof Pick<
 export type SortType = RealEstateQuery["sort"];
 
 export type GetPropertiesResult = {
-  query: RealEstateQuery;
+  query: ServerRealEstateQuery;
   data: Property[];
   pagination: Pagination;
 };

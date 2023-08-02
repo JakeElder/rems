@@ -1,10 +1,19 @@
-import { Filter, PartialRealEstateQuery } from "@rems/types";
+import {
+  Filter,
+  PartialRealEstateQuery,
+  ServerRealEstateQuery
+} from "@rems/types";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
-import api from "../../api";
-import { AiRealEstateQuerySchema, PropertySchema } from "@rems/schemas";
+import {
+  AiRealEstateQuerySchema,
+  FilterSchema,
+  PartialAiRealEstateQuerySchema,
+  PropertySchema
+} from "@rems/schemas";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import fetch from "@/fetch";
+import * as Models from "@/models";
+import getProperties from "../app/api/properties/resolve";
 
 const txt = (node: React.ReactNode) => {
   const { renderToStaticMarkup } = require("react-dom/server");
@@ -26,6 +35,8 @@ const enumArray = (key: keyof PartialRealEstateQuery, filters: Filter[]) => ({
   }
 });
 
+const parse = (rows: any) => rows.map((r: any) => FilterSchema.parse(r));
+
 const enumProperties = async () => {
   const [
     indoorFeatures,
@@ -34,11 +45,11 @@ const enumProperties = async () => {
     viewTypes,
     propertyTypes
   ] = await Promise.all([
-    api.get.indoorFeatures(),
-    api.get.lotFeatures(),
-    api.get.outdoorFeatures(),
-    api.get.viewTypes(),
-    api.get.propertyTypes()
+    Models.IndoorFeature.findAll({ raw: true }).then(parse),
+    Models.LotFeature.findAll({ raw: true }).then(parse),
+    Models.OutdoorFeature.findAll({ raw: true }).then(parse),
+    Models.ViewType.findAll({ raw: true }).then(parse),
+    Models.PropertyType.findAll({ raw: true }).then(parse)
   ]);
 
   return {
@@ -51,7 +62,7 @@ const enumProperties = async () => {
 };
 
 const getQueryProperties = async () => {
-  const schema = zodToJsonSchema(AiRealEstateQuerySchema);
+  const schema = zodToJsonSchema(PartialAiRealEstateQuerySchema);
   return {
     ...(schema as any).properties,
     ...(await enumProperties())
@@ -59,7 +70,7 @@ const getQueryProperties = async () => {
 };
 
 export const generateSchema = async () => {
-  const schema = zodToJsonSchema(AiRealEstateQuerySchema);
+  const schema = zodToJsonSchema(PartialAiRealEstateQuerySchema);
   return {
     ...schema,
     properties: await getQueryProperties()
@@ -76,11 +87,11 @@ export const createMockProperty = async () => {
     viewTypes,
     propertyTypes
   ] = await Promise.all([
-    api.get.indoorFeatures(),
-    api.get.lotFeatures(),
-    api.get.outdoorFeatures(),
-    api.get.viewTypes(),
-    api.get.propertyTypes()
+    Models.IndoorFeature.findAll({ raw: true }).then(parse),
+    Models.LotFeature.findAll({ raw: true }).then(parse),
+    Models.OutdoorFeature.findAll({ raw: true }).then(parse),
+    Models.ViewType.findAll({ raw: true }).then(parse),
+    Models.PropertyType.findAll({ raw: true }).then(parse)
   ]);
 
   const minify = (arr: Filter[]) => {
@@ -193,7 +204,7 @@ export const createImages = async (prompt: string, n: number) => {
   return image.data.data.map((i) => i.b64_json).filter(isString);
 };
 
-export const nlToQuery = async (query: PartialRealEstateQuery, nl: string) => {
+export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
   // const request: CreateChatCompletionRequest = {
   //   model: "gpt-3.5-turbo",
   //   temperature: 0.1,
@@ -288,12 +299,12 @@ export const nlToQuery = async (query: PartialRealEstateQuery, nl: string) => {
   //   ]
   // };
 
-  const res = await fetch("properties", query);
-  const properties = res.data.map((p) => {
-    const { description, images, ...rest } = p;
-    return rest;
-  });
-  const context = { properties };
+  // const res = await getProperties(query);
+  // const properties = res.data.map((p) => {
+  //   const { description, images, ...rest } = p;
+  //   return rest;
+  // });
+  const context = {};
 
   const request: CreateChatCompletionRequest = {
     model: "gpt-3.5-turbo-16k",
@@ -326,7 +337,7 @@ export const nlToQuery = async (query: PartialRealEstateQuery, nl: string) => {
             <p>
               When you have identified the user is attempting to refine their
               search results by adjusting parameters, you must take the current
-              query and update it based on their input
+              query and provide a diff to update it.
             </p>
             <p>
               These are some instructions on how to construct the resulting
@@ -347,9 +358,14 @@ export const nlToQuery = async (query: PartialRealEstateQuery, nl: string) => {
                 budget
               </li>
               <li>
-                IMPORTANT: Make sure the next query you generate is an UPDATE of
-                the original query, and includes all previous filters, as well
-                as new ones.
+                IMPORTANT: Only include keys that have changed in the
+                `queryPatch`. IE, I should be able to extend the current query
+                and end up with the new query. IE - this code should result in
+                the updated query `Object.assign(oldQuery, queryPatch)`. ENSURE
+                that when adding a filter to an array, you include the currently
+                present filters in that array. IE, if `indoorFeatures` currently
+                contains 'cinema', then if the user requests 'pet-friendly', the
+                resulting array should be ['cinema', 'pet-friendly']
               </li>
             </ul>
             <h1>2. Responding to questions about the resulting properties</h1>
@@ -443,25 +459,21 @@ export const nlToQuery = async (query: PartialRealEstateQuery, nl: string) => {
         parameters: {
           type: "object",
           properties: {
-            previousQuery: {
+            queryPatch: {
               type: "object",
               properties: await getQueryProperties(),
-              description: txt(<>The query before the users input</>)
-            },
-            nextQuery: {
-              type: "object",
-              properties: await getQueryProperties(),
-              description: txt(<>The query after it has been updated</>)
-            },
-            response: {
-              type: "string",
-              description: txt(
-                <>
-                  A polite response to be communicated to the user once the
-                  query has been executed
-                </>
-              )
+              description:
+                "The diff that should be applied to the current query"
             }
+            // response: {
+            //   type: "string",
+            //   description: txt(
+            //     <>
+            //       A polite response to be communicated to the user once the
+            //       query has been executed
+            //     </>
+            //   )
+            // }
           }
         }
       },
@@ -556,5 +568,21 @@ export const nlToQuery = async (query: PartialRealEstateQuery, nl: string) => {
     console.dir(e.response.data, { depth: null, colors: true });
   }
 };
+
+// {false && (
+//   <li>
+//     IMPORTANT: Make sure you provide a JavaScript Object Notation
+//     (JSON) Patch, RFC 6902 that describes how to transition from
+//     the previous query, to the updated query. IE, it must describe
+//     how to PATCH the current query, using a format like this;
+//     {JSON.stringify([
+//       { op: "replace", path: "/baz", value: "boo" },
+//       { op: "add", path: "/hello", value: ["world"] },
+//       { op: "remove", path: "/foo" }
+//     ])}
+//     MAKE SURE THE `queryPatch` ARGUMENT USES THIS NOTATION, EVERY
+//     TIME
+//   </li>
+// )}
 
 export const getModels = async () => openai.listModels();
