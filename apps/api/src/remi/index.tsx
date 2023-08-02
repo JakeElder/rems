@@ -346,7 +346,14 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
             <ul>
               <li>
                 Pay special attention to location, and set the search-origin if
-                a location is specified.
+                a location is specified. Remember, if you have identified the
+                user has requested properies in a specific area, you are to
+                include that area in the `search-origin` property.
+              </li>
+              <li>
+                Ensure that all query objects adhere to the schema provided. Do
+                NOT include keys that don't exist within that schema. Do not add
+                items to an array if they don't exist in the schema.
               </li>
               <li>
                 If the user specifies a budget as a single, fixed number, set
@@ -394,14 +401,18 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
               </li>
               <li>Do not include any Markdown or links in your response.</li>
             </ul>
-            <h1>
-              3. Showing users properties they want to see more details of
-            </h1>
+            <h1>3. Navigate to a properties information page</h1>
             <p>
-              The user may request to see a property by title, or by id. These
-              commands will start with a request like "Show Me". It's IMPORTANT
-              that when a user asks to see a property, or more details about the
-              property, they are shown the property.
+              The user may request to see more details of a property by title,
+              or by id. These commands will start with a request like "Show me".
+              It's IMPORTANT that when a user asks to see more details of a
+              property, they are navigated to that properties page.
+            </p>
+            <h1>4. Booking a viewing of a specific property</h1>
+            <p>
+              The user may request that they'd like to book a viewing of one of
+              the properties. IE, the user may state "Ok, Book a viewing for
+              property $X". Where $X can be a properties title, or id.
             </p>
           </>
         )
@@ -488,7 +499,8 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
                   may say "It has to have a pool". This is an amendment on the
                   current query, and therefore this value will be false. The
                   user may also say "show me 3 bedroom properties in Pattaya".
-                  This is a NEW search and so this value should be set to true
+                  This is a NEW search and so this value should be set to true.
+                  If the user starts with "I'm looking for, it is a new search"
                 </>
               )
             }
@@ -555,6 +567,7 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
         ),
         parameters: {
           type: "object",
+          required: ["ids"],
           properties: {
             ids: {
               type: "array",
@@ -588,12 +601,30 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
         }
       },
       {
-        name: "showProperty",
+        name: "navigateToProperty",
         description: txt(
-          <>
-            Shows the details of one of the properties the user is currently
-            viewing
-          </>
+          <>Navigates the user to the property they've requested.</>
+        ),
+        parameters: {
+          type: "object",
+          required: ["id"],
+          properties: {
+            id: {
+              type: "number",
+              description: txt(
+                <>
+                  The id of the properties the user wishes to see more details
+                  of.
+                </>
+              )
+            }
+          }
+        }
+      },
+      {
+        name: "bookAViewing",
+        description: txt(
+          <>Books a viewing for a property the user requests.</>
         ),
         parameters: {
           type: "object",
@@ -601,15 +632,9 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
             id: {
               type: "number",
               description: txt(
-                <>The id of the properties the user wishes to see</>
-              )
-            },
-            response: {
-              type: "string",
-              description: txt(
                 <>
-                  A brief response but polite, informing the user that their
-                  request has been understood.
+                  The id of the properties the user wishes to see more details
+                  of.
                 </>
               )
             }
