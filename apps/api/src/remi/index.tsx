@@ -299,12 +299,12 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
   //   ]
   // };
 
-  // const res = await getProperties(query);
-  // const properties = res.data.map((p) => {
-  //   const { description, images, ...rest } = p;
-  //   return rest;
-  // });
-  const context = {};
+  const res = await getProperties({ ...query, limit: "true" });
+  const properties = res.data.map((p) => {
+    const { description, images, ...rest } = p;
+    return rest;
+  });
+  const context = { properties };
 
   const request: CreateChatCompletionRequest = {
     model: "gpt-3.5-turbo-16k",
@@ -358,14 +358,10 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
                 budget
               </li>
               <li>
-                IMPORTANT: Only include keys that have changed in the
-                `queryPatch`. IE, I should be able to extend the current query
-                and end up with the new query. IE - this code should result in
-                the updated query `Object.assign(oldQuery, queryPatch)`. ENSURE
-                that when adding a filter to an array, you include the currently
-                present filters in that array. IE, if `indoorFeatures` currently
-                contains 'cinema', then if the user requests 'pet-friendly', the
-                resulting array should be ['cinema', 'pet-friendly']
+                IMPORTANT: Pay special attention to which properties should be
+                removed and which should be added. IE, if a user is interested
+                in an additional lotFeature, ensure that the current lotFeatures
+                are not removed.
               </li>
             </ul>
             <h1>2. Responding to questions about the resulting properties</h1>
@@ -398,6 +394,15 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
               </li>
               <li>Do not include any Markdown or links in your response.</li>
             </ul>
+            <h1>
+              3. Showing users properties they want to see more details of
+            </h1>
+            <p>
+              The user may request to see a property by title, or by id. These
+              commands will start with a request like "Show Me". It's IMPORTANT
+              that when a user asks to see a property, or more details about the
+              property, they are shown the property.
+            </p>
           </>
         )
       },
@@ -449,21 +454,43 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
     ],
     functions: [
       {
-        name: "updateQuery",
+        name: "u",
         description: txt(
           <>
-            Updates the current query, showing the user new properties with
-            their amended search criteria
+            Updates the current query, showing the user new properties based on
+            their latest input. It accepts two arguments, which properties to
+            remove, and which to add.
           </>
         ),
         parameters: {
           type: "object",
+          required: ["n"],
           properties: {
-            queryPatch: {
-              type: "object",
-              properties: await getQueryProperties(),
-              description:
-                "The diff that should be applied to the current query"
+            definitions: {
+              q: {
+                type: "object",
+                properties: await getQueryProperties()
+              }
+            },
+            r: {
+              $ref: "#/definitions/q",
+              description: "The properties to be removed from the current query"
+            },
+            a: {
+              $ref: "#/definitions/q",
+              description: "The properties to be added to the current query"
+            },
+            n: {
+              type: "boolean",
+              description: txt(
+                <>
+                  Whether or not this is a completely *NEW search* IE, the user
+                  may say "It has to have a pool". This is an amendment on the
+                  current query, and therefore this value will be false. The
+                  user may also say "show me 3 bedroom properties in Pattaya".
+                  This is a NEW search and so this value should be set to true
+                </>
+              )
             }
             // response: {
             //   type: "string",
@@ -478,17 +505,17 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
         }
       },
       {
-        name: "answerSingular",
+        name: "answerSingle",
         description: txt(
           <>
-            Answers a users question when the user has asked a question that
-            would warrant choosing the single, most appropriate property.
+            Answers a users question, in the event that they have asked a
+            question that warrants returning a *SINGLE* property as the answer
           </>
         ),
         parameters: {
           type: "object",
           properties: {
-            propertyId: {
+            id: {
               type: "number",
               description: txt(
                 <>
@@ -496,14 +523,22 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
                 </>
               )
             },
+            pertinentFields: {
+              type: "array",
+              items: { type: "string" },
+              description: txt(
+                <>
+                  A list of the fields, taken from the property schema that were
+                  important when deriving this response.
+                </>
+              )
+            },
             response: {
               type: "string",
               description: txt(
                 <>
-                  A polite response, explaining why this property best matches
-                  the question. It should include context, comparing it to other
-                  properties they can see and explain why this property is a
-                  better match.
+                  A brief response but polite, explaining how you arrived at
+                  this conclusion. Include some context.
                 </>
               )
             }
@@ -515,13 +550,13 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
         description: txt(
           <>
             Answers a users question when the user has asked a question that
-            would warrant choosing multiple properties.
+            would warrant choosing *MULTIPLE* properties.
           </>
         ),
         parameters: {
           type: "object",
           properties: {
-            propertyIds: {
+            ids: {
               type: "array",
               items: { type: "number" },
               description: txt(
@@ -544,10 +579,37 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
               type: "string",
               description: txt(
                 <>
-                  A polite response, explaining why this property best matches
-                  the question. It should include context, comparing it to other
-                  properties they can see and explain why this property is a
-                  better match.
+                  A brief response but polite, explaining how you arrived at
+                  this conclusion. Include some context.
+                </>
+              )
+            }
+          }
+        }
+      },
+      {
+        name: "showProperty",
+        description: txt(
+          <>
+            Shows the details of one of the properties the user is currently
+            viewing
+          </>
+        ),
+        parameters: {
+          type: "object",
+          properties: {
+            id: {
+              type: "number",
+              description: txt(
+                <>The id of the properties the user wishes to see</>
+              )
+            },
+            response: {
+              type: "string",
+              description: txt(
+                <>
+                  A brief response but polite, informing the user that their
+                  request has been understood.
                 </>
               )
             }
