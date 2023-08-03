@@ -7,9 +7,6 @@
   "engines": {
     "node": "18.x"
   },
-  "scripts": {
-    "postinstall": "./postinstall",
-    "start": "cd apps/cms && yarn start"
-  },
-  "packageManager": "yarn@3.6.1"
+  "packageManager": "yarn@3.6.1",
+  "private": true
 }

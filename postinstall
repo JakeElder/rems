@@ -1,6 +1,0 @@
-#!/bin/bash
-
-if [[ "$IS_HEROKU_CMS" ]]
-then
-  cd apps/cms && npm run build; 
-fi
