@@ -24,7 +24,10 @@ const nextConfig = {
   webpack: (config) => {
     return {
       ...config,
-      externals: [...config.externals, { sequelize: "commonjs sequelize" }]
+      externals: [...config.externals, { sequelize: "commonjs sequelize" }],
+      optimization: {
+        minimize: process.env.VERCEL_ENV === "production"
+      }
     };
   }
 };

@@ -28,7 +28,7 @@ const base = () =>
     "min-bathrooms": z.coerce.number().default(0).catch(0),
     "min-living-area": z.coerce.number().default(0).catch(0),
     "max-living-area": z.coerce.number().nullable().default(null).catch(null),
-    availability: z.enum(["sale", "rent"]).default("sale").catch("sale"),
+    availability: z.enum(["sale", "rent", "any"]).default("sale").catch("sale"),
     "min-lot-size": z.coerce.number().default(0).catch(0),
     "max-lot-size": z.coerce.number().nullable().default(null).catch(null),
     "search-radius": z.coerce
