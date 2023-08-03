@@ -51,5 +51,5 @@ jobs:
         run: npm install --global vercel@latest
       - name: Deploy Project Artifacts to Vercel
         run: |
-          url="$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }})"
-          vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" stage.jyoproperty.com
+          url="$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }})"
+          vercel alias --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} set "$url" stage.jyoproperty.com
