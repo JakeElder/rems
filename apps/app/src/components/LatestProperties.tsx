@@ -4,7 +4,7 @@ import fetch from "@/fetch";
 
 type Props = {};
 
-const LatestProperties = async ({}: Props) => {
+const LatestProperties = async ({ }: Props) => {
   const { data: properties } = await fetch("properties", {
     sort: "newest-first"
   });

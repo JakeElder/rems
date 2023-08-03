@@ -4,7 +4,7 @@ import fetch from "@/fetch";
 
 type Props = {};
 
-const FeaturedCarouselContainer = async ({}: Props) => {
+const FeaturedCarouselContainer = async ({ }: Props) => {
   const properties = await fetch("featured-properties");
   return <FeaturedCarousel properties={properties} />;
 };

@@ -210,6 +210,22 @@ const offset = (query: ServerRealEstateQuery) => {
   }
 };
 
+const validLngLat = () => {
+  return [
+    {
+      location: {
+        [Op.and]: [
+          { [Op.not]: null },
+          { lat: { [Op.not]: null } },
+          { lng: { [Op.not]: null } },
+          { lat: { [Op.between]: [-90, 90] } },
+          { lng: { [Op.between]: [-180, 180] } }
+        ]
+      }
+    }
+  ];
+};
+
 export default async function resolve(
   query: ServerRealEstateQuery
 ): Promise<GetPropertiesResult> {
@@ -231,17 +247,7 @@ export default async function resolve(
         ...lotFeatures(query),
         ...radius(query),
         ...bounds(query),
-        {
-          location: {
-            [Op.and]: [
-              { [Op.not]: null },
-              { lat: { [Op.not]: null } },
-              { lng: { [Op.not]: null } },
-              { lat: { [Op.between]: [-90, 90] } },
-              { lng: { [Op.between]: [-180, 180] } }
-            ]
-          }
-        }
+        ...validLngLat()
       ]
     },
     include: [...propertyType(query)],
@@ -287,8 +293,25 @@ export default async function resolve(
     });
   });
 
+  const properties = data.map((p) => {
+    if (p.images!.length === 0) {
+      return {
+        ...p,
+        images: [
+          ImageSchema.parse({
+            id: 1,
+            width: 800,
+            height: 450,
+            url: "https://res.cloudinary.com/dxnqopswh/image/upload/v1691021749/default_nopiyd.png"
+          })
+        ]
+      };
+    }
+    return { ...p };
+  });
+
   return {
-    data,
+    data: properties,
     pagination: {
       page: 1,
       pageSize: PROPERTIES_PER_PAGE,

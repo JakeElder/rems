@@ -72,6 +72,14 @@ export const init = (url: string) => {
   URL = url;
 };
 
+const fetch: typeof global.fetch = async (...args) => {
+  const res = await global.fetch(...args);
+  if (!res.ok) {
+    throw new Error(JSON.stringify(await res.json()));
+  }
+  return res;
+};
+
 const url = (endpoint: string) => `${URL}/${endpoint}`;
 
 const propertyResource = async (

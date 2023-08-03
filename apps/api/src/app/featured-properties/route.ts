@@ -17,6 +17,12 @@ export async function GET() {
     order: [["propertyOrder", "ASC"]]
   });
 
+  if (raw.length === 0) {
+    return new Response(JSON.stringify({ error: "No featured properties" }), {
+      status: 500
+    });
+  }
+
   const format = (val: number | null) =>
     val ? `฿${val.toLocaleString()}` : null;
 

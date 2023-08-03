@@ -30,11 +30,5 @@ export async function GET(_req: Request, { params }: Params) {
     formattedRentalPrice: format(raw.rentalPrice)
   });
 
-  // ...parsed,
-  // url: `/real-estate/${slug}-${parsed.id}`,
-  //   formattedPurchasePrice: format(parsed.purchasePrice),
-  //     formattedRentalPrice: format(parsed.rentalPrice)
-  // };
-
   return NextResponse.json(property);
 }
