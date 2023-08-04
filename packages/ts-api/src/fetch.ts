@@ -72,11 +72,16 @@ export const init = (url: string) => {
   URL = url;
 };
 
-const fetch: typeof global.fetch = async (...args) => {
-  const res = await global.fetch(...args);
+const fetch: typeof global.fetch = async (input, init) => {
+  const res = await global.fetch(input, {
+    ...init,
+    ...(process.env.NODE_ENV === "production" ? {} : { cache: "no-store" })
+  });
+
   if (!res.ok) {
     throw new Error(JSON.stringify(await res.json()));
   }
+
   return res;
 };
 
@@ -136,10 +141,10 @@ const wrapper = async <T extends Routes["route"]>(
     return res.json();
   }
 
-  if (route === "quick-filters") {
-    const res = await fetch(url(`quick-filters`));
-    return res.json();
-  }
+  // if (route === "quick-filters") {
+  //   const res = await fetch(url(`quick-filters`));
+  //   return res.json();
+  // }
 
   const filters = [
     "property-types",

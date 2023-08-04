@@ -9,6 +9,10 @@ import MailingListModuleViewContainer from "@/components/client/MailingListModul
 import FooterContainer from "@/components/server/FooterContainer";
 import FeaturedCarouselContainer from "@/components/server/FeaturedCarouselContainer";
 
+console.log("--- NODE_ENV ---");
+console.log(process.env.NODE_ENV);
+console.log("--- NODE_ENV ---");
+
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetch("app-config");
 

@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port=3003",
+    "dev:stage": "env-cmd -f ./.vercel/.env.preview.local next dev --port=3003",
     "build": "next build",
+    "build:stage": "env-cmd -f ./.vercel/.env.preview.local next build",
     "start": "next start",
+    "start:stage": "env-cmd -f ./.vercel/.env.preview.local next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
   },
@@ -18,10 +21,14 @@
     "@types/react-dom": "18.2.7",
     "next": "13.4.12",
     "nextjs-cors": "latest",
+    "pg-connection-string": "^2.6.2",
     "query-string": "^8.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "snake-case": "^3.0.4",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
   }
 }

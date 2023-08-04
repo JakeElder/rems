@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:stage": "env-cmd -f ./.vercel/.env.preview.local next dev",
     "build": "next build",
+    "build:stage": "env-cmd -f ./.vercel/.env.preview.local next build",
     "start": "next start",
+    "start:stage": "env-cmd -f ./.vercel/.env.preview.local next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "cli": "ts-node -r ./src/cli/loader ./src/cli"
@@ -59,6 +62,7 @@
     "@types/react-speech-recognition": "^3.9.2",
     "commander": "^11.0.0",
     "dotenv": "^16.3.1",
+    "env-cmd": "^10.1.0",
     "ts-node": "^10.9.1"
   }
 }

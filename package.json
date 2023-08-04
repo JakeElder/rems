@@ -1,5 +1,8 @@
 {
   "name": "rems",
+  "scripts": {
+    "build:cms": "docker buildx build . -f Dockerfile.cms -t registry.digitalocean.com/rems-cms/rems-cms:latest"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"

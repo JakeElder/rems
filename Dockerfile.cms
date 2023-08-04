@@ -7,7 +7,9 @@ WORKDIR /opt/
 COPY package.json ./
 COPY apps/cms/package.json ./apps/cms/package.json
 COPY packages/strapi-plugin-google-map-picker ./packages/strapi-plugin-google-map-picker
-RUN --mount=type=cache,target=/root/.yarn yarn config set network-timeout 600000 -g && YARN_CACHE_FOLDER=/root/.yarn yarn install --production
+RUN yarn config set network-timeout 600000 -g
+RUN --mount=type=cache,mode=0777,target=/root/.yarn yarn cache list
+RUN --mount=type=cache,mode=0777,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn yarn install --production
 ENV PATH /opt/node_modules/.bin:$PATH
 COPY . .
 RUN yarn workspace @rems/cms build
