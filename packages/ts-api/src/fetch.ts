@@ -75,7 +75,7 @@ export const init = (url: string) => {
 const fetch: typeof global.fetch = async (input, init) => {
   const res = await global.fetch(input, {
     ...init,
-    ...(process.env.NODE_ENV === "production" ? {} : { cache: "no-store" })
+    ...(process.env.VERCEL_ENV === "production" ? {} : { cache: "no-store" })
   });
 
   if (!res.ok) {
