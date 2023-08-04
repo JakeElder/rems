@@ -1,4 +1,4 @@
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { Breadcrumbs, RealEstateIndexPage as Layout, ToastHub } from "@rems/ui";
 import PropertyGridViewContainer from "@/components/client/PropertyGridViewContainer";
 import ListingMapViewContainer from "@/components/client/ListingMapViewContainer";
@@ -81,7 +81,7 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const [
     config,
     searches,
