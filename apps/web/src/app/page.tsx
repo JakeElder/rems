@@ -9,8 +9,6 @@ import MailingListModuleViewContainer from "@/components/client/MailingListModul
 import FooterContainer from "@/components/server/FooterContainer";
 import FeaturedCarouselContainer from "@/components/server/FeaturedCarouselContainer";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetch("app-config");
 

@@ -3,6 +3,8 @@ import { FilterSchema } from "@rems/schemas";
 import { NextResponse } from "next/server";
 import { snakeCase } from "snake-case";
 
+export const revalidate = 0;
+
 export async function GET() {
   const raw = await Models.QuickFiltersComponent.findAll({
     raw: true,
