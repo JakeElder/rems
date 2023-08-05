@@ -51,6 +51,8 @@
 .caption {
   font-family: var(--font-inter);
   font-size: 11px;
+  height: 13px;
+  line-height: 13px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
 }

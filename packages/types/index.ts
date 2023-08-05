@@ -31,10 +31,12 @@ export type FilterSet = z.infer<typeof FilterSetSchema>;
 export type Filter = z.infer<typeof FilterSchema>;
 
 export type EntryCard = {
+  id: string;
   title: string;
-  caption: string;
+  caption?: string;
   url: string;
   image: Image;
+  loading: boolean;
 };
 
 export type Area = Filter;

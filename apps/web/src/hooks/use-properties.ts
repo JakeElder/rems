@@ -1,9 +1,8 @@
 import useSWR from "swr";
-import useRealEstateQuery from "./use-real-estate-query";
 import qs from "query-string";
-import { GetPropertiesResult } from "@rems/types";
+import { GetPropertiesResult, ServerRealEstateQuery } from "@rems/types";
 
-type UsePropertiesHook = (props?: { limit: boolean }) => {
+type UsePropertiesHook = (query: ServerRealEstateQuery) => {
   data: GetPropertiesResult | undefined;
   isLoading: boolean;
 };
@@ -16,16 +15,8 @@ const fetcher = async (query: string): Promise<GetPropertiesResult> => {
   return json;
 };
 
-const useProperties: UsePropertiesHook = (props) => {
-  const { serverQuery } = useRealEstateQuery();
-
-  const q = qs.stringify(
-    {
-      ...serverQuery,
-      limit: props?.limit === false ? "false" : "true"
-    },
-    { arrayFormat: "bracket" }
-  );
+const useProperties: UsePropertiesHook = (query) => {
+  const q = qs.stringify(query, { arrayFormat: "bracket" });
 
   const { data, isLoading } = useSWR(
     [q, "properties"],

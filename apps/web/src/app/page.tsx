@@ -1,5 +1,5 @@
 import { HomePage as Page, ToastHub } from "@rems/ui";
-import PopularSearches from "../components/PopularSearches";
+import PopularSearches from "../components/server/PopularSearches";
 import LatestProperties from "../components/LatestProperties";
 import { Metadata } from "next";
 import fetch from "@/fetch";
@@ -11,7 +11,6 @@ import FeaturedCarouselContainer from "@/components/server/FeaturedCarouselConta
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetch("app-config");
-
   return {
     title: config.defaultTitle,
     description: config.defaultDescription

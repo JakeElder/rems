@@ -15,9 +15,10 @@ type Props = {};
 
 const ListingMapViewContainer = ({}: Props) => {
   const mapRef = useRef<MapRef>();
-  const { query, onMapZoomChange, onMapMove, isReady } = useRealEstateQuery();
+  const { query, onMapZoomChange, onMapMove, isReady, serverQuery } =
+    useRealEstateQuery();
   const previousQuery = usePrevious(query);
-  const { data } = useProperties();
+  const { data } = useProperties(serverQuery);
   const { radius, mapBounds } = useRealEstateIndexPageState();
 
   useEffect(() => {

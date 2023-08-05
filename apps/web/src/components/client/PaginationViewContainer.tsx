@@ -8,8 +8,8 @@ import useProperties from "@/hooks/use-properties";
 type Props = {};
 
 const PaginationViewContainer = ({}: Props) => {
-  const { query, onPageChange, createLink } = useRealEstateQuery();
-  const { data, isLoading } = useProperties();
+  const { query, onPageChange, createLink, serverQuery } = useRealEstateQuery();
+  const { data, isLoading } = useProperties(serverQuery);
 
   return (
     <Pagination

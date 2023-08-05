@@ -8,8 +8,8 @@ import useProperties from "@/hooks/use-properties";
 type Props = { children: React.ReactNode };
 
 const FilterDialogViewContainer = ({ children }: Props) => {
-  const { activeFilters, reset } = useRealEstateQuery();
-  const { data, isLoading } = useProperties();
+  const { activeFilters, reset, serverQuery } = useRealEstateQuery();
+  const { data, isLoading } = useProperties(serverQuery);
 
   const [open, setOpen] = useState(false);
 

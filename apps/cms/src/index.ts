@@ -38,7 +38,8 @@ export default {
         { name: "Steam Room", slug: "steam-room" },
         { name: "Indoor Pool", slug: "indoor-pool" },
         { name: "Library", slug: "library" },
-        { name: "Pet Friendly", slug: "pet-friendly" }
+        { name: "Pet Friendly", slug: "pet-friendly" },
+        { name: "Cozy", slug: "cozy" }
       ]);
 
       seed("lot-feature.lot-feature", [
@@ -63,7 +64,8 @@ export default {
         { name: "Riverfront", slug: "riverfront" },
         { name: "Ski-In / Ski-Out", slug: "ski-in-ski-out" },
         { name: "Meeting Room", slug: "meeting-room" },
-        { name: "Co-Working Space", slug: "coworking-space" }
+        { name: "Co-Working Space", slug: "coworking-space" },
+        { name: "Lot Feature", slug: "lot-feature" }
       ]);
 
       seed("outdoor-feature.outdoor-feature", [

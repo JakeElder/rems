@@ -3,11 +3,13 @@
 import React from "react";
 import { PropertyCard, PropertyGrid } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
+import useRealEstateQuery from "@/hooks/use-real-estate-query";
 
 type Props = {};
 
 const PropertyGridViewContainer = ({}: Props) => {
-  const { data, isLoading } = useProperties();
+  const { serverQuery } = useRealEstateQuery();
+  const { data, isLoading } = useProperties(serverQuery);
 
   return (
     <PropertyGrid loading={isLoading}>

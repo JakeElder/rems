@@ -1,15 +1,18 @@
+'use client';
+
 import React from "react";
 import css from "./EntryCardGrid.module.css";
 import { EntryCard } from "@rems/types";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
+import { Oval } from "react-loader-spinner";
 
 type Props = {
-  cards: EntryCard[];
+  children: React.ReactNode;
 };
 
-const Item = ({ card }: { card: EntryCard }) => {
+export const Item = ({ card }: { card: EntryCard }) => {
   const { image } = card;
 
   return (
@@ -26,7 +29,13 @@ const Item = ({ card }: { card: EntryCard }) => {
       <div className={css["content"]}>
         <div className={css["title"]}>{card.title}</div>
         <div className={css["caption-and-icon"]}>
-          <div className={css["caption"]}>{card.caption}</div>
+          <div className={css["caption"]}>
+            {card.loading ? (
+              <Oval height={13} width={13} color="#aaa" secondaryColor="#aaa" />
+            ) : (
+              card.caption
+            )}
+          </div>
           <div className={css["icon"]}>
             <FontAwesomeIcon icon={faArrowRightLong} />
           </div>
@@ -36,14 +45,6 @@ const Item = ({ card }: { card: EntryCard }) => {
   );
 };
 
-const EntryCardGrid = ({ cards }: Props) => {
-  return (
-    <div className={css["root"]}>
-      {cards.map((card, idx) => (
-        <Item key={idx} card={card} />
-      ))}
-    </div>
-  );
+export const Root = ({ children }: Props) => {
+  return <div className={css["root"]}>{children}</div>;
 };
-
-export default EntryCardGrid;

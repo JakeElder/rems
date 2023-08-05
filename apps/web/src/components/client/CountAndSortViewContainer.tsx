@@ -8,8 +8,8 @@ import useProperties from "@/hooks/use-properties";
 type Props = {};
 
 const CountAndSortViewContainer = ({}: Props) => {
-  const { query, onValueChange } = useRealEstateQuery();
-  const { data, isLoading } = useProperties();
+  const { query, onValueChange, serverQuery } = useRealEstateQuery();
+  const { data, isLoading } = useProperties(serverQuery);
 
   return (
     <CountAndSort
