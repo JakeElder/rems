@@ -37,7 +37,5 @@ export async function GET() {
     return FilterSetSchema.parse({ ...json, image: processImage(image[0]) });
   });
 
-  console.log(filterSets);
-
   return NextResponse.json(filterSets);
 }
