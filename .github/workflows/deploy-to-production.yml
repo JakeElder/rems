@@ -1,0 +1,25 @@
+name: Deploy to Production
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Deploy-Api-Preview:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.15'
+          cache: 'yarn'
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Deploy Project to Vercel
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
