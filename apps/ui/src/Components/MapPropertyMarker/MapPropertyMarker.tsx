@@ -1,8 +1,8 @@
 import React, { forwardRef } from "react";
 import css from "./MapPropertyMarker.module.css";
 import { Property, Image } from "@rems/types";
-import NextImage from "next/image";
 import { useSpring, animated } from "@react-spring/web";
+import Img from "../../Elements/Img";
 
 type Props = {
   open: boolean;
@@ -26,11 +26,9 @@ const MapPropertyMarker = forwardRef<HTMLDivElement, Props>(
             <div className={css["popup"]}>
               <div className={css["property"]}>
                 <div className={css["image-container"]}>
-                  <NextImage
-                    src={image.url}
+                  <Img
                     alt={property.title}
-                    width={image.width}
-                    height={image.height}
+                    {...image}
                     className={css["image"]}
                   />
                 </div>

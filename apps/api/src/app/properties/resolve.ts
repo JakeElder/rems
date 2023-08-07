@@ -1,4 +1,4 @@
-import { GetPropertiesResult, ServerRealEstateQuery } from "@rems/types";
+import { GetPropertiesResult, ServerRealEstateQuery, Image } from "@rems/types";
 import {
   File,
   FileRelatedMorph,
@@ -284,12 +284,19 @@ export default async function resolve(
       formattedRentalPrice: format(p.rentalPrice),
       images: images
         .filter((i: any) => p.id === i["FileRelatedMorphs.related_id"])
-        .map((i: any) =>
-          ImageSchema.parse({
-            ...i,
-            url: `${process.env.ASSET_URL}${i.url}`
-          })
-        )
+        .map((i: any): Image => {
+          if (i.provider === "local") {
+            return {
+              type: "local",
+              props: { ...i, url: `${process.env.ASSET_URL}${i.url}` }
+            };
+          }
+
+          return {
+            type: "cloudinary",
+            props: { ...i, id: i.providerMetadata.public_id }
+          };
+        })
     });
   });
 

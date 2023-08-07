@@ -46,33 +46,3 @@ export default async function Home() {
     </Page.Root>
   );
 }
-
-// export default async function Home() {
-//   return (
-//     <Page.Root>
-//       <ToastHub>
-//         <Analytics />
-//         <Page.Header>
-//           <HeaderViewContainer mode="hero" />
-//         </Page.Header>
-//         <Page.Hero>
-//           <FeaturedCarouselContainer />
-//         </Page.Hero>
-//         <Page.Content>
-//           <Page.PopularSearches>
-//             <PopularSearches />
-//           </Page.PopularSearches>
-//           <Page.EmailCollector>
-//             <MailingListModuleViewContainer />
-//           </Page.EmailCollector>
-//           <Page.LatestProperties>
-//             <LatestProperties />
-//           </Page.LatestProperties>
-//         </Page.Content>
-//         <Page.Footer>
-//           <FooterContainer />
-//         </Page.Footer>
-//       </ToastHub>
-//     </Page.Root>
-//   );
-// }

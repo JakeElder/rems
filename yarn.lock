@@ -1797,6 +1797,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cloudinary-util/url-loader@npm:^3.10.0":
+  version: 3.10.0
+  resolution: "@cloudinary-util/url-loader@npm:3.10.0"
+  dependencies:
+    "@cloudinary-util/util": 2.2.1
+    "@cloudinary/url-gen": ^1.10.2
+  checksum: 313cec0fad54387e4975e21909f499703dd18c04ff25e7329a14c0b8b1cd0c0a55246dfd8124d3034df83575b7f6288f44de71bf1e87d5356a275c2f4cdb0ba9
+  languageName: node
+  linkType: hard
+
+"@cloudinary-util/util@npm:2.2.1, @cloudinary-util/util@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@cloudinary-util/util@npm:2.2.1"
+  checksum: a3dbf091b4a8c8090a6178ce140872d21902345c61372079d7af4436e9d894d727ea85520bd3306ad231446edd35ba1781a0dac17da16348a5b27f5af2060056
+  languageName: node
+  linkType: hard
+
+"@cloudinary/transformation-builder-sdk@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@cloudinary/transformation-builder-sdk@npm:1.5.1"
+  dependencies:
+    "@cloudinary/url-gen": ^1.7.0
+  checksum: 2cae6cff20a67b86680bbb8230ff9ef159db858878f50862c734c286d83899c6103ffcb486421cf268d046e9dbb3ef9277c664dd7d1405f838cbbff8b3726e02
+  languageName: node
+  linkType: hard
+
+"@cloudinary/url-gen@npm:^1.10.2, @cloudinary/url-gen@npm:^1.7.0":
+  version: 1.11.1
+  resolution: "@cloudinary/url-gen@npm:1.11.1"
+  dependencies:
+    "@cloudinary/transformation-builder-sdk": ^1.5.1
+  checksum: 49e7bda6aa69b2521bac7152e0a0b54539ab23d05027a8e466d102ec6a31eb3932fef49e77cd78b397192e6dd40e1778634aa79c02dd2f8134142bfb56286325
+  languageName: node
+  linkType: hard
+
 "@codemirror/autocomplete@npm:^6.0.0":
   version: 6.9.0
   resolution: "@codemirror/autocomplete@npm:6.9.0"
@@ -4504,6 +4539,7 @@ __metadata:
     lodash.clamp: ^4.0.3
     mapbox-gl: ^2.15.0
     next: 13.4.12
+    next-cloudinary: ^4.17.1
     query-string: ^8.1.0
     react: 18.2.0
     react-dom: 18.2.0
@@ -19246,6 +19282,19 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
+  languageName: node
+  linkType: hard
+
+"next-cloudinary@npm:^4.17.1":
+  version: 4.17.1
+  resolution: "next-cloudinary@npm:4.17.1"
+  dependencies:
+    "@cloudinary-util/url-loader": ^3.10.0
+    "@cloudinary-util/util": ^2.2.1
+  peerDependencies:
+    next: ^12 || ^13
+    react: ^17 || ^18
+  checksum: 81d23a86ea967b1a416f46595cfe082d5081c88ec3b508fc5187d851d297bb4a2d0d1c84edc79ec883c179770bd8d3dff6f49f0ccacd761ceb61d25509d6a73f
   languageName: node
   linkType: hard
 

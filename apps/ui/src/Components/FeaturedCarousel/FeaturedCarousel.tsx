@@ -5,12 +5,12 @@ import { useTransition, animated } from "@react-spring/web";
 import css from "./FeaturedCarousel.module.css";
 import JourneyBar from "../JourneyBar";
 import { Property } from "@rems/types";
-import Image from "next/image";
 import Container from "../../Elements/Container/Container";
 import Link from "next/link";
 import { useDrag } from "@use-gesture/react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Key } from "ts-key-enum";
+import Img from "../../Elements/Img";
 
 function mod(n: number, m: number) {
   return ((n % m) + m) % m;
@@ -57,12 +57,7 @@ const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
         const img = properties[i].images![0];
         return (
           <animated.div className={css["image"]} style={style}>
-            <Image
-              alt={properties[i].title}
-              src={img.url}
-              width={img.width}
-              height={img.height}
-            />
+            <Img alt={properties[i].title} {...img} />
           </animated.div>
         );
       })}

@@ -1,17 +1,8 @@
 "use client";
 
 import React from "react";
-import { EntryCardGrid } from "@rems/ui";
-import {
-  EntryCard,
-  FilterSet,
-  PartialRealEstateQuery,
-  PartialServerRealEstateQuery
-} from "@rems/types";
-import useProperties from "@/hooks/use-properties";
-import { ServerRealEstateQuerySchema } from "@rems/schemas";
-import { generateQueryString } from "@/hooks/use-real-estate-query";
-import { PartialServerRealEstateQuerySchema } from "@rems/schemas/src/real-estate-query";
+import { FilterSet, PartialServerRealEstateQuery } from "@rems/types";
+import EntryCardViewContainer from "./EntryCardViewContainer";
 
 type Props = {
   filterSet: FilterSet;
@@ -28,7 +19,7 @@ const resolveQuery: (slug: string) => PartialServerRealEstateQuery = (slug) => {
       "lot-features": ["family-friendly"]
     },
     "new-builds-ready-to-move-in-to-in-bangkok": {
-      "lot-features": ["new-built"],
+      "lot-features": ["new-built"]
     },
     "pool-villas-for-sale-in-bangkok": {
       "property-type": ["villa"],
@@ -41,22 +32,12 @@ const resolveQuery: (slug: string) => PartialServerRealEstateQuery = (slug) => {
 
 const PopularSearchCardViewContainer = ({ filterSet }: Props) => {
   const query = resolveQuery(filterSet.slug);
-  const qs = generateQueryString(query);
 
-  const { data, isLoading } = useProperties(
-    ServerRealEstateQuerySchema.parse(query)
-  );
+  if (!query) {
+    return null;
+  }
 
-  const card: EntryCard = {
-    loading: isLoading,
-    id: filterSet.slug,
-    title: filterSet.name,
-    url: `/real-estate${qs}`,
-    caption: data && `${data.pagination.total} listings`,
-    image: filterSet.image
-  };
-
-  return <EntryCardGrid.Item card={card} />;
+  return <EntryCardViewContainer query={query} filterSet={filterSet} />;
 };
 
 export default PopularSearchCardViewContainer;

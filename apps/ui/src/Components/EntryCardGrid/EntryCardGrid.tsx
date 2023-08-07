@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
 import React from "react";
 import css from "./EntryCardGrid.module.css";
 import { EntryCard } from "@rems/types";
-import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import { Oval } from "react-loader-spinner";
+import Img from "../../Elements/Img";
 
 type Props = {
   children: React.ReactNode;
@@ -18,12 +18,7 @@ export const Item = ({ card }: { card: EntryCard }) => {
   return (
     <a className={css["item"]} href={card.url}>
       <div className={css["img"]}>
-        <Image
-          src={image.url}
-          alt={card.title}
-          width={image.width}
-          height={image.height}
-        />
+        <Img alt={card.title} {...image} />
       </div>
       <div className={css["overlay"]} />
       <div className={css["content"]}>

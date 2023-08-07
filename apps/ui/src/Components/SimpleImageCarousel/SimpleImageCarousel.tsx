@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 import css from "./SimpleImageCarousel.module.css";
 import { Image } from "@rems/types";
-import NextImage from "next/image";
 import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import clamp from "lodash.clamp";
 import { useElementSize } from "usehooks-ts";
 import cn from "classnames";
 import Link from "next/link";
+import Img from "../../Elements/Img";
 
 type Props = {
   children?: React.ReactNode;
@@ -19,8 +19,6 @@ type Props = {
   index?: number;
   onIndexChange?: (index: number) => void;
 };
-
-const Img = animated(NextImage);
 
 const SimpleImageCarousel = ({ index, onIndexChange, ...props }: Props) => {
   if (typeof index !== "undefined" && onIndexChange) {
@@ -120,7 +118,7 @@ const ControlledImageCarousel = ({
         <div className={css["container"]}>
           {images.map((i, idx) => (
             <span
-              key={i.url}
+              key={i.props.url}
               onClick={(e) => {
                 e.preventDefault();
                 onIndexChange(idx);
@@ -137,13 +135,11 @@ const ControlledImageCarousel = ({
       <Images className={css["images"]} {...bind()} link={link} style={props}>
         {images.map((i) => (
           <Img
-            key={i.id}
+            key={i.props.id}
+            alt={i.props.name || ""}
             draggable={false}
             className={css["image"]}
-            alt={i.name || ""}
-            src={i.url}
-            width={i.width}
-            height={i.height}
+            {...i}
           />
         ))}
       </Images>
