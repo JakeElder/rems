@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 
+const update = require("immutability-helper");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true"
 });
@@ -21,14 +22,23 @@ const nextConfig = {
       { hostname: "res.cloudinary.com" }
     ]
   },
-  webpack: (config) => {
-    return {
-      ...config,
-      externals: [...config.externals, { sequelize: "commonjs sequelize" }],
+  webpack: (config, { isServer }) => {
+    const base = update(config, {
+      externals: { $push: [{ sequelize: "commonjs sequelize" }] },
       optimization: {
-        minimize: process.env.VERCEL_ENV === "production"
+        minimize: { $set: process.env.NEXT_PUBLIC_ENV === "production" }
       }
-    };
+    });
+
+    if (process.env.NEXT_PUBLIC_ENV === "production" && !isServer) {
+      return update(config, {
+        externals: {
+          $push: [{ "mapbox-gl": "mapboxgl" }]
+        }
+      });
+    }
+
+    return base;
   }
 };
 

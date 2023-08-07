@@ -8,7 +8,8 @@ import { useIndexConnector } from "../IndexConnector/IndexConnector";
 import Link from "next/link";
 import { Property, RealEstateQuery } from "@rems/types";
 import React from "react";
-import { circle, lineString } from "@turf/turf";
+import circle from "@turf/circle";
+import { lineString } from "@turf/helpers";
 import { Required } from "utility-types";
 
 const TOKEN =
@@ -45,7 +46,7 @@ const Radius = ({ lat, lng, radius, show }: RadiusProps) => {
       <Source type="geojson" data={c}>
         <Layer
           type="fill"
-          paint={{ "fill-color": "#fff", "fill-opacity": 0.25 }}
+          paint={{ "fill-color": "red", "fill-opacity": 0.25 }}
         />
       </Source>
       <Source type="geojson" data={line}>

@@ -1,6 +1,7 @@
 import "the-new-css-reset/css/reset.css";
 import "../globals.css";
 import { FontLoader, IconLoader } from "@rems/ui";
+import ExternalScripts from "@/components/client/ExternalScripts";
 
 export const metadata = {
   title: "JYO Property",
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ExternalScripts />
         <IconLoader>
           <FontLoader>{children}</FontLoader>
         </IconLoader>
