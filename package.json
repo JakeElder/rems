@@ -1,8 +1,11 @@
 {
   "name": "rems",
   "scripts": {
-    "build:cms": "docker buildx build . -f Dockerfile.cms -t registry.digitalocean.com/rems-cms/rems-cms:latest",
-    "push:cms": "docker push registry.digitalocean.com/rems-cms/rems-cms:latest"
+    "build:cms": "docker buildx build . -f Dockerfile.cms -t rems-cms:latest",
+    "tag:cms:stage": "docker tag rems-cms:latest registry.digitalocean.com/rems-cms/rems-cms:stage",
+    "tag:cms:prod": "docker tag rems-cms:latest registry.digitalocean.com/rems-cms/rems-cms:prod",
+    "push:cms:stage": "docker push registry.digitalocean.com/rems-cms/rems-cms:stage",
+    "push:cms:prod": "docker push registry.digitalocean.com/rems-cms/rems-cms:prod"
   },
   "workspaces": [
     "apps/*",

@@ -1,3 +1,5 @@
+require("events").EventEmitter.defaultMaxListeners = 15;
+
 import { Sequelize } from "sequelize";
 import * as pg from "pg";
 import { parse } from "pg-connection-string";
