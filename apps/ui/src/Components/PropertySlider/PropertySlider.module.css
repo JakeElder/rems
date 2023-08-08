@@ -21,6 +21,9 @@
   display: block;
   margin-bottom: 12px;
   object-fit: cover;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
 }
 
 .content {
@@ -31,6 +34,27 @@
   font-family: var(--font-libre);
   font-size: 14px;
   margin-bottom: 3px;
+}
+
+.rental-price-and-pm {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.rental-price-and-pm {
+  display: flex;
+  align-items: center;
+}
+
+.rental-price {
+  margin-right: 5px;
+}
+
+.pm {
+  font-size: 13px;
+  font-weight: 300;
+  color: #999;
+  font-family: var(--font-inter);
 }
 
 .title {

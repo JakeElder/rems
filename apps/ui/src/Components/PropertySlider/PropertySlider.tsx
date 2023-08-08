@@ -8,14 +8,38 @@ import Img from "../../Elements/Img";
 
 type Props = { properties: Property[] };
 
+const Content = ({ property }: { property: Property }) => {
+  if (property.availableToPurchase) {
+    return (
+      <>
+        <h3 className={css["price"]}>{property.formattedPurchasePrice}</h3>
+        <p className={css["title"]}>{property.title}</p>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h3 className={css["price"]}>
+        <div className={css["rental-price-and-pm"]}>
+          <span className={css["rental-price"]}>
+            {property.formattedRentalPrice}
+          </span>
+          <span className={css["pm"]}>p/m</span>
+        </div>
+      </h3>
+      <p className={css["title"]}>{property.title}</p>
+    </>
+  );
+};
+
 const Card = ({ property }: { property: Property }) => {
   const img = property.images![0];
   return (
     <a className={css["card"]} href={property.url}>
-      <Img alt={property.title} {...img} />
+      <Img alt={property.title} {...img} height="auto" />
       <div className={css["content"]}>
-        <h3 className={css["price"]}>{property.formattedPurchasePrice}</h3>
-        <p className={css["title"]}>{property.title}</p>
+        <Content property={property} />
       </div>
     </a>
   );
