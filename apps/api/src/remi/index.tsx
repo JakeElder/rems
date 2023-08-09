@@ -101,7 +101,7 @@ export const createMockProperty = async () => {
   };
 
   const request: CreateChatCompletionRequest = {
-    model: "gpt-3.5-turbo-16k",
+    model: "gpt-3.5-turbo-16k-0613",
     temperature: 1.6,
     messages: [
       {
@@ -203,7 +203,7 @@ export const createImages = async (prompt: string, n: number) => {
   return image.data.data.map((i) => i.b64_json).filter(isString);
 };
 
-export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
+export const nlToFn = async (query: ServerRealEstateQuery, nl: string) => {
   // const request: CreateChatCompletionRequest = {
   //   model: "gpt-3.5-turbo",
   //   temperature: 0.1,
@@ -299,15 +299,14 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
   // };
 
   const res = await getProperties({ ...query, limit: "true" });
-  const properties = res.data.map((p) => {
-    const { description, images, ...rest } = p;
-    return rest;
-  });
-  const context = { properties };
+  // const properties = res.data.map((p) => {
+  //   const { description, images, ...rest } = p;
+  //   return rest;
+  // });
+  const context = {};
 
   const request: CreateChatCompletionRequest = {
-    model: "gpt-3.5-turbo-16k",
-    temperature: 0.1,
+    model: "gpt-3.5-turbo-16k-0613",
     messages: [
       {
         role: "system",
@@ -368,6 +367,16 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
                 removed and which should be added. IE, if a user is interested
                 in an additional lotFeature, ensure that the current lotFeatures
                 are not removed.
+              </li>
+              <li>
+                IMPORTANT: Pay attention to the property type. IE, if the user
+                specifies "Villa" or "Condo", ensure they are included within
+                the response.
+              </li>
+              <li>
+                IMPORTANT: When the user ADDS Search criteria, IE, "It has to be
+                at least 3 bedrooms", these properties will be added under the
+                `add` parameter.
               </li>
             </ul>
             <h1>2. Responding to questions about the resulting properties</h1>
@@ -464,45 +473,47 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
     ],
     functions: [
       {
-        name: "u",
+        name: "updateQuery",
         description: txt(
           <>
             Updates the current query, showing the user new properties based on
             their latest input. It accepts two arguments, which properties to
-            remove, and which to add.
+            remove, and which to add. When the user ADDs Search criteria, IE,
+            "It has to be at least 3 bedrooms", these properties will be added
+            under the `add` parameter.
           </>
         ),
         parameters: {
           type: "object",
-          required: ["n"],
+          // required: ["n"],
           properties: {
             definitions: {
-              q: {
+              query: {
                 type: "object",
                 properties: await getQueryProperties()
               }
             },
-            r: {
-              $ref: "#/definitions/q",
+            remove: {
+              $ref: "#/definitions/query",
               description: "The properties to be removed from the current query"
             },
-            a: {
-              $ref: "#/definitions/q",
+            add: {
+              $ref: "#/definitions/query",
               description: "The properties to be added to the current query"
-            },
-            n: {
-              type: "boolean",
-              description: txt(
-                <>
-                  Whether or not this is a completely *NEW search* IE, the user
-                  may say "It has to have a pool". This is an amendment on the
-                  current query, and therefore this value will be false. The
-                  user may also say "show me 3 bedroom properties in Pattaya".
-                  This is a NEW search and so this value should be set to true.
-                  If the user starts with "I'm looking for, it is a new search"
-                </>
-              )
             }
+            // newSearch: {
+            //   type: "boolean",
+            //   description: txt(
+            //     <>
+            //       Whether or not this is a completely *NEW search* IE, the user
+            //       may say "It has to have a pool". This is an amendment on the
+            //       current query, and therefore this value will be false. The
+            //       user may also say "show me 3 bedroom properties in Pattaya".
+            //       This is a NEW search and so this value should be set to true.
+            //       If the user starts with "I'm looking for, it is a new search"
+            //     </>
+            //   )
+            // }
             // response: {
             //   type: "string",
             //   description: txt(
@@ -647,9 +658,9 @@ export const nlToQuery = async (query: ServerRealEstateQuery, nl: string) => {
     const res = await openai.createChatCompletion(request);
     const message = res.data.choices[0].message!;
 
-    console.dir(message, { depth: null, colors: true });
+    // console.dir(message, { depth: null, colors: true });
 
-    return {};
+    return message.function_call;
   } catch (e: any) {
     console.dir(e.response.data, { depth: null, colors: true });
   }

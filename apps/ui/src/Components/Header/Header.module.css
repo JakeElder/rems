@@ -22,6 +22,11 @@
   font-size: 14px;
 }
 
+.logo {
+  position: relative;
+  top: 2px;
+}
+
 .logo svg {
   display: block;
 }
