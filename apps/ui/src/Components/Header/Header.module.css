@@ -22,6 +22,10 @@
   font-size: 14px;
 }
 
+.logo svg {
+  display: block;
+}
+
 .button {
   border-radius: 18px;
   height: 36px;

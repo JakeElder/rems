@@ -15,38 +15,38 @@ const PROPERTIES_PER_PAGE = 14;
 const propertyType = (q: ServerRealEstateQuery) => {
   return q["property-type"].length
     ? [
-        {
-          model: PropertyType,
-          as: "propertyTypes",
-          where: { slug: { [Op.in]: q["property-type"] } }
-        }
-      ]
+      {
+        model: PropertyType,
+        as: "propertyTypes",
+        where: { slug: { [Op.in]: q["property-type"] } }
+      }
+    ]
     : [];
 };
 
 const purchasePrice = (q: ServerRealEstateQuery) => {
   return q["availability"] === "sale"
     ? [
-        {
-          purchasePrice: {
-            [Op.gte]: q["min-price"],
-            ...(q["max-price"] ? { [Op.lte]: q["max-price"] } : {})
-          }
+      {
+        purchasePrice: {
+          [Op.gte]: q["min-price"],
+          ...(q["max-price"] ? { [Op.lte]: q["max-price"] } : {})
         }
-      ]
+      }
+    ]
     : [];
 };
 
 const rentalPrice = (q: ServerRealEstateQuery) => {
   return q["availability"] === "rent"
     ? [
-        {
-          rentalPrice: {
-            [Op.gte]: q["min-price"],
-            ...(q["max-price"] ? { [Op.lte]: q["max-price"] } : {})
-          }
+      {
+        rentalPrice: {
+          [Op.gte]: q["min-price"],
+          ...(q["max-price"] ? { [Op.lte]: q["max-price"] } : {})
         }
-      ]
+      }
+    ]
     : [];
 };
 
@@ -79,13 +79,13 @@ const livingArea = (q: ServerRealEstateQuery) => {
 const lotSize = (q: ServerRealEstateQuery) => {
   return q["min-lot-size"] || q["max-lot-size"]
     ? [
-        {
-          lotSize: {
-            [Op.gte]: q["min-lot-size"],
-            ...(q["max-lot-size"] ? { [Op.lte]: q["max-lot-size"] } : {})
-          }
+      {
+        lotSize: {
+          [Op.gte]: q["min-lot-size"],
+          ...(q["max-lot-size"] ? { [Op.lte]: q["max-lot-size"] } : {})
         }
-      ]
+      }
+    ]
     : [];
 };
 
@@ -306,10 +306,12 @@ export default async function resolve(
         ...p,
         images: [
           ImageSchema.parse({
-            id: 1,
-            width: 800,
-            height: 450,
-            url: "https://res.cloudinary.com/dxnqopswh/image/upload/v1691021749/default_nopiyd.png"
+            type: "cloudinary",
+            props: {
+              id: "https://res.cloudinary.com/dxnqopswh/image/upload/v1691021749/default_nopiyd.png",
+              width: 800,
+              height: 450
+            }
           })
         ]
       };

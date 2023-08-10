@@ -5,10 +5,13 @@
   "scripts": {
     "dev": "next dev --port=3003",
     "dev:stage": "env-cmd -f ./.vercel/.env.preview.local next dev --port=3003",
+    "dev:prod": "env-cmd -f ./.vercel/.env.production.local next dev --port=3003",
     "build": "next build",
     "build:stage": "env-cmd -f ./.vercel/.env.preview.local next build",
+    "build:prod": "env-cmd -f ./.vercel/.env.production.local next build",
     "start": "next start",
     "start:stage": "env-cmd -f ./.vercel/.env.preview.local next start",
+    "start:prod": "env-cmd -f ./.vercel/.env.production.local next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
   },

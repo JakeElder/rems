@@ -22,7 +22,7 @@ const AreaMap = ({ property, image }: Props) => {
         <div className={css["map-container"]}>
           <Map
             mapboxAccessToken={TOKEN}
-            mapStyle="mapbox://styles/jake-elder/clfmqca38006901pcm2wsjgqr"
+            mapStyle="mapbox://styles/jake-elder/clkpaxw5d00ly01qyah2jbomw"
             initialViewState={{
               longitude: property.location.lng,
               latitude: property.location.lat,
