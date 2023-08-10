@@ -2,7 +2,7 @@ import { Footer } from "@rems/ui";
 import fetch from "@/fetch";
 import FooterViewContainer from "../client/FooterViewContainer";
 
-type Props = Pick<React.ComponentProps<typeof Footer>, "full">;
+type Props = Pick<React.ComponentProps<typeof Footer.Root>, "full">;
 
 const FooterContainer = async ({ full }: Props) => {
   const [config, searches] = await Promise.all([
