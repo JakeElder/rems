@@ -15,5 +15,9 @@ const dialectOptions: pg.ClientConfig = { ssl };
 
 export default new Sequelize(
   `postgres://${db.user}:${db.password}@${db.host}:${db.port}/${db.database}`,
-  { dialectModule: pg, dialectOptions, logging: false }
+  {
+    dialectModule: pg,
+    dialectOptions,
+    logging: false
+  }
 );
