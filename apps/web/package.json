@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:stage": "env-cmd -f ./.vercel/.env.preview.local next dev",
+    "dev:prod": "env-cmd -f ./.vercel/.env.production.local next dev",
     "build": "next build",
     "build:stage": "env-cmd -f ./.vercel/.env.preview.local next build",
     "start": "next start",

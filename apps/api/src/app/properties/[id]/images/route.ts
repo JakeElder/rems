@@ -39,10 +39,12 @@ export async function GET(_req: Request, { params }: Params) {
     images = [
       ImageSchema.parse({
         type: "local",
-        id: 1,
-        width: 800,
-        height: 450,
-        url: "/default.png"
+        props: {
+          id: 1,
+          width: 800,
+          height: 450,
+          url: "/default.png"
+        }
       })
     ];
   }
