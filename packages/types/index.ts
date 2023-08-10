@@ -143,3 +143,11 @@ export type AiSearchInputState =
   | "resolving"
   | "resolved"
   | "committed";
+
+export type ResolvingFilterSet = {
+  set: FilterSet;
+  data: GetPropertiesResult | undefined;
+  isLoading: boolean;
+  query: PartialServerRealEstateQuery;
+  url: string;
+};

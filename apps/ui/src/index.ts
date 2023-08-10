@@ -22,7 +22,7 @@ export * as EntryCardGrid from "./Components/EntryCardGrid";
 export { default as FeaturedCarousel } from "./Components/FeaturedCarousel";
 export * as FilterBar from "./Components/FilterBar";
 export { default as FilterDialog } from "./Components/FilterDialog";
-export { default as Footer } from "./Components/Footer";
+export * as Footer from "./Components/Footer";
 export * as Header from "./Components/Header";
 export { default as HeroCarousel } from "./Components/HeroCarousel";
 export { default as IndoorFeatureFilters } from "./Components/IndoorFeatureFilters";

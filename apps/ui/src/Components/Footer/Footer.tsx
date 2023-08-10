@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import css from "./Footer.module.css";
 import Container from "../../Elements/Container";
@@ -10,14 +12,17 @@ import {
   faFacebookSquare
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
+import { ResolvingFilterSet } from "@rems/types";
+import { Oval } from "react-loader-spinner";
 
 type Props = {
   full?: boolean;
-  popularSearches: React.ComponentProps<typeof Link>[];
+  popularSearches: React.ReactNode;
   linkedInURL: string;
   lineURL: string;
   instagramURL: string;
   facebookURL: string;
+  onContactUsClick: () => void;
 };
 
 const UL = ({
@@ -41,13 +46,33 @@ const UL = ({
   );
 };
 
-const Footer = ({
+export const PopularSearch = ({ set }: { set: ResolvingFilterSet }) => {
+  return (
+    <li>
+      <Link className={css["popular-search"]} href={set.url}>
+        {set.set.name}
+        <div className={css["count-spinner"]}>
+          {set.isLoading ? (
+            <div className={css["spinner"]}>
+              <Oval height={10} width={10} color="#aaa" secondaryColor="#aaa" />
+            </div>
+          ) : (
+            <div className={css["count"]}>{set.data?.pagination.total}</div>
+          )}
+        </div>
+      </Link>
+    </li>
+  );
+};
+
+export const Root = ({
   full = false,
   popularSearches,
   lineURL,
   facebookURL,
   linkedInURL,
-  instagramURL
+  instagramURL,
+  onContactUsClick
 }: Props) => {
   return (
     <footer className={css["root"]}>
@@ -58,10 +83,20 @@ const Footer = ({
             links={[
               { href: "/", children: "Home" },
               { href: "/real-estate", children: "Real Estate" },
-              { href: "#", children: "Contact Us" }
+              {
+                onClick: (e) => {
+                  e.preventDefault();
+                  onContactUsClick();
+                },
+                children: "Contact Us",
+                href: "#"
+              }
             ]}
           />
-          <UL heading="POPULAR SEARCHES" links={popularSearches} />
+          <div className={css["section"]}>
+            <div className={css["heading"]}>POPULAR SEARCHES</div>
+            <ul className={css["list"]}>{popularSearches}</ul>
+          </div>
         </div>
         <div className={css["logo-disclaimer-socials"]}>
           <Link href="/" className={css["logo"]}>
@@ -92,5 +127,3 @@ const Footer = ({
     </footer>
   );
 };
-
-export default Footer;
