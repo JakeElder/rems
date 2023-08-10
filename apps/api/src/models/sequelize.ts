@@ -18,6 +18,10 @@ export default new Sequelize(
   {
     dialectModule: pg,
     dialectOptions,
-    logging: false
+    logging: false,
+    pool: {
+      max: 14,
+      min: 0
+    }
   }
 );
