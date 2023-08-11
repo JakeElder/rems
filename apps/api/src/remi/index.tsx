@@ -378,6 +378,17 @@ export const nlToFn = async (query: ServerRealEstateQuery, nl: string) => {
                 at least 3 bedrooms", these properties will be added under the
                 `add` parameter.
               </li>
+              <li>
+                IMPORTANT: Ensure that all properties are specified in hyphen
+                case. ALL properties in the query should adhere to the schema.
+              </li>
+              <li>
+                IMPORTANT: Pay special attention to the enum values available
+                for each query property. IE, the "garden" filter belongs to
+                "outdoor-features". Only include values that are defined in the
+                schema. Do not include values that are not acceptable, IE, not
+                included in the enum fields.
+              </li>
             </ul>
             <h1>2. Responding to questions about the resulting properties</h1>
             <p>

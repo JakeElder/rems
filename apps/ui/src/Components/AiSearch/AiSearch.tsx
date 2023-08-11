@@ -1,13 +1,69 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import css from "./AiSearch.module.css";
 import { ColorRing, LineWave } from "react-loader-spinner";
 import { AiSearchInputState } from "@rems/types";
 import { animated, useSpring, useTransition } from "@react-spring/web";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faMicrophoneLines } from "@fortawesome/free-solid-svg-icons";
-import Color from "color";
+import {
+  faCheck,
+  faMicrophoneLines,
+  faMicrophoneLinesSlash
+} from "@fortawesome/free-solid-svg-icons";
+import c from "tinycolor2";
+import EnterIcon from "../../Elements/EnterIcon/EnterIcon";
+import cn from "classnames";
+
+const useColors = (state: AiSearchInputState) => {
+  const map: Record<
+    AiSearchInputState,
+    {
+      backgroundColor: string;
+      borderColor: string;
+      color: string;
+    }
+  > = {
+    inactive: {
+      borderColor: "#ccc",
+      // backgroundColor: c("#aaa").lighten(0.95).toString(),
+      backgroundColor: "rgba(255, 255, 255, 0)",
+      color: "#444"
+    },
+    inputting: {
+      borderColor: "#ad3dbf",
+      // backgroundColor: c("#ad3dbf").lighten(50).toString(),
+      backgroundColor: "rgba(255, 255, 255, 0)",
+      color: c("#ad3dbf").darken(12).toString()
+    },
+    listening: {
+      borderColor: "#ad3dbf",
+      // backgroundColor: c("#ad3dbf").lighten(0.95).toString(),
+      backgroundColor: "rgba(255, 255, 255, 0)",
+      color: c("#ad3dbf").darken(16).toString()
+    },
+    resolving: {
+      borderColor: "#ecbb56",
+      backgroundColor: c("#ecbb56").lighten(36).toString(),
+      color: c("#ecbb56").darken(16).toString()
+    },
+    resolved: {
+      borderColor: "#19c351",
+      backgroundColor: c("#19c351").lighten(56).toString(),
+      // backgroundColor: "rgba(255, 255, 255, 0)",
+      color: c("#19c351").darken(16).toString()
+    },
+    committed: {
+      borderColor: "#ccc",
+      // backgroundColor: c("#ccc").lighten(0.95).toString(),
+      backgroundColor: "rgba(255, 255, 255, 0)",
+      color: c("#ccc").darken(0.3).toString()
+    }
+  };
+
+  const { borderColor, color, backgroundColor } = map[state];
+  return useSpring({ backgroundColor, borderColor, color });
+};
 
 type InputHTMLProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -16,12 +72,15 @@ type InputHTMLProps = React.DetailedHTMLProps<
 
 type Props = {
   onChange?: InputHTMLProps["onChange"];
-  onSubmit?: React.FormHTMLAttributes<HTMLFormElement>["onSubmit"];
   onMicClick?: () => void;
+  enterDown: boolean;
   value?: InputHTMLProps["value"];
-  debug?: boolean;
   state: AiSearchInputState;
-};
+  submittable: boolean;
+} & Pick<
+  React.FormHTMLAttributes<HTMLFormElement>,
+  "onSubmit" | "onKeyDown" | "onKeyUp"
+>;
 
 const useHideShow = (show: boolean) => {
   const hidden = { opacity: 0, scale: 0.8 };
@@ -52,7 +111,11 @@ const Status = ({ state }: { state: AiSearchInputState }) => {
                 ariaLabel="blocks-loading"
                 wrapperStyle={{}}
                 wrapperClass="blocks-wrapper"
-                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+                colors={
+                  c("#ecbb56")
+                    .analogous(5)
+                    .map((c) => c.toString()) as any
+                }
               />
             </animated.div>
           )
@@ -88,109 +151,90 @@ const Status = ({ state }: { state: AiSearchInputState }) => {
   );
 };
 
-const useColors = (state: AiSearchInputState) => {
-  const map: Record<
-    AiSearchInputState,
-    {
-      backgroundColor: string;
-      borderColor: string;
-      color: string;
-    }
-  > = {
-    inactive: {
-      borderColor: "#aaa",
-      backgroundColor: Color("#aaa").lighten(0.95).hex(),
-      color: Color("#aaa").darken(0.3).hex()
-    },
-    inputting: {
-      borderColor: "#ad3dbf",
-      backgroundColor: Color("#ad3dbf").lighten(0.95).hex(),
-      color: Color("#ad3dbf").darken(0.3).hex()
-    },
-    listening: {
-      borderColor: "#ad3dbf",
-      backgroundColor: Color("#ad3dbf").lighten(0.95).hex(),
-      color: Color("#ad3dbf").darken(0.3).hex()
-    },
-    resolving: {
-      borderColor: "#ecbb56",
-      backgroundColor: Color("#ecbb56").lighten(0.55).hex(),
-      color: Color("#ecbb56").darken(0.3).hex()
-    },
-    resolved: {
-      borderColor: "#19c351",
-      backgroundColor: Color("#19c351").lighten(1.15).hex(),
-      color: Color("#19c351").darken(0.3).hex()
-    },
-    committed: {
-      borderColor: "#ccc",
-      backgroundColor: Color("#ccc").lighten(0.95).hex(),
-      color: Color("#ccc").darken(0.3).hex()
-    }
-  };
-
-  const { borderColor, color, backgroundColor } = map[state];
-
-  return useSpring({ backgroundColor, borderColor, color });
-};
-
 const Input = React.forwardRef<
   HTMLInputElement,
-  { state: AiSearchInputState } & InputHTMLProps
->(({ state, ...props }, ref) => {
+  {
+    state: AiSearchInputState;
+    enterDown: boolean;
+    submittable: boolean;
+  } & InputHTMLProps
+>(({ state, enterDown, submittable, ...props }, ref) => {
   const style = useColors(state);
+
+  const hidden = { opacity: 0, width: 0 };
+  const visible = { opacity: 1, width: 26 };
+
+  const submit = useTransition(submittable, {
+    from: hidden,
+    enter: visible,
+    leave: hidden
+  });
+
   return (
-    <animated.div style={style} className={css["input-container"]}>
-      <input
-        ref={ref}
-        {...props}
-        className={css["input"]}
-        disabled={state !== "inactive" && state !== "inputting"}
-      />
-      <Status state={state} />
+    <animated.div style={style} className={css["container"]}>
+      <div className={css["session-container"]}>
+        <input
+          ref={ref}
+          {...props}
+          className={css["input"]}
+          disabled={state !== "inactive" && state !== "inputting"}
+        />
+      </div>
+      <div className={css["enter-and-status"]}>
+        <div className={css["status"]}>
+          <Status state={state} />
+        </div>
+        {submit(
+          (style, show) =>
+            show && (
+              <animated.div style={style}>
+                <div
+                  className={cn(css["enter"], {
+                    [css["enter-down"]]: enterDown
+                  })}
+                >
+                  <EnterIcon />
+                </div>
+              </animated.div>
+            )
+        )}
+      </div>
     </animated.div>
   );
 });
 
-const DebugAiSearch = ({ onChange, value, state }: Omit<Props, "debug">) => {
-  return (
-    <div className={css["debug-root"]}>
-      <Input state={state} value={value} onChange={onChange} />
-    </div>
-  );
-};
-
-const AiSearch = React.forwardRef<HTMLInputElement, Props>(
-  ({ debug, ...props }, ref) => {
-    if (debug) {
-      return <DebugAiSearch {...props} />;
+const AiSearch = React.memo(
+  React.forwardRef<HTMLInputElement, Props>(
+    (
+      { onChange, value, onMicClick, state, enterDown, submittable, ...rest },
+      ref
+    ) => {
+      return (
+        <div className={css["root"]}>
+          <form className={css["form"]} {...rest}>
+            <div className={css["input-state-and-controls"]}>
+              <div className={css["input-state"]}>
+                <Input
+                  submittable={submittable}
+                  enterDown={enterDown}
+                  ref={ref}
+                  state={state}
+                  className={css["input"]}
+                  autoComplete="off"
+                  name="query"
+                  value={value}
+                  onChange={onChange}
+                />
+              </div>
+              <div className={css["controls"]}>
+                <Controls onMicClick={onMicClick} state={state} />
+              </div>
+            </div>
+          </form>
+        </div>
+      );
     }
-
-    const { onChange, value, onMicClick, state, onSubmit } = props;
-
-    return (
-      <div className={css["root"]}>
-        <form className={css["form"]} onSubmit={onSubmit}>
-          <div className={css["input-state-and-controls"]}>
-            <div className={css["input-state"]}>
-              <Input
-                ref={ref}
-                state={props.state}
-                className={css["input"]}
-                autoComplete="off"
-                name="query"
-                value={value}
-                onChange={onChange}
-              />
-            </div>
-            <div className={css["controls"]}>
-              <Controls onMicClick={onMicClick} state={state} />
-            </div>
-          </div>
-        </form>
-      </div>
-    );
-  }
+  )
 );
 
 const Controls = ({
@@ -198,16 +242,23 @@ const Controls = ({
   state
 }: Pick<Props, "onMicClick" | "state">) => {
   const style = useColors(state);
-  const listen = useHideShow(state === "inactive" || state === "listening");
+  // const listen = useHideShow(state === "inactive" || state === "listening");
+  const listen = useHideShow(true);
+
+  const colors = useSpring({
+    color: state === "listening" ? c("#ad3dbf").darken(10).toString() : "#aaa",
+    backgroundColor:
+      state === "listening" ? c("#ad3dbf").lighten(40).toString() : "#eee"
+  });
 
   return (
     <div className={css["controls"]}>
-      <animated.div className={css["mic"]} style={{ color: style.color }}>
+      <animated.div className={css["mic"]}>
         {listen(
           (style, show) =>
             show && (
               <animated.button
-                style={style}
+                style={colors}
                 onClick={onMicClick}
                 type="button"
                 className={css["listen-button"]}
