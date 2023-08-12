@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import css from "./AiSearch.module.css";
 import { ColorRing, LineWave } from "react-loader-spinner";
-import { AiSearchInputState } from "@rems/types";
-import { animated, useSpring, useTransition } from "@react-spring/web";
+import { AiSearchInputState, AiSearchSession } from "@rems/types";
+import { animated, useSpring, useTransition, config } from "@react-spring/web";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -74,7 +74,7 @@ type Props = {
   onChange?: InputHTMLProps["onChange"];
   onMicClick?: () => void;
   enterDown: boolean;
-  value?: InputHTMLProps["value"];
+  sessions: AiSearchSession[];
   state: AiSearchInputState;
   submittable: boolean;
 } & Pick<
@@ -157,8 +157,9 @@ const Input = React.forwardRef<
     state: AiSearchInputState;
     enterDown: boolean;
     submittable: boolean;
+    sessions: AiSearchSession[];
   } & InputHTMLProps
->(({ state, enterDown, submittable, ...props }, ref) => {
+>(({ state, enterDown, submittable, sessions, ...props }, ref) => {
   const style = useColors(state);
 
   const hidden = { opacity: 0, width: 0 };
@@ -170,16 +171,45 @@ const Input = React.forwardRef<
     leave: hidden
   });
 
+  const t = useTransition(Array.from(Array(sessions.length).keys()), {
+    from: { height: 0 },
+    enter: { height: 36 }
+  });
+
   return (
     <animated.div style={style} className={css["container"]}>
       <div className={css["session-container"]}>
-        <input
-          ref={ref}
-          {...props}
-          className={css["input"]}
-          disabled={state !== "inactive" && state !== "inputting"}
-        />
+        {t((style, idx) => {
+          const s = sessions[idx];
+          return (
+            <animated.div style={style}>
+              {(() => {
+                if (idx !== sessions.length - 1) {
+                  return (
+                    <input
+                      key={s.id}
+                      value={sessions[idx].value}
+                      className={css["input"]}
+                      disabled
+                    />
+                  );
+                }
+                return (
+                  <input
+                    ref={ref}
+                    key={s.id}
+                    value={s.value}
+                    className={css["input"]}
+                    disabled={state !== "inactive" && state !== "inputting"}
+                    {...props}
+                  />
+                );
+              })()}
+            </animated.div>
+          );
+        })}
       </div>
+
       <div className={css["enter-and-status"]}>
         <div className={css["status"]}>
           <Status state={state} />
@@ -206,7 +236,15 @@ const Input = React.forwardRef<
 const AiSearch = React.memo(
   React.forwardRef<HTMLInputElement, Props>(
     (
-      { onChange, value, onMicClick, state, enterDown, submittable, ...rest },
+      {
+        onChange,
+        sessions,
+        onMicClick,
+        state,
+        enterDown,
+        submittable,
+        ...rest
+      },
       ref
     ) => {
       return (
@@ -222,7 +260,7 @@ const AiSearch = React.memo(
                   className={css["input"]}
                   autoComplete="off"
                   name="query"
-                  value={value}
+                  sessions={sessions}
                   onChange={onChange}
                 />
               </div>
@@ -272,4 +310,4 @@ const Controls = ({
   );
 };
 
-export default AiSearch;
+export default React.memo(AiSearch);

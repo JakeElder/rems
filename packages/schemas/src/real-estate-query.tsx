@@ -84,16 +84,6 @@ export const AiRealEstateQuerySchema = base().extend({
           should be near
         </>
       )
-    ),
-  "new-search-origin": z
-    .boolean()
-    .describe(
-      txt(
-        <>
-          Whether or not the user has specified a new search location in this
-          change request
-        </>
-      )
     )
 });
 

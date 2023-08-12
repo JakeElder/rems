@@ -151,3 +151,8 @@ export type ResolvingFilterSet = {
   query: PartialServerRealEstateQuery;
   url: string;
 };
+
+export type AiSearchSession = {
+  id: string;
+  value: string;
+};

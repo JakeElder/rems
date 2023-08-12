@@ -17,8 +17,13 @@
   color: #000;
 }
 
+.indicator-container {
+  overflow: hidden;
+  display: flex;
+}
+
 .indicator {
-  margin-left: 2px;
+  flex-shrink: 0;
   font-size: 12px;
   background-color: #555;
   color: #fff;
