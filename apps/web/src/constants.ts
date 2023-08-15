@@ -71,7 +71,7 @@ export const MAX_LOT_SIZES: LivingAreaSize[] = [
 ];
 
 export const MIN_PURCHASE_PRICE = 0;
-export const MAX_PURCHASE_PRICE = 100_000_000;
+export const MAX_PURCHASE_PRICE = 500_000_000;
 
 export const MIN_RENTAL_PRICE = 0;
 export const MAX_RENTAL_PRICE = 1_000_000;

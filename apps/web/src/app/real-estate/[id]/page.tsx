@@ -18,6 +18,8 @@ type Props = {
   searchParams: SearchParams;
 };
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const parts = params.id.split("-");
   const id = parseInt(parts[parts.length - 1], 10);
