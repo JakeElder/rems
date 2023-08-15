@@ -20,16 +20,16 @@ type Props = Required<
   "longitude" | "latitude"
 > & {
   properties: Property[];
-  radius: RealEstateQuery["search-radius"];
-  searchLat: RealEstateQuery["search-origin-lat"];
-  searchLng: RealEstateQuery["search-origin-lng"];
+  radius: RealEstateQuery["radius"];
+  searchLat: RealEstateQuery["origin-lat"];
+  searchLng: RealEstateQuery["origin-lng"];
   showRadius: boolean;
 };
 
 type RadiusProps = {
-  lat: RealEstateQuery["search-origin-lat"];
-  lng: RealEstateQuery["search-origin-lng"];
-  radius: RealEstateQuery["search-radius"];
+  lat: RealEstateQuery["origin-lat"];
+  lng: RealEstateQuery["origin-lng"];
+  radius: RealEstateQuery["radius"];
   show: boolean;
 };
 

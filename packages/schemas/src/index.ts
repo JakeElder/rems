@@ -1,12 +1,6 @@
 import { z } from "zod";
 
-export {
-  PartialRealEstateQuerySchema,
-  RealEstateQuerySchema,
-  AiRealEstateQuerySchema,
-  PartialAiRealEstateQuerySchema,
-  ServerRealEstateQuerySchema
-} from "./real-estate-query";
+export * as RealEstateQuerySchema from "./real-estate-query";
 
 export { ContactFormSchema } from "./contact-form";
 export { FileSchema } from "./file";
@@ -14,6 +8,7 @@ export { ImageSchema } from "./image";
 export { PropertySchema } from "./property";
 export { AppConfigSchema } from "./app-config";
 export { FilterSetSchema } from "./filter-set";
+export { CapabilitySchema } from "./capability";
 
 const filterSchemaFactory = () =>
   z.object({

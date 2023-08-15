@@ -23,7 +23,7 @@ const fetcher = async (id: string): Promise<Place> => {
 
 const PlacesAutocompleteViewContainer = ({}: Props) => {
   const { query, onSearchOriginChange } = useRealEstateQuery();
-  const [placeId, setPlaceId] = useState(query["search-origin-id"]);
+  const [placeId, setPlaceId] = useState(query["origin-id"]);
 
   const { data } = useSWR(
     placeId ? [placeId, "place"] : null,

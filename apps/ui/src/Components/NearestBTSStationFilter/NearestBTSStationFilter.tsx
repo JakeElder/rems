@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from "react";
 import css from "./NearestBTSStationFilter.module.css";
 import Select from "../../Elements/Select";

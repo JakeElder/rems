@@ -1,6 +1,5 @@
 import { RealEstateQuerySchema } from "@rems/schemas";
 import {
-  PartialRealEstateQuery,
   Property,
   Image,
   IndoorFeature,
@@ -40,7 +39,7 @@ type Routes =
   | Route<"lot-features", LotFeature[]>
   | Route<"mrt-stations", MRTStation[]>
   | Route<"bts-stations", BTSStation[]>
-  | Route<"properties", GetPropertiesResult, [query?: PartialRealEstateQuery]>
+  | Route<"properties", GetPropertiesResult, [query?: Partial<RealEstateQuery>]>
   | Route<"properties/[id]/images", Image[], [propertyId?: Property["id"]]>
   | Route<
       "properties/[id]/indoor-features",
@@ -96,14 +95,14 @@ const propertyResource = async (
 };
 
 export const removeDefaults = (
-  query: PartialRealEstateQuery
-): PartialRealEstateQuery => {
-  const defaults = RealEstateQuerySchema.parse({});
+  query: Partial<RealEstateQuery>
+): Partial<RealEstateQuery> => {
+  const defaults = RealEstateQuerySchema.URL.parse({});
   return omitBy(query, (v, k) => equals(defaults[k], v));
 };
 
 export const generateQueryString = (
-  query: PartialRealEstateQuery,
+  query: Partial<RealEstateQuery>,
   page?: number,
   sort?: RealEstateQuery["sort"]
 ) => {
@@ -168,7 +167,7 @@ const wrapper = async <T extends Routes["route"]>(
   }
 
   if (route === "properties") {
-    const params = (args[0] || {}) as PartialRealEstateQuery;
+    const params = (args[0] || {}) as Partial<RealEstateQuery>;
     const res = await fetch(url(`properties${generateQueryString(params)}`));
     return res.json();
   }

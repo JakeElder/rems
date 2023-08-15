@@ -3,8 +3,10 @@
 import "regenerator-runtime";
 import React, { useCallback, useEffect, useReducer, useRef } from "react";
 import { AiSearch } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
-import { PartialRealEstateQuery, RealEstateQuery } from "@rems/types";
+import useRealEstateQuery, {
+  removeDefaults
+} from "@/hooks/use-real-estate-query";
+import { RealEstateQuery } from "@rems/types";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -16,13 +18,42 @@ type ViewProps = React.ComponentProps<typeof AiSearch>;
 type OnKeyDown = NonNullable<ViewProps["onKeyDown"]>;
 type OnKeyUp = NonNullable<ViewProps["onKeyUp"]>;
 type OnChange = NonNullable<ViewProps["onChange"]>;
+type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
-const fetcher = async (query: PartialRealEstateQuery, nl: string) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`,
-    { method: "POST", body: JSON.stringify({ query, nl }) }
-  );
-  return res.json() as Promise<RealEstateQuery>;
+const fetcher = async (query: Partial<RealEstateQuery>, nl: string) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
+    method: "POST",
+    body: JSON.stringify({ query, nl })
+  });
+
+  return new Promise<void>(async (resolve, reject) => {
+    if (!res.body) {
+      reject();
+      return;
+    }
+
+    const decoder = new TextDecoder();
+    const reader = res.body.getReader();
+
+    const pump: Pump = async ({ done, value }) => {
+      if (done) {
+        resolve();
+        return;
+      }
+
+      const chunks = decoder
+        .decode(value)
+        .split("\n")
+        .filter(Boolean)
+        .map((c) => JSON.parse(c));
+
+      chunks.forEach(console.log);
+
+      pump(await reader.read());
+    };
+
+    pump(await reader.read());
+  });
 };
 
 const AiSearchViewContainer = () => {
@@ -63,14 +94,14 @@ const AiSearchViewContainer = () => {
     }
 
     dispatch({ type: "START_ASSISTANT_REQUEST" });
-    const res = await fetcher(query, s.value);
+    const res = await fetcher(removeDefaults(query), s.value);
     dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
 
     setTimeout(() => {
       dispatch({ type: "SESSION_COMPLETE" });
     }, 1200);
 
-    console.log(res);
+    // console.log(res);
   };
 
   const debouncedSetInactive = useDebouncedCallback(

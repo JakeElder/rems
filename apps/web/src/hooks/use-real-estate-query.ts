@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  PartialRealEstateQuery,
   QuickFilterQueryKey,
   RealEstateQuery,
   SearchParams,
@@ -12,10 +11,7 @@ import qs from "query-string";
 import update from "immutability-helper";
 import { omitBy, equals, flatten } from "remeda";
 import { setCookie } from "typescript-cookie";
-import {
-  RealEstateQuerySchema,
-  ServerRealEstateQuerySchema
-} from "@rems/schemas";
+import { RealEstateQuerySchema } from "@rems/schemas";
 import { useDebouncedCallback } from "use-debounce";
 import useRealEstateIndexPageState from "./use-real-estate-index-page-state";
 
@@ -23,7 +19,7 @@ type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
   serverQuery: ServerRealEstateQuery;
   queryString: string;
-  commit: (query: PartialRealEstateQuery) => void;
+  commit: (query: Partial<RealEstateQuery>) => void;
   has: (param: keyof RealEstateQuery) => boolean;
   activeFilters: number;
   isQuickFilterOn: (key: QuickFilterQueryKey, value: string) => boolean;
@@ -61,14 +57,14 @@ type UseRealEstateQueryReturn = {
 };
 
 export const removeDefaults = (
-  query: PartialRealEstateQuery
-): PartialRealEstateQuery => {
-  const defaults = RealEstateQuerySchema.parse({});
+  query: Partial<RealEstateQuery>
+): Partial<RealEstateQuery> => {
+  const defaults = RealEstateQuerySchema.URL.parse({});
   return omitBy(query, (v, k) => equals(defaults[k], v));
 };
 
 export const generateQueryString = (
-  query: PartialRealEstateQuery,
+  query: Partial<RealEstateQuery>,
   page?: number,
   sort?: RealEstateQuery["sort"]
 ) => {
@@ -100,14 +96,14 @@ const searchParamsToPartialQuery = (params: SearchParams): RealEstateQuery => {
     return { ...acc, [k]: val };
   }, {});
 
-  return RealEstateQuerySchema.parse(p);
+  return RealEstateQuerySchema.URL.parse(p);
 };
 
 const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const router = useRouter();
   const pageState = useRealEstateIndexPageState();
 
-  const commit = (query: PartialRealEstateQuery) => {
+  const commit = (query: Partial<RealEstateQuery>) => {
     const qs = generateQueryString(query);
     router.push(`${router.pathname}${qs}`, "", { shallow: true });
 
@@ -122,7 +118,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const query = searchParamsToPartialQuery(router.query);
   const queryString = generateQueryString(query);
 
-  const defaults = RealEstateQuerySchema.parse({});
+  const defaults = RealEstateQuerySchema.URL.parse({});
   const queryWithoutDefaults = omitBy(query, (v, k) => equals(defaults[k], v));
 
   const has: UseRealEstateQueryReturn["has"] = (param) => {
@@ -131,7 +127,6 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
   const activeFilters = [
     ...query["property-type"],
-    has("area"),
     has("min-price") || has("max-price"),
     has("min-bedrooms") || has("max-bedrooms"),
     has("min-bathrooms"),
@@ -140,9 +135,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     ...query["outdoor-features"],
     ...query["lot-features"],
     has("min-living-area") || has("max-living-area"),
-    has("min-lot-size") || has("max-lot-size"),
-    has("nearest-mrt-station"),
-    has("nearest-bts-station")
+    has("min-lot-size") || has("max-lot-size")
   ].filter((i) => i).length;
 
   const onMapZoomChange = useDebouncedCallback<
@@ -183,7 +176,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     };
   })();
 
-  const serverQuery = ServerRealEstateQuerySchema.parse({
+  const serverQuery = RealEstateQuerySchema.Server.parse({
     ...query,
     ...bounds
   });
@@ -227,9 +220,9 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
     onSearchOriginChange: (id, lng, lat) => {
       const nextQuery = update(query, {
-        "search-origin-id": { $set: id },
-        "search-origin-lat": { $set: lat },
-        "search-origin-lng": { $set: lng }
+        "origin-id": { $set: id },
+        "origin-lat": { $set: lat },
+        "origin-lng": { $set: lng }
       });
       commit(nextQuery);
     },
@@ -287,7 +280,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     },
 
     reset: () => {
-      commit(RealEstateQuerySchema.parse({}));
+      commit(RealEstateQuerySchema.URL.parse({}));
     },
 
     commit,

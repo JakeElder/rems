@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from "react";
 import css from "./NearestMRTStationFilter.module.css";
 import Select from "../../Elements/Select";

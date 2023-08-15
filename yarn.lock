@@ -4504,7 +4504,11 @@ __metadata:
   dependencies:
     "@rems/tsconfig": "*"
     "@rems/types": "*"
+    "@types/react": 18.2.18
+    "@types/react-dom": 18.2.7
+    node-html-markdown: ^1.3.0
     react: 18.2.0
+    react-dom: 18.2.0
     react-google-places-autocomplete: ^4.0.1
     typescript: ^5.1.6
     zod: ^3.21.4
@@ -7915,6 +7919,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pluralize@npm:^0.0.30":
+  version: 0.0.30
+  resolution: "@types/pluralize@npm:0.0.30"
+  checksum: 7a9a4a24aac1f74bd63e592a824ebec114486e0635a94496e92aa37fa388fac585be108d3ccfc7b2c490963679ec4900fbf394d22fa6cbf419f22cc499ab5a29
+  languageName: node
+  linkType: hard
+
 "@types/pretty-hrtime@npm:^1.0.0":
   version: 1.0.1
   resolution: "@types/pretty-hrtime@npm:1.0.1"
@@ -8994,17 +9005,20 @@ __metadata:
     "@rems/tsconfig": "*"
     "@rems/types": "*"
     "@types/node": 20.4.5
+    "@types/pluralize": ^0.0.30
     "@types/react": 18.2.18
     "@types/react-dom": 18.2.7
     env-cmd: ^10.1.0
-    fast-json-patch: ^3.1.1
     next: 13.4.12
     nextjs-cors: latest
+    param-case: ^3.0.4
     pg-connection-string: ^2.6.2
+    pluralize: ^8.0.0
     query-string: ^8.1.0
     react: 18.2.0
     react-dom: 18.2.0
     snake-case: ^3.0.4
+    title-case: ^3.0.3
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -13161,13 +13175,6 @@ __metadata:
   version: 1.0.3
   resolution: "fast-json-parse@npm:1.0.3"
   checksum: c19117c56ec18a9aa133c8ebf450c99d1037117e47a3cb9aff91b60580ba48d0fd8484b696c26749a1b9cb4914084177b3fa9ebef72063a74dee7d9ead987603
-  languageName: node
-  linkType: hard
-
-"fast-json-patch@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "fast-json-patch@npm:3.1.1"
-  checksum: c4525b61b2471df60d4b025b4118b036d99778a93431aa44d1084218182841d82ce93056f0f3bbd731a24e6a8e69820128adf1873eb2199a26c62ef58d137833
   languageName: node
   linkType: hard
 
@@ -23173,6 +23180,15 @@ __metadata:
     no-case: ^2.2.0
     upper-case: ^1.0.3
   checksum: e88ddfc4608a7fb18ed440139d9c42a5f8a50f916e07062be2aef5e2038720746ed51c4fdf9e7190d24a8cc10e6dec9773027fc44450b3a4a5e5c49b4a931fb1
+  languageName: node
+  linkType: hard
+
+"title-case@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "title-case@npm:3.0.3"
+  dependencies:
+    tslib: ^2.0.3
+  checksum: e8b7ea006b53cf3208d278455d9f1e22c409459d7f9878da324fa3b18cc0aef8560924c19c744e870394a5d9cddfdbe029ebae9875909ee7f4fc562e7cbfc53e
   languageName: node
   linkType: hard
 

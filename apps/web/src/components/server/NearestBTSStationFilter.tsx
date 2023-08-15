@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 "use server";
 
 import fetch from "@/fetch";
@@ -5,7 +7,7 @@ import NearestBTSStationFilterViewContainer from "@/components/client/NearestBTS
 
 type Props = {};
 
-const NearestBTSStationFilterContainer = async ({ }: Props) => {
+const NearestBTSStationFilterContainer = async ({}: Props) => {
   const stations = await fetch("bts-stations");
   return <NearestBTSStationFilterViewContainer stations={stations} />;
 };

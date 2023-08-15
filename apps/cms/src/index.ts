@@ -52,7 +52,6 @@ export default {
         { name: "Mansion", slug: "mansion" },
         { name: "Hilltop", slug: "hilltop" },
         { name: "High Altitude", slug: "high-altitude" },
-        { name: "City View", slug: "city-view" },
         { name: "Renovated", slug: "renovated" },
         { name: "Beachfront", slug: "beachfront" },
         { name: "Oceanfront", slug: "oceanfront" },
@@ -64,8 +63,7 @@ export default {
         { name: "Riverfront", slug: "riverfront" },
         { name: "Ski-In / Ski-Out", slug: "ski-in-ski-out" },
         { name: "Meeting Room", slug: "meeting-room" },
-        { name: "Co-Working Space", slug: "coworking-space" },
-        { name: "Lot Feature", slug: "lot-feature" }
+        { name: "Co-Working Space", slug: "coworking-space" }
       ]);
 
       seed("outdoor-feature.outdoor-feature", [

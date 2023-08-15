@@ -1,18 +1,14 @@
 import {
-  PartialRealEstateQuerySchema,
-  RealEstateQuerySchema,
   ContactFormSchema,
-  AiRealEstateQuerySchema,
-  PartialAiRealEstateQuerySchema,
   PropertySchema,
   FileSchema,
   ImageSchema,
-  ServerRealEstateQuerySchema,
   AppConfigSchema,
   FilterSetSchema,
-  FilterSchema
+  FilterSchema,
+  CapabilitySchema,
+  RealEstateQuerySchema
 } from "@rems/schemas";
-import { PartialServerRealEstateQuerySchema } from "@rems/schemas/src/real-estate-query";
 import { z } from "zod";
 
 export type Pagination = {
@@ -27,6 +23,7 @@ export type ResourceId = string;
 export type File = z.infer<typeof FileSchema>;
 export type Image = z.infer<typeof ImageSchema>;
 export type FilterSet = z.infer<typeof FilterSetSchema>;
+export type Capability = z.infer<typeof CapabilitySchema>;
 
 export type Filter = z.infer<typeof FilterSchema>;
 
@@ -94,9 +91,12 @@ export type Property = z.infer<typeof PropertySchema>;
 
 export type ContactFormData = z.infer<typeof ContactFormSchema>;
 
-export type RealEstateQuery = z.infer<typeof RealEstateQuerySchema>;
-export type PartialRealEstateQuery = z.infer<
-  typeof PartialRealEstateQuerySchema
+export type RealEstateQuery = z.infer<typeof RealEstateQuerySchema.URL>;
+export type ServerRealEstateQuery = z.infer<
+  typeof RealEstateQuerySchema.Server
+>;
+export type RealEstateQueryScalars = z.infer<
+  typeof RealEstateQuerySchema.Scalars
 >;
 
 export type LngLat = {
@@ -109,16 +109,6 @@ export type MapBounds = {
   ne: LngLat;
 };
 
-export type ServerRealEstateQuery = z.infer<typeof ServerRealEstateQuerySchema>;
-export type PartialServerRealEstateQuery = z.infer<
-  typeof PartialServerRealEstateQuerySchema
->;
-
-export type AiRealEstateQuery = z.infer<typeof AiRealEstateQuerySchema>;
-export type PartialAiRealEstateQuery = z.infer<
-  typeof PartialAiRealEstateQuerySchema
->;
-
 export type QuickFilterQueryKey = keyof Pick<
   RealEstateQuery,
   "indoor-features" | "outdoor-features" | "lot-features" | "view-types"
@@ -127,7 +117,7 @@ export type QuickFilterQueryKey = keyof Pick<
 export type SortType = RealEstateQuery["sort"];
 
 export type GetPropertiesResult = {
-  query: ServerRealEstateQuery;
+  query: RealEstateQuery;
   data: Property[];
   pagination: Pagination;
 };
@@ -148,7 +138,7 @@ export type ResolvingFilterSet = {
   set: FilterSet;
   data: GetPropertiesResult | undefined;
   isLoading: boolean;
-  query: PartialServerRealEstateQuery;
+  query: Partial<RealEstateQuery>;
   url: string;
 };
 
@@ -156,3 +146,61 @@ export type AiSearchSession = {
   id: string;
   value: string;
 };
+
+export type OpenAIModel =
+  | "gpt-3.5-turbo-16k-0613"
+  | "text-davinci-001"
+  | "text-search-curie-query-001"
+  | "davinci"
+  | "text-babbage-001"
+  | "curie-instruct-beta"
+  | "text-davinci-003"
+  | "davinci-similarity"
+  | "code-davinci-edit-001"
+  | "text-similarity-curie-001"
+  | "text-embedding-ada-002"
+  | "ada-code-search-text"
+  | "text-search-ada-query-001"
+  | "gpt-4-0314"
+  | "babbage-search-query"
+  | "ada-similarity"
+  | "gpt-3.5-turbo"
+  | "gpt-4-0613"
+  | "text-search-ada-doc-001"
+  | "text-search-babbage-query-001"
+  | "code-search-ada-code-001"
+  | "curie-search-document"
+  | "text-search-davinci-query-001"
+  | "text-search-curie-doc-001"
+  | "babbage-search-document"
+  | "babbage-code-search-text"
+  | "davinci-instruct-beta"
+  | "davinci-search-query"
+  | "text-similarity-babbage-001"
+  | "text-davinci-002"
+  | "code-search-babbage-text-001"
+  | "babbage"
+  | "text-search-davinci-doc-001"
+  | "code-search-ada-text-001"
+  | "ada-search-query"
+  | "text-similarity-ada-001"
+  | "whisper-1"
+  | "gpt-4"
+  | "ada-code-search-code"
+  | "ada"
+  | "text-davinci-edit-001"
+  | "davinci-search-document"
+  | "curie-search-query"
+  | "babbage-similarity"
+  | "ada-search-document"
+  | "text-ada-001"
+  | "text-similarity-davinci-001"
+  | "gpt-3.5-turbo-16k"
+  | "curie"
+  | "curie-similarity"
+  | "gpt-3.5-turbo-0613"
+  | "babbage-code-search-code"
+  | "code-search-babbage-code-001"
+  | "text-search-babbage-doc-001"
+  | "text-curie-001"
+  | "gpt-3.5-turbo-0301";

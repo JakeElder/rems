@@ -26,12 +26,9 @@ const ListingMapViewContainer = ({}: Props) => {
       return;
     }
     setTimeout(() => {
-      mapRef.current!.panTo([
-        query["search-origin-lng"],
-        query["search-origin-lat"]
-      ]);
+      mapRef.current!.panTo([query["origin-lng"], query["origin-lat"]]);
     }, 200);
-  }, [query["search-origin-lat"], query["search-origin-lng"]]);
+  }, [query["origin-lat"], query["origin-lng"]]);
 
   useEffect(() => {
     if (!isReady || !previousQuery || !mapRef.current) {
@@ -57,10 +54,10 @@ const ListingMapViewContainer = ({}: Props) => {
     <ListingMap
       ref={mapRef as any}
       properties={data?.data || []}
-      latitude={query["map-lat"] || query["search-origin-lat"]}
-      longitude={query["map-lng"] || query["search-origin-lng"]}
-      searchLat={query["search-origin-lat"]}
-      searchLng={query["search-origin-lng"]}
+      latitude={query["map-lat"] || query["origin-lat"]}
+      longitude={query["map-lng"] || query["origin-lng"]}
+      searchLat={query["origin-lat"]}
+      searchLng={query["origin-lng"]}
       zoom={query["map-zoom"]}
       radius={radius.get()}
       onZoom={(e) => {
@@ -71,7 +68,7 @@ const ListingMapViewContainer = ({}: Props) => {
         onMapMove(e.viewState.latitude, e.viewState.longitude);
         setBounds();
       }}
-      showRadius={query["search-radius-enabled"] === "true"}
+      showRadius={query["radius-enabled"] === "true"}
     />
   );
 };

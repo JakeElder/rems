@@ -5,7 +5,7 @@ import NearestMRTStationFilterViewContainer from "@/components/client/NearestMRT
 
 type Props = {};
 
-const NearestMRTStationFilterContainer = async ({ }: Props) => {
+const NearestMRTStationFilterContainer = async ({}: Props) => {
   const stations = await fetch("mrt-stations");
   return <NearestMRTStationFilterViewContainer stations={stations} />;
 };

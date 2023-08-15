@@ -1,14 +1,10 @@
-import {
-  FilterSet,
-  PartialServerRealEstateQuery,
-  ResolvingFilterSet
-} from "@rems/types";
-import { ServerRealEstateQuerySchema } from "@rems/schemas";
+import { FilterSet, RealEstateQuery, ResolvingFilterSet } from "@rems/types";
 import useProperties from "@/hooks/use-properties";
 import { generateQueryString } from "./use-real-estate-query";
+import { RealEstateQuerySchema } from "@rems/schemas";
 
-const resolve: (slug: string) => PartialServerRealEstateQuery = (slug) => {
-  const sets: Record<string, PartialServerRealEstateQuery> = {
+const resolve: (slug: string) => Partial<RealEstateQuery> = (slug) => {
+  const sets: Record<string, Partial<RealEstateQuery>> = {
     "cozy-pads-for-young-professionals": {
       "indoor-features": ["cozy"],
       availability: "rent"
@@ -33,7 +29,7 @@ const useFilterSet = (set: FilterSet): ResolvingFilterSet => {
   const query = resolve(set.slug);
 
   const { data, isLoading } = useProperties(
-    ServerRealEstateQuerySchema.parse(query)
+    RealEstateQuerySchema.Server.parse(query)
   );
 
   const qs = generateQueryString(query);

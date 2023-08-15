@@ -7,7 +7,7 @@ import { MapBounds, RealEstateQuery } from "@rems/types";
 enableLegendStateReact();
 
 const PersonProvider = createContext<{
-  radius: Observable<RealEstateQuery["search-radius"]>;
+  radius: Observable<RealEstateQuery["radius"]>;
   mapBounds: Observable<MapBounds | null>;
 } | null>(null);
 
@@ -19,12 +19,12 @@ export const RealEstateIndexPageStateProvider = ({
   children: React.ReactNode;
 }) => {
   const { query } = useRealEstateQuery();
-  const radius = useObservable(query["search-radius"]);
+  const radius = useObservable(query["radius"]);
   const mapBounds = useObservable<MapBounds | null>(null);
 
   useEffect(() => {
-    radius.set(query["search-radius"]);
-  }, [query["search-radius"]]);
+    radius.set(query["radius"]);
+  }, [query["radius"]]);
 
   return (
     <PersonProvider.Provider
