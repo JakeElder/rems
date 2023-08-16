@@ -23,7 +23,7 @@ const TypeFilters = ({ id, types, onChange, isChecked }: Props) => {
               }
               checked={isChecked(t.slug)}
               key={t.slug}
-              name="property-type[]"
+              name="property-types[]"
               value={t.slug}
               id={`${id}_${t.slug}`}
               label={t.name}

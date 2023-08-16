@@ -9011,14 +9011,12 @@ __metadata:
     env-cmd: ^10.1.0
     next: 13.4.12
     nextjs-cors: latest
-    param-case: ^3.0.4
     pg-connection-string: ^2.6.2
     pluralize: ^8.0.0
     query-string: ^8.1.0
     react: 18.2.0
     react-dom: 18.2.0
     snake-case: ^3.0.4
-    title-case: ^3.0.3
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -23180,15 +23178,6 @@ __metadata:
     no-case: ^2.2.0
     upper-case: ^1.0.3
   checksum: e88ddfc4608a7fb18ed440139d9c42a5f8a50f916e07062be2aef5e2038720746ed51c4fdf9e7190d24a8cc10e6dec9773027fc44450b3a4a5e5c49b4a931fb1
-  languageName: node
-  linkType: hard
-
-"title-case@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "title-case@npm:3.0.3"
-  dependencies:
-    tslib: ^2.0.3
-  checksum: e8b7ea006b53cf3208d278455d9f1e22c409459d7f9878da324fa3b18cc0aef8560924c19c744e870394a5d9cddfdbe029ebae9875909ee7f4fc562e7cbfc53e
   languageName: node
   linkType: hard
 

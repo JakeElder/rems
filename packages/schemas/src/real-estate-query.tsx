@@ -7,7 +7,7 @@ export const Arrays = z.object({
   "indoor-features": z.string().array().default([]).catch([]),
   "lot-features": z.string().array().default([]).catch([]),
   "outdoor-features": z.string().array().default([]).catch([]),
-  "property-type": z.string().array().default([]).catch([]),
+  "property-types": z.string().array().default([]).catch([]),
   "view-types": z.string().array().default([]).catch([])
 });
 

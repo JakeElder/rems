@@ -2,6 +2,8 @@ import { NextRequest } from "next/server";
 import * as remi from "@/remi";
 import { RealEstateQuery } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
+import { z } from "zod";
+import { ReviseArrayReturn } from "@/remi";
 
 const { revise } = remi;
 
@@ -11,6 +13,8 @@ type Chunk =
   | { type: "LOCATION"; location: any }
   | { type: "RESPOND_GENERAL"; message: string }
   | { type: "SUMMARY"; data: any };
+
+type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
 
 type Stream = (
   nl: string,
@@ -25,39 +29,56 @@ const stream: Stream = (nl, query) => async (c) => {
     c.enqueue(chunk);
   };
 
-  const code = await remi.capability.identify(nl);
+  const req = {
+    capability: remi.capability.identify(nl),
+    indoorFeatures: revise.indoorFeatures(nl, query["indoor-features"]),
+    outdoorFeatures: revise.outdoorFeatures(nl, query["outdoor-features"]),
+    lotFeatures: revise.lotFeatures(nl, query["lot-features"]),
+    propertyTypes: revise.propertyTypes(nl, query["property-types"]),
+    viewTypes: revise.viewTypes(nl, query["view-types"]),
+    respondGeneral: remi.capability.respondGeneral(nl)
+  };
 
-  if (code && code.ok) {
-    send({ type: "STRATEGY", value: code.data });
+  const capability = await req.capability;
+
+  if (capability?.ok) {
+    send({ type: "STRATEGY", value: capability.data });
   }
+
+  const arr = async (
+    req: Promise<ReviseArrayReturn>,
+    key: ArrayKey
+  ): Promise<Partial<Record<ArrayKey, Partial<RealEstateQuery> | null>>> => {
+    const res = await req;
+    if (res?.ok) {
+      send({ type: "PATCH", data: { [key]: res.data } });
+      return { [key]: res.data };
+    }
+    return { [key]: null };
+  };
 
   const res = await Promise.all([
     /*
-     * Indoor Features
+     * Arrays
      */
-    (async () => {
-      const res = await revise.indoorFeatures(nl, query["indoor-features"]);
-      if (res && res.ok) {
-        send({
-          type: "PATCH",
-          data: { "indoor-features": res.data }
-        });
-      }
-      return { indoorFeatures: res && res.ok ? res.data : null };
-    })(),
+    arr(req.indoorFeatures, "indoor-features"),
+    arr(req.outdoorFeatures, "outdoor-features"),
+    arr(req.lotFeatures, "lot-features"),
+    arr(req.propertyTypes, "property-types"),
+    arr(req.viewTypes, "view-types"),
 
     /*
      * General Response
      */
     (async () => {
-      if (!code?.ok || code?.data !== "RGQ") {
-        return { generalResponse: null };
+      if (capability?.ok && capability?.data === "RGQ") {
+        const res = await req.respondGeneral;
+        if (res?.ok) {
+          send({ type: "RESPOND_GENERAL", message: res.data });
+          return { generalResponse: res.data };
+        }
       }
-      const res = await remi.capability.respondGeneral(nl);
-      if (res && res.ok) {
-        send({ type: "RESPOND_GENERAL", message: res.data });
-      }
-      return { generalResponse: res && res.ok ? res.data : null };
+      return { generalResponse: null };
     })()
   ]);
 
@@ -67,7 +88,7 @@ const stream: Stream = (nl, query) => async (c) => {
   };
 
   console.dir(
-    { query: nl, capability: code, strategy: summary.data },
+    { query: nl, capability: capability, strategy: summary.data },
     { depth: null, colors: true }
   );
 
@@ -91,55 +112,10 @@ export async function POST(req: NextRequest) {
 //     return { location };
 //   }),
 
-//   capability === "RGQ"
-//     ? respondGeneral(nl).then((generalResponse) => {
-//         send({ type: "RESPOND_GENERAL", message: generalResponse });
-//         return { generalResponse };
-//       })
-//     : Promise.resolve({ generalResponse: null }),
-
 //   remi.revise.budget(query, nl).then((res) => {
 //     if (res && res.ok) {
 //       send({ type: "PATCH", data: res.value });
 //     }
 //     return { budget: data };
 //   }),
-
-//   tasks.indoorFeatures.then((indoorFeatures) => {
-//     send({
-//       type: "PATCH_ARRAY",
-//       key: "indoor-features",
-//       value: indoorFeatures
-//     });
-//     return { indoorFeatures };
-//   }),
-
-//   tasks.outdoorFeatures.then((value) => {
-//     c.enqueue(
-//       send(
-//         chunk({
-//           type: "PATCH_ARRAY",
-//           key: "outdoor-features",
-//           value
-//         })
-//       )
-//     );
-//     return { outdoorFeatures: value };
-//   }),
-
-//   tasks.lotFeatures.then((value) => {
-//     const chunk: Chunk = {
-//       type: "PATCH_ARRAY",
-//       key: "lot-features",
-//       value
-//     };
-//     c.enqueue(send(chunk));
-//     return { lotFeatures: value };
-//   }),
-
-//   tasks.viewTypes.then((value) => {
-//     const chunk: Chunk = { type: "PATCH_ARRAY", key: "view-types", value };
-//     c.enqueue(send(chunk));
-//     return { viewTypes: value };
-//   })
 // ]);

@@ -1,7 +1,6 @@
 import * as Models from "@/models";
 import { NextResponse } from "next/server";
 import { Filter, QuickFilter } from "@rems/types";
-import { getModels } from "@/remi";
 
 const features = async () => {
   const lot = await Models.LotFeature.findAll({ raw: true });
@@ -26,9 +25,10 @@ const features = async () => {
 };
 
 export async function GET() {
-  const _ = await features();
+  const f = await features();
 
-  const models = await getModels();
-  const ids = models.data.data.map((m: any) => m.id);
-  return NextResponse.json(ids);
+  // const models = await getModels();
+  // const ids = models.data.data.map((m: any) => m.id);
+
+  return NextResponse.json(f);
 }

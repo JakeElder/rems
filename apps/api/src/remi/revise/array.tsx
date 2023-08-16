@@ -1,9 +1,8 @@
 import { Filter } from "@rems/types";
-import { txt, openai, RemiResponse, ChatCompletionRequest } from "@/remi";
+import { txt, openai, ChatCompletionRequest, ReviseArrayReturn } from "@/remi";
 import { ChatCompletionRequestMessageFunctionCall } from "openai";
 import { FilterSchema } from "@rems/schemas";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import pluralize from "pluralize";
 
 type ExecuteReturn =
   | { error: false; fc: ChatCompletionRequestMessageFunctionCall }
@@ -31,7 +30,7 @@ const arr = async ({
   filters: Filter[];
   current: string[];
   nl: string;
-}): Promise<RemiResponse<Filter["slug"][]>> => {
+}): Promise<ReviseArrayReturn> => {
   const request: ChatCompletionRequest = {
     model: "gpt-4",
     messages: [
@@ -45,8 +44,8 @@ const arr = async ({
             </p>
             <ul>
               <li>
-                1. Take an array of "{pluralize(type)}". This is a list of items
-                that the user may filter by.
+                1. Take an array of "{type}". This is a list of items that the
+                user may filter by.
                 <br />
                 This is the schema for a filter object: ```json
                 {JSON.stringify(zodToJsonSchema(FilterSchema))}
@@ -154,10 +153,13 @@ const arr = async ({
   const rm: Filter["slug"][] = (json.r || []).map(mapIds);
   const add: Filter["slug"][] = (json.a || []).map(mapIds);
 
-  return {
-    ok: true,
-    data: [...current.filter((f) => !rm.includes(f)), ...add]
-  };
+  const withoutRemoved = current.filter((f) => !rm.includes(f));
+  const next = [
+    ...withoutRemoved,
+    ...add.filter((f) => !withoutRemoved.includes(f))
+  ];
+
+  return { ok: true, data: next };
 };
 
 export default arr;

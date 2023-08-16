@@ -17,7 +17,7 @@ const resolve: (slug: string) => Partial<RealEstateQuery> = (slug) => {
       "lot-features": ["new-built"]
     },
     "pool-villas-for-sale-in-bangkok": {
-      "property-type": ["villa"],
+      "property-types": ["villa"],
       "outdoor-features": ["pool"]
     }
   };

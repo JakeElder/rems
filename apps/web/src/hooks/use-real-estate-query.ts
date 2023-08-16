@@ -14,6 +14,7 @@ import { setCookie } from "typescript-cookie";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import { useDebouncedCallback } from "use-debounce";
 import useRealEstateIndexPageState from "./use-real-estate-index-page-state";
+import { z } from "zod";
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
@@ -79,17 +80,19 @@ export const generateQueryString = (
   return string ? `?${string}` : "";
 };
 
+type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
+
 const searchParamsToPartialQuery = (params: SearchParams): RealEstateQuery => {
-  const arrayKeys = [
+  const arrayKeys: ArrayKey[] = [
     "indoor-features",
     "lot-features",
     "outdoor-features",
-    "property-type",
+    "property-types",
     "view-types"
   ];
 
   const p = Object.keys(params).reduce((acc, key) => {
-    const k = key.replace(/\[\]$/, "");
+    const k = key.replace(/\[\]$/, "") as ArrayKey;
     const val = arrayKeys.includes(k)
       ? flatten([...[params[key]]])
       : params[key];
@@ -126,7 +129,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   };
 
   const activeFilters = [
-    ...query["property-type"],
+    ...query["property-types"],
     has("min-price") || has("max-price"),
     has("min-bedrooms") || has("max-bedrooms"),
     has("min-bathrooms"),
@@ -289,7 +292,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
     onSearchRadiusChange: (value) => {
       const nextQuery = update(query, {
-        "search-radius": { $set: value },
+        radius: { $set: value },
         page: { $set: 1 }
       });
       commit(nextQuery);
@@ -297,7 +300,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
     onSearchRadiusEnabledChange: (enabled) => {
       const nextQuery = update(query, {
-        "search-radius-enabled": { $set: enabled ? "true" : "false" },
+        "radius-enabled": { $set: enabled ? "true" : "false" },
         page: { $set: 1 }
       });
       commit(nextQuery);

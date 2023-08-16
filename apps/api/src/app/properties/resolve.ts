@@ -17,12 +17,12 @@ import slugify from "slugify";
 const PROPERTIES_PER_PAGE = 14;
 
 const propertyType = (q: Query) => {
-  return q["property-type"].length
+  return q["property-types"].length
     ? [
         {
           model: PropertyType,
           as: "propertyTypes",
-          where: { slug: { [Op.in]: q["property-type"] } }
+          where: { slug: { [Op.in]: q["property-types"] } }
         }
       ]
     : [];

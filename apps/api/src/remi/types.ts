@@ -1,4 +1,4 @@
-import { OpenAIModel } from "@rems/types";
+import { Filter, OpenAIModel } from "@rems/types";
 import { CreateChatCompletionRequest as OriginalRequest } from "openai";
 
 export type RemiResponse<T> =
@@ -9,3 +9,10 @@ export type RemiResponse<T> =
 export type ChatCompletionRequest = Omit<OriginalRequest, "model"> & {
   model: OpenAIModel;
 };
+
+export type ReviseArrayReturn = RemiResponse<Filter["slug"][]>;
+
+export type ReviseArrayFn = (
+  nl: string,
+  current: Filter["slug"][]
+) => Promise<ReviseArrayReturn>;
