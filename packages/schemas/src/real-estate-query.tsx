@@ -4,7 +4,9 @@ import {
   MIN_LIVING_AREA_SIZES,
   MAX_LIVING_AREA_SIZES,
   MIN_LOT_SIZES,
-  MAX_LOT_SIZES
+  MAX_LOT_SIZES,
+  MAX_RENTAL_PRICE,
+  MAX_PURCHASE_PRICE
 } from "./constants";
 
 export const Arrays = z.object({
@@ -16,9 +18,48 @@ export const Arrays = z.object({
 });
 
 export const BudgetAndAvailability = z.object({
-  "min-price": z.coerce.number().default(0).catch(0),
-  "max-price": z.coerce.number().nullable().default(null).catch(null),
-  availability: z.enum(["sale", "rent", "any"]).default("sale").catch("sale")
+  "min-price": z.coerce
+    .number()
+    .default(0)
+    .catch(0)
+    .describe(
+      txt(
+        <>
+          Minimum Price. When browsing rental properties, this is the minimum
+          amount of money the user would like to spend per month. When browsing
+          sale properties, this is the minimum amount in the users budget to
+          purchase a property outright.
+        </>
+      )
+    ),
+  "max-price": z.coerce
+    .number()
+    .nullable()
+    .default(null)
+    .catch(null)
+    .describe(
+      txt(
+        <>
+          Minimum Price. When browsing rental properties, this is the maximum
+          amount of money the user would like to spend per month. The *maximum
+          possible value* is {MAX_RENTAL_PRICE}. When browsing sale properties,
+          this is the maximum amount in the users budget to purchase a property
+          outright. The *maximum possible value* is {MAX_PURCHASE_PRICE}.
+        </>
+      )
+    ),
+  availability: z
+    .enum(["sale", "rent", "any"])
+    .default("sale")
+    .catch("sale")
+    .describe(
+      txt(
+        <>
+          Availability. Whether the user is looking to buy or rent. This should
+          be set to "rent" if the user specifies a monthly budget.
+        </>
+      )
+    )
 });
 
 export const PageAndSort = z.object({

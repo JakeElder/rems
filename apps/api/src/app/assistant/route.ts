@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import * as remi from "@/remi";
-import { RealEstateQuery } from "@rems/types";
+import { Filter, RealEstateQuery } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import { z } from "zod";
 import { RefineArrayReturn } from "@/remi";
@@ -14,13 +14,18 @@ type PageAndSort = z.infer<typeof RealEstateQuerySchema.PageAndSort>;
 type SpaceRequirements = z.infer<
   typeof RealEstateQuerySchema.SpaceRequirements
 >;
+type BudgetAndAvailability = z.infer<
+  typeof RealEstateQuerySchema.BudgetAndAvailability
+>;
 type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
 
 type Refinement =
   | { type: "LOCATION"; data: any }
   | { type: "MAP_STATE"; data: Partial<MapState> }
   | { type: "PAGE_AND_SORT"; data: Partial<PageAndSort> }
-  | { type: "SPACE_REQUIREMENTS"; data: Partial<SpaceRequirements> };
+  | { type: "SPACE_REQUIREMENTS"; data: Partial<SpaceRequirements> }
+  | { type: "BUDGET_AND_AVAILABILITY"; data: Partial<BudgetAndAvailability> }
+  | { type: "ARRAY"; key: ArrayKey; data: Filter["slug"][] };
 
 type Chunk =
   | { type: "STRATEGY"; value: string }
@@ -37,7 +42,13 @@ type Stream = (
 const encoder = new TextEncoder();
 
 const stream: Stream = (nl, query) => async (c) => {
-  const refine = (r: Refinement) => send({ type: "PATCH", data: r.data });
+  const refine = (r: Refinement) => {
+    if (r.type === "ARRAY" && r.data.length > 0) {
+      send({ type: "PATCH", data: { [r.key]: r.data } });
+    } else if (Object.keys(r.data).length > 0) {
+      send({ type: "PATCH", data: r.data });
+    }
+  };
 
   const send = (data: Chunk) => {
     const chunk = encoder.encode(`${JSON.stringify(data)}\n`);
@@ -59,6 +70,10 @@ const stream: Stream = (nl, query) => async (c) => {
       nl,
       RealEstateQuerySchema.SpaceRequirements.parse(query)
     ),
+    budgetAndAvailability: remi.refine.budgetAndAvailability(
+      nl,
+      RealEstateQuerySchema.BudgetAndAvailability.parse(query)
+    ),
     indoorFeatures: remi.refine.indoorFeatures(nl, query["indoor-features"]),
     outdoorFeatures: remi.refine.outdoorFeatures(nl, query["outdoor-features"]),
     lotFeatures: remi.refine.lotFeatures(nl, query["lot-features"]),
@@ -79,7 +94,7 @@ const stream: Stream = (nl, query) => async (c) => {
   ): Promise<Partial<RealEstateQuery>> => {
     const res = await req;
     if (res?.ok) {
-      send({ type: "PATCH", data: { [key]: res.data } });
+      refine({ type: "ARRAY", key, data: res.data });
       return { [key]: res.data };
     }
     return { [key]: null };
@@ -111,7 +126,7 @@ const stream: Stream = (nl, query) => async (c) => {
     })(),
 
     /*
-     * Page and Sort
+     * Page & Sort
      */
     (async () => {
       const res = await req.pageAndSort;
@@ -132,6 +147,18 @@ const stream: Stream = (nl, query) => async (c) => {
         return { spaceRequirements: res.data };
       }
       return { spaceRequirements: null };
+    })(),
+
+    /*
+     * Budget & Availability
+     */
+    (async () => {
+      const res = await req.budgetAndAvailability;
+      if (res?.ok) {
+        refine({ type: "BUDGET_AND_AVAILABILITY", data: defined(res.data) });
+        return { budgetAndAvailability: res.data };
+      }
+      return { budgetAndAvailability: null };
     })(),
 
     /*

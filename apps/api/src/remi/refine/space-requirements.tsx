@@ -55,35 +55,7 @@ const spaceRequirements: Fn = async (nl, query) => {
     ]
   };
 
-  const res = await execute(request);
-
-  if (res.error === true) {
-    console.dir(res.message, { colors: true });
-    return {
-      ok: false,
-      error: res.message
-    };
-  }
-
-  try {
-    const json = JSON.parse(res.fc.arguments!);
-    return {
-      ok: true,
-      data: ReturnsSchema.parse(json)
-    };
-  } catch (e) {
-    console.dir(
-      {
-        error: "PARSE_ERROR",
-        string: res.fc.arguments!
-      },
-      { colors: true }
-    );
-    return {
-      ok: false,
-      error: "PARSE_ERROR"
-    };
-  }
+  return execute(request, ReturnsSchema);
 };
 
 export default spaceRequirements;

@@ -47,21 +47,7 @@ const location: Fn = async (nl) => {
     ]
   };
 
-  const res = await execute(request);
-
-  if (res.error === true) {
-    return {
-      ok: false,
-      error: res.error
-    };
-  }
-
-  const json = JSON.parse(res.fc.arguments!);
-
-  return {
-    ok: true,
-    data: ReturnsSchema.parse(json)
-  };
+  return execute(request, ReturnsSchema);
 };
 
 export default location;

@@ -33,6 +33,7 @@ const arr = async ({
 }): Promise<RefineArrayReturn> => {
   const request: ChatCompletionRequest = {
     model: "gpt-4",
+    temperature: 0.2,
     messages: [
       {
         role: "system",
@@ -78,7 +79,8 @@ const arr = async ({
               </li>
               <li>
                 Do *not* speculate. Only include id's that exist within our data
-                set.
+                set. That is, do *not* add items to this array unless the user
+                has mentioned them explicitly.
               </li>
               <li>
                 Only include ids that you are confident the user has requested

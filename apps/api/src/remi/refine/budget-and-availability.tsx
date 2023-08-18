@@ -4,13 +4,13 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import RefineCaveats from "../components/RefineCaveats";
 
-const { ArgsSchema, ReturnsSchema } = AiRefinement.PageAndSort;
+const { ArgsSchema, ReturnsSchema } = AiRefinement.BudgetAndAvailability;
 
 type Args = z.infer<typeof ArgsSchema>;
 type Returns = z.infer<typeof ReturnsSchema>;
 type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
 
-const pageAndSort: Fn = async (nl, query) => {
+const budgetAndAvailability: Fn = async (nl, query) => {
   const request: ChatCompletionRequest = {
     model: "gpt-4",
     messages: [
@@ -21,7 +21,8 @@ const pageAndSort: Fn = async (nl, query) => {
             <p>
               You are Remi, an assistant responsible for helping the user of a
               real estate website. Your task is to process their input and
-              update the current page and sort order of the property listings.
+              update the current query to reflect thier budget, and whether or
+              not they are looking for a sale/rental property.
             </p>
             <p>
               Here is the relevant state from the current query: `
@@ -29,10 +30,18 @@ const pageAndSort: Fn = async (nl, query) => {
             </p>
             <RefineCaveats partial>
               <li>
-                We only need to change the page and sort when the user
-                explicitly requests to change the page or sort. It is not
-                necessary to set these values if the user has not mentioned them
-                literally.
+                Set sensible min and max values when a user specifies a
+                ballpark. IE "around 30k" should set both min and max values.
+                10% is a good ballpark.
+              </li>
+              <li>
+                Try to extrapolate the availablity based on the users input. IE,
+                if the user specifies a single figure that seemingly represents
+                a purchase price, set the availability to `sale`.
+              </li>
+              <li>
+                Use sensible judgment to identify the values. IE, sometimes the
+                user will say "around 30" per month. This implies around 30,000.
               </li>
             </RefineCaveats>
           </>
@@ -48,7 +57,7 @@ const pageAndSort: Fn = async (nl, query) => {
       {
         name: "f",
         description: txt(
-          <>Updates the page and sort based on the users input.</>
+          <>Updates the budget/availability based on users input.</>
         ),
         parameters: zodToJsonSchema(ReturnsSchema)
       }
@@ -58,4 +67,4 @@ const pageAndSort: Fn = async (nl, query) => {
   return execute(request, ReturnsSchema);
 };
 
-export default pageAndSort;
+export default budgetAndAvailability;
