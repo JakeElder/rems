@@ -34,8 +34,8 @@ const ListingMapViewContainer = ({}: Props) => {
     if (!isReady || !previousQuery || !mapRef.current) {
       return;
     }
-    mapRef.current.zoomTo(query["map-zoom"]);
-  }, [query["map-zoom"]]);
+    mapRef.current.zoomTo(query["zoom"]);
+  }, [query["zoom"]]);
 
   const setBounds = useDebouncedCallback(() => {
     const bounds = mapRef.current?.getBounds();
@@ -54,11 +54,11 @@ const ListingMapViewContainer = ({}: Props) => {
     <ListingMap
       ref={mapRef as any}
       properties={data?.data || []}
-      latitude={query["map-lat"] || query["origin-lat"]}
-      longitude={query["map-lng"] || query["origin-lng"]}
+      latitude={query["lat"] || query["origin-lat"]}
+      longitude={query["lng"] || query["origin-lng"]}
       searchLat={query["origin-lat"]}
       searchLng={query["origin-lng"]}
-      zoom={query["map-zoom"]}
+      zoom={query["zoom"]}
       radius={radius.get()}
       onZoom={(e) => {
         onMapZoomChange(e.viewState.zoom);

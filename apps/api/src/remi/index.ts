@@ -5,6 +5,9 @@ export const openai = new OpenAIApi(
 );
 
 export { default as txt } from "./utils/txt";
+export { default as execute } from "./utils/execute";
 export * from "./types";
-export * as revise from "./revise";
+export * as refine from "./refine";
 export * as capability from "./capability";
+
+export { default as capabilities } from "./capabilities";

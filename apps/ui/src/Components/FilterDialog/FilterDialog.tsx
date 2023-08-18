@@ -6,12 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import CloseIcon from "../../Elements/CloseIcon";
 import css from "./FilterDialog.module.css";
-import {
-  animated,
-  useResize,
-  useSpring,
-  useTransition
-} from "@react-spring/web";
+import { animated, useSpring, useTransition } from "@react-spring/web";
 import Split from "../../Elements/Split";
 import Button from "../../Elements/Button";
 import { Oval } from "react-loader-spinner";
@@ -26,16 +21,19 @@ type Props = React.ComponentProps<typeof Dialog.Root> & {
 
 const Indicator = ({ amount }: { amount: number }) => {
   const $ref = useRef<HTMLDivElement>(null);
-  const [{ width }, api] = useSpring(() => {
-    width: $ref.current?.clientWidth || 0;
-  });
+
+  const [style, api] = useSpring(() => ({
+    width: $ref.current?.clientWidth || 0
+  }));
 
   useEffect(() => {
-    api.start({ width: amount > 0 ? $ref.current?.offsetWidth : 0 });
+    api.start({
+      width: amount > 0 ? $ref.current?.offsetWidth : 0
+    });
   }, [amount, $ref.current?.offsetWidth]);
 
   return (
-    <animated.div style={{ width }} className={css["indicator-container"]}>
+    <animated.div style={style} className={css["indicator-container"]}>
       <div ref={$ref} className={css["indicator"]}>
         {amount}
       </div>

@@ -3,9 +3,24 @@ import * as remi from "@/remi";
 import { RealEstateQuery } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import { z } from "zod";
-import { ReviseArrayReturn } from "@/remi";
+import { RefineArrayReturn } from "@/remi";
+import { pickBy } from "remeda";
 
-const { revise } = remi;
+const defined = (obj: Record<string, any>) =>
+  pickBy(obj, (v) => typeof v !== "undefined");
+
+type MapState = z.infer<typeof RealEstateQuerySchema.MapState>;
+type PageAndSort = z.infer<typeof RealEstateQuerySchema.PageAndSort>;
+type SpaceRequirements = z.infer<
+  typeof RealEstateQuerySchema.SpaceRequirements
+>;
+type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
+
+type Refinement =
+  | { type: "LOCATION"; data: any }
+  | { type: "MAP_STATE"; data: Partial<MapState> }
+  | { type: "PAGE_AND_SORT"; data: Partial<PageAndSort> }
+  | { type: "SPACE_REQUIREMENTS"; data: Partial<SpaceRequirements> };
 
 type Chunk =
   | { type: "STRATEGY"; value: string }
@@ -13,8 +28,6 @@ type Chunk =
   | { type: "LOCATION"; location: any }
   | { type: "RESPOND_GENERAL"; message: string }
   | { type: "SUMMARY"; data: any };
-
-type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
 
 type Stream = (
   nl: string,
@@ -24,6 +37,8 @@ type Stream = (
 const encoder = new TextEncoder();
 
 const stream: Stream = (nl, query) => async (c) => {
+  const refine = (r: Refinement) => send({ type: "PATCH", data: r.data });
+
   const send = (data: Chunk) => {
     const chunk = encoder.encode(`${JSON.stringify(data)}\n`);
     c.enqueue(chunk);
@@ -31,11 +46,24 @@ const stream: Stream = (nl, query) => async (c) => {
 
   const req = {
     capability: remi.capability.identify(nl),
-    indoorFeatures: revise.indoorFeatures(nl, query["indoor-features"]),
-    outdoorFeatures: revise.outdoorFeatures(nl, query["outdoor-features"]),
-    lotFeatures: revise.lotFeatures(nl, query["lot-features"]),
-    propertyTypes: revise.propertyTypes(nl, query["property-types"]),
-    viewTypes: revise.viewTypes(nl, query["view-types"]),
+    location: remi.refine.location(nl),
+    mapState: remi.refine.mapState(
+      nl,
+      RealEstateQuerySchema.MapState.parse(query)
+    ),
+    pageAndSort: remi.refine.pageAndSort(
+      nl,
+      RealEstateQuerySchema.PageAndSort.parse(query)
+    ),
+    spaceRequirements: remi.refine.spaceRequirements(
+      nl,
+      RealEstateQuerySchema.SpaceRequirements.parse(query)
+    ),
+    indoorFeatures: remi.refine.indoorFeatures(nl, query["indoor-features"]),
+    outdoorFeatures: remi.refine.outdoorFeatures(nl, query["outdoor-features"]),
+    lotFeatures: remi.refine.lotFeatures(nl, query["lot-features"]),
+    propertyTypes: remi.refine.propertyTypes(nl, query["property-types"]),
+    viewTypes: remi.refine.viewTypes(nl, query["view-types"]),
     respondGeneral: remi.capability.respondGeneral(nl)
   };
 
@@ -46,9 +74,9 @@ const stream: Stream = (nl, query) => async (c) => {
   }
 
   const arr = async (
-    req: Promise<ReviseArrayReturn>,
+    req: Promise<RefineArrayReturn>,
     key: ArrayKey
-  ): Promise<Partial<Record<ArrayKey, Partial<RealEstateQuery> | null>>> => {
+  ): Promise<Partial<RealEstateQuery>> => {
     const res = await req;
     if (res?.ok) {
       send({ type: "PATCH", data: { [key]: res.data } });
@@ -58,6 +86,54 @@ const stream: Stream = (nl, query) => async (c) => {
   };
 
   const res = await Promise.all([
+    /*
+     * Location
+     */
+    (async () => {
+      const res = await req.location;
+      if (res?.ok) {
+        send({ type: "LOCATION", location: res.data });
+        return { location: res.data };
+      }
+      return { location: null };
+    })(),
+
+    /*
+     * Map State
+     */
+    (async () => {
+      const res = await req.mapState;
+      if (res?.ok) {
+        refine({ type: "MAP_STATE", data: defined(res.data) });
+        return { mapState: res.data };
+      }
+      return { mapState: null };
+    })(),
+
+    /*
+     * Page and Sort
+     */
+    (async () => {
+      const res = await req.pageAndSort;
+      if (res?.ok) {
+        refine({ type: "PAGE_AND_SORT", data: defined(res.data) });
+        return { pageAndSort: res.data };
+      }
+      return { pageAndSort: null };
+    })(),
+
+    /*
+     * Space Requirements
+     */
+    (async () => {
+      const res = await req.spaceRequirements;
+      if (res?.ok) {
+        refine({ type: "SPACE_REQUIREMENTS", data: defined(res.data) });
+        return { spaceRequirements: res.data };
+      }
+      return { spaceRequirements: null };
+    })(),
+
     /*
      * Arrays
      */
@@ -105,17 +181,3 @@ export async function POST(req: NextRequest) {
     headers: { "Content-Type": "application/json; charset=utf-8" }
   });
 }
-
-// const res = await Promise.all([
-//   tasks.location.then((location) => {
-//     send({ type: "LOCATION", location });
-//     return { location };
-//   }),
-
-//   remi.revise.budget(query, nl).then((res) => {
-//     if (res && res.ok) {
-//       send({ type: "PATCH", data: res.value });
-//     }
-//     return { budget: data };
-//   }),
-// ]);

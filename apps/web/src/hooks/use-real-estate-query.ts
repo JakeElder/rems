@@ -144,15 +144,15 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const onMapZoomChange = useDebouncedCallback<
     UseRealEstateQueryReturn["onMapZoomChange"]
   >((zoom) => {
-    const nextQuery = update(query, { "map-zoom": { $set: zoom } });
+    const nextQuery = update(query, { zoom: { $set: zoom } });
     commit(nextQuery);
   }, 500);
 
   const onMapMove = useDebouncedCallback<UseRealEstateQueryReturn["onMapMove"]>(
     (lat, lng) => {
       const nextQuery = update(query, {
-        "map-lat": { $set: lat },
-        "map-lng": { $set: lng }
+        lat: { $set: lat },
+        lng: { $set: lng }
       });
       commit(nextQuery);
     },

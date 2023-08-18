@@ -1,12 +1,15 @@
-import { ChatCompletionRequest, RemiResponse, openai, txt } from "@/remi";
-import { z } from "zod";
+import {
+  CapabilityCode,
+  ChatCompletionRequest,
+  RemiResponse,
+  openai,
+  txt
+} from "@/remi";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { CapabilitySchema } from "@rems/schemas";
-import { Capability } from "@rems/types";
+import { capabilities } from "@/remi";
 
-const identify = async (
-  nl: string
-): Promise<RemiResponse<Capability>> => {
+const identify = async (nl: string): Promise<RemiResponse<CapabilityCode>> => {
   const request: ChatCompletionRequest = {
     model: "gpt-3.5-turbo-0613",
     messages: [
@@ -14,11 +17,21 @@ const identify = async (
         role: "system",
         content: txt(
           <>
-            You are Remi, an assistant responsible for taking natural language
-            requests and commands from a user, while they navigate a property
-            website. You are responsible for simply taking their input and
-            identifying the nature of their command so that it may be further
-            processed. The following message is the users input.
+            <p>
+              You are Remi, an assistant responsible for taking natural language
+              requests and commands from a user while they navigate a property
+              website.
+            </p>
+            <p>
+              Your task, for now is to simply take the users input/command and
+              identify which capability of yours is best suited to help the
+              user.
+            </p>
+            <p>These are your capabilities;</p>
+            <code>{JSON.stringify(capabilities)}</code>
+            <p>This is the schema of a capability;</p>
+            <code>{JSON.stringify(zodToJsonSchema(CapabilitySchema))}</code>
+            <p>The next message is the users input.</p>
           </>
         )
       },
@@ -27,17 +40,25 @@ const identify = async (
         content: nl
       }
     ],
-    function_call: { name: "p" },
+    function_call: { name: "f" },
     functions: [
       {
-        name: "p",
+        name: "f",
         description: txt(
           <>
-            further processes a users request based on the nature of their
-            input.
+            Sets the capability code for this users input, so that it may be
+            further processed.
           </>
         ),
-        parameters: zodToJsonSchema(z.object({ t: CapabilitySchema }))
+        parameters: {
+          type: "object",
+          properties: {
+            c: {
+              type: "string",
+              enum: capabilities.map((c) => c.code)
+            }
+          }
+        }
       }
     ]
   };
@@ -46,7 +67,7 @@ const identify = async (
   const message = res.data.choices[0].message!;
   const json = JSON.parse(message.function_call!.arguments!);
 
-  return { ok: true, data: json.t };
+  return { ok: true, data: json.c };
 };
 
 export default identify;

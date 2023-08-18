@@ -1,5 +1,5 @@
 import { Filter } from "@rems/types";
-import { txt, openai, ChatCompletionRequest, ReviseArrayReturn } from "@/remi";
+import { txt, openai, ChatCompletionRequest, RefineArrayReturn } from "@/remi";
 import { ChatCompletionRequestMessageFunctionCall } from "openai";
 import { FilterSchema } from "@rems/schemas";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -30,7 +30,7 @@ const arr = async ({
   filters: Filter[];
   current: string[];
   nl: string;
-}): Promise<ReviseArrayReturn> => {
+}): Promise<RefineArrayReturn> => {
   const request: ChatCompletionRequest = {
     model: "gpt-4",
     messages: [
@@ -147,7 +147,6 @@ const arr = async ({
   }
 
   const json = JSON.parse(res.fc.arguments!);
-
   const mapIds = (id: number) => filters.find((f) => f.id === id)?.slug;
 
   const rm: Filter["slug"][] = (json.r || []).map(mapIds);

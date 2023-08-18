@@ -21,6 +21,8 @@ type OnChange = NonNullable<ViewProps["onChange"]>;
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
 const fetcher = async (query: Partial<RealEstateQuery>, nl: string) => {
+  const start = Date.now();
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
     method: "POST",
     body: JSON.stringify({ query, nl })
@@ -47,7 +49,7 @@ const fetcher = async (query: Partial<RealEstateQuery>, nl: string) => {
         .filter(Boolean)
         .map((c) => JSON.parse(c));
 
-      chunks.forEach(console.log);
+      chunks.forEach((c) => console.log(Date.now() - start, c));
 
       pump(await reader.read());
     };

@@ -1,3 +1,4 @@
+import { ChatCompletionRequestMessageFunctionCall } from "openai";
 import { Filter, OpenAIModel } from "@rems/types";
 import { CreateChatCompletionRequest as OriginalRequest } from "openai";
 
@@ -10,9 +11,15 @@ export type ChatCompletionRequest = Omit<OriginalRequest, "model"> & {
   model: OpenAIModel;
 };
 
-export type ReviseArrayReturn = RemiResponse<Filter["slug"][]>;
+export type RefineArrayReturn = RemiResponse<Filter["slug"][]>;
 
-export type ReviseArrayFn = (
+export type RefineArrayFn = (
   nl: string,
   current: Filter["slug"][]
-) => Promise<ReviseArrayReturn>;
+) => Promise<RefineArrayReturn>;
+
+export type CapabilityCode = "NQ" | "RQ" | "CQ" | "SP" | "RV" | "RGQ";
+
+export type ExecuteReturn =
+  | { error: false; fc: ChatCompletionRequestMessageFunctionCall }
+  | { error: true; message: string };

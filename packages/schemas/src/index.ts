@@ -9,6 +9,7 @@ export { PropertySchema } from "./property";
 export { AppConfigSchema } from "./app-config";
 export { FilterSetSchema } from "./filter-set";
 export { CapabilitySchema } from "./capability";
+export * as AiRefinement from "./ai-refinement";
 
 const filterSchemaFactory = () =>
   z.object({
