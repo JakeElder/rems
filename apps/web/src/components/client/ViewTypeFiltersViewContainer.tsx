@@ -7,7 +7,7 @@ import useRealEstateQuery from "@/hooks/use-real-estate-query";
 type Props = Pick<React.ComponentProps<typeof ViewTypeFilters>, "types">;
 
 const ViewTypeFiltersViewContainer = ({ types }: Props) => {
-  const { onCheckedChange, query } = useRealEstateQuery();
+  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
 
   return (
     <ViewTypeFilters
@@ -15,7 +15,7 @@ const ViewTypeFiltersViewContainer = ({ types }: Props) => {
       onChange={(value, checked) =>
         onCheckedChange("view-types", value, checked)
       }
-      isChecked={(value) => query["view-types"].includes(value)}
+      isChecked={(value) => stagedQuery["view-types"].includes(value)}
     />
   );
 };

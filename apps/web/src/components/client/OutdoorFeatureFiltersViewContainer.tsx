@@ -10,7 +10,7 @@ type Props = Pick<
 >;
 
 const OutdoorFeatureFiltersViewContainer = ({ features }: Props) => {
-  const { onCheckedChange, query } = useRealEstateQuery();
+  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
 
   return (
     <OutdoorFeatureFilters
@@ -18,7 +18,7 @@ const OutdoorFeatureFiltersViewContainer = ({ features }: Props) => {
       onChange={(value, checked) =>
         onCheckedChange("outdoor-features", value, checked)
       }
-      isChecked={(value) => query["outdoor-features"].includes(value)}
+      isChecked={(value) => stagedQuery["outdoor-features"].includes(value)}
     />
   );
 };

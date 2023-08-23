@@ -1,7 +1,7 @@
-import { txt } from "../utils";
+import { txt } from "./utils";
 import { z } from "zod";
 
-const InputSchema = z
+const NlInputSchema = z
   .string()
   .describe(
     txt(
@@ -13,4 +13,4 @@ const InputSchema = z
     )
   );
 
-export default InputSchema;
+export default NlInputSchema;

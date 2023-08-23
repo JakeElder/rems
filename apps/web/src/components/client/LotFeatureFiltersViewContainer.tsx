@@ -7,7 +7,7 @@ import useRealEstateQuery from "../../hooks/use-real-estate-query";
 type Props = Pick<React.ComponentProps<typeof LotFeatureFilters>, "features">;
 
 const LotFeatureFiltersViewContainer = ({ features }: Props) => {
-  const { onCheckedChange, query } = useRealEstateQuery();
+  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
 
   return (
     <LotFeatureFilters
@@ -15,7 +15,7 @@ const LotFeatureFiltersViewContainer = ({ features }: Props) => {
       onChange={(value, checked) =>
         onCheckedChange("lot-features", value, checked)
       }
-      isChecked={(value) => query["lot-features"].includes(value)}
+      isChecked={(value) => stagedQuery["lot-features"].includes(value)}
     />
   );
 };

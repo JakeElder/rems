@@ -7,7 +7,8 @@ import {
   FilterSetSchema,
   FilterSchema,
   CapabilitySchema,
-  RealEstateQuerySchema
+  RealEstateQuerySchema,
+  IntentSchema
 } from "@rems/schemas";
 import { z } from "zod";
 
@@ -24,6 +25,7 @@ export type File = z.infer<typeof FileSchema>;
 export type Image = z.infer<typeof ImageSchema>;
 export type FilterSet = z.infer<typeof FilterSetSchema>;
 export type Capability = z.infer<typeof CapabilitySchema>;
+export type Intent = z.infer<typeof IntentSchema>;
 
 export type Filter = z.infer<typeof FilterSchema>;
 
@@ -204,3 +206,10 @@ export type OpenAIModel =
   | "text-search-babbage-doc-001"
   | "text-curie-001"
   | "gpt-3.5-turbo-0301";
+
+export type Chunk =
+  | { type: "STRATEGY"; value: string }
+  | { type: "PATCH"; data: Partial<RealEstateQuery> }
+  | { type: "LOCATION"; location: any }
+  | { type: "RESPOND_GENERAL"; message: string }
+  | { type: "SUMMARY"; data: any };

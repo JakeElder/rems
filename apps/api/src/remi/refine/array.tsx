@@ -3,6 +3,8 @@ import { txt, openai, ChatCompletionRequest, RefineArrayReturn } from "@/remi";
 import { ChatCompletionRequestMessageFunctionCall } from "openai";
 import { FilterSchema } from "@rems/schemas";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import RefineCaveats from "../components/RefineCaveats";
+import arrayEqual from "array-equal";
 
 type ExecuteReturn =
   | { error: false; fc: ChatCompletionRequestMessageFunctionCall }
@@ -63,19 +65,12 @@ const arr = async ({
               </li>
             </ul>
             <p>Here are some important points;</p>
-            <ul>
+            <RefineCaveats partial>
               <li>
                 Only specify the numeric ids of filters that need to be removed.
                 If the users command indicated that they would like to remove a
                 certain filter, but it is not in the *currently active* array
                 provided, then it does not need to be included for removal.
-              </li>
-              <li>
-                Disregard any part of the users command that is irrelevant to
-                this task. The users command may involve other criteria not
-                relating to indoor features. You may focus only on indoor
-                features, and only work with the indoor features specified
-                explicity in this message.
               </li>
               <li>
                 Do *not* speculate. Only include id's that exist within our data
@@ -90,7 +85,7 @@ const arr = async ({
                 Do not extrapolate. Only include filters that the user has been
                 verbose in specifying, and that exist within our data set.
               </li>
-            </ul>
+            </RefineCaveats>
           </>
         )
       },
@@ -160,7 +155,9 @@ const arr = async ({
     ...add.filter((f) => !withoutRemoved.includes(f))
   ];
 
-  return { ok: true, data: next };
+  const data = arrayEqual(next.sort(), current.sort()) ? undefined : next;
+
+  return { ok: true, data };
 };
 
 export default arr;

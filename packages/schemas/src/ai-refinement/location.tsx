@@ -1,8 +1,8 @@
 import { txt } from "../utils";
 import { z } from "zod";
-import InputSchema from "./input";
+import NlInputSchema from "../nl-input";
 
-export const ArgsSchema = z.tuple([InputSchema]);
+export const ArgsSchema = z.tuple([NlInputSchema]);
 
 export const ReturnsSchema = z
   .object({

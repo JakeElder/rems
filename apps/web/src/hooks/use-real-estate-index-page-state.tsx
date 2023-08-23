@@ -6,12 +6,12 @@ import { MapBounds, RealEstateQuery } from "@rems/types";
 
 enableLegendStateReact();
 
-const PersonProvider = createContext<{
+const IndexPageStateProvider = createContext<{
   radius: Observable<RealEstateQuery["radius"]>;
   mapBounds: Observable<MapBounds | null>;
 } | null>(null);
 
-const useRealEstateIndexPageState = () => useContext(PersonProvider)!;
+const useRealEstateIndexPageState = () => useContext(IndexPageStateProvider)!;
 
 export const RealEstateIndexPageStateProvider = ({
   children
@@ -27,7 +27,7 @@ export const RealEstateIndexPageStateProvider = ({
   }, [query["radius"]]);
 
   return (
-    <PersonProvider.Provider
+    <IndexPageStateProvider.Provider
       value={{ radius, mapBounds }}
       children={children}
     />

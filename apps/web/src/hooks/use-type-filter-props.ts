@@ -5,11 +5,11 @@ const useTypeFilterProps = (): Omit<
   React.ComponentProps<typeof TypeFilters>,
   "id" | "types"
 > => {
-  const { onCheckedChange, query } = useRealEstateQuery();
+  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
   return {
     onChange: (value, checked) =>
       onCheckedChange("property-types", value, checked),
-    isChecked: (value) => query["property-types"].includes(value)
+    isChecked: (value) => stagedQuery["property-types"].includes(value)
   };
 };
 

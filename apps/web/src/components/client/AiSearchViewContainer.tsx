@@ -6,13 +6,14 @@ import { AiSearch } from "@rems/ui";
 import useRealEstateQuery, {
   removeDefaults
 } from "@/hooks/use-real-estate-query";
-import { RealEstateQuery } from "@rems/types";
+import { Chunk, RealEstateQuery } from "@rems/types";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
 import { useDebouncedCallback } from "use-debounce";
 import aiSearchViewContainerReducer from "reducers/ai-search-view-container-reducer";
 import uuid from "short-uuid";
+import { Observable } from "rxjs";
 
 type ViewProps = React.ComponentProps<typeof AiSearch>;
 type OnKeyDown = NonNullable<ViewProps["onKeyDown"]>;
@@ -20,43 +21,45 @@ type OnKeyUp = NonNullable<ViewProps["onKeyUp"]>;
 type OnChange = NonNullable<ViewProps["onChange"]>;
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
-const fetcher = async (query: Partial<RealEstateQuery>, nl: string) => {
-  const start = Date.now();
+const fetcher = (query: Partial<RealEstateQuery>, nl: string) =>
+  new Observable<Chunk>((s) => {
+    const start = Date.now();
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
-    method: "POST",
-    body: JSON.stringify({ query, nl })
-  });
-
-  return new Promise<void>(async (resolve, reject) => {
-    if (!res.body) {
-      reject();
-      return;
-    }
-
-    const decoder = new TextDecoder();
-    const reader = res.body.getReader();
-
-    const pump: Pump = async ({ done, value }) => {
-      if (done) {
-        resolve();
+    fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
+      method: "POST",
+      body: JSON.stringify({ query, nl })
+    }).then((res) => {
+      if (!res.ok || !res.body) {
+        s.error();
         return;
       }
 
-      const chunks = decoder
-        .decode(value)
-        .split("\n")
-        .filter(Boolean)
-        .map((c) => JSON.parse(c));
+      const decoder = new TextDecoder();
+      const reader = res.body.getReader();
 
-      chunks.forEach((c) => console.log(Date.now() - start, c));
+      const pump: Pump = async ({ done, value }) => {
+        if (done) {
+          s.complete();
+          return;
+        }
 
-      pump(await reader.read());
-    };
+        const chunks: Chunk[] = decoder
+          .decode(value)
+          .split("\n")
+          .filter(Boolean)
+          .map((c) => JSON.parse(c));
 
-    pump(await reader.read());
+        chunks.forEach((c) => {
+          // console.log(Date.now() - start);
+          s.next(c);
+        });
+
+        reader.read().then(pump);
+      };
+
+      reader.read().then(pump);
+    });
   });
-};
 
 const AiSearchViewContainer = () => {
   const [c, dispatch] = useReducer(aiSearchViewContainerReducer, {
@@ -68,7 +71,7 @@ const AiSearchViewContainer = () => {
   const s = c.sessions[c.sessions.length - 1];
 
   const { transcript, listening } = useSpeechRecognition();
-  const { commit, query } = useRealEstateQuery();
+  const { patch, query, reset } = useRealEstateQuery();
   const $input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -96,14 +99,24 @@ const AiSearchViewContainer = () => {
     }
 
     dispatch({ type: "START_ASSISTANT_REQUEST" });
-    const res = await fetcher(removeDefaults(query), s.value);
-    dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
 
-    setTimeout(() => {
-      dispatch({ type: "SESSION_COMPLETE" });
-    }, 1200);
-
-    // console.log(res);
+    fetcher(removeDefaults(query), s.value).subscribe({
+      next: (c) => {
+        if (c.type === "STRATEGY" && (c.value === "NQ" || c.value === "CQ")) {
+          reset();
+        }
+        if (c.type === "PATCH") {
+          console.log(c.data);
+          patch(c.data);
+        }
+      },
+      complete() {
+        dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
+        setTimeout(() => {
+          dispatch({ type: "SESSION_COMPLETE" });
+        }, 1200);
+      }
+    });
   };
 
   const debouncedSetInactive = useDebouncedCallback(

@@ -1,8 +1,8 @@
 import { z } from "zod";
-import InputSchema from "./input";
+import NlInputSchema from "../nl-input";
 import { SpaceRequirements } from "../real-estate-query";
 
-export const ArgsSchema = z.tuple([InputSchema, SpaceRequirements]);
+export const ArgsSchema = z.tuple([NlInputSchema, SpaceRequirements]);
 
 export const ReturnsSchema = z
   .object({

@@ -1,10 +1,10 @@
 import { txt } from "@/remi";
 import { Capability } from "@rems/types";
 
-
 const capabilities: Capability[] = [
   {
-    code: "NQ",
+    id: 1,
+    code: "NEW_QUERY",
     name: "New Query",
     description: txt(
       <>
@@ -20,7 +20,8 @@ const capabilities: Capability[] = [
   },
 
   {
-    code: "RQ",
+    id: 2,
+    code: "REFINE_QUERY",
     name: "Refine Query",
     description: txt(<>Remi is able to refine queries.</>),
     exampleTriggers: [
@@ -32,7 +33,8 @@ const capabilities: Capability[] = [
   },
 
   {
-    code: "CQ",
+    id: 3,
+    code: "CLEAR_QUERY",
     name: "Clear Query",
     description: txt(
       <>Remi can clear the search, resetting the listings to their defaults.</>
@@ -44,7 +46,8 @@ const capabilities: Capability[] = [
   },
 
   {
-    code: "SP",
+    id: 4,
+    code: "SHOW_PROPERTY",
     name: "Show Property",
     description: txt(
       <>
@@ -61,7 +64,8 @@ const capabilities: Capability[] = [
   },
 
   {
-    code: "RV",
+    id: 5,
+    code: "REQUEST_VIEWING",
     name: "Request Viewing",
     description: txt(
       <>
@@ -73,7 +77,8 @@ const capabilities: Capability[] = [
   },
 
   {
-    code: "RGQ",
+    id: 6,
+    code: "RESPOND_GENERAL_QUERY",
     name: "Respond to General Query",
     description: txt(
       <>

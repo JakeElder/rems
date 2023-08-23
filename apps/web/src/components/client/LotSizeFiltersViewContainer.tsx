@@ -8,12 +8,11 @@ import { MAX_LOT_SIZES, MIN_LOT_SIZES } from "../../constants";
 type Props = {};
 
 const LotSizeFiltersViewContainer = ({}: Props) => {
-  const { onValueChange, query } = useRealEstateQuery();
-
+  const { onValueChange, stagedQuery } = useRealEstateQuery();
   return (
     <LotSizeFilters
-      minLotSize={query["min-lot-size"]}
-      maxLotSize={query["max-lot-size"]}
+      minLotSize={stagedQuery["min-lot-size"]}
+      maxLotSize={stagedQuery["max-lot-size"]}
       minLotSizes={MIN_LOT_SIZES}
       maxLotSizes={MAX_LOT_SIZES}
       onMinLotSizeChange={(value) => onValueChange("min-lot-size", value)}

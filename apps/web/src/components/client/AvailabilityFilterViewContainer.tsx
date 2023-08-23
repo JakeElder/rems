@@ -7,10 +7,10 @@ import { AvailabilityFilter } from "@rems/ui";
 type Props = {};
 
 const AvailabilityFilterViewContainer = ({}: Props) => {
-  const { query, onAvailabilityChange } = useRealEstateQuery();
+  const { stagedQuery, onAvailabilityChange } = useRealEstateQuery();
   return (
     <AvailabilityFilter
-      value={query["availability"]}
+      value={stagedQuery["availability"]}
       onChange={onAvailabilityChange}
     />
   );

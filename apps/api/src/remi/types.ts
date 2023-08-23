@@ -10,7 +10,7 @@ export type ChatCompletionRequest = Omit<OriginalRequest, "model"> & {
   model: OpenAIModel;
 };
 
-export type RefineArrayReturn = RemiResponse<Filter["slug"][]>;
+export type RefineArrayReturn = RemiResponse<Filter["slug"][] | undefined>;
 
 export type RefineArrayFn = (
   nl: string,

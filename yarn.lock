@@ -4668,6 +4668,7 @@ __metadata:
     react-map-gl: ^7.1.3
     react-speech-recognition: ^3.10.0
     remeda: ^1.24.0
+    rxjs: ^7.8.1
     sequelize: ^6.32.1
     short-uuid: ^4.2.2
     slugify: ^1.6.6
@@ -7280,6 +7281,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/array-equal@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@types/array-equal@npm:1.0.0"
+  checksum: 40d0c8fc322a856e39e1a845d001772f1fe5195cde865c936f9fb09756c02e32ff260de038e59d0451e74bac19a2a10546be7b067779d74eb6d943f370693be1
+  languageName: node
+  linkType: hard
+
 "@types/babel__core@npm:^7.0.0":
   version: 7.20.1
   resolution: "@types/babel__core@npm:7.20.1"
@@ -9012,11 +9020,13 @@ __metadata:
     "@rems/schemas": "*"
     "@rems/tsconfig": "*"
     "@rems/types": "*"
+    "@types/array-equal": ^1.0.0
     "@types/node": 20.4.5
     "@types/pluralize": ^0.0.30
     "@types/react": 18.2.18
     "@types/react-dom": 18.2.7
     "@types/turndown": ^5.0.1
+    array-equal: ^1.0.0
     env-cmd: ^10.1.0
     next: 13.4.12
     nextjs-cors: latest
@@ -9249,6 +9259,13 @@ __metadata:
   version: 1.0.1
   resolution: "array-each@npm:1.0.1"
   checksum: eb2393c1200003993d97dab2b280aa01e6ca339b383198e5d250cc8cd31f8012a0c22b66f275401a80e89e21bfab420e0f4c77c295637dea525fe0e152ba2300
+  languageName: node
+  linkType: hard
+
+"array-equal@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "array-equal@npm:1.0.0"
+  checksum: 3f68045806357db9b2fa1ad583e42a659de030633118a0cd35ee4975cb20db3b9a3d36bbec9b5afe70011cf989eefd215c12fe0ce08c498f770859ca6e70688a
   languageName: node
   linkType: hard
 
@@ -21467,7 +21484,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.5":
+"rxjs@npm:^7.5.5, rxjs@npm:^7.8.1":
   version: 7.8.1
   resolution: "rxjs@npm:7.8.1"
   dependencies:

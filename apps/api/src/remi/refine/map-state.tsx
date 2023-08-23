@@ -12,7 +12,7 @@ type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
 
 const mapState: Fn = async (nl, query) => {
   const request: ChatCompletionRequest = {
-    model: "gpt-4",
+    model: "gpt-3.5-turbo-0613",
     messages: [
       {
         role: "system",
@@ -32,12 +32,19 @@ const mapState: Fn = async (nl, query) => {
               "increase the radius", or "move the map up a bit" or "zoom out a
               bit"
             </p>
-            <p>Some points to take in to consideration;</p>
             <RefineCaveats partial>
+              <li>
+                Do *NOT* specify a lng/lat if no location has been specified. IE
+                do not extrapolate based on features desired.
+              </li>
               <li>
                 Do *NOT* set the lng/lat based on a location. Only specify a new
                 lng/lat if the command has a relative adjustment. IE "Shift
                 north a bit".
+              </li>
+              <li>
+                Only set the zoom when the user *explicitly* sets the zoom, or
+                requests to zoom in or out.
               </li>
             </RefineCaveats>
           </>

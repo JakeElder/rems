@@ -9,12 +9,12 @@ import useRealEstateQuery from "@/hooks/use-real-estate-query";
 type Props = Pick<React.ComponentProps<typeof AreaFilter>, "areas">;
 
 const AreaFilterViewContainer = ({ areas }: Props) => {
-  const { onValueChange, query } = useRealEstateQuery();
+  const { onValueChange, stagedQuery } = useRealEstateQuery();
   return (
     <AreaFilter
       areas={areas}
       onChange={(value) => onValueChange("area", value)}
-      value={query["area"]}
+      value={stagedQuery["area"]}
     />
   );
 };

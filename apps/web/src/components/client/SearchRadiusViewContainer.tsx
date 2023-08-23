@@ -9,7 +9,7 @@ import { observer } from "@legendapp/state/react";
 type Props = {};
 
 const SearchRadiusViewContainer = ({}: Props) => {
-  const { query, onSearchRadiusChange, onSearchRadiusEnabledChange } =
+  const { stagedQuery, onSearchRadiusChange, onSearchRadiusEnabledChange } =
     useRealEstateQuery();
   const { radius } = useRealEstateIndexPageState();
 
@@ -20,7 +20,7 @@ const SearchRadiusViewContainer = ({}: Props) => {
       value={radius.get()}
       onValueChange={([value]) => radius.set(value)}
       onValueCommit={([value]) => onSearchRadiusChange(value)}
-      enabled={query["radius-enabled"] === "true"}
+      enabled={stagedQuery["radius-enabled"] === "true"}
       onEnabledChange={onSearchRadiusEnabledChange}
     />
   );

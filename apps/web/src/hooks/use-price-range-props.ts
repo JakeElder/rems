@@ -8,13 +8,13 @@ import {
 } from "../constants";
 
 const usePriceRangeProps = (): React.ComponentProps<typeof PriceRange> => {
-  const { query, onPriceRangeChange } = useRealEstateQuery();
+  const { stagedQuery, onPriceRangeChange } = useRealEstateQuery();
 
   return {
-    availability: query["availability"],
+    availability: stagedQuery["availability"],
     onChange: onPriceRangeChange,
-    maxPrice: query["max-price"],
-    minPrice: query["min-price"],
+    maxPrice: stagedQuery["max-price"],
+    minPrice: stagedQuery["min-price"],
     minRentalPrice: MIN_RENTAL_PRICE,
     maxRentalPrice: MAX_RENTAL_PRICE,
     minPurchasePrice: MIN_PURCHASE_PRICE,

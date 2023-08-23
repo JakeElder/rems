@@ -1,8 +1,8 @@
 import { z } from "zod";
-import InputSchema from "./input";
+import NlInputSchema from "../nl-input";
 import { PageAndSort } from "../real-estate-query";
 
-export const ArgsSchema = z.tuple([InputSchema, PageAndSort]);
+export const ArgsSchema = z.tuple([NlInputSchema, PageAndSort]);
 
 export const ReturnsSchema = z
   .object({

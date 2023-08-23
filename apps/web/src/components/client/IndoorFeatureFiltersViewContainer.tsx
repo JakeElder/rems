@@ -10,7 +10,7 @@ type Props = Pick<
 >;
 
 const IndoorFeatureFiltersViewContainer = ({ features }: Props) => {
-  const { onCheckedChange, query } = useRealEstateQuery();
+  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
 
   return (
     <IndoorFeatureFilters
@@ -18,7 +18,7 @@ const IndoorFeatureFiltersViewContainer = ({ features }: Props) => {
       onChange={(value, checked) =>
         onCheckedChange("indoor-features", value, checked)
       }
-      isChecked={(value) => query["indoor-features"].includes(value)}
+      isChecked={(value) => stagedQuery["indoor-features"].includes(value)}
     />
   );
 };

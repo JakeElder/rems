@@ -7,7 +7,8 @@ import { QuickFilters } from "@rems/ui";
 type Props = Pick<React.ComponentProps<typeof QuickFilters>, "filters">;
 
 const QuickFiltersViewContainer = ({ filters }: Props) => {
-  const { isQuickFilterOn, onQuickFilterChange } = useRealEstateQuery();
+  const { isQuickFilterOn, onQuickFilterChange, stagedQuery } =
+    useRealEstateQuery();
   return (
     <QuickFilters
       isOn={isQuickFilterOn}

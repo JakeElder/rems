@@ -2,11 +2,12 @@ import { BedsFilter } from "@rems/ui";
 import useRealEstateQuery from "./use-real-estate-query";
 
 const useBedsFilterProps = (): React.ComponentProps<typeof BedsFilter> => {
-  const { query, onMinBedsChange, onMaxBedsChange } = useRealEstateQuery();
+  const { stagedQuery, onMinBedsChange, onMaxBedsChange } =
+    useRealEstateQuery();
 
   return {
-    maxBedrooms: query["max-bedrooms"],
-    minBedrooms: query["min-bedrooms"],
+    maxBedrooms: stagedQuery["max-bedrooms"],
+    minBedrooms: stagedQuery["min-bedrooms"],
     onMinChange: onMinBedsChange,
     onMaxChange: onMaxBedsChange
   };

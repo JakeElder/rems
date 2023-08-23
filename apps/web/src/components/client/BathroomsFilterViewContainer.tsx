@@ -7,11 +7,11 @@ import useRealEstateQuery from "@/hooks/use-real-estate-query";
 type Props = {};
 
 const BathroomsFilterViewContainer = ({}: Props) => {
-  const { query, onMinBathsChange } = useRealEstateQuery();
+  const { stagedQuery, onMinBathsChange } = useRealEstateQuery();
   return (
     <BathroomsFilter
       onChange={onMinBathsChange}
-      value={query["min-bathrooms"]}
+      value={stagedQuery["min-bathrooms"]}
     />
   );
 };
