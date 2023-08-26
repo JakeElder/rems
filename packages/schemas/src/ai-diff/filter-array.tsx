@@ -1,25 +1,25 @@
 import { txt } from "../utils";
 import { z } from "zod";
 import NlInputSchema from "../nl-input";
-import { FilterSchema, IndoorFeature } from "..";
+import { FilterSchema } from "..";
 
 export const ArgsSchema = z.tuple([
   NlInputSchema,
-  z.array(z.lazy(() => IndoorFeature.shape["slug"]))
+  z.array(z.lazy(() => FilterSchema.shape["slug"]))
 ]);
 
 export const ContextSchema = z.object({
   input: NlInputSchema,
-  filters: z.array(z.lazy(() => IndoorFeature)),
+  filters: z.array(z.lazy(() => FilterSchema)),
   current: z
-    .array(z.lazy(() => IndoorFeature.shape["id"]))
-    .describe(txt(<>An array of id's of currently active indoor features.</>))
+    .array(z.lazy(() => FilterSchema.shape["id"]))
+    .describe(txt(<>An array of id's of currently active filters.</>))
 });
 
 export const ReturnsSchema = z
   .object({
     n: z
       .array(z.lazy(() => FilterSchema.shape["id"]))
-      .describe(txt(<>An array of updated indoor feature ids</>))
+      .describe(txt(<>An array of updated filter ids</>))
   })
   .transform(({ n }) => n);

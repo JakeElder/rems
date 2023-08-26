@@ -1,1 +1,1 @@
-export * as IndoorFeatures from "./indoor-features";
+export * as FilterArray from "./filter-array";

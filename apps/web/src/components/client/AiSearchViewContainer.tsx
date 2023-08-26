@@ -106,7 +106,6 @@ const AiSearchViewContainer = () => {
           reset();
         }
         if (c.type === "PATCH") {
-          console.log(c.data);
           patch(c.data);
         }
       },

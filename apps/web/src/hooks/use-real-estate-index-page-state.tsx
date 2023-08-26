@@ -1,10 +1,8 @@
 import { createContext, useContext, useEffect } from "react";
 import useRealEstateQuery from "./use-real-estate-query";
 import { Observable } from "@legendapp/state";
-import { enableLegendStateReact, useObservable } from "@legendapp/state/react";
+import { useObservable } from "@legendapp/state/react";
 import { MapBounds, RealEstateQuery } from "@rems/types";
-
-enableLegendStateReact();
 
 const IndexPageStateProvider = createContext<{
   radius: Observable<RealEstateQuery["radius"]>;

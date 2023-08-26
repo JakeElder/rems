@@ -3,6 +3,7 @@ import * as remi from "@/remi";
 import { Chunk, Filter, RealEstateQuery } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import { z } from "zod";
+import { RefineArrayReturn } from "@/remi";
 
 type MapState = z.infer<typeof RealEstateQuerySchema.MapState>;
 type PageAndSort = z.infer<typeof RealEstateQuerySchema.PageAndSort>;
@@ -43,20 +44,48 @@ const stream: Stream = (nl, query) => async (c) => {
     c.enqueue(chunk);
   };
 
-  const analysis = await remi.capability.analyze(nl);
+  const reqs = {
+    analysis: remi.capability.analyze(nl),
+    indoorFeatures: remi.diff.indoorFeatures(nl, query["indoor-features"]),
+    outdoorFeatures: remi.diff.outdoorFeatures(nl, query["outdoor-features"]),
+    lotFeatures: remi.diff.lotFeatures(nl, query["lot-features"]),
+    propertyTypes: remi.diff.propertyTypes(nl, query["property-types"]),
+    viewTypes: remi.diff.viewTypes(nl, query["view-types"])
+  };
 
-  if (!analysis?.ok) {
-    console.dir(analysis, { depth: null, colors: true });
-    throw new Error();
-  }
+  const arr = async (
+    req: Promise<RefineArrayReturn>,
+    key: ArrayKey
+  ): Promise<Partial<RealEstateQuery>> => {
+    const analysis = await reqs.analysis;
+    const res = await req;
+    if (res?.ok && res.data) {
+      if (res.data) {
+        refine({ type: "ARRAY", key, data: res.data });
+      }
+      return { [key]: res.data };
+    }
+    return { [key]: null };
+  };
 
-  const indoorFeatures = await remi.diff.indoorFeatures(
-    nl,
-    query["indoor-features"]
-  );
+  const res = await Promise.all([
+    /*
+     * Arrays
+     */
+    arr(reqs.indoorFeatures, "indoor-features"),
+    arr(reqs.outdoorFeatures, "outdoor-features"),
+    arr(reqs.lotFeatures, "lot-features"),
+    arr(reqs.propertyTypes, "property-types"),
+    arr(reqs.viewTypes, "view-types")
+  ]);
+
+  const summary: Chunk = {
+    type: "SUMMARY",
+    data: res.reduce((strategy, value) => ({ ...strategy, ...value }), {})
+  };
 
   console.dir(
-    { query: nl, analysis, indoorFeatures },
+    { query: nl, analysis: await reqs.analysis, summary },
     { depth: null, colors: true }
   );
 
