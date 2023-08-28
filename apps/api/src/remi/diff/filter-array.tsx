@@ -4,7 +4,7 @@ import {
   execute,
   RemiResponse,
   stringify,
-  mapFilter
+  mapFilters
 } from "@/remi";
 import { AiDiff } from "@rems/schemas";
 import { z } from "zod";
@@ -20,11 +20,13 @@ type Fn = (...args: Args) => Promise<RemiResponse<Filter["slug"][]>>;
 const factory = (type: string, filtersPromise: Promise<Filter[]>): Fn => {
   return async (input, current) => {
     const filters = await filtersPromise;
-    const context = stringify<Context>({
-      input,
-      filters,
-      current: current.map((slug) => mapFilter.slugToId(filters, slug))
-    });
+    const context = stringify<Context>(
+      ContextSchema.parse({
+        input,
+        filters,
+        current: mapFilters.slugsToIds(filters, current)
+      })
+    );
 
     console.log(context);
 

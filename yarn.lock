@@ -3127,7 +3127,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@legendapp/state@npm:^1.6.4":
+"@legendapp/state@npm:^1.11.1":
   version: 1.11.1
   resolution: "@legendapp/state@npm:1.11.1"
   dependencies:
@@ -4553,8 +4553,8 @@ __metadata:
     react-dom: 18.2.0
     react-google-places-autocomplete: ^4.0.1
     turndown: ^7.1.2
-    typescript: ^5.1.6
-    zod: ^3.21.4
+    typescript: ^5.2.2
+    zod: ^3.22.2
   languageName: unknown
   linkType: soft
 
@@ -4568,7 +4568,7 @@ __metadata:
     qs: ^6.11.2
     query-string: ^8.1.0
     remeda: ^1.24.0
-    typescript: ^5.1.6
+    typescript: ^5.2.2
   languageName: unknown
   linkType: soft
 
@@ -4585,9 +4585,9 @@ __metadata:
     "@rems/schemas": "*"
     "@rems/tsconfig": "*"
     react: 18.2.0
-    typescript: ^5.1.6
+    typescript: ^5.2.2
     utility-types: ^3.10.0
-    zod: ^3.21.4
+    zod: ^3.22.2
   languageName: unknown
   linkType: soft
 
@@ -4660,12 +4660,12 @@ __metadata:
     throttle-debounce: ^5.0.0
     tinycolor2: ^1.6.0
     ts-key-enum: ^2.0.12
-    typescript: 5.1.6
+    typescript: 5.2.2
     typescript-cookie: ^1.0.6
     usehooks-ts: ^2.9.1
     utility-types: ^3.10.0
     uuid: ^9.0.0
-    zod: ^3.21.4
+    zod: ^3.22.2
   languageName: unknown
   linkType: soft
 
@@ -4673,7 +4673,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rems/web@workspace:apps/web"
   dependencies:
-    "@legendapp/state": ^1.6.4
+    "@legendapp/state": ^1.11.1
     "@next/bundle-analyzer": ^13.4.9
     "@rems/schemas": "*"
     "@rems/ts-api": "*"
@@ -4717,11 +4717,11 @@ __metadata:
     swr: ^2.2.0
     the-new-css-reset: ^1.9.0
     ts-node: ^10.9.1
-    typescript: 5.1.6
+    typescript: 5.2.2
     typescript-cookie: ^1.0.6
     use-debounce: ^9.0.4
     use-previous: ^1.2.0
-    zod: ^3.21.4
+    zod: ^3.22.2
     zod-to-json-schema: ^3.21.4
   languageName: unknown
   linkType: soft
@@ -9136,7 +9136,8 @@ __metadata:
     remeda: ^1.24.1
     snake-case: ^3.0.4
     turndown: ^7.1.2
-    typescript: 5.1.6
+    typescript: 5.2.2
+    zod: ^3.22.2
   languageName: unknown
   linkType: soft
 
@@ -22487,7 +22488,7 @@ __metadata:
     strapi-typed: ^1.0.15
     styled-components: ^5.3.6
     ts-node: ^10.9.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     "@strapi/strapi": ^4.4.0
   languageName: unknown
@@ -23635,17 +23636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.1.6":
-  version: 5.1.6
-  resolution: "typescript@npm:5.1.6"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: b2f2c35096035fe1f5facd1e38922ccb8558996331405eb00a5111cc948b2e733163cc22fab5db46992aba7dd520fff637f2c1df4996ff0e134e77d3249a7350
-  languageName: node
-  linkType: hard
-
-"typescript@npm:^5.1.6":
+"typescript@npm:5.2.2, typescript@npm:^5.2.2":
   version: 5.2.2
   resolution: "typescript@npm:5.2.2"
   bin:
@@ -23665,17 +23656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.1.6#~builtin<compat/typescript>":
-  version: 5.1.6
-  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: f53bfe97f7c8b2b6d23cf572750d4e7d1e0c5fff1c36d859d0ec84556a827b8785077bc27676bf7e71fae538e517c3ecc0f37e7f593be913d884805d931bc8be
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@^5.1.6#~builtin<compat/typescript>":
+"typescript@patch:typescript@5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@^5.2.2#~builtin<compat/typescript>":
   version: 5.2.2
   resolution: "typescript@patch:typescript@npm%3A5.2.2#~builtin<compat/typescript>::version=5.2.2&hash=14eedb"
   bin:
@@ -24988,7 +24969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.21.4":
+"zod@npm:^3.22.2":
   version: 3.22.2
   resolution: "zod@npm:3.22.2"
   checksum: 231e2180c8eabb56e88680d80baff5cf6cbe6d64df3c44c50ebe52f73081ecd0229b1c7215b9552537f537a36d9e36afac2737ddd86dc14e3519bdbc777e82b9

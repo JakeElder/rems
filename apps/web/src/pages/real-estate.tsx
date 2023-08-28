@@ -23,6 +23,9 @@ import {
 } from "@rems/types";
 import fetch from "@/fetch";
 import { RealEstateIndexPageStateProvider } from "../hooks/use-real-estate-index-page-state";
+import { enableReactUse } from "@legendapp/state/config/enableReactUse";
+
+enableReactUse();
 
 type Props = {
   config: AppConfig;

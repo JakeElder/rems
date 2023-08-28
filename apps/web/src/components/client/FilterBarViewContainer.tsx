@@ -47,10 +47,6 @@ type Props = {
 };
 
 const LocationAndRadius = () => {
-  if (!process.env.NEXT_PUBLIC_ENABLE_LOCATION_RADIUS) {
-    return null;
-  }
-
   return (
     <>
       <PropertyFilters.Location>
@@ -64,10 +60,6 @@ const LocationAndRadius = () => {
 };
 
 const Area = ({ areas }: { areas: Area[] }) => {
-  if (process.env.NEXT_PUBLIC_ENABLE_LOCATION_RADIUS) {
-    return null;
-  }
-
   return (
     <PropertyFilters.Area>
       <AreaFilterViewContainer areas={areas} />

@@ -209,14 +209,14 @@ export const MapState = z.object({
   lat: z.coerce
     .number()
     .nullable()
-    .default(13.736717)
-    .catch(13.736717)
+    .default(13.7563309)
+    .catch(13.7563309)
     .describe(txt(<>The current latitude of the center point of the map.</>)),
   lng: z.coerce
     .number()
     .nullable()
-    .default(100.523186)
-    .catch(100.523186)
+    .default(100.5017651)
+    .catch(100.5017651)
     .describe(txt(<>The current longitude of the center point of the map.</>))
 });
 

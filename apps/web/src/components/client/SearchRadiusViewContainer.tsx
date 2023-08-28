@@ -11,14 +11,15 @@ type Props = {};
 const SearchRadiusViewContainer = ({}: Props) => {
   const { stagedQuery, onSearchRadiusChange, onSearchRadiusEnabledChange } =
     useRealEstateQuery();
-  const { radius } = useRealEstateIndexPageState();
 
   return (
     <SearchRadius
       min={300}
       max={10_000}
-      value={radius.get()}
-      onValueChange={([value]) => radius.set(value)}
+      value={10000}
+      onValueChange={([value]) => {
+        // radius.set(value)
+      }}
       onValueCommit={([value]) => onSearchRadiusChange(value)}
       enabled={stagedQuery["radius-enabled"] === "true"}
       onEnabledChange={onSearchRadiusEnabledChange}

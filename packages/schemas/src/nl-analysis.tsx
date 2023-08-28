@@ -1,24 +1,19 @@
 import { z } from "zod";
 import NlInputSchema from "./nl-input";
 import { txt } from "./utils";
-import {
-  IndoorFeature,
-  IntentSchema,
-  LotFeature,
-  OutdoorFeature,
-  PropertyType,
-  ViewType
-} from ".";
+import { FilterSchema, IntentSchema } from ".";
 
 export const ArgsSchema = z.tuple([NlInputSchema]);
 
+const CompressedFilter = z.lazy(() => FilterSchema.omit({ slug: true }));
+
 export const ContextSchema = z.object({
   intents: z.lazy(() => z.array(IntentSchema)),
-  indoorFeatures: z.lazy(() => z.array(IndoorFeature)),
-  outdoorFeatures: z.lazy(() => z.array(OutdoorFeature)),
-  lotFeatures: z.lazy(() => z.array(LotFeature)),
-  viewTypes: z.lazy(() => z.array(ViewType)),
-  propertyTypes: z.lazy(() => z.array(PropertyType))
+  indoorFeatures: z.lazy(() => z.array(CompressedFilter)),
+  outdoorFeatures: z.lazy(() => z.array(CompressedFilter)),
+  lotFeatures: z.lazy(() => z.array(CompressedFilter)),
+  viewTypes: z.lazy(() => z.array(CompressedFilter)),
+  propertyTypes: z.lazy(() => z.array(CompressedFilter))
 });
 
 export const ReturnsSchema = z

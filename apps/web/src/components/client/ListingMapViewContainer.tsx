@@ -8,18 +8,16 @@ import type { MapRef } from "react-map-gl";
 import usePrevious from "use-previous";
 import dynamic from "next/dynamic";
 import useRealEstateIndexPageState from "@/hooks/use-real-estate-index-page-state";
-import { observer } from "@legendapp/state/react";
 import { useDebouncedCallback } from "use-debounce";
 
 type Props = {};
 
 const ListingMapViewContainer = ({}: Props) => {
   const mapRef = useRef<MapRef>();
-  const { query, onMapZoomChange, onMapMove, isReady, serverQuery } =
-    useRealEstateQuery();
+  const { query, onMapMove, isReady, serverQuery } = useRealEstateQuery();
   const previousQuery = usePrevious(query);
   const { data } = useProperties(serverQuery);
-  const { radius, mapBounds } = useRealEstateIndexPageState();
+  const { mapBounds } = useRealEstateIndexPageState();
 
   useEffect(() => {
     if (!isReady || !previousQuery || !mapRef.current) {
@@ -59,13 +57,14 @@ const ListingMapViewContainer = ({}: Props) => {
       searchLat={query["origin-lat"]}
       searchLng={query["origin-lng"]}
       zoom={query["zoom"]}
-      radius={radius.get()}
-      onZoom={(e) => {
-        onMapZoomChange(e.viewState.zoom);
-      }}
+      radius={10000}
       onLoad={() => setBounds()}
       onMove={(e) => {
-        onMapMove(e.viewState.latitude, e.viewState.longitude);
+        onMapMove({
+          zoom: e.viewState.zoom,
+          lat: e.viewState.latitude,
+          lng: e.viewState.longitude
+        });
         setBounds();
       }}
       showRadius={query["radius-enabled"] === "true"}
@@ -73,7 +72,6 @@ const ListingMapViewContainer = ({}: Props) => {
   );
 };
 
-export default dynamic(
-  () => Promise.resolve(observer(ListingMapViewContainer)),
-  { ssr: false }
-);
+export default dynamic(() => Promise.resolve(ListingMapViewContainer), {
+  ssr: false
+});

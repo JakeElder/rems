@@ -76,6 +76,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.1",
     "prettier": "^2.8.3",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   }
 }

@@ -8,6 +8,7 @@ export { default as txt } from "./utils/txt";
 export { default as execute } from "./utils/execute";
 export { default as stringify } from "./utils/stringify";
 export * as mapFilter from "./utils/map-filter";
+export * as mapFilters from "./utils/map-filters";
 
 export * from "./types";
 export * as refine from "./refine";

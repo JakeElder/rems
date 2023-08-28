@@ -1,32 +1,69 @@
 import { createContext, useContext, useEffect } from "react";
-import useRealEstateQuery from "./use-real-estate-query";
 import { Observable } from "@legendapp/state";
 import { useObservable } from "@legendapp/state/react";
-import { MapBounds, RealEstateQuery } from "@rems/types";
+import { MapBounds, RealEstateQuery, SearchParams } from "@rems/types";
+import { RealEstateQuerySchema } from "@rems/schemas";
+import { flatten } from "remeda";
+import { z } from "zod";
+import { useRouter } from "next/router";
 
 const IndexPageStateProvider = createContext<{
-  radius: Observable<RealEstateQuery["radius"]>;
+  query: Observable<RealEstateQuery>;
+  stagedQuery: Observable<RealEstateQuery>;
   mapBounds: Observable<MapBounds | null>;
 } | null>(null);
 
 const useRealEstateIndexPageState = () => useContext(IndexPageStateProvider)!;
+
+type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
+
+const searchParamsToQuery = (params: SearchParams): RealEstateQuery => {
+  const arrayKeys: ArrayKey[] = [
+    "indoor-features",
+    "lot-features",
+    "outdoor-features",
+    "property-types",
+    "view-types"
+  ];
+
+  const p = Object.keys(params).reduce((acc, key) => {
+    const k = key.replace(/\[\]$/, "") as ArrayKey;
+    const val = arrayKeys.includes(k)
+      ? flatten([...[params[key]]])
+      : params[key];
+    return { ...acc, [k]: val };
+  }, {});
+
+  return RealEstateQuerySchema.URL.parse(p);
+};
 
 export const RealEstateIndexPageStateProvider = ({
   children
 }: {
   children: React.ReactNode;
 }) => {
-  const { query } = useRealEstateQuery();
-  const radius = useObservable(query["radius"]);
-  const mapBounds = useObservable<MapBounds | null>(null);
+  const router = useRouter();
+  const query = searchParamsToQuery(router.query);
+
+  const $ = {
+    query: useObservable<RealEstateQuery>(query),
+    stagedQuery: useObservable<RealEstateQuery>(query),
+    mapBounds: useObservable<MapBounds | null>(null)
+  };
 
   useEffect(() => {
-    radius.set(query["radius"]);
-  }, [query["radius"]]);
+    const nextQuery = searchParamsToQuery(router.query);
+    $.query.set(nextQuery);
+    $.stagedQuery.set(nextQuery);
+  }, [router.query]);
 
   return (
     <IndexPageStateProvider.Provider
-      value={{ radius, mapBounds }}
+      value={{
+        mapBounds: $.mapBounds,
+        stagedQuery: $.stagedQuery,
+        query: $.query
+      }}
       children={children}
     />
   );

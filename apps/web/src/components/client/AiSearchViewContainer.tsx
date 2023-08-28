@@ -71,7 +71,7 @@ const AiSearchViewContainer = () => {
   const s = c.sessions[c.sessions.length - 1];
 
   const { transcript, listening } = useSpeechRecognition();
-  const { patch, query, reset } = useRealEstateQuery();
+  const { patch, query, reset, commit } = useRealEstateQuery();
   const $input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -110,6 +110,7 @@ const AiSearchViewContainer = () => {
         }
       },
       complete() {
+        commit();
         dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
         setTimeout(() => {
           dispatch({ type: "SESSION_COMPLETE" });

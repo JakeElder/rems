@@ -1,29 +1,26 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useCallback } from "react";
 import {
   QuickFilterQueryKey,
   RealEstateQuery,
-  SearchParams,
   ServerRealEstateQuery
 } from "@rems/types";
 import { useRouter } from "next/router";
 import qs from "query-string";
 import update from "immutability-helper";
-import { omitBy, equals, flatten } from "remeda";
+import { omitBy, equals } from "remeda";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import { useDebouncedCallback } from "use-debounce";
 import useRealEstateIndexPageState from "./use-real-estate-index-page-state";
-import { z } from "zod";
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
   stagedQuery: RealEstateQuery;
   serverQuery: ServerRealEstateQuery;
   queryString: string;
-  freeze: () => void;
-  unfreeze: (commit?: boolean) => void;
   patch: (query: Partial<RealEstateQuery>) => void;
+  commit: () => void;
   has: (param: keyof RealEstateQuery) => boolean;
   activeFilters: number;
   isQuickFilterOn: (key: QuickFilterQueryKey, value: string) => boolean;
@@ -51,9 +48,8 @@ type UseRealEstateQueryReturn = {
   ) => void;
   onAvailabilityChange: (availability: RealEstateQuery["availability"]) => void;
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
-  onMapZoomChange: (zoom: number) => void;
   onSearchOriginChange: (id: string, lng: number, lat: number) => void;
-  onMapMove: (lat: number, lng: number) => void;
+  onMapMove: (params: { zoom: number; lat: number; lng: number }) => void;
   reset: () => void;
   isReady: boolean;
   onSearchRadiusChange: (value: number) => void;
@@ -83,28 +79,6 @@ export const generateQueryString = (
   return string ? `?${string}` : "";
 };
 
-type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
-
-const searchParamsToQuery = (params: SearchParams): RealEstateQuery => {
-  const arrayKeys: ArrayKey[] = [
-    "indoor-features",
-    "lot-features",
-    "outdoor-features",
-    "property-types",
-    "view-types"
-  ];
-
-  const p = Object.keys(params).reduce((acc, key) => {
-    const k = key.replace(/\[\]$/, "") as ArrayKey;
-    const val = arrayKeys.includes(k)
-      ? flatten([...[params[key]]])
-      : params[key];
-    return { ...acc, [k]: val };
-  }, {});
-
-  return RealEstateQuerySchema.URL.parse(p);
-};
-
 const has = (query: RealEstateQuery, param: keyof RealEstateQuery) => {
   const defaults = RealEstateQuerySchema.URL.parse({});
   const queryWithoutDefaults = omitBy(query, (v, k) => equals(defaults[k], v));
@@ -129,42 +103,29 @@ const countActiveFilters = (query: RealEstateQuery) => {
 
 const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   const router = useRouter();
-  const pageState = useRealEstateIndexPageState();
+  const $ = useRealEstateIndexPageState();
 
-  const [query, setQuery] = useState(searchParamsToQuery(router.query));
-  const [stagedQuery, setStagedQuery] = useState(query);
-  const [frozen, setFrozen] = useState(false);
-  const $stagedQuery = useRef(stagedQuery);
-
-  useEffect(() => {
-    const nextQuery = searchParamsToQuery(router.query);
-    setQuery(nextQuery);
-    setStagedQuery(nextQuery);
-  }, [router.query]);
+  $.query.use();
+  $.stagedQuery.use();
+  $.mapBounds.use();
 
   const commit = () => {
-    const qs = generateQueryString($stagedQuery.current);
+    const qs = generateQueryString($.stagedQuery.get()!);
     router.push(`${router.pathname}${qs}`, "", { shallow: true });
   };
 
   const patch: UseRealEstateQueryReturn["patch"] = (data) => {
-    const nextQuery = update($stagedQuery.current, { $merge: data });
-    $stagedQuery.current = nextQuery;
-    setStagedQuery(nextQuery);
+    const nextQuery = update($.stagedQuery.get()!, { $merge: data });
+    $.stagedQuery.set(nextQuery);
   };
 
   const bounds = (() => {
-    if (pageState === null || !process.env.NEXT_PUBLIC_ENABLE_LOCATION_RADIUS) {
-      return {};
-    }
-
-    const b = pageState.mapBounds.get();
+    const b = $.mapBounds.get();
 
     if (b === null) {
       return {};
     }
 
-    // TODO: Change to map-size
     return {
       "map-bound-sw-lng": b.sw.lng,
       "map-bound-sw-lat": b.sw.lat,
@@ -173,23 +134,16 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     };
   })();
 
+  const query = $.query.get()!;
+  const stagedQuery = $.stagedQuery.get()!;
+
   return {
     isReady: router.isReady,
 
     query,
     stagedQuery,
-    serverQuery: RealEstateQuerySchema.Server.parse({
-      ...query,
-      ...bounds
-    }),
+    serverQuery: RealEstateQuerySchema.Server.parse({ ...query, ...bounds }),
     queryString: generateQueryString(query),
-
-    freeze: () => setFrozen(true),
-
-    unfreeze: (cmt) => {
-      setFrozen(false);
-      cmt && commit();
-    },
 
     has: (key) => has(query, key),
     activeFilters: countActiveFilters(query),
@@ -275,19 +229,15 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     },
 
     reset: () => {
-      $stagedQuery.current = RealEstateQuerySchema.URL.parse({});
+      $.stagedQuery.set(RealEstateQuerySchema.URL.parse({}));
       commit();
     },
 
     patch,
+    commit,
 
-    onMapZoomChange: useDebouncedCallback((zoom) => {
-      patch({ zoom });
-      commit();
-    }, 500),
-
-    onMapMove: useDebouncedCallback((lat, lng) => {
-      patch({ lat, lng });
+    onMapMove: useDebouncedCallback(({ zoom, lat, lng }) => {
+      patch({ zoom, lat, lng });
       commit();
     }, 500),
 

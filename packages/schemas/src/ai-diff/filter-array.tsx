@@ -10,7 +10,7 @@ export const ArgsSchema = z.tuple([
 
 export const ContextSchema = z.object({
   input: NlInputSchema,
-  filters: z.array(z.lazy(() => FilterSchema)),
+  filters: z.array(z.lazy(() => FilterSchema.omit({ slug: true }))),
   current: z
     .array(z.lazy(() => FilterSchema.shape["id"]))
     .describe(txt(<>An array of id's of currently active filters.</>))
