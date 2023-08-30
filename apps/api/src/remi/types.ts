@@ -1,8 +1,9 @@
 import { Filter, OpenAIModel } from "@rems/types";
 import { CreateChatCompletionRequest as OriginalRequest } from "openai";
 
-export type RemiResponse<T> =
-  | null
+export type RemiFn = (...args: any) => Promise<RemiResponse>;
+
+export type RemiResponse<T = any> =
   | { ok: true; data: T }
   | { ok: false; error: any };
 
@@ -16,5 +17,3 @@ export type RefineArrayFn = (
   nl: string,
   current: Filter["slug"][]
 ) => Promise<RefineArrayReturn>;
-
-export type CapabilityCode = "NQ" | "RQ" | "CQ" | "SP" | "RV" | "RGQ";

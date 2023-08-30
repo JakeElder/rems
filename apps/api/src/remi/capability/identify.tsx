@@ -1,73 +1,54 @@
 import {
-  CapabilityCode,
   ChatCompletionRequest,
   RemiResponse,
-  openai,
-  txt
+  txt,
+  execute,
+  capabilities,
+  stringify
 } from "@/remi";
+import { AiCapability } from "@rems/schemas";
+import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { CapabilitySchema } from "@rems/schemas";
-import { capabilities } from "@/remi";
+import { ChatCompletionRequestMessage } from "openai";
 
-const identify = async (nl: string): Promise<RemiResponse<CapabilityCode>> => {
+const { ArgsSchema, ReturnsSchema, ContextSchema } = AiCapability.Identify;
+
+type Args = z.infer<typeof ArgsSchema>;
+type Returns = z.infer<typeof ReturnsSchema>;
+type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
+
+const analyze: Fn = async (nl) => {
+  const context = stringify(ContextSchema.parse({ capabilities }));
+  const schema = stringify(zodToJsonSchema(ContextSchema));
+
+  const instruction: ChatCompletionRequestMessage["content"] = txt(
+    <>
+      <p>
+        You are an assistant responsible for helping the user of a real estate
+        website. Your task is to analyze their input and assess which of our
+        capabilities should be used to react to the user.
+      </p>
+      <p>Here is additional context: `{context}`</p>
+      <p>This is the schema of the context: `{schema}`</p>
+    </>
+  );
+
   const request: ChatCompletionRequest = {
-    model: "gpt-3.5-turbo-0613",
+    model: "gpt-4",
     messages: [
-      {
-        role: "system",
-        content: txt(
-          <>
-            <p>
-              You are Remi, an assistant responsible for taking natural language
-              requests and commands from a user while they navigate a property
-              website.
-            </p>
-            <p>
-              Your task, for now is to simply take the users input/command and
-              identify which capability of yours is best suited to help the
-              user.
-            </p>
-            <p>These are your capabilities;</p>
-            <code>{JSON.stringify(capabilities)}</code>
-            <p>This is the schema of a capability;</p>
-            <code>{JSON.stringify(zodToJsonSchema(CapabilitySchema))}</code>
-            <p>The next message is the users input.</p>
-          </>
-        )
-      },
-      {
-        role: "user",
-        content: nl
-      }
+      { role: "system", content: instruction },
+      { role: "user", content: nl }
     ],
     function_call: { name: "f" },
     functions: [
       {
         name: "f",
-        description: txt(
-          <>
-            Sets the capability code for this users input, so that it may be
-            further processed.
-          </>
-        ),
-        parameters: {
-          type: "object",
-          properties: {
-            c: {
-              type: "string",
-              enum: capabilities.map((c) => c.code)
-            }
-          }
-        }
+        parameters: zodToJsonSchema(ReturnsSchema)
       }
     ]
   };
 
-  const res = await openai.createChatCompletion(request);
-  const message = res.data.choices[0].message!;
-  const json = JSON.parse(message.function_call!.arguments!);
-
-  return { ok: true, data: json.c };
+  return execute(request, ReturnsSchema);
 };
 
-export default identify;
+export default analyze;

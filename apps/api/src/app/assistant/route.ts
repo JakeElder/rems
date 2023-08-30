@@ -1,27 +1,11 @@
 import { NextRequest } from "next/server";
 import * as remi from "@/remi";
-import { Chunk, Filter, RealEstateQuery } from "@rems/types";
+import { IntentCode, Reaction, RealEstateQuery } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
-import { z } from "zod";
-import { RefineArrayReturn } from "@/remi";
-
-type MapState = z.infer<typeof RealEstateQuerySchema.MapState>;
-type PageAndSort = z.infer<typeof RealEstateQuerySchema.PageAndSort>;
-type SpaceRequirements = z.infer<
-  typeof RealEstateQuerySchema.SpaceRequirements
->;
-type BudgetAndAvailability = z.infer<
-  typeof RealEstateQuerySchema.BudgetAndAvailability
->;
-type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
-
-type Refinement =
-  | { type: "LOCATION"; data: any }
-  | { type: "MAP_STATE"; data: Partial<MapState> }
-  | { type: "PAGE_AND_SORT"; data: Partial<PageAndSort> }
-  | { type: "SPACE_REQUIREMENTS"; data: Partial<SpaceRequirements> }
-  | { type: "BUDGET_AND_AVAILABILITY"; data: Partial<BudgetAndAvailability> }
-  | { type: "ARRAY"; key: ArrayKey; data: Filter["slug"][] };
+import memoize from "memoizee";
+import { nlToLocation } from "../../utils/nl-to-location";
+import { RemiFn } from "@/remi";
+import chalk from "chalk";
 
 type Stream = (
   nl: string,
@@ -30,63 +14,111 @@ type Stream = (
 
 const encoder = new TextEncoder();
 
-const stream: Stream = (nl, query) => async (c) => {
-  const refine = (r: Refinement) => {
-    if (r.type === "ARRAY") {
-      send({ type: "PATCH", data: { [r.key]: r.data } });
-    } else if (Object.keys(r.data).length > 0) {
-      send({ type: "PATCH", data: r.data });
-    }
-  };
+const patch = (data: Partial<RealEstateQuery>): Reaction => ({
+  type: "PATCH_QUERY",
+  patch: data
+});
 
-  const send = (data: Chunk) => {
+const stream: Stream = (input, query) => async (c) => {
+  const send = (data: Reaction) => {
     const chunk = encoder.encode(`${JSON.stringify(data)}\n`);
     c.enqueue(chunk);
   };
 
-  const reqs = {
-    analysis: remi.capability.analyze(nl),
-    indoorFeatures: remi.diff.indoorFeatures(nl, query["indoor-features"]),
-    outdoorFeatures: remi.diff.outdoorFeatures(nl, query["outdoor-features"]),
-    lotFeatures: remi.diff.lotFeatures(nl, query["lot-features"]),
-    propertyTypes: remi.diff.propertyTypes(nl, query["property-types"]),
-    viewTypes: remi.diff.viewTypes(nl, query["view-types"])
+  const intents = memoize(async () => {
+    const res = await remi.capability.analyze(input);
+    if (!res?.ok) throw new Error();
+    return res.data;
+  });
+
+  // const capability = memoize(async () => {
+  //   const res = await remi.capability.identify(nl);
+  //   if (!res?.ok) throw new Error();
+  //   return res.data;
+  // });
+
+  const run = async <T extends RemiFn>(
+    label: string,
+    condition: () => Promise<boolean>,
+    fn: T,
+    process: (
+      res: Extract<Awaited<ReturnType<T>>, { ok: true }>["data"]
+    ) => Promise<Reaction | null>
+  ) => {
+    if (!(await condition())) return { [label]: "No-op" };
+
+    const res = await fn();
+
+    if (!res.ok) {
+      console.log();
+      console.log(chalk.red(`<ERROR: ${label}>`));
+      console.dir(res.error, { colors: true, depth: null });
+      console.log(chalk.red(`<ERROR: ${label}>`));
+      console.log()
+      return { [label]: "Error" };
+    }
+
+    const reaction = await process(res.data);
+    if (reaction) send(reaction);
+    return { [label]: reaction };
   };
 
-  const arr = async (
-    req: Promise<RefineArrayReturn>,
-    key: ArrayKey
-  ): Promise<Partial<RealEstateQuery>> => {
-    const analysis = await reqs.analysis;
-    const res = await req;
-    if (res?.ok && res.data) {
-      if (res.data) {
-        refine({ type: "ARRAY", key, data: res.data });
-      }
-      return { [key]: res.data };
-    }
-    return { [key]: null };
-  };
+  const intends = async (intent: IntentCode) =>
+    remi.terse.intents(await intents()).includes(intent);
 
   const res = await Promise.all([
     /*
-     * Arrays
+     * Location
      */
-    arr(reqs.indoorFeatures, "indoor-features"),
-    arr(reqs.outdoorFeatures, "outdoor-features"),
-    arr(reqs.lotFeatures, "lot-features"),
-    arr(reqs.propertyTypes, "property-types"),
-    arr(reqs.viewTypes, "view-types")
+    run(
+      "Location",
+      async () => intends("REFINE_LOCATION"),
+      () => remi.refine.location(input),
+      async ({ origin }) => {
+        if (!origin) return null;
+
+        const l = await nlToLocation(origin);
+        if (!l) return null;
+
+        return patch({
+          "origin-lat": l.lat,
+          "origin-lng": l.lng,
+          "origin-id": l.placeId
+        });
+      }
+    ),
+
+    /**
+     * Indoor Features
+     */
+    run(
+      "Indoor Features",
+      async () => intends("REFINE_INDOOR_FEATURES"),
+      () => remi.refine.indoorFeatures(input, query["indoor-features"]),
+      async (res) => patch({ "indoor-features": res })
+    ),
+
+    /**
+     * Outdoor Features
+     */
+    run(
+      "Outdoor Features",
+      async () => intends("REFINE_OUTDOOR_FEATURES"),
+      () => remi.refine.outdoorFeatures(input, query["outdoor-features"]),
+      async (res) => patch({ "outdoor-features": res })
+    )
   ]);
 
-  const summary: Chunk = {
-    type: "SUMMARY",
-    data: res.reduce((strategy, value) => ({ ...strategy, ...value }), {})
-  };
-
   console.dir(
-    { query: nl, analysis: await reqs.analysis, summary },
-    { depth: null, colors: true }
+    {
+      input,
+      intents: remi.terse.intents(await intents()),
+      reactions: Object.assign({}, ...res)
+    },
+    {
+      colors: true,
+      depth: null
+    }
   );
 
   c.close();

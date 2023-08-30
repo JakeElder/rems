@@ -145,6 +145,9 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     serverQuery: RealEstateQuerySchema.Server.parse({ ...query, ...bounds }),
     queryString: generateQueryString(query),
 
+    patch,
+    commit,
+
     has: (key) => has(query, key),
     activeFilters: countActiveFilters(query),
 
@@ -232,9 +235,6 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
       $.stagedQuery.set(RealEstateQuerySchema.URL.parse({}));
       commit();
     },
-
-    patch,
-    commit,
 
     onMapMove: useDebouncedCallback(({ zoom, lat, lng }) => {
       patch({ zoom, lat, lng });

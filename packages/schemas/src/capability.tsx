@@ -1,11 +1,23 @@
 import { z } from "zod";
 import { txt } from "./utils";
 
+export const CapabilityCodeSchema = z
+  .enum([
+    "NEW_QUERY",
+    "REFINE_QUERY",
+    "CLEAR_QUERY",
+    "SHOW_PROPERTY",
+    "REQUEST_VIEWING",
+    "RESPOND_GENERAL_QUERY",
+    "REQUEST_CLARIFICATION"
+  ])
+  .describe(txt(<>A unique identifier for the capability</>));
+
 export const CapabilitySchema = z
   .object({
     id: z.number().min(1),
     name: z.string(),
-    code: z.string().describe(txt(<>A unique identifier for the capability</>)),
+    code: CapabilityCodeSchema,
     description: z
       .string()
       .describe(

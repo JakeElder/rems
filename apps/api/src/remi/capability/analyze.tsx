@@ -3,19 +3,20 @@ import {
   RemiResponse,
   txt,
   execute,
-  intents
+  intents,
+  stringify
 } from "@/remi";
-import { NlAnalysis } from "@rems/schemas";
+import { AiCapability } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import * as Models from "@/models";
 import { ChatCompletionRequestMessage } from "openai";
-import { Intent } from "@rems/types";
 
-const { ArgsSchema, ReturnsSchema, ContextSchema } = NlAnalysis;
+const { ArgsSchema, ReturnsSchema, ContextSchema } = AiCapability.Analyze;
 
 type Args = z.infer<typeof ArgsSchema>;
-type Fn = (...args: Args) => Promise<RemiResponse<Intent["code"][]>>;
+type Returns = z.infer<typeof ReturnsSchema>;
+type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
 
 const analyze: Fn = async (nl) => {
   const [
@@ -32,7 +33,7 @@ const analyze: Fn = async (nl) => {
     Models.PropertyType.findAll({ raw: true })
   ]);
 
-  const context = JSON.stringify(
+  const context = stringify(
     ContextSchema.parse({
       indoorFeatures,
       outdoorFeatures,
@@ -43,7 +44,7 @@ const analyze: Fn = async (nl) => {
     })
   );
 
-  const schema = JSON.stringify(zodToJsonSchema(ContextSchema));
+  const schema = stringify(zodToJsonSchema(ContextSchema));
 
   const instruction: ChatCompletionRequestMessage["content"] = txt(
     <>
@@ -69,21 +70,12 @@ const analyze: Fn = async (nl) => {
       {
         name: "f",
         description: txt(<>Further processes a users input/command.</>),
-        parameters: zodToJsonSchema(NlAnalysis.ReturnsSchema)
+        parameters: zodToJsonSchema(ReturnsSchema)
       }
     ]
   };
 
-  const res = await execute(request, ReturnsSchema);
-
-  if (res?.ok) {
-    return {
-      ...res,
-      data: res.data.i.map((id) => intents.find((i) => i.id === id)!.code)
-    };
-  }
-
-  return res;
+  return execute(request, ReturnsSchema);
 };
 
 export default analyze;

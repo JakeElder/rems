@@ -19,18 +19,19 @@ const execute = async <Returns>(
         data: Schema.parse(json)
       };
     } catch (e) {
-      console.dir(
-        {
-          error: true,
-          message: `PARSE_ERROR: ${message.function_call!.arguments}`
-        },
-        { colors: true }
-      );
-      return { ok: false, error: "PARSE_ERROR" };
+      return {
+        ok: false,
+        error: {
+          type: "PARSE_ERROR",
+          data: message.function_call!.arguments
+        }
+      };
     }
   } catch (e: any) {
-    console.dir(e.response.data, { colors: true });
-    return { ok: false, error: e.response.data };
+    return {
+      ok: false,
+      error: e?.response?.data || e
+    };
   }
 };
 

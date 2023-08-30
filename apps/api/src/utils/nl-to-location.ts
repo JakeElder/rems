@@ -2,7 +2,7 @@ import qs from "query-string";
 
 const PLACES_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
 
-const nlToLocation = async (
+export const nlToLocation = async (
   nl: string
 ): Promise<{ lat: number; lng: number; placeId: string } | null> => {
   const q = qs.stringify({

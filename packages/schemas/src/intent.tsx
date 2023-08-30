@@ -1,11 +1,22 @@
 import { z } from "zod";
 import { txt } from "./utils";
 
+export const IntentCodeSchema = z
+  .enum([
+    "REFINE_INDOOR_FEATURES",
+    "REFINE_OUTDOOR_FEATURES",
+    "REFINE_LOT_FEATURES",
+    "REFINE_VIEW_TYPES",
+    "REFINE_PROPERTY_TYPES",
+    "REFINE_LOCATION"
+  ])
+  .describe(txt(<>A unique identifier for the intent</>));
+
 export const IntentSchema = z
   .object({
     id: z.number().min(1),
     name: z.string(),
-    code: z.string().describe(txt(<>A unique identifier for the intent</>)),
+    code: IntentCodeSchema,
     description: z.string().describe(txt(<>A description of the intent</>)),
     examples: z.array(
       z.object({

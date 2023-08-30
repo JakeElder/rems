@@ -4,6 +4,8 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import RefineCaveats from "../components/RefineCaveats";
 
+AiRefinement.Location.ReturnsSchema
+
 const { ArgsSchema, ReturnsSchema } = AiRefinement.Location;
 
 type Args = z.infer<typeof ArgsSchema>;
@@ -12,7 +14,7 @@ type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
 
 const location: Fn = async (nl) => {
   const request: ChatCompletionRequest = {
-    model: "gpt-4",
+    model: "gpt-3.5-turbo-0613",
     messages: [
       {
         role: "system",

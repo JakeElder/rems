@@ -9,11 +9,10 @@ export { ImageSchema } from "./image";
 export { PropertySchema } from "./property";
 export { AppConfigSchema } from "./app-config";
 export { FilterSetSchema } from "./filter-set";
-export { CapabilitySchema } from "./capability";
-export { IntentSchema } from "./intent";
+export { CapabilitySchema, CapabilityCodeSchema } from "./capability";
+export { IntentSchema, IntentCodeSchema } from "./intent";
 export * as AiRefinement from "./ai-refinement";
-export * as AiDiff from "./ai-diff";
-export * as NlAnalysis from "./nl-analysis";
+export * as AiCapability from "./ai-capability";
 
 export const FilterSchema = z.object({
   id: z.number(),

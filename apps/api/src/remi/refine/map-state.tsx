@@ -12,7 +12,7 @@ type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
 
 const mapState: Fn = async (nl, query) => {
   const request: ChatCompletionRequest = {
-    model: "gpt-3.5-turbo-0613",
+    model: "gpt-4",
     messages: [
       {
         role: "system",

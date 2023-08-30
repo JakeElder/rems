@@ -102,6 +102,7 @@ const AiSearchViewContainer = () => {
 
     fetcher(removeDefaults(query), s.value).subscribe({
       next: (c) => {
+        console.log(c);
         if (c.type === "STRATEGY" && (c.value === "NQ" || c.value === "CQ")) {
           reset();
         }

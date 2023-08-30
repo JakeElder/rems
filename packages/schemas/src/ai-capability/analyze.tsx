@@ -1,7 +1,7 @@
 import { z } from "zod";
-import NlInputSchema from "./nl-input";
-import { txt } from "./utils";
-import { FilterSchema, IntentSchema } from ".";
+import NlInputSchema from "../nl-input";
+import { txt } from "../utils";
+import { FilterSchema, IntentSchema } from "..";
 
 export const ArgsSchema = z.tuple([NlInputSchema]);
 
@@ -37,4 +37,5 @@ export const ReturnsSchema = z
         natural language issued to Remi as a command or enquiry.
       </>
     )
-  );
+  )
+  .transform(({ i }) => i);

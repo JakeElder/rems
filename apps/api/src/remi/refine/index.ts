@@ -1,43 +1,24 @@
-import arr from "./array";
 import { FilterSchema } from "@rems/schemas";
-import { Filter } from "@rems/types";
+import factory from "./filter-array";
 import { Model, ModelStatic } from "sequelize";
 import * as Models from "@/models";
-import { RefineArrayFn } from "../types";
 
-type FilterFn = (
-  type: string,
-  filters: Promise<Filter[]>,
-  nl: string,
-  current: Filter["slug"][]
-) => ReturnType<typeof arr>;
-
-const filter: FilterFn = async (type, filters, nl, current) =>
-  arr({ type, current, filters: await filters, nl });
-
-const filters = (Model: ModelStatic<Model>) =>
-  Model.findAll({ raw: true }).then((res) =>
-    res.map((r: any) => FilterSchema.parse(r))
+const filterArray = (Model: ModelStatic<Model>) =>
+  factory(
+    `${Model.name}s`,
+    (async () => {
+      const raw = await Model.findAll({ raw: true });
+      return raw.map((r) => FilterSchema.parse(r));
+    })()
   );
 
-type Slug = Filter["slug"];
+export type FilterArrayFn = ReturnType<typeof filterArray>;
 
-export const indoorFeatures: RefineArrayFn = (nl, current) =>
-  filter("Indoor Features", filters(Models.IndoorFeature), nl, current);
-
-export const outdoorFeatures: RefineArrayFn = (nl, current) =>
-  filter("Outdoor Features", filters(Models.OutdoorFeature), nl, current);
-
-export const lotFeatures: RefineArrayFn = (nl, current) =>
-  filter("Lot Features", filters(Models.LotFeature), nl, current);
-
-export const propertyTypes: RefineArrayFn = (nl, current) =>
-  filter("Property Types", filters(Models.PropertyType), nl, current);
-
-export const viewTypes: RefineArrayFn = (nl, current) =>
-  filter("View Types", filters(Models.ViewType), nl, current);
-
-export { arr };
+export const indoorFeatures = filterArray(Models.IndoorFeature);
+export const outdoorFeatures = filterArray(Models.OutdoorFeature);
+export const propertyTypes = filterArray(Models.PropertyType);
+export const lotFeatures = filterArray(Models.LotFeature);
+export const viewTypes = filterArray(Models.ViewType);
 
 export { default as location } from "./location";
 export { default as mapState } from "./map-state";

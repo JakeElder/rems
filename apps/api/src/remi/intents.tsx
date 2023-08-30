@@ -90,6 +90,24 @@ const intents: Intent[] = [
         matches: ["condo or apartment"]
       }
     ]
+  },
+
+  {
+    id: 6,
+    code: "REFINE_LOCATION",
+    name: "Refine Location",
+    description: txt(
+      <>
+        The user has indicated that they would like to specify the search origin
+        for their search.
+      </>
+    ),
+    examples: [
+      {
+        input: "I'm looking for a 3 bedroom condo or apartment",
+        matches: ["condo or apartment"]
+      }
+    ]
   }
 ];
 

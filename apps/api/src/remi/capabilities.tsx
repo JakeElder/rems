@@ -92,6 +92,25 @@ const capabilities: Capability[] = [
       txt(<>What's the square root of 6049261729?</>),
       txt(<>Do you know how to shot web?</>)
     ]
+  },
+
+  {
+    id: 100,
+    code: "REQUEST_CLARIFICATION",
+    name: "Request Clarification",
+    description: txt(
+      <>
+        When Remi is unsure about your intent or needs more information, she
+        will ask for clarification to ensure she can provide the most suitable
+        response or perform the most appropriate action.
+      </>
+    ),
+    exampleTriggers: [
+      txt(<>asdfghjkl</>),
+      txt(<>Show me a 3-bedroom within...actually nevermind</>),
+      txt(<>How do I...you know what?</>),
+      txt(<>So, um, could you, like...</>)
+    ]
   }
 ];
 
