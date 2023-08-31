@@ -8,8 +8,8 @@ const intents: Intent[] = [
     name: "Refine Indoor Features",
     description: txt(
       <>
-        The user has indicated that they would like to add or remove a filter
-        from the available set of indoor features.
+        The user wants to add or remove a filter from the available set of
+        indoor features
       </>
     ),
     examples: [
@@ -26,8 +26,8 @@ const intents: Intent[] = [
     name: "Refine Outdoor Features",
     description: txt(
       <>
-        The user has indicated that they would like to add or remove a filter
-        from the available set of outdoor features.
+        The user wants to add or remove a filter from the available set of
+        outdoor features
       </>
     ),
     examples: [
@@ -44,8 +44,8 @@ const intents: Intent[] = [
     name: "Refine Lot Features",
     description: txt(
       <>
-        The user has indicated that they would like to add or remove a filter
-        from the available set of lot features.
+        The user wants to add or remove a filter from the available set of lot
+        features
       </>
     ),
     examples: [
@@ -62,8 +62,8 @@ const intents: Intent[] = [
     name: "Refine View Types",
     description: txt(
       <>
-        The user has indicated that they would like to add or remove a filter
-        from the available set of view types.
+        The user wants to add or remove a filter from the available set of view
+        types
       </>
     ),
     examples: [
@@ -80,8 +80,8 @@ const intents: Intent[] = [
     name: "Refine Property Types",
     description: txt(
       <>
-        The user has indicated that they would like to add or remove a filter
-        from the available set of property types.
+        The user wants to add or remove a filter from the available set of
+        property types
       </>
     ),
     examples: [
@@ -97,15 +97,34 @@ const intents: Intent[] = [
     code: "REFINE_LOCATION",
     name: "Refine Location",
     description: txt(
-      <>
-        The user has indicated that they would like to specify the search origin
-        for their search.
-      </>
+      <>The user wants to specify the search origin for their search</>
     ),
     examples: [
       {
         input: "I'm looking for a 3 bedroom condo or apartment",
         matches: ["condo or apartment"]
+      }
+    ]
+  },
+
+  {
+    id: 7,
+    code: "REFINE_PAGE_SORT",
+    name: "Refine Page/Sort",
+    description: txt(
+      <>
+        The user wants to change either the current page, or the order the
+        properties are sorted
+      </>
+    ),
+    examples: [
+      {
+        input: "Go forward a page",
+        matches: ["Go forward a page"]
+      },
+      {
+        input: "Sort by lot size",
+        matches: ["Sort by lot size"]
       }
     ]
   }

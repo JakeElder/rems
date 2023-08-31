@@ -7,6 +7,8 @@ import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
 import chalk from "chalk";
 
+const { PageAndSort } = RealEstateQuerySchema;
+
 type Stream = (
   nl: string,
   query: RealEstateQuery
@@ -54,7 +56,7 @@ const stream: Stream = (input, query) => async (c) => {
       console.log(chalk.red(`<ERROR: ${label}>`));
       console.dir(res.error, { colors: true, depth: null });
       console.log(chalk.red(`<ERROR: ${label}>`));
-      console.log()
+      console.log();
       return { [label]: "Error" };
     }
 
@@ -72,7 +74,7 @@ const stream: Stream = (input, query) => async (c) => {
      */
     run(
       "Location",
-      async () => intends("REFINE_LOCATION"),
+      () => intends("REFINE_LOCATION"),
       () => remi.refine.location(input),
       async ({ origin }) => {
         if (!origin) return null;
@@ -88,12 +90,22 @@ const stream: Stream = (input, query) => async (c) => {
       }
     ),
 
+    /*
+     * Page & Sort
+     */
+    run(
+      "Page & Sort",
+      () => intends("REFINE_PAGE_SORT"),
+      () => remi.refine.pageAndSort(input, PageAndSort.parse(query)),
+      async ({ page, sort }) => patch({ page, sort })
+    ),
+
     /**
      * Indoor Features
      */
     run(
       "Indoor Features",
-      async () => intends("REFINE_INDOOR_FEATURES"),
+      () => intends("REFINE_INDOOR_FEATURES"),
       () => remi.refine.indoorFeatures(input, query["indoor-features"]),
       async (res) => patch({ "indoor-features": res })
     ),
@@ -103,9 +115,39 @@ const stream: Stream = (input, query) => async (c) => {
      */
     run(
       "Outdoor Features",
-      async () => intends("REFINE_OUTDOOR_FEATURES"),
+      () => intends("REFINE_OUTDOOR_FEATURES"),
       () => remi.refine.outdoorFeatures(input, query["outdoor-features"]),
       async (res) => patch({ "outdoor-features": res })
+    ),
+
+    /**
+     * Lot Features
+     */
+    run(
+      "Lot Features",
+      () => intends("REFINE_LOT_FEATURES"),
+      () => remi.refine.lotFeatures(input, query["lot-features"]),
+      async (res) => patch({ "lot-features": res })
+    ),
+
+    /**
+     * Property Types
+     */
+    run(
+      "Property Types",
+      () => intends("REFINE_PROPERTY_TYPES"),
+      () => remi.refine.propertyTypes(input, query["property-types"]),
+      async (res) => patch({ "property-types": res })
+    ),
+
+    /**
+     * View Types
+     */
+    run(
+      "View Types",
+      () => intends("REFINE_VIEW_TYPES"),
+      () => remi.refine.viewTypes(input, query["view-types"]),
+      async (res) => patch({ "view-types": res })
     )
   ]);
 
@@ -115,10 +157,7 @@ const stream: Stream = (input, query) => async (c) => {
       intents: remi.terse.intents(await intents()),
       reactions: Object.assign({}, ...res)
     },
-    {
-      colors: true,
-      depth: null
-    }
+    { colors: true, depth: null }
   );
 
   c.close();

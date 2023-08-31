@@ -48,8 +48,7 @@ const factory = (type: string, filtersPromise: Promise<Filter[]>): Fn => {
               <p>The schema for this context: `{schema}`</p>
             </>
           )
-        },
-        { role: "user", content: input }
+        }
       ],
       function_call: { name: "f" },
       functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]

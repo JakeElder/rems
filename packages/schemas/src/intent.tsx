@@ -8,7 +8,8 @@ export const IntentCodeSchema = z
     "REFINE_LOT_FEATURES",
     "REFINE_VIEW_TYPES",
     "REFINE_PROPERTY_TYPES",
-    "REFINE_LOCATION"
+    "REFINE_LOCATION",
+    "REFINE_PAGE_SORT"
   ])
   .describe(txt(<>A unique identifier for the intent</>));
 
