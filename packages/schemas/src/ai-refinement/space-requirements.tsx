@@ -4,6 +4,11 @@ import { SpaceRequirements } from "../real-estate-query";
 
 export const ArgsSchema = z.tuple([NlInputSchema, SpaceRequirements]);
 
+export const ContextSchema = z.object({
+  input: NlInputSchema,
+  current: SpaceRequirements
+});
+
 export const ReturnsSchema = z
   .object({
     mnbd: SpaceRequirements.shape["min-bedrooms"],

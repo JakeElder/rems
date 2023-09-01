@@ -6,6 +6,12 @@ import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
 import chalk from "chalk";
+import { pickBy } from "remeda";
+
+const { SpaceRequirements } = RealEstateQuerySchema;
+
+const defined = (obj: Record<string, any>) =>
+  pickBy(obj, (v) => typeof v !== "undefined");
 
 type Stream = (
   nl: string,
@@ -106,6 +112,17 @@ const stream: Stream = (input, query) => async (c) => {
       () => intends("REFINE_SORT"),
       () => remi.refine.sort(input, query["sort"]),
       async (sort) => (sort ? patch({ sort }) : null)
+    ),
+
+    /*
+     * Space Requirements
+     */
+    run(
+      "Space Requirements",
+      () => intends("REFINE_SPACE_REQUIREMENTS"),
+      () =>
+        remi.refine.spaceRequirements(input, SpaceRequirements.parse(query)),
+      async (props) => patch(defined(props))
     ),
 
     /**

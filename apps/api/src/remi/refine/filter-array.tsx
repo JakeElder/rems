@@ -33,7 +33,6 @@ const factory = (type: string, filtersPromise: Promise<Filter[]>): Fn => {
 
     const request: ChatCompletionRequest = {
       model: "gpt-4",
-      temperature: 0.1,
       messages: [
         {
           role: "system",

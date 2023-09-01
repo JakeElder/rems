@@ -131,6 +131,30 @@ const intents: Intent[] = [
         matches: ["Sort by lot size"]
       }
     ]
+  },
+
+  {
+    id: 9,
+    code: "REFINE_SPACE_REQUIREMENTS",
+    name: "Refine Sort",
+    description: txt(
+      <>
+        <p>The user wants to specify search criteria relating to space.</p>
+        <p>This could be any of the following;</p>
+        <ul>
+          <li>Min/Max bedrooms</li>
+          <li>Min bathrooms</li>
+          <li>Min/Max living area</li>
+          <li>Min/Max lot size</li>
+        </ul>
+      </>
+    ),
+    examples: [
+      {
+        input: "I'm looking for a 3 bedroom, 2 bathroom condo, around 100m2",
+        matches: ["3 bedroom", "2 bathroom", "around 100m2"]
+      }
+    ]
   }
 ];
 
