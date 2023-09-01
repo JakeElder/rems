@@ -4,6 +4,11 @@ import { MapState } from "../real-estate-query";
 
 export const ArgsSchema = z.tuple([NlInputSchema, MapState]);
 
+export const ContextSchema = z.object({
+  input: NlInputSchema,
+  current: MapState
+});
+
 export const ReturnsSchema = z
   .object({
     r: MapState.shape["radius"],

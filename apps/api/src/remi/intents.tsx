@@ -155,6 +155,43 @@ const intents: Intent[] = [
         matches: ["3 bedroom", "2 bathroom", "around 100m2"]
       }
     ]
+  },
+
+  {
+    id: 10,
+    code: "REFINE_BUDGET_AVAILABILITY",
+    name: "Refine Budget & Availability",
+    description: txt(
+      <>
+        The user wants to set their budget/whether they are looking to rent or
+        buy
+      </>
+    ),
+    examples: [
+      {
+        input: "3 bedroom condos around 20k per month",
+        matches: ["around 20k per month"]
+      }
+    ]
+  },
+
+  {
+    id: 11,
+    code: "REFINE_MAP_STATE",
+    name: "Refine Map State",
+    description: txt(
+      <>The user wants to modify the state of the listings map</>
+    ),
+    examples: [
+      {
+        input: "Shift north a bit",
+        matches: ["Shift north a bit"]
+      },
+      {
+        input: "Enable the zoom radius",
+        matches: ["Enable the zoom radius"]
+      }
+    ]
   }
 ];
 

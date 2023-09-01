@@ -4,6 +4,11 @@ import { BudgetAndAvailability } from "../real-estate-query";
 
 export const ArgsSchema = z.tuple([NlInputSchema, BudgetAndAvailability]);
 
+export const ContextSchema = z.object({
+  input: NlInputSchema,
+  current: BudgetAndAvailability
+});
+
 export const ReturnsSchema = z
   .object({
     mn: BudgetAndAvailability.shape["min-price"],

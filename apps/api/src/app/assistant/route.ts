@@ -8,7 +8,8 @@ import { RemiFn } from "@/remi";
 import chalk from "chalk";
 import { pickBy } from "remeda";
 
-const { SpaceRequirements } = RealEstateQuerySchema;
+const { SpaceRequirements, BudgetAndAvailability, MapState } =
+  RealEstateQuerySchema;
 
 const defined = (obj: Record<string, any>) =>
   pickBy(obj, (v) => typeof v !== "undefined");
@@ -122,6 +123,30 @@ const stream: Stream = (input, query) => async (c) => {
       () => intends("REFINE_SPACE_REQUIREMENTS"),
       () =>
         remi.refine.spaceRequirements(input, SpaceRequirements.parse(query)),
+      async (props) => patch(defined(props))
+    ),
+
+    /*
+     * Budget & Availability
+     */
+    run(
+      "Budget & Availability",
+      () => intends("REFINE_BUDGET_AVAILABILITY"),
+      () =>
+        remi.refine.budgetAndAvailability(
+          input,
+          BudgetAndAvailability.parse(query)
+        ),
+      async (props) => patch(defined(props))
+    ),
+
+    /*
+     * Map State
+     */
+    run(
+      "Map State",
+      () => intends("REFINE_MAP_STATE"),
+      () => remi.refine.mapState(input, MapState.parse(query)),
       async (props) => patch(defined(props))
     ),
 

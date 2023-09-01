@@ -11,7 +11,9 @@ export const IntentCodeSchema = z
     "REFINE_LOCATION",
     "REFINE_PAGE",
     "REFINE_SORT",
-    "REFINE_SPACE_REQUIREMENTS"
+    "REFINE_SPACE_REQUIREMENTS",
+    "REFINE_BUDGET_AVAILABILITY",
+    "REFINE_MAP_STATE"
   ])
   .describe(txt(<>A unique identifier for the intent</>));
 

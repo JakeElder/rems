@@ -1,64 +1,60 @@
-import { ChatCompletionRequest, RemiResponse, txt, execute } from "@/remi";
+import {
+  ChatCompletionRequest,
+  RemiResponse,
+  txt,
+  execute,
+  stringify
+} from "@/remi";
 import { AiRefinement } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import RefineCaveats from "../components/RefineCaveats";
 
-const { ArgsSchema, ReturnsSchema } = AiRefinement.BudgetAndAvailability;
+const { ArgsSchema, ReturnsSchema, ContextSchema } =
+  AiRefinement.BudgetAndAvailability;
 
 type Args = z.infer<typeof ArgsSchema>;
+type Context = z.infer<typeof ContextSchema>;
 type Returns = z.infer<typeof ReturnsSchema>;
 type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
 
-const budgetAndAvailability: Fn = async (nl, query) => {
+const budgetAndAvailability: Fn = async (input, current) => {
+  const context = stringify<Context>({ input, current });
+  const schema = stringify(zodToJsonSchema(ContextSchema));
+
   const request: ChatCompletionRequest = {
-    model: "gpt-3.5-turbo-0613",
+    model: "gpt-4",
     messages: [
       {
         role: "system",
         content: txt(
           <>
             <p>
-              You are Remi, an assistant responsible for helping the user of a
-              real estate website. Your task is to process their input and
-              update the current query to reflect thier budget, and whether or
-              not they are looking for a sale/rental property.
+              You an assistant responsible for helping the user of a real estate
+              website. Process their input and update the current query to
+              reflect their budget & availability requirements
             </p>
-            <p>
-              Here is the relevant state from the current query: `
-              {JSON.stringify(query)}`
-            </p>
-            <RefineCaveats partial>
+            <p>Useful context: `{context}`</p>
+            <p>The context schema: `{schema}`</p>
+            <ul>
               <li>
-                Set sensible min and max values when a user specifies a
-                ballpark. IE "around 30k" should set both min and max values.
-                10% is a good ballpark.
+                If the user sets a monthly range, assume they are looking to
+                rent
               </li>
+              <li>Leave unchanged values undefined</li>
               <li>
-                Try to extrapolate the availablity based on the users input. IE,
-                if the user specifies a single figure that seemingly represents
-                a purchase price, set the availability to `sale`.
+                Extrapolate min and max values from ballpark figures. Ie a 10%
+                range
               </li>
-              <li>
-                Use sensible judgment to identify the values. IE, sometimes the
-                user will say "around 30" per month. This implies around 30,000.
-              </li>
-            </RefineCaveats>
+            </ul>
           </>
         )
-      },
-      {
-        role: "user",
-        content: nl
       }
     ],
     function_call: { name: "f" },
     functions: [
       {
         name: "f",
-        description: txt(
-          <>Updates the budget/availability based on users input.</>
-        ),
+        description: txt(<>Updates the budget/availability</>),
         parameters: zodToJsonSchema(ReturnsSchema)
       }
     ]
