@@ -109,19 +109,23 @@ const intents: Intent[] = [
 
   {
     id: 7,
-    code: "REFINE_PAGE_SORT",
-    name: "Refine Page/Sort",
-    description: txt(
-      <>
-        The user wants to change either the current page, or the order the
-        properties are sorted
-      </>
-    ),
+    code: "REFINE_PAGE",
+    name: "Refine Page",
+    description: txt(<>The user wants to change either the current page </>),
     examples: [
       {
         input: "Go forward a page",
         matches: ["Go forward a page"]
-      },
+      }
+    ]
+  },
+
+  {
+    id: 8,
+    code: "REFINE_SORT",
+    name: "Refine Sort",
+    description: txt(<>The user wants to change the sort order</>),
+    examples: [
       {
         input: "Sort by lot size",
         matches: ["Sort by lot size"]

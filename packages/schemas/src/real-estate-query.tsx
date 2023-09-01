@@ -62,19 +62,22 @@ export const BudgetAndAvailability = z.object({
     )
 });
 
-export const PageAndSort = z.object({
-  page: z.coerce.number().default(1).catch(1),
-  sort: z
-    .enum([
-      "newest-first",
-      "lowest-price-first",
-      "highest-price-first",
-      "smallest-living-area-first",
-      "largest-living-area-first"
-    ])
-    .default("newest-first")
-    .catch("newest-first")
-});
+export const Page = z.coerce
+  .number()
+  .default(1)
+  .catch(1)
+  .describe(txt(<>The page to show</>));
+
+export const Sort = z
+  .enum([
+    "newest-first",
+    "lowest-price-first",
+    "highest-price-first",
+    "smallest-living-area-first",
+    "largest-living-area-first"
+  ])
+  .default("newest-first")
+  .catch("newest-first");
 
 export const SpaceRequirements = z.object({
   "min-bedrooms": z.coerce
@@ -221,9 +224,11 @@ export const MapState = z.object({
 });
 
 export const Scalars = z
-  .object({})
+  .object({
+    page: Page,
+    sort: Sort
+  })
   .merge(BudgetAndAvailability)
-  .merge(PageAndSort)
   .merge(SpaceRequirements)
   .merge(Origin)
   .merge(MapState);

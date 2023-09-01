@@ -22,6 +22,7 @@ export const viewTypes = filterArray(Models.ViewType);
 
 export { default as location } from "./location";
 export { default as mapState } from "./map-state";
-export { default as pageAndSort } from "./page-and-sort";
+export { default as page } from "./page";
+export { default as sort } from "./sort";
 export { default as spaceRequirements } from "./space-requirements";
 export { default as budgetAndAvailability } from "./budget-and-availability";

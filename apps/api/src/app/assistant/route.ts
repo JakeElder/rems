@@ -7,8 +7,6 @@ import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
 import chalk from "chalk";
 
-const { PageAndSort } = RealEstateQuerySchema;
-
 type Stream = (
   nl: string,
   query: RealEstateQuery
@@ -91,13 +89,23 @@ const stream: Stream = (input, query) => async (c) => {
     ),
 
     /*
-     * Page & Sort
+     * Page
      */
     run(
-      "Page & Sort",
-      () => intends("REFINE_PAGE_SORT"),
-      () => remi.refine.pageAndSort(input, PageAndSort.parse(query)),
-      async ({ page, sort }) => patch({ page, sort })
+      "Page",
+      () => intends("REFINE_PAGE"),
+      () => remi.refine.page(input, query["page"]),
+      async (page) => (page ? patch({ page }) : null)
+    ),
+
+    /*
+     * Sort
+     */
+    run(
+      "Sort",
+      () => intends("REFINE_SORT"),
+      () => remi.refine.sort(input, query["sort"]),
+      async (sort) => (sort ? patch({ sort }) : null)
     ),
 
     /**
