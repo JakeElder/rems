@@ -2462,6 +2462,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ewoudenberg/difflib@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@ewoudenberg/difflib@npm:0.1.0"
+  dependencies:
+    heap: ">= 0.2.0"
+  checksum: 9fdffcb90d1a17134954cf0f38a59b24b5557eb833bef7a4637e5c347aaf55bc35898a5183aa614315297a39b526e2bc760c0f5f4334f77d55064321bc7cfff5
+  languageName: node
+  linkType: hard
+
 "@fal-works/esbuild-plugin-global-externals@npm:^2.1.2":
   version: 2.1.2
   resolution: "@fal-works/esbuild-plugin-global-externals@npm:2.1.2"
@@ -7764,6 +7773,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/json-diff@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@types/json-diff@npm:1.0.0"
+  checksum: 1fc9d0b2cd0b9766f7c23689dcd4d934b6ed00f6b45a5423702ae7911d85c3872f6982f98b38e0eff74af617a3603e6dc0ed34d100d4b323d89f9c61d7b73362
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.12
   resolution: "@types/json-schema@npm:7.0.12"
@@ -9126,20 +9142,24 @@ __metadata:
     "@rems/tsconfig": "*"
     "@rems/types": "*"
     "@types/array-equal": ^1.0.0
+    "@types/json-diff": ^1.0.0
     "@types/memoizee": ^0.4.8
     "@types/node": 20.4.5
     "@types/pluralize": ^0.0.30
+    "@types/prettyjson": ^0.0.30
     "@types/react": 18.2.18
     "@types/react-dom": 18.2.7
     "@types/turndown": ^5.0.1
     array-equal: ^1.0.0
     chalk: ^5.3.0
     env-cmd: ^10.1.0
+    json-diff: ^1.0.6
     memoizee: ^0.4.15
     next: 13.4.12
     nextjs-cors: latest
     pg-connection-string: ^2.6.2
     pluralize: ^8.0.0
+    prettyjson: ^1.2.5
     query-string: ^8.1.0
     react: 18.2.0
     react-dom: 18.2.0
@@ -9147,6 +9167,7 @@ __metadata:
     snake-case: ^3.0.4
     turndown: ^7.1.2
     typescript: 5.2.2
+    widest-line: ^4.0.1
     zod: ^3.22.2
   languageName: unknown
   linkType: soft
@@ -10921,7 +10942,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colors@npm:1.4.0":
+"colors@npm:1.4.0, colors@npm:^1.4.0":
   version: 1.4.0
   resolution: "colors@npm:1.4.0"
   checksum: 98aa2c2418ad87dedf25d781be69dc5fc5908e279d9d30c34d8b702e586a0474605b3a189511482b9d5ed0d20c867515d22749537f7bc546256c6014f3ebdcec
@@ -12186,6 +12207,15 @@ __metadata:
   version: 2.0.6
   resolution: "dottie@npm:2.0.6"
   checksum: 4c778df9dc631a1108a32ef390916836814999a7411d10883f4151bd49c9c6934dc329b3f50fc7692849aa75ba87dba880fd54be501a3b39a6b9c23d6f772a09
+  languageName: node
+  linkType: hard
+
+"dreamopt@npm:~0.8.0":
+  version: 0.8.0
+  resolution: "dreamopt@npm:0.8.0"
+  dependencies:
+    wordwrap: ">=0.0.2"
+  checksum: 701134807c4a2cc6d111888e1faa7ea6b5ac73cb2cc0f49d852844f7ade3f8bfd03249845841ff2786ffeb6cff9ba8d8cf39c152c24341fd67ef93a0cf7c9287
   languageName: node
   linkType: hard
 
@@ -14771,6 +14801,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"heap@npm:>= 0.2.0":
+  version: 0.2.7
+  resolution: "heap@npm:0.2.7"
+  checksum: b0f3963a799e02173f994c452921a777f2b895b710119df999736bfed7477235c2860c423d9aea18a9f3b3d065cb1114d605c208cfcb8d0ac550f97ec5d28cb0
+  languageName: node
+  linkType: hard
+
 "helmet@npm:^6.0.1":
   version: 6.2.0
   resolution: "helmet@npm:6.2.0"
@@ -16385,6 +16422,19 @@ __metadata:
   version: 3.0.1
   resolution: "json-buffer@npm:3.0.1"
   checksum: 9026b03edc2847eefa2e37646c579300a1f3a4586cfb62bf857832b60c852042d0d6ae55d1afb8926163fa54c2b01d83ae24705f34990348bdac6273a29d4581
+  languageName: node
+  linkType: hard
+
+"json-diff@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "json-diff@npm:1.0.6"
+  dependencies:
+    "@ewoudenberg/difflib": 0.1.0
+    colors: ^1.4.0
+    dreamopt: ~0.8.0
+  bin:
+    json-diff: bin/json-diff.js
+  checksum: 6faba53836190a0090ac6c5d05a13c6cf856d23ed4ec44d6da9400f4a8e19ca149cbb675a45a5abe2880f9342c6ca9339fdb4e902a0ba3bd017ffd8ec544efd9
   languageName: node
   linkType: hard
 
@@ -24784,6 +24834,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"widest-line@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "widest-line@npm:4.0.1"
+  dependencies:
+    string-width: ^5.0.1
+  checksum: 64c48cf27171221be5f86fc54b94dd29879165bdff1a7aa92dde723d9a8c99fb108312768a5d62c8c2b80b701fa27bbd36a1ddc58367585cd45c0db7920a0cba
+  languageName: node
+  linkType: hard
+
 "wildcard@npm:^2.0.0":
   version: 2.0.1
   resolution: "wildcard@npm:2.0.1"
@@ -24847,7 +24906,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wordwrap@npm:^1.0.0":
+"wordwrap@npm:>=0.0.2, wordwrap@npm:^1.0.0":
   version: 1.0.0
   resolution: "wordwrap@npm:1.0.0"
   checksum: 2a44b2788165d0a3de71fd517d4880a8e20ea3a82c080ce46e294f0b68b69a2e49cff5f99c600e275c698a90d12c5ea32aff06c311f0db2eb3f1201f3e7b2a04

@@ -6,7 +6,7 @@ import { AiSearch } from "@rems/ui";
 import useRealEstateQuery, {
   removeDefaults
 } from "@/hooks/use-real-estate-query";
-import { Chunk, RealEstateQuery } from "@rems/types";
+import { Reaction, RealEstateQuery } from "@rems/types";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -22,9 +22,7 @@ type OnChange = NonNullable<ViewProps["onChange"]>;
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
 const fetcher = (query: Partial<RealEstateQuery>, nl: string) =>
-  new Observable<Chunk>((s) => {
-    const start = Date.now();
-
+  new Observable<Reaction>((s) => {
     fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
       method: "POST",
       body: JSON.stringify({ query, nl })
@@ -43,17 +41,13 @@ const fetcher = (query: Partial<RealEstateQuery>, nl: string) =>
           return;
         }
 
-        const chunks: Chunk[] = decoder
+        const chunks: Reaction[] = decoder
           .decode(value)
           .split("\n")
           .filter(Boolean)
           .map((c) => JSON.parse(c));
 
-        chunks.forEach((c) => {
-          // console.log(Date.now() - start);
-          s.next(c);
-        });
-
+        chunks.forEach((c) => s.next(c));
         reader.read().then(pump);
       };
 
@@ -103,11 +97,8 @@ const AiSearchViewContainer = () => {
     fetcher(removeDefaults(query), s.value).subscribe({
       next: (c) => {
         console.log(c);
-        if (c.type === "STRATEGY" && (c.value === "NQ" || c.value === "CQ")) {
-          reset();
-        }
-        if (c.type === "PATCH") {
-          patch(c.data);
+        if (c.type === "PATCH_QUERY") {
+          patch(c.patch);
         }
       },
       complete() {

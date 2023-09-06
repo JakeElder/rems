@@ -1,11 +1,11 @@
 import { Filter, OpenAIModel } from "@rems/types";
 import { CreateChatCompletionRequest as OriginalRequest } from "openai";
 
-export type RemiFn = (...args: any) => Promise<RemiResponse>;
-
 export type RemiResponse<T = any> =
   | { ok: true; data: T }
   | { ok: false; error: any };
+
+export type RemiFn = (...args: any) => Promise<RemiResponse>;
 
 export type ChatCompletionRequest = Omit<OriginalRequest, "model"> & {
   model: OpenAIModel;

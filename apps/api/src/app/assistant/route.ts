@@ -1,15 +1,31 @@
 import { NextRequest } from "next/server";
 import * as remi from "@/remi";
-import { IntentCode, Reaction, RealEstateQuery } from "@rems/types";
+import {
+  IntentCode,
+  IntentResolution,
+  PatchArrayReaction,
+  PatchReactionIntentResolution,
+  PatchScalarReaction,
+  QueryRefinementSummary,
+  Reaction,
+  RealEstateQuery
+} from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
 import chalk from "chalk";
-import { pickBy } from "remeda";
+import { pickBy, pick } from "remeda";
+import { diffString } from "json-diff";
+import prettyjson from "prettyjson";
+import widestLine from "widest-line";
+import { z } from "zod";
 
 const { SpaceRequirements, BudgetAndAvailability, MapState } =
   RealEstateQuerySchema;
+
+type Arrays = z.infer<typeof RealEstateQuerySchema.Arrays>;
+type ArrayKey = keyof Arrays;
 
 const defined = (obj: Record<string, any>) =>
   pickBy(obj, (v) => typeof v !== "undefined");
@@ -21,10 +37,15 @@ type Stream = (
 
 const encoder = new TextEncoder();
 
-const patch = (data: Partial<RealEstateQuery>): Reaction => ({
-  type: "PATCH_QUERY",
+const scalarPatch = (data: Partial<RealEstateQuery>): PatchScalarReaction => ({
+  type: "PATCH_SCALAR",
   patch: data
 });
+
+const arrayPatch = (
+  key: ArrayKey,
+  data: Arrays[ArrayKey]
+): PatchArrayReaction => ({ type: "PATCH_ARRAY", key: key, value: data });
 
 const stream: Stream = (input, query) => async (c) => {
   const send = (data: Reaction) => {
@@ -38,36 +59,41 @@ const stream: Stream = (input, query) => async (c) => {
     return res.data;
   });
 
-  // const capability = memoize(async () => {
-  //   const res = await remi.capability.identify(nl);
-  //   if (!res?.ok) throw new Error();
-  //   return res.data;
-  // });
+  const capability = memoize(async () => {
+    const res = await remi.capability.identify(input);
+    if (!res?.ok) throw new Error();
+    return res.data;
+  });
 
-  const run = async <T extends RemiFn>(
-    label: string,
-    condition: () => Promise<boolean>,
+  const resolve = async <T extends RemiFn>(
+    intent: IntentCode,
     fn: T,
     process: (
       res: Extract<Awaited<ReturnType<T>>, { ok: true }>["data"]
     ) => Promise<Reaction | null>
-  ) => {
-    if (!(await condition())) return { [label]: "No-op" };
+  ): Promise<IntentResolution> => {
+    if (!(await intends(intent))) {
+      return { intent, type: "NOOP" };
+    }
 
     const res = await fn();
 
     if (!res.ok) {
       console.log();
-      console.log(chalk.red(`<ERROR: ${label}>`));
+      console.log(chalk.red(`<ERROR: ${intent}>`));
       console.dir(res.error, { colors: true, depth: null });
-      console.log(chalk.red(`<ERROR: ${label}>`));
+      console.log(chalk.red(`<ERROR: ${intent}>`));
       console.log();
-      return { [label]: "Error" };
+      return { intent, type: "ERROR" };
     }
 
     const reaction = await process(res.data);
-    if (reaction) send(reaction);
-    return { [label]: reaction };
+    if (!reaction) {
+      return { intent, type: "NOOP" };
+    }
+    send(reaction);
+
+    return { intent, type: "PATCH", reaction };
   };
 
   const intends = async (intent: IntentCode) =>
@@ -77,9 +103,8 @@ const stream: Stream = (input, query) => async (c) => {
     /*
      * Location
      */
-    run(
-      "Location",
-      () => intends("REFINE_LOCATION"),
+    resolve(
+      "REFINE_LOCATION",
       () => remi.refine.location(input),
       async ({ origin }) => {
         if (!origin) return null;
@@ -87,7 +112,7 @@ const stream: Stream = (input, query) => async (c) => {
         const l = await nlToLocation(origin);
         if (!l) return null;
 
-        return patch({
+        return scalarPatch({
           "origin-lat": l.lat,
           "origin-lng": l.lng,
           "origin-id": l.placeId
@@ -98,119 +123,155 @@ const stream: Stream = (input, query) => async (c) => {
     /*
      * Page
      */
-    run(
-      "Page",
-      () => intends("REFINE_PAGE"),
+    resolve(
+      "REFINE_PAGE",
       () => remi.refine.page(input, query["page"]),
-      async (page) => (page ? patch({ page }) : null)
+      async (page) => (page ? scalarPatch({ page }) : null)
     ),
 
     /*
      * Sort
      */
-    run(
-      "Sort",
-      () => intends("REFINE_SORT"),
+    resolve(
+      "REFINE_SORT",
       () => remi.refine.sort(input, query["sort"]),
-      async (sort) => (sort ? patch({ sort }) : null)
+      async (sort) => (sort ? scalarPatch({ sort }) : null)
     ),
 
     /*
      * Space Requirements
      */
-    run(
-      "Space Requirements",
-      () => intends("REFINE_SPACE_REQUIREMENTS"),
+    resolve(
+      "REFINE_SPACE_REQUIREMENTS",
       () =>
         remi.refine.spaceRequirements(input, SpaceRequirements.parse(query)),
-      async (props) => patch(defined(props))
+      async (props) => scalarPatch(defined(props))
     ),
 
     /*
      * Budget & Availability
      */
-    run(
-      "Budget & Availability",
-      () => intends("REFINE_BUDGET_AVAILABILITY"),
+    resolve(
+      "REFINE_BUDGET_AVAILABILITY",
       () =>
         remi.refine.budgetAndAvailability(
           input,
           BudgetAndAvailability.parse(query)
         ),
-      async (props) => patch(defined(props))
+      async (props) => scalarPatch(defined(props))
     ),
 
     /*
      * Map State
      */
-    run(
-      "Map State",
-      () => intends("REFINE_MAP_STATE"),
+    resolve(
+      "REFINE_MAP_STATE",
       () => remi.refine.mapState(input, MapState.parse(query)),
-      async (props) => patch(defined(props))
+      async (props) => scalarPatch(defined(props))
     ),
 
     /**
      * Indoor Features
      */
-    run(
-      "Indoor Features",
-      () => intends("REFINE_INDOOR_FEATURES"),
+    resolve(
+      "REFINE_INDOOR_FEATURES",
       () => remi.refine.indoorFeatures(input, query["indoor-features"]),
-      async (res) => patch({ "indoor-features": res })
+      async (res) => arrayPatch("indoor-features", res)
     ),
 
     /**
      * Outdoor Features
      */
-    run(
-      "Outdoor Features",
-      () => intends("REFINE_OUTDOOR_FEATURES"),
+    resolve(
+      "REFINE_OUTDOOR_FEATURES",
       () => remi.refine.outdoorFeatures(input, query["outdoor-features"]),
-      async (res) => patch({ "outdoor-features": res })
+      async (res) => arrayPatch("outdoor-features", res)
     ),
 
     /**
      * Lot Features
      */
-    run(
-      "Lot Features",
-      () => intends("REFINE_LOT_FEATURES"),
+    resolve(
+      "REFINE_LOT_FEATURES",
       () => remi.refine.lotFeatures(input, query["lot-features"]),
-      async (res) => patch({ "lot-features": res })
+      async (res) => arrayPatch("lot-features", res)
     ),
 
     /**
      * Property Types
      */
-    run(
-      "Property Types",
-      () => intends("REFINE_PROPERTY_TYPES"),
+    resolve(
+      "REFINE_PROPERTY_TYPES",
       () => remi.refine.propertyTypes(input, query["property-types"]),
-      async (res) => patch({ "property-types": res })
+      async (res) => arrayPatch("property-types", res)
     ),
 
     /**
      * View Types
      */
-    run(
-      "View Types",
-      () => intends("REFINE_VIEW_TYPES"),
+    resolve(
+      "REFINE_VIEW_TYPES",
       () => remi.refine.viewTypes(input, query["view-types"]),
-      async (res) => patch({ "view-types": res })
+      async (res) => arrayPatch("view-types", res)
     )
   ]);
 
-  console.dir(
-    {
-      input,
-      intents: remi.terse.intents(await intents()),
-      reactions: Object.assign({}, ...res)
-    },
-    { colors: true, depth: null }
-  );
+  const summary: QueryRefinementSummary = {
+    input,
+    intents: remi.terse.intents(await intents()),
+    resolutions: res
+  };
+
+  summarise(summary, query);
 
   c.close();
+};
+
+const summarise = (summary: QueryRefinementSummary, query: RealEstateQuery) => {
+  const title = chalk.blue("Summary");
+  const meta = prettyjson.render({
+    input: summary.input,
+    intents: summary.intents
+  });
+
+  const underline = chalk
+    .gray(`-`)
+    .repeat(Math.max(widestLine(meta), title.length));
+
+  console.log();
+  console.log(underline);
+  console.log(title);
+  console.log(underline);
+  console.log();
+  console.log(meta);
+  console.log();
+
+  const isActionable = (
+    r: IntentResolution
+  ): r is PatchReactionIntentResolution => r.type === "PATCH";
+
+  const resolutions = summary.resolutions.filter(isActionable);
+
+  resolutions.forEach((res) => {
+    console.log(underline);
+    console.log(chalk.yellow(res.intent));
+    console.log(underline);
+
+    if (res.reaction.type === "PATCH_SCALAR") {
+      console.log(
+        diffString(
+          pick(query, Object.keys(res.reaction.patch) as any),
+          res.reaction.patch
+        )
+      );
+    }
+
+    if (res.reaction.type === "PATCH_ARRAY") {
+      console.log(diffString(query[res.reaction.key], res.reaction.value));
+    }
+  });
+
+  console.log();
 };
 
 export async function POST(req: NextRequest) {

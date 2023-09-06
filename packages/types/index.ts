@@ -10,7 +10,15 @@ import {
   RealEstateQuerySchema,
   IntentSchema,
   CapabilityCodeSchema,
-  IntentCodeSchema
+  IntentCodeSchema,
+  ReactionSchema,
+  AiCapability,
+  IntentResolutionSchema,
+  PatchArrayReactionSchema,
+  PatchScalarReactionSchema,
+  NoopIntentResolutionSchema,
+  ErrorIntentResolutionSchema,
+  PatchReactionIntentResolutionSchema
 } from "@rems/schemas";
 import { z } from "zod";
 
@@ -211,7 +219,17 @@ export type OpenAIModel =
   | "text-curie-001"
   | "gpt-3.5-turbo-0301";
 
-export type Reaction = {
-  type: "PATCH_QUERY";
-  patch: Partial<RealEstateQuery>;
-};
+export type IntentResolution = z.infer<typeof IntentResolutionSchema>;
+export type NoopIntentResolution = z.infer<typeof NoopIntentResolutionSchema>;
+export type ErrorIntentResolution = z.infer<typeof ErrorIntentResolutionSchema>;
+export type PatchReactionIntentResolution = z.infer<
+  typeof PatchReactionIntentResolutionSchema
+>;
+
+export type Reaction = z.infer<typeof ReactionSchema>;
+export type PatchArrayReaction = z.infer<typeof PatchArrayReactionSchema>;
+export type PatchScalarReaction = z.infer<typeof PatchScalarReactionSchema>;
+
+export type QueryRefinementSummary = z.infer<
+  typeof AiCapability.RefineQuery.SummarySchema
+>;

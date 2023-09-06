@@ -11,6 +11,17 @@ export { AppConfigSchema } from "./app-config";
 export { FilterSetSchema } from "./filter-set";
 export { CapabilitySchema, CapabilityCodeSchema } from "./capability";
 export { IntentSchema, IntentCodeSchema } from "./intent";
+export {
+  ReactionSchema,
+  PatchScalarReactionSchema,
+  PatchArrayReactionSchema
+} from "./reaction";
+export {
+  IntentResolutionSchema,
+  PatchReactionIntentResolutionSchema,
+  ErrorIntentResolutionSchema,
+  NoopIntentResolutionSchema
+} from "./intent-resolution";
 export * as AiRefinement from "./ai-refinement";
 export * as AiCapability from "./ai-capability";
 
