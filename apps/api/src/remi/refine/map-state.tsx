@@ -21,7 +21,7 @@ const mapState: Fn = async (input, current) => {
   const schema = stringify(zodToJsonSchema(ContextSchema));
 
   const request: ChatCompletionRequest = {
-    model: "davinci",
+    model: "gpt-4",
     messages: [
       {
         role: "system",

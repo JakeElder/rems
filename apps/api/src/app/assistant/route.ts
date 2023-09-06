@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import * as remi from "@/remi";
 import {
+  ErrorIntentResolution,
   IntentCode,
   IntentResolution,
   PatchArrayReaction,
@@ -20,6 +21,7 @@ import { diffString } from "json-diff";
 import prettyjson from "prettyjson";
 import widestLine from "widest-line";
 import { z } from "zod";
+import dedent from "ts-dedent";
 
 const { SpaceRequirements, BudgetAndAvailability, MapState } =
   RealEstateQuerySchema;
@@ -29,11 +31,6 @@ type ArrayKey = keyof Arrays;
 
 const defined = (obj: Record<string, any>) =>
   pickBy(obj, (v) => typeof v !== "undefined");
-
-type Stream = (
-  nl: string,
-  query: RealEstateQuery
-) => UnderlyingDefaultSource["start"];
 
 const encoder = new TextEncoder();
 
@@ -47,7 +44,16 @@ const arrayPatch = (
   data: Arrays[ArrayKey]
 ): PatchArrayReaction => ({ type: "PATCH_ARRAY", key: key, value: data });
 
+type Stream = (
+  nl: string,
+  query: RealEstateQuery
+) => UnderlyingDefaultSource["start"];
+
 const stream: Stream = (input, query) => async (c) => {
+  // summarise(require("../../fixtures/summary").default, query);
+  // c.close();
+  // return;
+
   const send = (data: Reaction) => {
     const chunk = encoder.encode(`${JSON.stringify(data)}\n`);
     c.enqueue(chunk);
@@ -73,27 +79,21 @@ const stream: Stream = (input, query) => async (c) => {
     ) => Promise<Reaction | null>
   ): Promise<IntentResolution> => {
     if (!(await intends(intent))) {
-      return { intent, type: "NOOP" };
+      return { type: "NOOP", intent };
     }
 
     const res = await fn();
-
     if (!res.ok) {
-      console.log();
-      console.log(chalk.red(`<ERROR: ${intent}>`));
-      console.dir(res.error, { colors: true, depth: null });
-      console.log(chalk.red(`<ERROR: ${intent}>`));
-      console.log();
-      return { intent, type: "ERROR" };
+      return { type: "ERROR", intent, error: res.error };
     }
 
     const reaction = await process(res.data);
     if (!reaction) {
-      return { intent, type: "NOOP" };
+      return { type: "NOOP", intent };
     }
-    send(reaction);
 
-    return { intent, type: "PATCH", reaction };
+    send(reaction);
+    return { type: "PATCH", intent, reaction };
   };
 
   const intends = async (intent: IntentCode) =>
@@ -227,6 +227,12 @@ const stream: Stream = (input, query) => async (c) => {
   c.close();
 };
 
+const isPatch = (r: IntentResolution): r is PatchReactionIntentResolution =>
+  r.type === "PATCH";
+
+const isError = (r: IntentResolution): r is ErrorIntentResolution =>
+  r.type === "ERROR";
+
 const summarise = (summary: QueryRefinementSummary, query: RealEstateQuery) => {
   const title = chalk.blue("Summary");
   const meta = prettyjson.render({
@@ -234,43 +240,54 @@ const summarise = (summary: QueryRefinementSummary, query: RealEstateQuery) => {
     intents: summary.intents
   });
 
-  const underline = chalk
-    .gray(`-`)
-    .repeat(Math.max(widestLine(meta), title.length));
+  const line = chalk.gray(`-`).repeat(Math.max(widestLine(meta), title.length));
 
-  console.log();
-  console.log(underline);
-  console.log(title);
-  console.log(underline);
-  console.log();
-  console.log(meta);
-  console.log();
-
-  const isActionable = (
-    r: IntentResolution
-  ): r is PatchReactionIntentResolution => r.type === "PATCH";
-
-  const resolutions = summary.resolutions.filter(isActionable);
-
-  resolutions.forEach((res) => {
-    console.log(underline);
-    console.log(chalk.yellow(res.intent));
-    console.log(underline);
-
+  const diff = (res: PatchReactionIntentResolution) => {
     if (res.reaction.type === "PATCH_SCALAR") {
-      console.log(
-        diffString(
-          pick(query, Object.keys(res.reaction.patch) as any),
-          res.reaction.patch
-        )
-      );
+      return diffString(
+        pick(query, Object.keys(res.reaction.patch) as any),
+        res.reaction.patch
+      ).replace(/\n$/g, "");
     }
 
     if (res.reaction.type === "PATCH_ARRAY") {
-      console.log(diffString(query[res.reaction.key], res.reaction.value));
+      return diffString(query[res.reaction.key], res.reaction.value).replace(
+        /\n+$/g,
+        ""
+      );
     }
-  });
+  };
 
+  const resolutions = summary.resolutions.filter(isPatch).map(
+    (res) => dedent`
+       ${line}
+       ${chalk.yellow(res.intent)}
+       ${line}
+       ${diff(res)}
+     `
+  );
+
+  const errors = summary.resolutions.filter(isError).map(
+    (res) => dedent`
+       ${line}
+       ${chalk.red(res.intent)}
+       ${line}
+       ${prettyjson.render(res.error)}
+     `
+  );
+
+  console.log();
+  console.log();
+  console.log(line);
+  console.log(title);
+  console.log(line);
+  console.log();
+  console.log(meta);
+  console.log();
+  console.log(resolutions.join("\n\n"));
+  console.log();
+  console.log(errors.join("\n\n"));
+  console.log();
   console.log();
 };
 
