@@ -18,8 +18,13 @@ import {
   PatchScalarReactionSchema,
   NoopIntentResolutionSchema,
   ErrorIntentResolutionSchema,
-  PatchReactionIntentResolutionSchema
+  PatchReactionIntentResolutionSchema,
+  RemiStateSchema,
+  SleepingRemiStateSchema,
+  ThinkingRemiStateSchema,
+  ReactingRemiStateSchema
 } from "@rems/schemas";
+import { UpdateStateReactionSchema } from "@rems/schemas/src/reaction";
 import { z } from "zod";
 
 export type Pagination = {
@@ -229,6 +234,13 @@ export type PatchReactionIntentResolution = z.infer<
 export type Reaction = z.infer<typeof ReactionSchema>;
 export type PatchArrayReaction = z.infer<typeof PatchArrayReactionSchema>;
 export type PatchScalarReaction = z.infer<typeof PatchScalarReactionSchema>;
+export type PatchReaction = PatchArrayReaction | PatchScalarReaction;
+export type UpdateStateReaction = z.infer<typeof UpdateStateReactionSchema>;
+
+export type RemiState = z.infer<typeof RemiStateSchema>;
+export type SleepingRemiState = z.infer<typeof SleepingRemiStateSchema>;
+export type ThinkingRemiState = z.infer<typeof ThinkingRemiStateSchema>;
+export type ReactingRemiState = z.infer<typeof ReactingRemiStateSchema>;
 
 export type QueryRefinementSummary = z.infer<
   typeof AiCapability.RefineQuery.SummarySchema

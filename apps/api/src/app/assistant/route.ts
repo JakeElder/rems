@@ -5,6 +5,7 @@ import {
   IntentCode,
   IntentResolution,
   PatchArrayReaction,
+  PatchReaction,
   PatchReactionIntentResolution,
   PatchScalarReaction,
   QueryRefinementSummary,
@@ -68,15 +69,31 @@ const stream: Stream = (input, query) => async (c) => {
   const capability = memoize(async () => {
     const res = await remi.capability.identify(input);
     if (!res?.ok) throw new Error();
+
+    if (
+      remi.terse.capability(res.data) === "NEW_QUERY" ||
+      remi.terse.capability(res.data) === "REFINE_QUERY"
+    ) {
+      send({
+        type: "UPDATE_STATE",
+        value: {
+          name: "REACTING",
+          capability: remi.terse.capability(res.data)
+        }
+      });
+    }
+
     return res.data;
   });
+
+  capability();
 
   const resolve = async <T extends RemiFn>(
     intent: IntentCode,
     fn: T,
     process: (
       res: Extract<Awaited<ReturnType<T>>, { ok: true }>["data"]
-    ) => Promise<Reaction | null>
+    ) => Promise<PatchReaction | null>
   ): Promise<IntentResolution> => {
     if (!(await intends(intent))) {
       return { type: "NOOP", intent };
@@ -91,6 +108,8 @@ const stream: Stream = (input, query) => async (c) => {
     if (!reaction) {
       return { type: "NOOP", intent };
     }
+
+    await capability();
 
     send(reaction);
     return { type: "PATCH", intent, reaction };
@@ -219,6 +238,7 @@ const stream: Stream = (input, query) => async (c) => {
   const summary: QueryRefinementSummary = {
     input,
     intents: remi.terse.intents(await intents()),
+    capability: remi.terse.capability(await capability()),
     resolutions: res
   };
 
@@ -237,25 +257,27 @@ const summarise = (summary: QueryRefinementSummary, query: RealEstateQuery) => {
   const title = chalk.blue("Summary");
   const meta = prettyjson.render({
     input: summary.input,
-    intents: summary.intents
+    intents: summary.intents,
+    capability: summary.capability
   });
 
   const line = chalk.gray(`-`).repeat(Math.max(widestLine(meta), title.length));
 
   const diff = (res: PatchReactionIntentResolution) => {
-    if (res.reaction.type === "PATCH_SCALAR") {
-      return diffString(
-        pick(query, Object.keys(res.reaction.patch) as any),
-        res.reaction.patch
-      ).replace(/\n$/g, "");
+    const keys = (obj: any): any => Object.keys(obj);
+
+    const [before, after] =
+      res.reaction.type === "PATCH_SCALAR"
+        ? [pick(query, keys(res.reaction.patch)), res.reaction.patch]
+        : [query[res.reaction.key], res.reaction.value];
+
+    const string = diffString(before, after);
+
+    if (string) {
+      return string.replace(/\n+$/g, "");
     }
 
-    if (res.reaction.type === "PATCH_ARRAY") {
-      return diffString(query[res.reaction.key], res.reaction.value).replace(
-        /\n+$/g,
-        ""
-      );
-    }
+    return chalk.gray(JSON.stringify(after));
   };
 
   const resolutions = summary.resolutions.filter(isPatch).map(
@@ -287,8 +309,6 @@ const summarise = (summary: QueryRefinementSummary, query: RealEstateQuery) => {
   console.log(resolutions.join("\n\n"));
   console.log();
   console.log(errors.join("\n\n"));
-  console.log();
-  console.log();
 };
 
 export async function POST(req: NextRequest) {
