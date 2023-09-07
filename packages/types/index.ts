@@ -117,6 +117,9 @@ export type ServerRealEstateQuery = z.infer<
 export type RealEstateQueryScalars = z.infer<
   typeof RealEstateQuerySchema.Scalars
 >;
+export type RealEstateQueryArrays = z.infer<
+  typeof RealEstateQuerySchema.Arrays
+>;
 
 export type LngLat = {
   lng: number;

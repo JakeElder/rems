@@ -17,7 +17,7 @@ import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
 import chalk from "chalk";
-import { pickBy, pick } from "remeda";
+import { pickBy, pick, values } from "remeda";
 import { diffString } from "json-diff";
 import prettyjson from "prettyjson";
 import widestLine from "widest-line";
@@ -70,16 +70,12 @@ const stream: Stream = (input, query) => async (c) => {
     const res = await remi.capability.identify(input);
     if (!res?.ok) throw new Error();
 
-    if (
-      remi.terse.capability(res.data) === "NEW_QUERY" ||
-      remi.terse.capability(res.data) === "REFINE_QUERY"
-    ) {
+    const code = remi.terse.capability(res.data);
+
+    if (code === "NEW_QUERY" || code === "REFINE_QUERY") {
       send({
         type: "UPDATE_STATE",
-        value: {
-          name: "REACTING",
-          capability: remi.terse.capability(res.data)
-        }
+        value: { name: "REACTING", capability: code }
       });
     }
 
@@ -112,6 +108,17 @@ const stream: Stream = (input, query) => async (c) => {
     await capability();
 
     send(reaction);
+
+    if (reaction.type === "PATCH_SCALAR") {
+      console.dir(remi.diff.scalar(query, reaction.patch), { depth: null });
+    }
+
+    if (reaction.type === "PATCH_ARRAY") {
+      console.dir(remi.diff.array(query, reaction.key, reaction.value), {
+        depth: null
+      });
+    }
+
     return { type: "PATCH", intent, reaction };
   };
 
