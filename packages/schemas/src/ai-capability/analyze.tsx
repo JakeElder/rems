@@ -1,7 +1,7 @@
 import { z } from "zod";
 import NlInputSchema from "../nl-input";
 import { txt } from "../utils";
-import { FilterSchema, IntentSchema } from "..";
+import { FilterSchema, IntentSchema, RealEstateQuerySchema } from "..";
 
 export const ArgsSchema = z.tuple([NlInputSchema]);
 
@@ -13,7 +13,7 @@ export const ContextSchema = z.object({
   outdoorFeatures: z.lazy(() => z.array(CompressedFilter)),
   lotFeatures: z.lazy(() => z.array(CompressedFilter)),
   viewTypes: z.lazy(() => z.array(CompressedFilter)),
-  propertyTypes: z.lazy(() => z.array(CompressedFilter))
+  propertyTypes: z.lazy(() => z.array(CompressedFilter)),
 });
 
 export const ReturnsSchema = z

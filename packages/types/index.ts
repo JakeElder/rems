@@ -35,7 +35,6 @@ import {
   SummaryAssistantMessageSchema,
   AssistantMessageSchema
 } from "@rems/schemas";
-import { UpdateStateReactionSchema } from "@rems/schemas/src/reaction";
 import { z } from "zod";
 
 export type Pagination = {
@@ -249,7 +248,6 @@ export type Reaction = z.infer<typeof ReactionSchema>;
 export type PatchArrayReaction = z.infer<typeof PatchArrayReactionSchema>;
 export type PatchScalarReaction = z.infer<typeof PatchScalarReactionSchema>;
 export type PatchReaction = PatchArrayReaction | PatchScalarReaction;
-export type UpdateStateReaction = z.infer<typeof UpdateStateReactionSchema>;
 
 export type RemiState = z.infer<typeof RemiStateSchema>;
 export type SleepingRemiState = z.infer<typeof SleepingRemiStateSchema>;
@@ -277,3 +275,8 @@ export type SummaryAssistantMessage = z.infer<
 export type AssistantMessage = z.infer<typeof AssistantMessageSchema>;
 
 export type Interaction = z.infer<typeof InteractionSchema>;
+
+export type Logger = (ms: number, message: AssistantMessage) => void;
+
+export type ScalarKey = keyof RealEstateQueryScalars;
+export type ArrayKey = keyof RealEstateQueryArrays;

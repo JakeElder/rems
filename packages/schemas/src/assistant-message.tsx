@@ -14,6 +14,7 @@ export const AnalysisAssistantMessageSchema = z.object({
 
 export const ReactionAssistantMessageSchema = z.object({
   type: z.literal("REACTION"),
+  intent: IntentCodeSchema,
   reaction: ReactionSchema
 });
 

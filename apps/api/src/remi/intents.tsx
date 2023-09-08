@@ -192,6 +192,19 @@ const intents: Intent[] = [
         matches: ["Enable the zoom radius"]
       }
     ]
+  },
+
+  {
+    id: 12,
+    code: "CLEAR_QUERY",
+    name: "Resets the Search",
+    description: txt(<>The user wants to reset the listings to default.</>),
+    examples: [
+      {
+        input: "Clear the search",
+        matches: ["Clear the search"]
+      }
+    ]
   }
 ];
 

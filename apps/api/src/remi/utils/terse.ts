@@ -7,12 +7,12 @@ const capability = (id: Capability["id"]): CapabilityCode => {
   return i.code;
 };
 
-const intent = (id: Intent["id"]): IntentCode => {
-  const i = intents.find((i) => i.id === id);
-  if (!i) throw new Error();
-  return i.code;
-};
+const intent = (id: Intent["id"]): IntentCode | undefined =>
+  intents.find((i) => i.id === id)?.code;
 
-const intentArr = (arr: Intent["id"][]) => arr.map(intent);
+const intentArr = (arr: Intent["id"][]) => {
+  const isCode = (s: any): s is IntentCode => typeof s !== "undefined";
+  return arr.map(intent).filter(isCode);
+};
 
 export { capability, intent, intentArr as intents };

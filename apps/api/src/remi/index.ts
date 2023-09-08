@@ -11,6 +11,7 @@ export * as diff from "./utils/diff";
 export * as terse from "./utils/terse";
 export * as mapFilter from "./utils/map-filter";
 export * as mapFilters from "./utils/map-filters";
+export * as logger from "./utils/logger";
 
 export * from "./types";
 export * as refine from "./refine";

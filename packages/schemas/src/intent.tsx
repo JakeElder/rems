@@ -13,7 +13,9 @@ export const IntentCodeSchema = z
     "REFINE_SORT",
     "REFINE_SPACE_REQUIREMENTS",
     "REFINE_BUDGET_AVAILABILITY",
-    "REFINE_MAP_STATE"
+    "REFINE_MAP_STATE",
+    "PRESENT_GENERAL_INFORMATION",
+    "CLEAR_QUERY"
   ])
   .describe(txt(<>A unique identifier for the intent</>));
 

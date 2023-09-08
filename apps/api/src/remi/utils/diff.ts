@@ -2,16 +2,15 @@ import { RealEstateQuerySchema } from "@rems/schemas";
 import {
   AddScalarDiff,
   ArrayDiff,
+  ArrayKey,
   ChangeScalarDiff,
   Filter,
   RealEstateQueryArrays,
   RealEstateQueryScalars,
   RemoveScalarDiff,
-  ScalarDiff
+  ScalarDiff,
+  ScalarKey
 } from "@rems/types";
-
-type ScalarKey = keyof RealEstateQueryScalars;
-type ArrayKey = keyof RealEstateQueryArrays;
 
 export const scalar = (
   query: RealEstateQueryScalars,

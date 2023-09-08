@@ -59,13 +59,15 @@ type Stream = (
 ) => UnderlyingDefaultSource["start"];
 
 const stream: Stream = (input, query) => async (c) => {
-  // summarise(require("../../fixtures/summary").default, query);
-  // c.close();
-  // return;
+  const log = remi.logger.init(input);
 
-  const send = (message: AssistantMessage) => {
+  const send = (message: AssistantMessage, l: boolean = true) => {
     const chunk = encoder.encode(`${JSON.stringify(message)}\n`);
     c.enqueue(chunk);
+
+    if (l) {
+      log(message);
+    }
   };
 
   const analyze = memoize(async () => {
@@ -86,14 +88,6 @@ const stream: Stream = (input, query) => async (c) => {
       data: { capability, intents }
     });
 
-    send({
-      type: "REACTION",
-      reaction: {
-        type: "UPDATE_STATE",
-        value: { name: "REACTING", capability }
-      }
-    });
-
     return { intents, capability };
   });
 
@@ -111,7 +105,8 @@ const stream: Stream = (input, query) => async (c) => {
       res: Extract<Awaited<ReturnType<T>>, { ok: true }>["data"]
     ) => Promise<PatchReaction | null>
   ): Promise<IntentResolution> => {
-    if (!(await intends(intent))) {
+    const op = await intends(intent);
+    if (!op) {
       return { type: "NOOP", intent };
     }
 
@@ -125,18 +120,7 @@ const stream: Stream = (input, query) => async (c) => {
       return { type: "NOOP", intent };
     }
 
-    await analyze();
-
-    send({ type: "REACTION", reaction });
-
-    if (reaction.type === "PATCH_SCALAR") {
-      console.dir(reaction.diff);
-    }
-
-    if (reaction.type === "PATCH_ARRAY") {
-      console.dir(reaction.diff);
-    }
-
+    send({ type: "REACTION", intent, reaction });
     return { type: "PATCH", intent, reaction };
   };
 
@@ -284,6 +268,7 @@ const stream: Stream = (input, query) => async (c) => {
      `
   );
 
+  console.log("\n\n");
   console.log(errors.join("\n\n"));
 
   c.close();

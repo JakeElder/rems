@@ -1,7 +1,6 @@
 import { z } from "zod";
 import * as RealEstateQuerySchema from "./real-estate-query";
 import { FilterSchema } from ".";
-import { RemiStateSchema } from "./remi-state";
 import { ArrayDiffSchema, ScalarDiffSchema } from "./diff";
 
 export const PatchScalarReactionSchema = z.object({
@@ -17,13 +16,7 @@ export const PatchArrayReactionSchema = z.object({
   diff: z.array(ArrayDiffSchema)
 });
 
-export const UpdateStateReactionSchema = z.object({
-  type: z.literal("UPDATE_STATE"),
-  value: RemiStateSchema
-});
-
 export const ReactionSchema = z.discriminatedUnion("type", [
   PatchScalarReactionSchema,
-  PatchArrayReactionSchema,
-  UpdateStateReactionSchema
+  PatchArrayReactionSchema
 ]);
