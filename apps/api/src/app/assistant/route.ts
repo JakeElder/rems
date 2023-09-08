@@ -6,21 +6,19 @@ import {
   IntentResolution,
   PatchArrayReaction,
   PatchReaction,
-  PatchReactionIntentResolution,
   PatchScalarReaction,
-  QueryRefinementSummary,
-  Reaction,
-  RealEstateQuery
+  Interaction,
+  RealEstateQuery,
+  PatchReactionIntentResolution,
+  AssistantMessage
 } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
 import chalk from "chalk";
-import { pickBy, pick, values } from "remeda";
-import { diffString } from "json-diff";
+import { pickBy } from "remeda";
 import prettyjson from "prettyjson";
-import widestLine from "widest-line";
 import { z } from "zod";
 import dedent from "ts-dedent";
 
@@ -35,15 +33,25 @@ const defined = (obj: Record<string, any>) =>
 
 const encoder = new TextEncoder();
 
-const scalarPatch = (data: Partial<RealEstateQuery>): PatchScalarReaction => ({
+const scalarPatch = (
+  query: RealEstateQuery,
+  patch: Partial<RealEstateQuery>
+): PatchScalarReaction => ({
   type: "PATCH_SCALAR",
-  patch: data
+  patch,
+  diff: remi.diff.scalar(query, patch)
 });
 
 const arrayPatch = (
+  query: RealEstateQuery,
   key: ArrayKey,
-  data: Arrays[ArrayKey]
-): PatchArrayReaction => ({ type: "PATCH_ARRAY", key: key, value: data });
+  value: Arrays[ArrayKey]
+): PatchArrayReaction => ({
+  type: "PATCH_ARRAY",
+  key,
+  value,
+  diff: remi.diff.array(query, key, value)
+});
 
 type Stream = (
   nl: string,
@@ -55,34 +63,46 @@ const stream: Stream = (input, query) => async (c) => {
   // c.close();
   // return;
 
-  const send = (data: Reaction) => {
-    const chunk = encoder.encode(`${JSON.stringify(data)}\n`);
+  const send = (message: AssistantMessage) => {
+    const chunk = encoder.encode(`${JSON.stringify(message)}\n`);
     c.enqueue(chunk);
   };
 
-  const intents = memoize(async () => {
-    const res = await remi.capability.analyze(input);
-    if (!res?.ok) throw new Error();
-    return res.data;
-  });
+  const analyze = memoize(async () => {
+    const [i, c] = await Promise.all([
+      remi.capability.analyze(input),
+      remi.capability.identify(input)
+    ]);
 
-  const capability = memoize(async () => {
-    const res = await remi.capability.identify(input);
-    if (!res?.ok) throw new Error();
-
-    const code = remi.terse.capability(res.data);
-
-    if (code === "NEW_QUERY" || code === "REFINE_QUERY") {
-      send({
-        type: "UPDATE_STATE",
-        value: { name: "REACTING", capability: code }
-      });
+    if (!i.ok || !c.ok) {
+      throw new Error();
     }
 
-    return res.data;
+    const capability = remi.terse.capability(c.data);
+    const intents = remi.terse.intents(i.data);
+
+    send({
+      type: "ANALYSIS",
+      data: { capability, intents }
+    });
+
+    send({
+      type: "REACTION",
+      reaction: {
+        type: "UPDATE_STATE",
+        value: { name: "REACTING", capability }
+      }
+    });
+
+    return { intents, capability };
   });
 
-  capability();
+  analyze();
+
+  const intends = async (intent: IntentCode) => {
+    const { intents } = await analyze();
+    return intents.includes(intent);
+  };
 
   const resolve = async <T extends RemiFn>(
     intent: IntentCode,
@@ -105,27 +125,22 @@ const stream: Stream = (input, query) => async (c) => {
       return { type: "NOOP", intent };
     }
 
-    await capability();
+    await analyze();
 
-    send(reaction);
+    send({ type: "REACTION", reaction });
 
     if (reaction.type === "PATCH_SCALAR") {
-      console.dir(remi.diff.scalar(query, reaction.patch), { depth: null });
+      console.dir(reaction.diff);
     }
 
     if (reaction.type === "PATCH_ARRAY") {
-      console.dir(remi.diff.array(query, reaction.key, reaction.value), {
-        depth: null
-      });
+      console.dir(reaction.diff);
     }
 
     return { type: "PATCH", intent, reaction };
   };
 
-  const intends = async (intent: IntentCode) =>
-    remi.terse.intents(await intents()).includes(intent);
-
-  const res = await Promise.all([
+  const resolutions = await Promise.all([
     /*
      * Location
      */
@@ -138,7 +153,7 @@ const stream: Stream = (input, query) => async (c) => {
         const l = await nlToLocation(origin);
         if (!l) return null;
 
-        return scalarPatch({
+        return scalarPatch(query, {
           "origin-lat": l.lat,
           "origin-lng": l.lng,
           "origin-id": l.placeId
@@ -152,7 +167,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_PAGE",
       () => remi.refine.page(input, query["page"]),
-      async (page) => (page ? scalarPatch({ page }) : null)
+      async (page) => (page ? scalarPatch(query, { page }) : null)
     ),
 
     /*
@@ -161,7 +176,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_SORT",
       () => remi.refine.sort(input, query["sort"]),
-      async (sort) => (sort ? scalarPatch({ sort }) : null)
+      async (sort) => (sort ? scalarPatch(query, { sort }) : null)
     ),
 
     /*
@@ -171,7 +186,7 @@ const stream: Stream = (input, query) => async (c) => {
       "REFINE_SPACE_REQUIREMENTS",
       () =>
         remi.refine.spaceRequirements(input, SpaceRequirements.parse(query)),
-      async (props) => scalarPatch(defined(props))
+      async (props) => scalarPatch(query, defined(props))
     ),
 
     /*
@@ -184,7 +199,7 @@ const stream: Stream = (input, query) => async (c) => {
           input,
           BudgetAndAvailability.parse(query)
         ),
-      async (props) => scalarPatch(defined(props))
+      async (props) => scalarPatch(query, defined(props))
     ),
 
     /*
@@ -193,7 +208,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_MAP_STATE",
       () => remi.refine.mapState(input, MapState.parse(query)),
-      async (props) => scalarPatch(defined(props))
+      async (props) => scalarPatch(query, defined(props))
     ),
 
     /**
@@ -202,7 +217,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_INDOOR_FEATURES",
       () => remi.refine.indoorFeatures(input, query["indoor-features"]),
-      async (res) => arrayPatch("indoor-features", res)
+      async (res) => arrayPatch(query, "indoor-features", res)
     ),
 
     /**
@@ -211,7 +226,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_OUTDOOR_FEATURES",
       () => remi.refine.outdoorFeatures(input, query["outdoor-features"]),
-      async (res) => arrayPatch("outdoor-features", res)
+      async (res) => arrayPatch(query, "outdoor-features", res)
     ),
 
     /**
@@ -220,7 +235,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_LOT_FEATURES",
       () => remi.refine.lotFeatures(input, query["lot-features"]),
-      async (res) => arrayPatch("lot-features", res)
+      async (res) => arrayPatch(query, "lot-features", res)
     ),
 
     /**
@@ -229,7 +244,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_PROPERTY_TYPES",
       () => remi.refine.propertyTypes(input, query["property-types"]),
-      async (res) => arrayPatch("property-types", res)
+      async (res) => arrayPatch(query, "property-types", res)
     ),
 
     /**
@@ -238,84 +253,40 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_VIEW_TYPES",
       () => remi.refine.viewTypes(input, query["view-types"]),
-      async (res) => arrayPatch("view-types", res)
+      async (res) => arrayPatch(query, "view-types", res)
     )
   ]);
 
-  const summary: QueryRefinementSummary = {
-    input,
-    intents: remi.terse.intents(await intents()),
-    capability: remi.terse.capability(await capability()),
-    resolutions: res
-  };
+  const isError = (r: IntentResolution): r is ErrorIntentResolution =>
+    r.type === "ERROR";
 
-  summarise(summary, query);
+  const isReaction = (
+    r: IntentResolution
+  ): r is PatchReactionIntentResolution => r.type === "PATCH";
 
-  c.close();
-};
+  const { capability } = await analyze();
 
-const isPatch = (r: IntentResolution): r is PatchReactionIntentResolution =>
-  r.type === "PATCH";
+  if (capability === "REFINE_QUERY" || capability === "NEW_QUERY") {
+    const summary: Interaction = {
+      type: capability,
+      input,
+      analysis: await analyze(),
+      reactions: resolutions.filter(isReaction).map((i) => i.reaction)
+    };
 
-const isError = (r: IntentResolution): r is ErrorIntentResolution =>
-  r.type === "ERROR";
+    send({ type: "SUMMARY", summary });
+  }
 
-const summarise = (summary: QueryRefinementSummary, query: RealEstateQuery) => {
-  const title = chalk.blue("Summary");
-  const meta = prettyjson.render({
-    input: summary.input,
-    intents: summary.intents,
-    capability: summary.capability
-  });
-
-  const line = chalk.gray(`-`).repeat(Math.max(widestLine(meta), title.length));
-
-  const diff = (res: PatchReactionIntentResolution) => {
-    const keys = (obj: any): any => Object.keys(obj);
-
-    const [before, after] =
-      res.reaction.type === "PATCH_SCALAR"
-        ? [pick(query, keys(res.reaction.patch)), res.reaction.patch]
-        : [query[res.reaction.key], res.reaction.value];
-
-    const string = diffString(before, after);
-
-    if (string) {
-      return string.replace(/\n+$/g, "");
-    }
-
-    return chalk.gray(JSON.stringify(after));
-  };
-
-  const resolutions = summary.resolutions.filter(isPatch).map(
+  const errors = resolutions.filter(isError).map(
     (res) => dedent`
-       ${line}
-       ${chalk.yellow(res.intent)}
-       ${line}
-       ${diff(res)}
-     `
-  );
-
-  const errors = summary.resolutions.filter(isError).map(
-    (res) => dedent`
-       ${line}
        ${chalk.red(res.intent)}
-       ${line}
        ${prettyjson.render(res.error)}
      `
   );
 
-  console.log();
-  console.log();
-  console.log(line);
-  console.log(title);
-  console.log(line);
-  console.log();
-  console.log(meta);
-  console.log();
-  console.log(resolutions.join("\n\n"));
-  console.log();
   console.log(errors.join("\n\n"));
+
+  c.close();
 };
 
 export async function POST(req: NextRequest) {

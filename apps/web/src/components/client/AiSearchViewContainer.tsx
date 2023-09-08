@@ -6,7 +6,7 @@ import { AiSearch } from "@rems/ui";
 import useRealEstateQuery, {
   removeDefaults
 } from "@/hooks/use-real-estate-query";
-import { Reaction, RealEstateQuery } from "@rems/types";
+import { AssistantMessage, Reaction, RealEstateQuery } from "@rems/types";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -22,7 +22,7 @@ type OnChange = NonNullable<ViewProps["onChange"]>;
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
 const fetcher = (query: Partial<RealEstateQuery>, nl: string) =>
-  new Observable<Reaction>((s) => {
+  new Observable<AssistantMessage>((s) => {
     fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
       method: "POST",
       body: JSON.stringify({ query, nl })
@@ -97,14 +97,13 @@ const AiSearchViewContainer = () => {
     fetcher(removeDefaults(query), s.value).subscribe({
       next: (c) => {
         console.log(c);
-        if (c.type === "UPDATE_STATE") {
-          console.log('STATE:', c.value);
+
+        if (c.type === "REACTION" && c.reaction.type === "PATCH_ARRAY") {
+          patch({ [c.reaction.key]: c.reaction.value });
         }
-        if (c.type === "PATCH_ARRAY") {
-          patch({ [c.key]: c.value });
-        }
-        if (c.type === "PATCH_SCALAR") {
-          patch(c.patch);
+
+        if (c.type === "REACTION" && c.reaction.type === "PATCH_SCALAR") {
+          patch(c.reaction.patch);
         }
       },
       complete() {

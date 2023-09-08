@@ -1,61 +1,33 @@
 import { RealEstateQuerySchema } from "@rems/schemas";
 import {
+  AddScalarDiff,
+  ArrayDiff,
+  ChangeScalarDiff,
   Filter,
-  RealEstateQuery,
   RealEstateQueryArrays,
-  RealEstateQueryScalars
+  RealEstateQueryScalars,
+  RemoveScalarDiff,
+  ScalarDiff
 } from "@rems/types";
 
 type ScalarKey = keyof RealEstateQueryScalars;
 type ArrayKey = keyof RealEstateQueryArrays;
 
-type AddScalarDiff = {
-  type: "ADD_SCALAR";
-  props: Partial<RealEstateQuery>;
-};
-
-type AddArrayDiff = {
-  type: "ADD_ARRAY";
-  key: ArrayKey;
-  values: Filter["slug"][];
-};
-
-type RemoveScalarDiff = {
-  type: "REMOVE_SCALAR";
-  props: Partial<RealEstateQuery>;
-};
-
-type RemoveArrayDiff = {
-  type: "REMOVE_ARRAY";
-  key: ArrayKey;
-  values: Filter["slug"][];
-};
-
-type ChangeScalarDiff = {
-  type: "CHANGE_SCALAR";
-  props: {
-    [K in keyof RealEstateQuery]?: [RealEstateQuery[K], RealEstateQuery[K]];
-  };
-};
-
-type ScalarDiff = AddScalarDiff | RemoveScalarDiff | ChangeScalarDiff;
-type ArrayDiff = AddArrayDiff | RemoveArrayDiff;
-
 export const scalar = (
-  query: RealEstateQuery,
+  query: RealEstateQueryScalars,
   patch: Partial<RealEstateQueryScalars>
 ): ScalarDiff[] => {
   const defaults = RealEstateQuerySchema.URL.parse({});
   const keys = Object.keys(patch) as ScalarKey[];
 
-  const isAddition = (key: ScalarKey) =>
-    query[key] === defaults[key] && patch[key] !== defaults[key];
+  const isAddition = (k: ScalarKey) =>
+    query[k] === defaults[k] && patch[k] !== defaults[k];
 
-  const isRemoval = (key: ScalarKey) =>
-    patch[key] === defaults[key] && query[key] !== defaults[key];
+  const isRemoval = (k: ScalarKey) =>
+    patch[k] === defaults[k] && query[k] !== defaults[k];
 
-  const isChange = (key: ScalarKey) =>
-    !isAddition(key) && !isRemoval(key) && query[key] !== patch[key];
+  const isChange = (k: ScalarKey) =>
+    !isAddition(k) && !isRemoval(k) && query[k] !== patch[k];
 
   const additions = keys
     .filter(isAddition)
@@ -96,7 +68,7 @@ export const scalar = (
 };
 
 export const array = (
-  query: RealEstateQuery,
+  query: RealEstateQueryArrays,
   key: ArrayKey,
   value: Filter["slug"][]
 ): ArrayDiff[] => {

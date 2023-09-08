@@ -12,7 +12,6 @@ import {
   CapabilityCodeSchema,
   IntentCodeSchema,
   ReactionSchema,
-  AiCapability,
   IntentResolutionSchema,
   PatchArrayReactionSchema,
   PatchScalarReactionSchema,
@@ -22,7 +21,19 @@ import {
   RemiStateSchema,
   SleepingRemiStateSchema,
   ThinkingRemiStateSchema,
-  ReactingRemiStateSchema
+  ReactingRemiStateSchema,
+  AddScalarDiffSchema,
+  RemoveScalarDiffSchema,
+  ChangeScalarDiffSchema,
+  AddArrayDiffSchema,
+  RemoveArrayDiffSchema,
+  ScalarDiffSchema,
+  ArrayDiffSchema,
+  InteractionSchema,
+  AnalysisAssistantMessageSchema,
+  ReactionAssistantMessageSchema,
+  SummaryAssistantMessageSchema,
+  AssistantMessageSchema
 } from "@rems/schemas";
 import { UpdateStateReactionSchema } from "@rems/schemas/src/reaction";
 import { z } from "zod";
@@ -245,6 +256,24 @@ export type SleepingRemiState = z.infer<typeof SleepingRemiStateSchema>;
 export type ThinkingRemiState = z.infer<typeof ThinkingRemiStateSchema>;
 export type ReactingRemiState = z.infer<typeof ReactingRemiStateSchema>;
 
-export type QueryRefinementSummary = z.infer<
-  typeof AiCapability.RefineQuery.SummarySchema
+export type AddScalarDiff = z.infer<typeof AddScalarDiffSchema>;
+export type RemoveScalarDiff = z.infer<typeof RemoveScalarDiffSchema>;
+export type ChangeScalarDiff = z.infer<typeof ChangeScalarDiffSchema>;
+export type ScalarDiff = z.infer<typeof ScalarDiffSchema>;
+
+export type AddArrayDiff = z.infer<typeof AddArrayDiffSchema>;
+export type RemoveArrayDiff = z.infer<typeof RemoveArrayDiffSchema>;
+export type ArrayDiff = z.infer<typeof ArrayDiffSchema>;
+
+export type AnalysisAssistantMessage = z.infer<
+  typeof AnalysisAssistantMessageSchema
 >;
+export type ReactionAssistantMessage = z.infer<
+  typeof ReactionAssistantMessageSchema
+>;
+export type SummaryAssistantMessage = z.infer<
+  typeof SummaryAssistantMessageSchema
+>;
+export type AssistantMessage = z.infer<typeof AssistantMessageSchema>;
+
+export type Interaction = z.infer<typeof InteractionSchema>;

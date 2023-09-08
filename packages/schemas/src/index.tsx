@@ -14,6 +14,9 @@ export * from "./intent";
 export * from "./reaction";
 export * from "./intent-resolution";
 export * from "./remi-state";
+export * from "./diff";
+export * from "./interaction";
+export * from "./assistant-message";
 
 export * as AiRefinement from "./ai-refinement";
 export * as AiCapability from "./ai-capability";
