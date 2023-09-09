@@ -23,6 +23,11 @@ export const SummaryAssistantMessageSchema = z.object({
   summary: z.lazy(() => InteractionSchema)
 });
 
+export const GeneralResponseAssistantMessageSchema = z.object({
+  type: z.literal("GENERAL_RESPONSE"),
+  response: z.string()
+});
+
 export const AssistantMessageSchema = z.discriminatedUnion("type", [
   AnalysisAssistantMessageSchema,
   ReactionAssistantMessageSchema,
