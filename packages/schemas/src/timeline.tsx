@@ -4,7 +4,7 @@ import { AssistantMessageSchema } from "./assistant-message";
 
 export const TimelineMessage = z.object({
   timestamp: z.date(),
-  messages: z.array(z.union([UserMessageSchema, AssistantMessageSchema]))
+  message: z.union([UserMessageSchema, AssistantMessageSchema])
 });
 
 export const TimelineSchema = z.object({
