@@ -1,19 +1,9 @@
 import { z } from "zod";
-import * as RealEstateQuerySchema from "./real-estate-query";
-import { FilterSchema } from ".";
-import { ArrayDiffSchema, ScalarDiffSchema } from "./diff";
+import { PatchSchema } from "./patch";
 
-export const PatchScalarReactionSchema = z.object({
-  type: z.literal("PATCH_SCALAR"),
-  patch: RealEstateQuerySchema.URL.partial(),
-  diff: z.array(ScalarDiffSchema)
-});
-
-export const PatchArrayReactionSchema = z.object({
-  type: z.literal("PATCH_ARRAY"),
-  key: RealEstateQuerySchema.Arrays.keyof(),
-  value: z.array(z.lazy(() => FilterSchema.shape["slug"])),
-  diff: z.array(ArrayDiffSchema)
+export const PatchReactionSchema = z.object({
+  type: z.literal("PATCH"),
+  patch: PatchSchema
 });
 
 export const VerbalReactionSchema = z.object({
@@ -22,7 +12,6 @@ export const VerbalReactionSchema = z.object({
 });
 
 export const ReactionSchema = z.discriminatedUnion("type", [
-  PatchScalarReactionSchema,
-  PatchArrayReactionSchema,
+  PatchReactionSchema,
   VerbalReactionSchema
 ]);

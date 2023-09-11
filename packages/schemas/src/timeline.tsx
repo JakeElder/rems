@@ -2,11 +2,23 @@ import { z } from "zod";
 import { UserInteractionSchema } from "./user-interaction";
 import { AssistantMessageSchema } from "./assistant-message";
 
-export const TimelineMessage = z.object({
-  timestamp: z.date(),
-  message: z.union([UserInteractionSchema, AssistantMessageSchema])
+export const UserTimelineEventSchema = z.object({
+  id: z.string(),
+  type: z.literal("USER"),
+  date: z.number(),
+  interaction: UserInteractionSchema
 });
 
-export const TimelineSchema = z.object({
-  messages: z.array(TimelineMessage)
+export const AssistantTimelineEventSchema = z.object({
+  id: z.string(),
+  type: z.literal("ASSISTANT"),
+  date: z.number(),
+  message: AssistantMessageSchema
 });
+
+export const TimelineEventSchema = z.discriminatedUnion("type", [
+  UserTimelineEventSchema,
+  AssistantTimelineEventSchema
+]);
+
+export const TimelineSchema = z.array(TimelineEventSchema);

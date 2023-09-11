@@ -14,6 +14,7 @@ export { default as BathroomsFilter } from "./Components/BathroomsFilter";
 export { default as BedsFilter } from "./Components/BedsFilter";
 export { default as BedsFilterPopover } from "./Components/BedsFilterPopover";
 export { default as Breadcrumbs } from "./Components/Breadcrumbs";
+export { default as Chat } from "./Components/Chat";
 export { default as ContactAgentModule } from "./Components/ContactAgentModule";
 export * as ContactForm from "./Components/ContactForm";
 export { default as ContactModal } from "./Components/ContactModal";

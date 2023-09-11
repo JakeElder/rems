@@ -24,6 +24,7 @@ import {
 import fetch from "@/fetch";
 import { RealEstateIndexPageStateProvider } from "../hooks/use-real-estate-index-page-state";
 import { enableReactUse } from "@legendapp/state/config/enableReactUse";
+import ChatViewContainer from "@/components/client/ChatViewContainer";
 
 enableReactUse();
 
@@ -44,6 +45,7 @@ type Props = {
 const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
   return (
     <Layout.Root>
+      <ChatViewContainer />
       <ToastHub>
         <RealEstateIndexPageStateProvider>
           <Layout.Header>

@@ -97,14 +97,15 @@ const AiSearchViewContainer = () => {
     fetcher(removeDefaults(query), s.value).subscribe({
       next: (c) => {
         console.log(c);
-
-        if (c.type === "REACTION" && c.reaction.type === "PATCH_ARRAY") {
-          patch({ [c.reaction.key]: c.reaction.value });
+        if (c.type === "REACTION" && c.reaction.type === "PATCH") {
+          const { patch: p } = c.reaction;
+          if (p.type === "ARRAY") {
+            patch({ [p.key]: p.value });
+          } else {
+            patch(p.data);
+          }
         }
 
-        if (c.type === "REACTION" && c.reaction.type === "PATCH_SCALAR") {
-          patch(c.reaction.patch);
-        }
       },
       complete() {
         commit();

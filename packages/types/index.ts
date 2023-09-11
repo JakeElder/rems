@@ -13,8 +13,6 @@ import {
   IntentCodeSchema,
   ReactionSchema,
   IntentResolutionSchema,
-  PatchArrayReactionSchema,
-  PatchScalarReactionSchema,
   NoopIntentResolutionSchema,
   ErrorIntentResolutionSchema,
   PatchReactionIntentResolutionSchema,
@@ -34,9 +32,15 @@ import {
   ReactionAssistantMessageSchema,
   SummaryAssistantMessageSchema,
   AssistantMessageSchema,
-  VerbalReactionSchema
+  VerbalReactionSchema,
+  PatchReactionSchema,
+  TimelineSchema,
+  TimelineEventSchema
 } from "@rems/schemas";
-import { z } from "zod";
+import { UserInteractionSchema } from "@rems/schemas/src/user-interaction";
+import { ZodType, z } from "zod";
+
+type Z<T extends ZodType<any, any, any>> = z.infer<T>;
 
 export type Pagination = {
   page: number;
@@ -47,15 +51,15 @@ export type Pagination = {
 
 export type ResourceId = string;
 
-export type File = z.infer<typeof FileSchema>;
-export type Image = z.infer<typeof ImageSchema>;
-export type FilterSet = z.infer<typeof FilterSetSchema>;
-export type Capability = z.infer<typeof CapabilitySchema>;
-export type CapabilityCode = z.infer<typeof CapabilityCodeSchema>;
-export type Intent = z.infer<typeof IntentSchema>;
-export type IntentCode = z.infer<typeof IntentCodeSchema>;
+export type File = Z<typeof FileSchema>;
+export type Image = Z<typeof ImageSchema>;
+export type FilterSet = Z<typeof FilterSetSchema>;
+export type Capability = Z<typeof CapabilitySchema>;
+export type CapabilityCode = Z<typeof CapabilityCodeSchema>;
+export type Intent = Z<typeof IntentSchema>;
+export type IntentCode = Z<typeof IntentCodeSchema>;
 
-export type Filter = z.infer<typeof FilterSchema>;
+export type Filter = Z<typeof FilterSchema>;
 
 export type EntryCard = {
   id: string;
@@ -116,21 +120,15 @@ export type Filters = {
   quickFilters: QuickFilter[];
 };
 
-export type AppConfig = z.infer<typeof AppConfigSchema>;
-export type Property = z.infer<typeof PropertySchema>;
+export type AppConfig = Z<typeof AppConfigSchema>;
+export type Property = Z<typeof PropertySchema>;
 
-export type ContactFormData = z.infer<typeof ContactFormSchema>;
+export type ContactFormData = Z<typeof ContactFormSchema>;
 
-export type RealEstateQuery = z.infer<typeof RealEstateQuerySchema.URL>;
-export type ServerRealEstateQuery = z.infer<
-  typeof RealEstateQuerySchema.Server
->;
-export type RealEstateQueryScalars = z.infer<
-  typeof RealEstateQuerySchema.Scalars
->;
-export type RealEstateQueryArrays = z.infer<
-  typeof RealEstateQuerySchema.Arrays
->;
+export type RealEstateQuery = Z<typeof RealEstateQuerySchema.URL>;
+export type ServerRealEstateQuery = Z<typeof RealEstateQuerySchema.Server>;
+export type RealEstateQueryScalars = Z<typeof RealEstateQuerySchema.Scalars>;
+export type RealEstateQueryArrays = Z<typeof RealEstateQuerySchema.Arrays>;
 
 export type LngLat = {
   lng: number;
@@ -238,46 +236,42 @@ export type OpenAIModel =
   | "text-curie-001"
   | "gpt-3.5-turbo-0301";
 
-export type IntentResolution = z.infer<typeof IntentResolutionSchema>;
-export type NoopIntentResolution = z.infer<typeof NoopIntentResolutionSchema>;
-export type ErrorIntentResolution = z.infer<typeof ErrorIntentResolutionSchema>;
-export type PatchReactionIntentResolution = z.infer<
+export type IntentResolution = Z<typeof IntentResolutionSchema>;
+export type NoopIntentResolution = Z<typeof NoopIntentResolutionSchema>;
+export type ErrorIntentResolution = Z<typeof ErrorIntentResolutionSchema>;
+export type PatchReactionIntentResolution = Z<
   typeof PatchReactionIntentResolutionSchema
 >;
 
-export type Reaction = z.infer<typeof ReactionSchema>;
-export type PatchArrayReaction = z.infer<typeof PatchArrayReactionSchema>;
-export type PatchScalarReaction = z.infer<typeof PatchScalarReactionSchema>;
-export type PatchReaction = PatchArrayReaction | PatchScalarReaction;
-export type VerbalReaction = z.infer<typeof VerbalReactionSchema>;
+export type Reaction = Z<typeof ReactionSchema>;
+export type PatchReaction = Z<typeof PatchReactionSchema>;
+export type VerbalReaction = Z<typeof VerbalReactionSchema>;
 
-export type RemiState = z.infer<typeof RemiStateSchema>;
-export type SleepingRemiState = z.infer<typeof SleepingRemiStateSchema>;
-export type ThinkingRemiState = z.infer<typeof ThinkingRemiStateSchema>;
-export type ReactingRemiState = z.infer<typeof ReactingRemiStateSchema>;
+export type RemiState = Z<typeof RemiStateSchema>;
+export type SleepingRemiState = Z<typeof SleepingRemiStateSchema>;
+export type ThinkingRemiState = Z<typeof ThinkingRemiStateSchema>;
+export type ReactingRemiState = Z<typeof ReactingRemiStateSchema>;
 
-export type AddScalarDiff = z.infer<typeof AddScalarDiffSchema>;
-export type RemoveScalarDiff = z.infer<typeof RemoveScalarDiffSchema>;
-export type ChangeScalarDiff = z.infer<typeof ChangeScalarDiffSchema>;
-export type ScalarDiff = z.infer<typeof ScalarDiffSchema>;
+export type AddScalarDiff = Z<typeof AddScalarDiffSchema>;
+export type RemoveScalarDiff = Z<typeof RemoveScalarDiffSchema>;
+export type ChangeScalarDiff = Z<typeof ChangeScalarDiffSchema>;
+export type ScalarDiff = Z<typeof ScalarDiffSchema>;
 
-export type AddArrayDiff = z.infer<typeof AddArrayDiffSchema>;
-export type RemoveArrayDiff = z.infer<typeof RemoveArrayDiffSchema>;
-export type ArrayDiff = z.infer<typeof ArrayDiffSchema>;
+export type AddArrayDiff = Z<typeof AddArrayDiffSchema>;
+export type RemoveArrayDiff = Z<typeof RemoveArrayDiffSchema>;
+export type ArrayDiff = Z<typeof ArrayDiffSchema>;
 
-export type AnalysisAssistantMessage = z.infer<
-  typeof AnalysisAssistantMessageSchema
->;
-export type ReactionAssistantMessage = z.infer<
-  typeof ReactionAssistantMessageSchema
->;
-export type SummaryAssistantMessage = z.infer<
-  typeof SummaryAssistantMessageSchema
->;
-export type AssistantMessage = z.infer<typeof AssistantMessageSchema>;
+export type AnalysisAssistantMessage = Z<typeof AnalysisAssistantMessageSchema>;
+export type ReactionAssistantMessage = Z<typeof ReactionAssistantMessageSchema>;
+export type SummaryAssistantMessage = Z<typeof SummaryAssistantMessageSchema>;
+export type AssistantMessage = Z<typeof AssistantMessageSchema>;
 
-export type Interaction = z.infer<typeof InteractionSchema>;
+export type TimelineEvent = Z<typeof TimelineEventSchema>;
+export type Timeline = Z<typeof TimelineSchema>;
 
+export type UserInteraction = Z<typeof UserInteractionSchema>;
+
+export type Interaction = Z<typeof InteractionSchema>;
 export type Logger = (ms: number, message: AssistantMessage) => void;
 
 export type ScalarKey = keyof RealEstateQueryScalars;

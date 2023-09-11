@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PatchSchema } from "./patch";
 
 export const UserVerbalInteractionSchema = z.object({
   type: z.literal("VERBAL"),
@@ -12,7 +13,7 @@ export const UserWrittenInteractionSchema = z.object({
 
 export const UserPatchInteractionSchema = z.object({
   type: z.literal("PATCH"),
-  response: z.string()
+  patch: PatchSchema
 });
 
 export const UserInteractionSchema = z.discriminatedUnion("type", [

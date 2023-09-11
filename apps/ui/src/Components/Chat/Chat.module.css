@@ -1,0 +1,121 @@
+.root {
+  position: fixed;
+  bottom: 0;
+  right: 40px;
+  width: 360px;
+  border-radius: 5px 5px 0 0;
+  z-index: 1000;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  padding: 0 14px;
+  border-radius: 5px 5px 0 0;
+  justify-content: space-between;
+  background: #fff;
+  font-family: var(--font-inter);
+}
+
+.body {
+  background: #fff;
+  padding: 0 18px;
+  position: relative;
+  height: 400px;
+}
+
+.lang-pin {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 6px;
+}
+
+.lang {
+  color: #333;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.pin {
+  color: #aaa;
+}
+
+.body .shadow {
+  height: 4px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+}
+
+.avatar-name-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+
+.ror,
+.remi,
+.avatar .shadow {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ror,
+.remi,
+.avatar .shadow {
+  position: absolute;
+}
+
+.ror {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar .shadow {
+  box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+.ror img {
+  position: relative;
+  left: -4px;
+  top: 1px;
+}
+
+.remi {
+  opacity: 0.6;
+}
+
+.name {
+  font-weight: 460;
+  color: #333;
+}
+
+.state {
+  background: #f2f2f2;
+  border-radius: 3px;
+  font-size: 9px;
+  padding: 3px 8px;
+  color: #333;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+}

@@ -4,9 +4,7 @@ import {
   ErrorIntentResolution,
   IntentCode,
   IntentResolution,
-  PatchArrayReaction,
   PatchReaction,
-  PatchScalarReaction,
   Interaction,
   RealEstateQuery,
   PatchReactionIntentResolution,
@@ -35,22 +33,28 @@ const encoder = new TextEncoder();
 
 const scalarPatch = (
   query: RealEstateQuery,
-  patch: Partial<RealEstateQuery>
-): PatchScalarReaction => ({
-  type: "PATCH_SCALAR",
-  patch,
-  diff: remi.diff.scalar(query, patch)
+  data: Partial<RealEstateQuery>
+): PatchReaction => ({
+  type: "PATCH",
+  patch: {
+    type: "SCALAR",
+    data,
+    diff: remi.diff.scalar(query, data)
+  }
 });
 
 const arrayPatch = (
   query: RealEstateQuery,
   key: ArrayKey,
   value: Arrays[ArrayKey]
-): PatchArrayReaction => ({
-  type: "PATCH_ARRAY",
-  key,
-  value,
-  diff: remi.diff.array(query, key, value)
+): PatchReaction => ({
+  type: "PATCH",
+  patch: {
+    type: "ARRAY",
+    key,
+    value,
+    diff: remi.diff.array(query, key, value)
+  }
 });
 
 type Stream = (
@@ -111,6 +115,7 @@ const stream: Stream = (input, query) => async (c) => {
     }
 
     const res = await fn();
+
     if (!res.ok) {
       return { type: "ERROR", intent, error: res.error };
     }
