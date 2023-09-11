@@ -33,7 +33,8 @@ import {
   AnalysisAssistantMessageSchema,
   ReactionAssistantMessageSchema,
   SummaryAssistantMessageSchema,
-  AssistantMessageSchema
+  AssistantMessageSchema,
+  VerbalReactionSchema
 } from "@rems/schemas";
 import { z } from "zod";
 
@@ -248,6 +249,7 @@ export type Reaction = z.infer<typeof ReactionSchema>;
 export type PatchArrayReaction = z.infer<typeof PatchArrayReactionSchema>;
 export type PatchScalarReaction = z.infer<typeof PatchScalarReactionSchema>;
 export type PatchReaction = PatchArrayReaction | PatchScalarReaction;
+export type VerbalReaction = z.infer<typeof VerbalReactionSchema>;
 
 export type RemiState = z.infer<typeof RemiStateSchema>;
 export type SleepingRemiState = z.infer<typeof SleepingRemiStateSchema>;

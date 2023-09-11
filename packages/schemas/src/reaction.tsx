@@ -16,7 +16,13 @@ export const PatchArrayReactionSchema = z.object({
   diff: z.array(ArrayDiffSchema)
 });
 
+export const VerbalReactionSchema = z.object({
+  type: z.literal("VERBAL"),
+  message: z.string()
+});
+
 export const ReactionSchema = z.discriminatedUnion("type", [
   PatchScalarReactionSchema,
-  PatchArrayReactionSchema
+  PatchArrayReactionSchema,
+  VerbalReactionSchema
 ]);
