@@ -35,7 +35,10 @@ import {
   VerbalReactionSchema,
   PatchReactionSchema,
   TimelineSchema,
-  TimelineEventSchema
+  TimelineEventSchema,
+  ArrayPatchSchema,
+  ScalarPatchSchema,
+  PatchSchema
 } from "@rems/schemas";
 import { UserInteractionSchema } from "@rems/schemas/src/user-interaction";
 import { ZodType, z } from "zod";
@@ -256,6 +259,10 @@ export type AddScalarDiff = Z<typeof AddScalarDiffSchema>;
 export type RemoveScalarDiff = Z<typeof RemoveScalarDiffSchema>;
 export type ChangeScalarDiff = Z<typeof ChangeScalarDiffSchema>;
 export type ScalarDiff = Z<typeof ScalarDiffSchema>;
+
+export type ArrayPatch = Z<typeof ArrayPatchSchema>;
+export type ScalarPatch = Z<typeof ScalarPatchSchema>;
+export type Patch = Z<typeof PatchSchema>;
 
 export type AddArrayDiff = Z<typeof AddArrayDiffSchema>;
 export type RemoveArrayDiff = Z<typeof RemoveArrayDiffSchema>;

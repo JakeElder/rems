@@ -1,9 +1,10 @@
 import {
   AnalysisAssistantMessage,
+  ArrayPatch,
   AssistantMessage,
-  PatchArrayReaction,
-  PatchScalarReaction,
-  ScalarKey
+  PatchReaction,
+  ScalarKey,
+  ScalarPatch
 } from "@rems/types";
 import { createStream, WritableStream } from "table";
 import ms from "pretty-ms";
@@ -13,7 +14,7 @@ export const init = (input: string) => {
   const t = Date.now();
   let stream: WritableStream | null = null;
 
-  const i = (analysis: AnalysisAssistantMessage["data"]) => {
+  const i = (analysis: AnalysisAssistantMessage) => {
     const headings = [
       ...analysis.intents.map((s) => s.replace("REFINE_", "")),
       "Input",
@@ -40,37 +41,37 @@ export const init = (input: string) => {
 
   return (message: AssistantMessage) => {
     if (message.type === "ANALYSIS") {
-      i(message.data);
+      i(message);
 
       if (!stream) throw new Error();
 
       stream.write([now(), heading("Input"), val(input)]);
-      stream.write([
-        now(),
-        heading("Capability"),
-        val(message.data.capability)
-      ]);
+      stream.write([now(), heading("Capability"), val(message.capability)]);
       stream.write([
         now(),
         heading("Intents"),
-        val(message.data.intents.join(", "))
+        val(message.intents.join(", "))
       ]);
     }
 
     if (!stream) throw new Error();
 
-    if (message.type === "REACTION") {
-      stream.write([now(), heading(message.intent), diff(message.reaction)]);
+    if (message.type === "REACTION" && message.reaction.type === "PATCH") {
+      stream.write([
+        now(),
+        heading(message.reaction.group),
+        diff(message.reaction)
+      ]);
     }
   };
 };
 
-const arrayDiff = (reaction: PatchArrayReaction) => {
-  if (reaction.diff.length === 0) {
-    return chalk.gray(JSON.stringify(reaction.value));
+const arrayDiff = (patch: ArrayPatch) => {
+  if (patch.diff.length === 0) {
+    return chalk.gray(JSON.stringify(patch.value));
   }
 
-  return reaction.diff
+  return patch.diff
     .map((p) => {
       if (p.type === "ADD_ARRAY") {
         return chalk.green(`+ ${JSON.stringify(p.values)}`);
@@ -83,12 +84,12 @@ const arrayDiff = (reaction: PatchArrayReaction) => {
     .join("\n");
 };
 
-const scalarDiff = (reaction: PatchScalarReaction) => {
-  if (reaction.diff.length === 0) {
-    return chalk.gray(JSON.stringify(reaction.patch));
+const scalarDiff = (patch: ScalarPatch) => {
+  if (patch.diff.length === 0) {
+    return chalk.gray(JSON.stringify(patch.data));
   }
 
-  return reaction.diff
+  return patch.diff
     .map((p) => {
       if (p.type === "ADD_SCALAR") {
         const keys = Object.keys(p.props) as ScalarKey[];
@@ -113,5 +114,5 @@ const scalarDiff = (reaction: PatchScalarReaction) => {
     .join("\n");
 };
 
-const diff = (reaction: PatchArrayReaction | PatchScalarReaction) =>
-  reaction.type === "PATCH_ARRAY" ? arrayDiff(reaction) : scalarDiff(reaction);
+const diff = ({ patch }: PatchReaction) =>
+  patch.type === "ARRAY" ? arrayDiff(patch) : scalarDiff(patch);

@@ -32,10 +32,12 @@ const defined = (obj: Record<string, any>) =>
 const encoder = new TextEncoder();
 
 const scalarPatch = (
+  group: PatchReaction["group"],
   query: RealEstateQuery,
   data: Partial<RealEstateQuery>
 ): PatchReaction => ({
   type: "PATCH",
+  group,
   patch: {
     type: "SCALAR",
     data,
@@ -44,11 +46,13 @@ const scalarPatch = (
 });
 
 const arrayPatch = (
+  group: PatchReaction["group"],
   query: RealEstateQuery,
   key: ArrayKey,
   value: Arrays[ArrayKey]
 ): PatchReaction => ({
   type: "PATCH",
+  group,
   patch: {
     type: "ARRAY",
     key,
@@ -121,7 +125,7 @@ const stream: Stream = (input, query) => async (c) => {
       return { type: "NOOP", intent };
     }
 
-    send({ type: "REACTION", intent, reaction });
+    send({ type: "REACTION", reaction });
     return { type: "PATCH", intent, reaction };
   };
 
@@ -138,7 +142,7 @@ const stream: Stream = (input, query) => async (c) => {
         const l = await nlToLocation(origin);
         if (!l) return null;
 
-        return scalarPatch(query, {
+        return scalarPatch("LOCATION", query, {
           "origin-lat": l.lat,
           "origin-lng": l.lng,
           "origin-id": l.placeId
@@ -152,7 +156,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_PAGE",
       () => remi.refine.page(input, query["page"]),
-      async (page) => (page ? scalarPatch(query, { page }) : null)
+      async (page) => (page ? scalarPatch("PAGE", query, { page }) : null)
     ),
 
     /*
@@ -161,7 +165,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_SORT",
       () => remi.refine.sort(input, query["sort"]),
-      async (sort) => (sort ? scalarPatch(query, { sort }) : null)
+      async (sort) => (sort ? scalarPatch("SORT", query, { sort }) : null)
     ),
 
     /*
@@ -171,7 +175,7 @@ const stream: Stream = (input, query) => async (c) => {
       "REFINE_SPACE_REQUIREMENTS",
       () =>
         remi.refine.spaceRequirements(input, SpaceRequirements.parse(query)),
-      async (props) => scalarPatch(query, defined(props))
+      async (props) => scalarPatch("SPACE_REQUIREMENTS", query, defined(props))
     ),
 
     /*
@@ -184,7 +188,8 @@ const stream: Stream = (input, query) => async (c) => {
           input,
           BudgetAndAvailability.parse(query)
         ),
-      async (props) => scalarPatch(query, defined(props))
+      async (props) =>
+        scalarPatch("BUDGET_AND_AVAILABILITY", query, defined(props))
     ),
 
     /*
@@ -193,7 +198,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_MAP_STATE",
       () => remi.refine.mapState(input, MapState.parse(query)),
-      async (props) => scalarPatch(query, defined(props))
+      async (props) => scalarPatch("MAP_STATE", query, defined(props))
     ),
 
     /**
@@ -202,7 +207,8 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_INDOOR_FEATURES",
       () => remi.refine.indoorFeatures(input, query["indoor-features"]),
-      async (res) => arrayPatch(query, "indoor-features", res)
+      async (res) =>
+        arrayPatch("INDOOR_FEATURES", query, "indoor-features", res)
     ),
 
     /**
@@ -211,7 +217,8 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_OUTDOOR_FEATURES",
       () => remi.refine.outdoorFeatures(input, query["outdoor-features"]),
-      async (res) => arrayPatch(query, "outdoor-features", res)
+      async (res) =>
+        arrayPatch("OUTDOOR_FEATURES", query, "outdoor-features", res)
     ),
 
     /**
@@ -220,7 +227,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_LOT_FEATURES",
       () => remi.refine.lotFeatures(input, query["lot-features"]),
-      async (res) => arrayPatch(query, "lot-features", res)
+      async (res) => arrayPatch("LOT_FEATURES", query, "lot-features", res)
     ),
 
     /**
@@ -229,7 +236,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_PROPERTY_TYPES",
       () => remi.refine.propertyTypes(input, query["property-types"]),
-      async (res) => arrayPatch(query, "property-types", res)
+      async (res) => arrayPatch("PROPERTY_TYPES", query, "property-types", res)
     ),
 
     /**
@@ -238,7 +245,7 @@ const stream: Stream = (input, query) => async (c) => {
     resolve(
       "REFINE_VIEW_TYPES",
       () => remi.refine.viewTypes(input, query["view-types"]),
-      async (res) => arrayPatch(query, "view-types", res)
+      async (res) => arrayPatch("VIEW_TYPES", query, "view-types", res)
     )
   ]);
 

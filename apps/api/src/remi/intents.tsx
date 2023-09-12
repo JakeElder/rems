@@ -205,6 +205,19 @@ const intents: Intent[] = [
         matches: ["Clear the search"]
       }
     ]
+  },
+
+  {
+    id: 100,
+    code: "UNKNOWN",
+    name: "It is unclear what the users intent is.",
+    description: txt(
+      <>
+        The user has issued a command that is either incomprehnsible, or lacks
+        the clarity required to properly identify an appropriate reaction.
+      </>
+    ),
+    examples: [{ input: "asdfas", matches: ["asdfas"] }]
   }
 ];
 

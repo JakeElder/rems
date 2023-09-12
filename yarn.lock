@@ -4713,6 +4713,7 @@ __metadata:
     prettyjson: ^1.2.5
     qs: ^6.11.2
     query-string: ^8.1.0
+    random-int: ^3.0.0
     react: 18.2.0
     react-dom: 18.2.0
     react-hotkeys-hook: ^4.4.1
@@ -20298,6 +20299,13 @@ nextjs-cors@latest:
   version: 0.29.0
   resolution: "ramda@npm:0.29.0"
   checksum: 9ab26c06eb7545cbb7eebcf75526d6ee2fcaae19e338f165b2bf32772121e7b28192d6664d1ba222ff76188ba26ab307342d66e805dbb02c860560adc4d5dd57
+  languageName: node
+  linkType: hard
+
+"random-int@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "random-int@npm:3.0.0"
+  checksum: 417827d15e4245e76e9a3cc4fbda733ebcc68d18cdc82d3cd41ff5885fe9418f32566b4f588ecfbe1d1afa8013910905d9f53b7495fa7452077e465f0211a479
   languageName: node
   linkType: hard
 
