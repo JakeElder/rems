@@ -6,7 +6,7 @@ import { AiSearch } from "@rems/ui";
 import useRealEstateQuery, {
   removeDefaults
 } from "@/hooks/use-real-estate-query";
-import { AssistantMessage, Reaction, RealEstateQuery } from "@rems/types";
+import { AssistantMessage, RealEstateQuery } from "@rems/types";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -41,7 +41,7 @@ const fetcher = (query: Partial<RealEstateQuery>, nl: string) =>
           return;
         }
 
-        const chunks: Reaction[] = decoder
+        const chunks: AssistantMessage[] = decoder
           .decode(value)
           .split("\n")
           .filter(Boolean)
@@ -105,7 +105,6 @@ const AiSearchViewContainer = () => {
             patch(p.data);
           }
         }
-
       },
       complete() {
         commit();

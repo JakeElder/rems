@@ -5,7 +5,7 @@ import { ReactionSchema } from "./reaction";
 
 const StandardInteractionSchema = z.object({
   input: NlInputSchema,
-  analysis: AnalysisAssistantMessageSchema.shape["data"],
+  analysis: AnalysisAssistantMessageSchema.omit({ type: true }),
   reactions: z.array(ReactionSchema)
 });
 

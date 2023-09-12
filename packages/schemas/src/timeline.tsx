@@ -22,3 +22,27 @@ export const TimelineEventSchema = z.discriminatedUnion("type", [
 ]);
 
 export const TimelineSchema = z.array(TimelineEventSchema);
+
+`
+- TimelineSchema
+  - UserTimelineEventSchema
+    - UserInteractionSchema
+      - UserVerbalInteractionSchema
+      - UserWrittenInteractionSchema
+      - UserPatchInteractionSchema
+        - ScalarPatchSchema
+          - ScalarDiffSchema
+        - ArrayPatchSchema
+          - ArrayDiffSchema
+    - AssistantMessageSchema
+      - AnalysisAssistantMessageSchema
+      - ReactionAssistantMessageSchema
+        - PatchReactionSchema
+          - ScalarPatchSchema
+            - ScalarDiffSchema
+          - ArrayPatchSchema
+            - ArrayDiffSchema
+        - VerbalReactionSchema
+      - SummaryAssistantMessageSchema
+  - AssistantTimelineEventSchema
+`

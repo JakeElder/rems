@@ -87,11 +87,7 @@ const stream: Stream = (input, query) => async (c) => {
     const capability = remi.terse.capability(c.data);
     const intents = remi.terse.intents(i.data);
 
-    send({
-      type: "ANALYSIS",
-      data: { capability, intents }
-    });
-
+    send({ type: "ANALYSIS", capability, intents });
     return { intents, capability };
   });
 

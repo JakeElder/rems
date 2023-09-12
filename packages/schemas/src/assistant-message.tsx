@@ -6,10 +6,8 @@ import { InteractionSchema } from "./interaction";
 
 export const AnalysisAssistantMessageSchema = z.object({
   type: z.literal("ANALYSIS"),
-  data: z.object({
-    intents: z.array(IntentCodeSchema),
-    capability: CapabilityCodeSchema
-  })
+  intents: z.array(IntentCodeSchema),
+  capability: CapabilityCodeSchema
 });
 
 export const ReactionAssistantMessageSchema = z.object({
