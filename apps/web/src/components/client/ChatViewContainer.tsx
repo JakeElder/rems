@@ -22,6 +22,18 @@ const timeline: Timeline = [
   },
   {
     type: "ASSISTANT",
+    id: "12",
+    date: date(),
+    message: {
+      type: "REACTION",
+      reaction: {
+        type: "LANGUAGE_BASED",
+        message: "Sure! I can do that"
+      }
+    }
+  },
+  {
+    type: "ASSISTANT",
     id: "2",
     date: date(),
     message: {
@@ -104,6 +116,14 @@ const timeline: Timeline = [
             {
               type: "CHANGE_SCALAR",
               props: { "min-bedrooms": [2, 3] }
+            },
+            {
+              type: "REMOVE_SCALAR",
+              props: { "max-bedrooms": 3 }
+            },
+            {
+              type: "ADD_SCALAR",
+              props: { "min-lot-size": 100 }
             }
           ]
         }

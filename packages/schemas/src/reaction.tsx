@@ -1,30 +1,19 @@
 import { z } from "zod";
 import { PatchSchema } from "./patch";
+import { Group } from "./real-estate-query";
 
 export const PatchReactionSchema = z.object({
   type: z.literal("PATCH"),
-  group: z.enum([
-    "LOCATION",
-    "MAP_STATE",
-    "PAGE",
-    "SORT",
-    "SPACE_REQUIREMENTS",
-    "BUDGET_AND_AVAILABILITY",
-    "INDOOR_FEATURES",
-    "LOT_FEATURES",
-    "OUTDOOR_FEATURES",
-    "PROPERTY_TYPES",
-    "VIEW_TYPES"
-  ]),
+  group: Group,
   patch: PatchSchema
 });
 
-export const VerbalReactionSchema = z.object({
-  type: z.literal("VERBAL"),
+export const LanguageBasedReactionSchema = z.object({
+  type: z.literal("LANGUAGE_BASED"),
   message: z.string()
 });
 
 export const ReactionSchema = z.discriminatedUnion("type", [
   PatchReactionSchema,
-  VerbalReactionSchema
+  LanguageBasedReactionSchema
 ]);

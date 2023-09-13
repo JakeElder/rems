@@ -58,6 +58,7 @@
     "the-new-css-reset": "^1.9.0",
     "throttle-debounce": "^5.0.0",
     "tinycolor2": "^1.6.0",
+    "title-case": "^3.0.3",
     "ts-key-enum": "^2.0.12",
     "typescript": "5.2.2",
     "typescript-cookie": "^1.0.6",

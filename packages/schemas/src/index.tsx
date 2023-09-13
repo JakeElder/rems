@@ -19,6 +19,7 @@ export * from "./interaction";
 export * from "./assistant-message";
 export * from "./timeline";
 export * from "./patch";
+export * from './user-interaction'
 
 export * as AiRefinement from "./ai-refinement";
 export * as AiCapability from "./ai-capability";

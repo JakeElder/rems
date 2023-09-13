@@ -233,6 +233,20 @@ export const Scalars = z
   .merge(Origin)
   .merge(MapState);
 
+export const Group = z.enum([
+    "LOCATION",
+    "MAP_STATE",
+    "PAGE",
+    "SORT",
+    "SPACE_REQUIREMENTS",
+    "BUDGET_AND_AVAILABILITY",
+    "INDOOR_FEATURES",
+    "LOT_FEATURES",
+    "OUTDOOR_FEATURES",
+    "PROPERTY_TYPES",
+    "VIEW_TYPES"
+  ])
+
 export const URL = z.object({}).merge(Arrays).merge(Scalars);
 
 export const Server = z

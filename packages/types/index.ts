@@ -32,15 +32,18 @@ import {
   ReactionAssistantMessageSchema,
   SummaryAssistantMessageSchema,
   AssistantMessageSchema,
-  VerbalReactionSchema,
+  LanguageBasedReactionSchema,
   PatchReactionSchema,
   TimelineSchema,
   TimelineEventSchema,
   ArrayPatchSchema,
   ScalarPatchSchema,
-  PatchSchema
+  PatchSchema,
+  UserVerbalInteractionSchema,
+  UserWrittenInteractionSchema,
+  UserInteractionSchema,
+  UserPatchInteractionSchema
 } from "@rems/schemas";
-import { UserInteractionSchema } from "@rems/schemas/src/user-interaction";
 import { ZodType, z } from "zod";
 
 type Z<T extends ZodType<any, any, any>> = z.infer<T>;
@@ -248,7 +251,7 @@ export type PatchReactionIntentResolution = Z<
 
 export type Reaction = Z<typeof ReactionSchema>;
 export type PatchReaction = Z<typeof PatchReactionSchema>;
-export type VerbalReaction = Z<typeof VerbalReactionSchema>;
+export type LanguageBasedReaction = Z<typeof LanguageBasedReactionSchema>;
 
 export type RemiState = Z<typeof RemiStateSchema>;
 export type SleepingRemiState = Z<typeof SleepingRemiStateSchema>;
@@ -260,13 +263,21 @@ export type RemoveScalarDiff = Z<typeof RemoveScalarDiffSchema>;
 export type ChangeScalarDiff = Z<typeof ChangeScalarDiffSchema>;
 export type ScalarDiff = Z<typeof ScalarDiffSchema>;
 
+export type AddArrayDiff = Z<typeof AddArrayDiffSchema>;
+export type RemoveArrayDiff = Z<typeof RemoveArrayDiffSchema>;
+export type ArrayDiff = Z<typeof ArrayDiffSchema>;
+
 export type ArrayPatch = Z<typeof ArrayPatchSchema>;
 export type ScalarPatch = Z<typeof ScalarPatchSchema>;
 export type Patch = Z<typeof PatchSchema>;
 
-export type AddArrayDiff = Z<typeof AddArrayDiffSchema>;
-export type RemoveArrayDiff = Z<typeof RemoveArrayDiffSchema>;
-export type ArrayDiff = Z<typeof ArrayDiffSchema>;
+export type UserVerbalInteraction = Z<typeof UserVerbalInteractionSchema>;
+export type UserWrittenInteraction = Z<typeof UserWrittenInteractionSchema>;
+export type UserLanguageBasedInteraction =
+  | UserVerbalInteraction
+  | UserWrittenInteraction;
+export type UserPatchInteraction = Z<typeof UserPatchInteractionSchema>;
+export type UserInteraction = Z<typeof UserInteractionSchema>;
 
 export type AnalysisAssistantMessage = Z<typeof AnalysisAssistantMessageSchema>;
 export type ReactionAssistantMessage = Z<typeof ReactionAssistantMessageSchema>;
@@ -275,8 +286,6 @@ export type AssistantMessage = Z<typeof AssistantMessageSchema>;
 
 export type TimelineEvent = Z<typeof TimelineEventSchema>;
 export type Timeline = Z<typeof TimelineSchema>;
-
-export type UserInteraction = Z<typeof UserInteractionSchema>;
 
 export type Interaction = Z<typeof InteractionSchema>;
 export type Logger = (ms: number, message: AssistantMessage) => void;

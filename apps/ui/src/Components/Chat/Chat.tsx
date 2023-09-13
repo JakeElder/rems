@@ -41,9 +41,11 @@ const Body = ({ timeline }: Pick<Props, "timeline">) => {
   return (
     <div className={css["body"]}>
       <div className={css["shadow"]} />
-      {timeline.map((m) => (
-        <Message key={m.id} {...m} />
-      ))}
+      <div className={css["timeline"]}>
+        {timeline.reverse().map((m) => (
+          <Message key={m.id} {...m} />
+        ))}
+      </div>
     </div>
   );
 };

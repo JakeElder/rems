@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { PatchSchema } from "./patch";
+import { Group } from "./real-estate-query";
 
 export const UserVerbalInteractionSchema = z.object({
   type: z.literal("VERBAL"),
@@ -8,11 +9,12 @@ export const UserVerbalInteractionSchema = z.object({
 
 export const UserWrittenInteractionSchema = z.object({
   type: z.literal("WRITTEN"),
-  response: z.string()
+  input: z.string()
 });
 
 export const UserPatchInteractionSchema = z.object({
   type: z.literal("PATCH"),
+  group: Group,
   patch: PatchSchema
 });
 
