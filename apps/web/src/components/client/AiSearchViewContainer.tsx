@@ -65,7 +65,7 @@ const AiSearchViewContainer = () => {
   const s = c.sessions[c.sessions.length - 1];
 
   const { transcript, listening } = useSpeechRecognition();
-  const { patch, query, commit } = useRealEstateQuery();
+  const { patch, query, commit, reset } = useRealEstateQuery();
   const $input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -97,6 +97,10 @@ const AiSearchViewContainer = () => {
     fetcher(removeDefaults(query), s.value).subscribe({
       next: (c) => {
         console.log(c);
+        if (c.type === "ANALYSIS" && c.capability === "CLEAR_QUERY") {
+          reset();
+        }
+
         if (c.type === "REACTION" && c.reaction.type === "PATCH") {
           const { patch: p } = c.reaction;
           if (p.type === "ARRAY") {
