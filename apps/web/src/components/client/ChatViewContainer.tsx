@@ -5,6 +5,7 @@ import { Chat } from "@rems/ui";
 import { Timeline } from "@rems/types";
 import randomInt from "random-int";
 import useRealEstateIndexPageState from "@/hooks/use-real-estate-index-page-state";
+import useAssistant from "@/hooks/use-assistant";
 
 type Props = {};
 
@@ -147,16 +148,10 @@ const timeline: Timeline = [
 ];
 
 const ChatViewContainer = ({}: Props) => {
-  const $ = useRealEstateIndexPageState();
-  $.spaceDown.use();
+  const { timeline } = useAssistant();
 
   return (
-    <Chat
-      timeline={timeline}
-      lang="en"
-      state="SLEEPING"
-      open={$.spaceDown.get()}
-    />
+    <Chat timeline={timeline} lang="en" state="SLEEPING" open={true} />
   );
 };
 

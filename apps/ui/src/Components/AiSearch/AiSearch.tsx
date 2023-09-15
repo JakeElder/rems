@@ -1,16 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import css from "./AiSearch.module.css";
 import { ColorRing, LineWave } from "react-loader-spinner";
 import { AiSearchInputState, AiSearchSession } from "@rems/types";
-import { animated, useSpring, useTransition, config } from "@react-spring/web";
+import { animated, useSpring, useTransition } from "@react-spring/web";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faMicrophoneLines,
-  faMicrophoneLinesSlash
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faMicrophoneLines } from "@fortawesome/free-solid-svg-icons";
 import c from "tinycolor2";
 import EnterIcon from "../../Elements/EnterIcon/EnterIcon";
 import cn from "classnames";

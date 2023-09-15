@@ -1,12 +1,7 @@
 import { createContext, useContext, useEffect } from "react";
 import { Observable } from "@legendapp/state";
 import { useObservable } from "@legendapp/state/react";
-import {
-  MapBounds,
-  RealEstateQuery,
-  SearchParams,
-  Timeline
-} from "@rems/types";
+import { MapBounds, RealEstateQuery, SearchParams } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import { flatten } from "remeda";
 import { z } from "zod";
@@ -16,8 +11,6 @@ const IndexPageStateProvider = createContext<{
   query: Observable<RealEstateQuery>;
   stagedQuery: Observable<RealEstateQuery>;
   mapBounds: Observable<MapBounds | null>;
-  timeline: Observable<Timeline>;
-  spaceDown: Observable<boolean>;
 } | null>(null);
 
 const useRealEstateIndexPageState = () => {
@@ -50,8 +43,6 @@ const searchParamsToQuery = (params: SearchParams): RealEstateQuery => {
   return RealEstateQuerySchema.URL.parse(p);
 };
 
-const isHTMLElement = (el: any): el is HTMLElement => el instanceof HTMLElement;
-
 export const RealEstateIndexPageStateProvider = ({
   children
 }: {
@@ -63,40 +54,8 @@ export const RealEstateIndexPageStateProvider = ({
   const $ = {
     query: useObservable<RealEstateQuery>(query),
     stagedQuery: useObservable<RealEstateQuery>(query),
-    mapBounds: useObservable<MapBounds | null>(null),
-    timeline: useObservable<Timeline>([]),
-    spaceDown: useObservable<boolean>(false)
+    mapBounds: useObservable<MapBounds | null>(null)
   };
-
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
-          return;
-        }
-        e.preventDefault();
-        $.spaceDown.set(true);
-      }
-    };
-
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
-          return;
-        }
-        e.preventDefault();
-        $.spaceDown.set(false);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
-    };
-  }, []);
 
   useEffect(() => {
     const nextQuery = searchParamsToQuery(router.query);
@@ -109,9 +68,7 @@ export const RealEstateIndexPageStateProvider = ({
       value={{
         query: $.query,
         stagedQuery: $.stagedQuery,
-        mapBounds: $.mapBounds,
-        timeline: $.timeline,
-        spaceDown: $.spaceDown
+        mapBounds: $.mapBounds
       }}
       children={children}
     />

@@ -1,17 +1,22 @@
 import {
   AiSearchInputState,
   AiSearchSession,
-  AssistantMessage
+  AssistantMessage,
+  Timeline
 } from "@rems/types";
-import { useEffect, useReducer } from "react";
-import assistantReducer from "reducers/assistant-reducer";
-import { Observable } from "rxjs";
+import { useEffect } from "react";
+import assistantReducer, {
+  AssistantAction,
+  AssistantState
+} from "reducers/assistant-reducer";
 import uuid from "short-uuid";
 import { useDebouncedCallback } from "use-debounce";
 import useRealEstateQuery from "./use-real-estate-query";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
+import { Observable } from "rxjs";
+import { observable, Observable as LegendObservable } from "@legendapp/state";
 
 type FormAttributes = React.FormHTMLAttributes<HTMLFormElement>;
 type InputHTMLAttributes = React.InputHTMLAttributes<HTMLInputElement>;
@@ -28,14 +33,25 @@ type UseAssistantReturn = {
   submittable: boolean;
   state: AiSearchInputState;
   enterDown: boolean;
+  spaceDown: boolean;
+  timeline: Timeline;
 };
 
+const $state: LegendObservable<AssistantState> = observable({
+  sessions: [{ id: uuid.generate(), value: "" }],
+  state: "inactive",
+  enterDown: false,
+  timeline: [],
+  spaceDown: false
+});
+
+const isHTMLElement = (el: any): el is HTMLElement => el instanceof HTMLElement;
+
+const dispatch = (action: AssistantAction) =>
+  $state.set(assistantReducer($state.get(), action));
+
 const useAssistant = () => {
-  const [state, dispatch] = useReducer(assistantReducer, {
-    sessions: [{ id: uuid.generate(), value: "" }],
-    state: "inactive",
-    enterDown: false
-  });
+  $state.use();
 
   const debouncedSetInactive = useDebouncedCallback(
     () => dispatch({ type: "INPUT_IDLE" }),
@@ -44,7 +60,8 @@ const useAssistant = () => {
 
   const { transcript, listening } = useSpeechRecognition();
   const { query, reset, patch, commit } = useRealEstateQuery();
-  const session = state.sessions[state.sessions.length - 1];
+
+  const session = $state.sessions.get()[$state.sessions.get().length - 1];
 
   useEffect(() => {
     if (!listening && session.value) {
@@ -57,6 +74,36 @@ const useAssistant = () => {
       dispatch({ type: "VOICE_INPUT_RECEIVED", value: transcript });
     }
   }, [listening, transcript]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
+          return;
+        }
+        e.preventDefault();
+        dispatch({ type: "SPACE_KEY_DOWN" });
+      }
+    };
+
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
+          return;
+        }
+        e.preventDefault();
+        dispatch({ type: "SPACE_KEY_UP" });
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, []);
 
   const request = () =>
     new Observable<AssistantMessage>((sub) => {
@@ -111,7 +158,7 @@ const useAssistant = () => {
     },
 
     onMicClick: () => {
-      if (state.state === "listening") {
+      if ($state.state.get() === "listening") {
         SpeechRecognition.stopListening();
         dispatch({ type: "LISTENING_ABORTED" });
       } else {
@@ -128,12 +175,17 @@ const useAssistant = () => {
         throw new Error();
       }
 
-      dispatch({ type: "START_ASSISTANT_REQUEST" });
+      dispatch({
+        type: "START_ASSISTANT_REQUEST",
+        nl: session.value
+      });
+
       const req = request();
 
       req.subscribe({
         next: (c) => {
-          console.log(c);
+          dispatch({ type: "ASSISTANT_MESSAGE_RECEIVED", value: c });
+
           if (c.type === "ANALYSIS" && c.capability === "CLEAR_QUERY") {
             reset();
           }
@@ -167,14 +219,16 @@ const useAssistant = () => {
     },
 
     session,
-    sessions: state.sessions,
-    enterDown: state.enterDown,
+    sessions: $state.sessions.get(),
+    enterDown: $state.enterDown.get(),
+    spaceDown: $state.spaceDown.get(),
+    timeline: $state.timeline.get(),
 
     submittable:
       !!session.value &&
-      (state.state === "inputting" || state.state === "inactive"),
+      ($state.state.get() === "inputting" || $state.state.get() === "inactive"),
 
-    state: state.state
+    state: $state.state.get()
   };
 
   return ret;

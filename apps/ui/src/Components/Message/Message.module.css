@@ -1,10 +1,7 @@
-.root {
-  font-family: var(--font-inter);
-  font-size: 13px;
-}
-
 .user-root,
 .assistant-root {
+  font-family: var(--font-inter);
+  font-size: 13px;
   display: flex;
 }
 
@@ -66,6 +63,7 @@
   display: flex;
   align-items: center;
   font-weight: 550;
+  white-space: nowrap;
 }
 
 .from,

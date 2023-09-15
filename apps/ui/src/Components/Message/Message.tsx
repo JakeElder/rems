@@ -26,14 +26,10 @@ import {
 type Props = TimelineEvent;
 
 const Message = (event: Props) => {
-  return (
-    <div className={css["root"]}>
-      {event.type === "USER" ? (
-        <UserMessage {...event.interaction} />
-      ) : (
-        <AssistantMessage {...event.message} />
-      )}
-    </div>
+  return event.type === "USER" ? (
+    <UserMessage {...event.interaction} />
+  ) : (
+    <AssistantMessage {...event.message} />
   );
 };
 
@@ -77,7 +73,7 @@ const AssistantPatch = (r: PatchReaction) => {
   return (
     <div className={css["assistant-patch-root"]}>
       <div className={css["assistant-patch-group"]}>
-        {titleCase(r.group.replace("_", " ").toLowerCase())}
+        {titleCase(r.group.replace(/_/g, " ").toLowerCase())}
       </div>
       <div className={css["assistant-diff"]}>
         <Diff {...r.patch} />
@@ -98,8 +94,9 @@ const Array = ({ diff }: { diff: ArrayDiff[] }) => {
   return (
     <ul className={css["array-diff"]}>
       {diff.map((d) => {
-        return d.values.map((v) => (
+        return d.values.map((v, idx) => (
           <li
+            key={`${d.key}.${idx}`}
             className={cn(
               css[d.type === "ADD_ARRAY" ? "add" : "remove"],
               css["diff-item"]
@@ -134,7 +131,7 @@ const ScalarItem = (diff: ScalarDiff) => {
 
 const ChangeScalar = (diff: ChangeScalarDiff) => {
   return Object.keys(diff.props).map((k) => (
-    <li className={cn(css["diff-item"], css["change"])}>
+    <li key={k} className={cn(css["diff-item"], css["change"])}>
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faArrowRightArrowLeft} />
       </div>
@@ -149,7 +146,7 @@ const ChangeScalar = (diff: ChangeScalarDiff) => {
 
 const AddScalar = (diff: AddScalarDiff) => {
   return Object.keys(diff.props).map((k) => (
-    <li className={cn(css["diff-item"], css["add"])}>
+    <li key={k} className={cn(css["diff-item"], css["add"])}>
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faPlus} />
       </div>
@@ -162,7 +159,7 @@ const AddScalar = (diff: AddScalarDiff) => {
 
 const RemoveScalar = (diff: RemoveScalarDiff) => {
   return Object.keys(diff.props).map((k) => (
-    <li className={cn(css["diff-item"], css["remove"])}>
+    <li key={k} className={cn(css["diff-item"], css["remove"])}>
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faMinus} />
       </div>
@@ -177,7 +174,7 @@ const Scalar = ({ diff }: { diff: ScalarDiff[] }) => {
   return (
     <ul className={css["scalar-diff"]}>
       {diff.map((d) => {
-        return <ScalarItem {...d} />;
+        return <ScalarItem key={Object.keys(d.props).join(".")} {...d} />;
       })}
     </ul>
   );
