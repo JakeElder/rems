@@ -1,4 +1,8 @@
-import { AiSearchSession, AssistantMessage } from "@rems/types";
+import {
+  AiSearchInputState,
+  AiSearchSession,
+  AssistantMessage
+} from "@rems/types";
 import { useEffect, useReducer } from "react";
 import assistantReducer from "reducers/assistant-reducer";
 import { Observable } from "rxjs";
@@ -10,15 +14,20 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 
 type FormAttributes = React.FormHTMLAttributes<HTMLFormElement>;
+type InputHTMLAttributes = React.InputHTMLAttributes<HTMLInputElement>;
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
 type UseAssistantReturn = {
   onKeyDown: FormAttributes["onKeyDown"];
   onKeyUp: FormAttributes["onKeyUp"];
   onMicClick: () => void;
+  onChange: InputHTMLAttributes["onChange"];
   process: () => Observable<AssistantMessage>;
+  sessions: AiSearchSession[];
   session: AiSearchSession;
   submittable: boolean;
+  state: AiSearchInputState;
+  enterDown: boolean;
 };
 
 const useAssistant = () => {
@@ -35,9 +44,10 @@ const useAssistant = () => {
 
   const { transcript, listening } = useSpeechRecognition();
   const { query, reset, patch, commit } = useRealEstateQuery();
+  const session = state.sessions[state.sessions.length - 1];
 
   useEffect(() => {
-    if (!listening) {
+    if (!listening && session.value) {
       ret.process();
     }
   }, [listening]);
@@ -47,8 +57,6 @@ const useAssistant = () => {
       dispatch({ type: "VOICE_INPUT_RECEIVED", value: transcript });
     }
   }, [listening, transcript]);
-
-  const session = state.sessions[state.sessions.length - 1];
 
   const request = () =>
     new Observable<AssistantMessage>((sub) => {
@@ -96,7 +104,9 @@ const useAssistant = () => {
       if (e.code === "Enter") {
         e.preventDefault();
         dispatch({ type: "ENTER_KEY_UP" });
-        ret.process();
+        if (session.value) {
+          ret.process();
+        }
       }
     },
 
@@ -123,6 +133,7 @@ const useAssistant = () => {
 
       req.subscribe({
         next: (c) => {
+          console.log(c);
           if (c.type === "ANALYSIS" && c.capability === "CLEAR_QUERY") {
             reset();
           }
@@ -149,11 +160,21 @@ const useAssistant = () => {
       return req;
     },
 
+    onChange: (e) => {
+      const { value } = e.currentTarget;
+      dispatch({ type: "KEYBOARD_INPUT_RECEIVED", value });
+      debouncedSetInactive();
+    },
+
     session,
+    sessions: state.sessions,
+    enterDown: state.enterDown,
 
     submittable:
       !!session.value &&
-      (state.state === "inputting" || state.state === "inactive")
+      (state.state === "inputting" || state.state === "inactive"),
+
+    state: state.state
   };
 
   return ret;

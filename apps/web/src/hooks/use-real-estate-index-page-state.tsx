@@ -41,7 +41,9 @@ const searchParamsToQuery = (params: SearchParams): RealEstateQuery => {
 
   const p = Object.keys(params).reduce((acc, key) => {
     const k = key.replace(/\[\]$/, "") as ArrayKey;
-    const val = arrayKeys.includes(k) ? flatten() : params[key];
+    const val = arrayKeys.includes(k)
+      ? flatten([...[params[key]]])
+      : params[key];
     return { ...acc, [k]: val };
   }, {});
 
