@@ -48,6 +48,8 @@ const searchParamsToQuery = (params: SearchParams): RealEstateQuery => {
   return RealEstateQuerySchema.URL.parse(p);
 };
 
+const isHTMLElement = (el: any): el is HTMLElement => el instanceof HTMLElement;
+
 export const RealEstateIndexPageStateProvider = ({
   children
 }: {
@@ -67,6 +69,9 @@ export const RealEstateIndexPageStateProvider = ({
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
+        if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
+          return;
+        }
         e.preventDefault();
         $.spaceDown.set(true);
       }
@@ -74,6 +79,9 @@ export const RealEstateIndexPageStateProvider = ({
 
     const onKeyUp = (e: KeyboardEvent) => {
       if (e.code === "Space") {
+        if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
+          return;
+        }
         e.preventDefault();
         $.spaceDown.set(false);
       }
@@ -94,7 +102,18 @@ export const RealEstateIndexPageStateProvider = ({
     $.stagedQuery.set(nextQuery);
   }, [router.query]);
 
-  return <IndexPageStateProvider.Provider value={$} children={children} />;
+  return (
+    <IndexPageStateProvider.Provider
+      value={{
+        query: $.query,
+        stagedQuery: $.stagedQuery,
+        mapBounds: $.mapBounds,
+        timeline: $.timeline,
+        spaceDown: $.spaceDown
+      }}
+      children={children}
+    />
+  );
 };
 
 export default useRealEstateIndexPageState;
