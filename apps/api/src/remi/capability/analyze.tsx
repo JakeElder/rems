@@ -6,7 +6,11 @@ import {
   intents,
   stringify
 } from "@/remi";
-import { AiCapability } from "@rems/schemas";
+import {
+  AiCapability,
+  FilterSchema,
+  RealEstateQuerySchema
+} from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import * as Models from "@/models";
@@ -18,7 +22,7 @@ type Args = z.infer<typeof ArgsSchema>;
 type Returns = z.infer<typeof ReturnsSchema>;
 type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
 
-const analyze: Fn = async (nl) => {
+const analyze: Fn = async (nl, query) => {
   const [
     lotFeatures,
     outdoorFeatures,
@@ -33,6 +37,21 @@ const analyze: Fn = async (nl) => {
     Models.PropertyType.findAll({ raw: true })
   ]);
 
+  const currentQuery: z.infer<(typeof ContextSchema.shape)["currentQuery"]> = {
+    VIEW_TYPES: query["view-types"],
+    PROPERTY_TYPES: query["property-types"],
+    LOT_FEATURES: query["lot-features"],
+    OUTDOOR_FEATURES: query["outdoor-features"],
+    INDOOR_FEATURES: query["indoor-features"],
+    BUDGET_AND_AVAILABILITY:
+      RealEstateQuerySchema.BudgetAndAvailability.parse(query),
+    MAP_STATE: RealEstateQuerySchema.MapState.parse(query),
+    SPACE_REQUIREMENTS: RealEstateQuerySchema.SpaceRequirements.parse(query),
+    SORT: query["sort"],
+    PAGE: query["page"],
+    LOCATION: RealEstateQuerySchema.Origin.parse(query)
+  };
+
   const context = stringify(
     ContextSchema.parse({
       indoorFeatures,
@@ -40,7 +59,8 @@ const analyze: Fn = async (nl) => {
       lotFeatures,
       viewTypes,
       propertyTypes,
-      intents
+      intents,
+      currentQuery
     })
   );
 

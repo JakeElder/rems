@@ -45,9 +45,9 @@ type Props = {
 const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
   return (
     <Layout.Root>
-      <ChatViewContainer />
-      <ToastHub>
-        <RealEstateIndexPageStateProvider>
+      <RealEstateIndexPageStateProvider>
+        <ChatViewContainer />
+        <ToastHub>
           <Layout.Header>
             <HeaderViewContainer full mode="standard" search={true} />
             <FilterBarViewContainer {...filterBarProps} />
@@ -80,8 +80,8 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
           <Layout.Footer>
             <FooterViewContainer config={config} searches={searches} full />
           </Layout.Footer>
-        </RealEstateIndexPageStateProvider>
-      </ToastHub>
+        </ToastHub>
+      </RealEstateIndexPageStateProvider>
     </Layout.Root>
   );
 };

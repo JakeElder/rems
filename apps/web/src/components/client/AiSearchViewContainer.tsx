@@ -96,7 +96,6 @@ const AiSearchViewContainer = () => {
 
     fetcher(removeDefaults(query), s.value).subscribe({
       next: (c) => {
-        console.log(c);
         if (c.type === "ANALYSIS" && c.capability === "CLEAR_QUERY") {
           reset();
         }

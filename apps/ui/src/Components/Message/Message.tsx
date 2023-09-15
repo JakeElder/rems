@@ -160,7 +160,7 @@ const AddScalar = (diff: AddScalarDiff) => {
   ));
 };
 
-const RemoveScalar = (diff: AddScalarDiff) => {
+const RemoveScalar = (diff: RemoveScalarDiff) => {
   return Object.keys(diff.props).map((k) => (
     <li className={cn(css["diff-item"], css["remove"])}>
       <div className={css["icon"]}>

@@ -80,7 +80,7 @@ const stream: Stream = (input, query) => async (c) => {
 
   const analyze = memoize(async () => {
     const [i, c] = await Promise.all([
-      remi.capability.analyze(input),
+      remi.capability.analyze(input, query),
       remi.capability.identify(input)
     ]);
 

@@ -4,6 +4,7 @@ import React from "react";
 import { Chat } from "@rems/ui";
 import { Timeline } from "@rems/types";
 import randomInt from "random-int";
+import useRealEstateIndexPageState from "@/hooks/use-real-estate-index-page-state";
 
 type Props = {};
 
@@ -137,7 +138,7 @@ const timeline: Timeline = [
     message: {
       type: "REACTION",
       reaction: {
-        type: "VERBAL",
+        type: "LANGUAGE_BASED",
         message:
           "Ok, I’ve set the min bedrooms to 3. Is there anything else you’d like me to do?"
       }
@@ -146,7 +147,17 @@ const timeline: Timeline = [
 ];
 
 const ChatViewContainer = ({}: Props) => {
-  return <Chat timeline={timeline} lang="en" state="SLEEPING" />;
+  const $ = useRealEstateIndexPageState();
+  $.spaceDown.use();
+
+  return (
+    <Chat
+      timeline={timeline}
+      lang="en"
+      state="SLEEPING"
+      open={$.spaceDown.get()}
+    />
+  );
 };
 
 export default ChatViewContainer;

@@ -6,11 +6,13 @@ import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import Message from "../Message/Message";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
+import { animated, useSpring } from "@react-spring/web";
 
 type Props = {
   timeline: Timeline;
   lang: "en" | "th";
   state: "SLEEPING" | "THINKING";
+  open: boolean;
 };
 
 const Header = ({ state, lang }: Pick<Props, "state" | "lang">) => {
@@ -53,11 +55,21 @@ const Body = ({ timeline }: Pick<Props, "timeline">) => {
   );
 };
 
-const Chat = ({ timeline, state, lang }: Props) => {
+const Reveal = ({
+  open,
+  children
+}: { children: React.ReactNode } & Pick<Props, "open">) => {
+  const style = useSpring({ height: open ? 400 : 0 });
+  return <animated.div style={style}>{children}</animated.div>;
+};
+
+const Chat = ({ timeline, state, lang, open }: Props) => {
   return (
     <div className={css["root"]}>
       <Header state={state} lang={lang} />
-      <Body timeline={timeline} />
+      <Reveal open={open}>
+        <Body timeline={timeline} />
+      </Reveal>
     </div>
   );
 };
