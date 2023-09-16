@@ -1,0 +1,15 @@
+.root {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  display: inline-block;
+  padding: 12px 14px;
+  color: #723090;
+  background: #faf6ff;
+  border: 1px solid #8850a2;
+  border-radius: 10px;
+}

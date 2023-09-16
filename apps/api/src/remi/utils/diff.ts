@@ -1,5 +1,6 @@
 import { RealEstateQuerySchema } from "@rems/schemas";
 import {
+  AddArrayDiff,
   AddScalarDiff,
   ArrayDiff,
   ArrayKey,
@@ -7,6 +8,7 @@ import {
   Filter,
   RealEstateQueryArrays,
   RealEstateQueryScalars,
+  RemoveArrayDiff,
   RemoveScalarDiff,
   ScalarDiff,
   ScalarKey
@@ -28,42 +30,31 @@ export const scalar = (
   const isChange = (k: ScalarKey) =>
     !isAddition(k) && !isRemoval(k) && query[k] !== patch[k];
 
-  const additions = keys
-    .filter(isAddition)
-    .map((k): AddScalarDiff["props"] => ({ [k]: patch[k] }));
-
-  const removals = keys
-    .filter(isRemoval)
-    .map((k): RemoveScalarDiff["props"] => ({ [k]: query[k] }));
-
-  const changes = keys
-    .filter(isChange)
-    .map((k): ChangeScalarDiff["props"] => ({ [k]: [query[k], patch[k]] }));
-
-  const diffs: ScalarDiff[] = [];
-
-  if (additions.length) {
-    diffs.push({
+  const additions = keys.filter(isAddition).map(
+    (k): AddScalarDiff => ({
       type: "ADD_SCALAR",
-      props: Object.assign({}, ...additions)
-    });
-  }
+      k: k,
+      value: patch[k]
+    })
+  );
 
-  if (removals.length) {
-    diffs.push({
+  const removals = keys.filter(isRemoval).map(
+    (k): RemoveScalarDiff => ({
       type: "REMOVE_SCALAR",
-      props: Object.assign({}, ...removals)
-    });
-  }
+      k: k,
+      value: query[k]
+    })
+  );
 
-  if (changes.length) {
-    diffs.push({
+  const changes = keys.filter(isChange).map(
+    (k): ChangeScalarDiff => ({
       type: "CHANGE_SCALAR",
-      props: Object.assign({}, ...changes)
-    });
-  }
+      k: k,
+      value: [query[k], patch[k]]
+    })
+  );
 
-  return diffs;
+  return [...additions, ...removals, ...changes];
 };
 
 export const array = (
@@ -74,15 +65,14 @@ export const array = (
   const additions = value.filter((v) => query[key].indexOf(v) === -1);
   const removals = query[key].filter((v) => value.indexOf(v) === -1);
 
-  const diffs: ArrayDiff[] = [];
-
-  if (additions.length) {
-    diffs.push({ type: "ADD_ARRAY", key, values: additions });
-  }
-
-  if (removals.length) {
-    diffs.push({ type: "REMOVE_ARRAY", key, values: removals });
-  }
+  const diffs: ArrayDiff[] = [
+    ...additions.map(
+      (value): AddArrayDiff => ({ type: "ADD_ARRAY", k: key, value })
+    ),
+    ...removals.map(
+      (value): RemoveArrayDiff => ({ type: "REMOVE_ARRAY", k: key, value })
+    )
+  ];
 
   return diffs;
 };

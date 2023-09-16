@@ -17,6 +17,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { Observable } from "rxjs";
 import { observable, Observable as LegendObservable } from "@legendapp/state";
+import useKeyDown from "./use-key-down";
 
 type FormAttributes = React.FormHTMLAttributes<HTMLFormElement>;
 type InputHTMLAttributes = React.InputHTMLAttributes<HTMLInputElement>;
@@ -45,10 +46,9 @@ const $state: LegendObservable<AssistantState> = observable({
   spaceDown: false
 });
 
-const isHTMLElement = (el: any): el is HTMLElement => el instanceof HTMLElement;
-
-const dispatch = (action: AssistantAction) =>
+const dispatch = (action: AssistantAction) => {
   $state.set(assistantReducer($state.get(), action));
+};
 
 const useAssistant = () => {
   $state.use();
@@ -64,8 +64,15 @@ const useAssistant = () => {
   const session = $state.sessions.get()[$state.sessions.get().length - 1];
 
   useEffect(() => {
-    if (!listening && session.value) {
+    if (listening) {
+      dispatch({ type: "LISTENING_STARTED" });
+      return;
+    }
+    if (session.value) {
+      dispatch({ type: "LISTENING_COMPLETE" });
       ret.process();
+    } else {
+      dispatch({ type: "LISTENING_ABORTED" });
     }
   }, [listening]);
 
@@ -75,35 +82,17 @@ const useAssistant = () => {
     }
   }, [listening, transcript]);
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
-          return;
-        }
-        e.preventDefault();
-        dispatch({ type: "SPACE_KEY_DOWN" });
-      }
-    };
-
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
-          return;
-        }
-        e.preventDefault();
-        dispatch({ type: "SPACE_KEY_UP" });
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
-    };
-  }, []);
+  useKeyDown({
+    code: "Space",
+    down: () => {
+      dispatch({ type: "SPACE_KEY_DOWN" });
+      SpeechRecognition.startListening();
+    },
+    up: () => {
+      dispatch({ type: "SPACE_KEY_UP" });
+      SpeechRecognition.stopListening();
+    }
+  });
 
   const request = () =>
     new Observable<AssistantMessage>((sub) => {
@@ -160,10 +149,8 @@ const useAssistant = () => {
     onMicClick: () => {
       if ($state.state.get() === "listening") {
         SpeechRecognition.stopListening();
-        dispatch({ type: "LISTENING_ABORTED" });
       } else {
         SpeechRecognition.startListening();
-        dispatch({ type: "LISTENING_STARTED" });
       }
     },
 

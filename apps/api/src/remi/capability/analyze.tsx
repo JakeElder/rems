@@ -6,11 +6,7 @@ import {
   intents,
   stringify
 } from "@/remi";
-import {
-  AiCapability,
-  FilterSchema,
-  RealEstateQuerySchema
-} from "@rems/schemas";
+import { AiCapability, RealEstateQuerySchema } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import * as Models from "@/models";

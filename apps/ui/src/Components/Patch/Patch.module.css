@@ -1,0 +1,70 @@
+.root {
+  font-family: var(--font-inter);
+  overflow: hidden;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.icon {
+  margin-right: 4px;
+}
+
+.add,
+.remove,
+.change {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.add {
+  color: #3b9163;
+}
+
+.remove {
+  color: #b03939;
+}
+
+.change {
+  color: #d0a207;
+}
+
+.from,
+.to,
+.value {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.colon {
+  margin-right: 5px;
+}
+
+.add .value {
+  background-color: #e5f6ed;
+}
+
+.remove .value {
+  background-color: #fcefef;
+}
+
+.change .value {
+  background-color: #fcf8eb;
+}
+
+.direction {
+  margin: 0 3px;
+  position: relative;
+  top: -1px;
+  font-weight: 300;
+}

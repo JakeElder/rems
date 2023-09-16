@@ -1,12 +1,14 @@
+"use client";
+
 import React from "react";
 import css from "./Chat.module.css";
 import { Timeline } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
-import Message from "../Message/Message";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
 import { animated, useSpring } from "@react-spring/web";
+import ChatMessage from "../ChatMessage";
 
 type Props = {
   timeline: Timeline;
@@ -47,8 +49,8 @@ const Body = ({ timeline }: Pick<Props, "timeline">) => {
         {timeline
           .slice()
           .reverse()
-          .map((m) => (
-            <Message key={m.id} {...m} />
+          .map((e) => (
+            <ChatMessage key={e.id} {...e} />
           ))}
       </div>
     </div>

@@ -54,14 +54,6 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
           </Layout.Header>
           <Layout.Main>
             <Layout.Content>
-              <Layout.Breadcrumbs>
-                <Breadcrumbs
-                  items={[
-                    { children: "Home", href: "/" },
-                    { children: "Real Estate", href: "/real-estate" }
-                  ]}
-                />
-              </Layout.Breadcrumbs>
               <RealEstateIndexPageTitleViewContainer />
               <Layout.CountAndSort>
                 <CountAndSortViewContainer />

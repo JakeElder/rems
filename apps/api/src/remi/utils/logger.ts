@@ -3,7 +3,6 @@ import {
   ArrayPatch,
   AssistantMessage,
   PatchReaction,
-  ScalarKey,
   ScalarPatch
 } from "@rems/types";
 import { createStream, WritableStream } from "table";
@@ -74,11 +73,11 @@ const arrayDiff = (patch: ArrayPatch) => {
   return patch.diff
     .map((p) => {
       if (p.type === "ADD_ARRAY") {
-        return chalk.green(`+ ${JSON.stringify(p.values)}`);
+        return chalk.green(`+ ${p.value}`);
       }
 
       if (p.type === "REMOVE_ARRAY") {
-        return chalk.red(`- ${JSON.stringify(p.values)}`);
+        return chalk.red(`- ${p.value}`);
       }
     })
     .join("\n");
@@ -92,23 +91,15 @@ const scalarDiff = (patch: ScalarPatch) => {
   return patch.diff
     .map((p) => {
       if (p.type === "ADD_SCALAR") {
-        const keys = Object.keys(p.props) as ScalarKey[];
-        const props = keys.map((k) => `+ ${k}: ${p.props[k]}`);
-        return chalk.green(props.join("\n"));
+        return chalk.green(`+ ${p.k}: ${p.value}`);
       }
 
       if (p.type === "REMOVE_SCALAR") {
-        const keys = Object.keys(p.props) as ScalarKey[];
-        const props = keys.map((k) => `- ${k}: ${p.props[k]}`);
-        return chalk.red(props.join("\n"));
+        return chalk.red(`- ${p.k}: ${p.value}`);
       }
 
       if (p.type === "CHANGE_SCALAR") {
-        const keys = Object.keys(p.props) as ScalarKey[];
-        const props = keys.map(
-          (k) => `⇄ ${k}: ${p.props[k][0]} => ${p.props[k][1]}`
-        );
-        return chalk.yellow(props.join("\n"));
+        return chalk.yellow(`⇄ ${p.k}: ${p.value[0]} => ${p.value[1]}`);
       }
     })
     .join("\n");
