@@ -9,18 +9,17 @@
   gap: 2px;
 }
 
-.item {
-  font-size: 12px;
-  font-weight: 500;
-}
-
 .icon {
-  margin-right: 4px;
+  width: 13px;
 }
 
 .add,
 .remove,
-.change {
+.change,
+.array-noop,
+.scalar-noop {
+  font-size: 12px;
+  font-weight: 500;
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -38,12 +37,21 @@
   color: #d0a207;
 }
 
+.array-noop,
+.scalar-noop {
+  color: #777777;
+}
+
 .from,
 .to,
 .value {
   font-size: 11px;
   padding: 2px 6px;
   border-radius: 2px;
+}
+
+.values {
+  font-size: 11px;
 }
 
 .colon {
@@ -60,6 +68,10 @@
 
 .change .value {
   background-color: #fcf8eb;
+}
+
+.scalar-noop .value {
+  background-color: #eee;
 }
 
 .direction {

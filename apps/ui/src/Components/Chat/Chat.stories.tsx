@@ -57,6 +57,24 @@ export const Default: Story = {
       },
       {
         type: "ASSISTANT",
+        id: "30",
+        date: date(),
+        message: {
+          type: "REACTION",
+          reaction: {
+            type: "PATCH",
+            group: "INDOOR_FEATURES",
+            patch: {
+              type: "ARRAY",
+              key: "indoor-features",
+              value: ["pet-friendly", "swimming-pool"],
+              diff: []
+            }
+          }
+        }
+      },
+      {
+        type: "ASSISTANT",
         id: "3",
         date: date(),
         message: {
@@ -108,6 +126,26 @@ export const Default: Story = {
                   value: [18.7883439, 9.5120168]
                 }
               ]
+            }
+          }
+        }
+      },
+      {
+        type: "ASSISTANT",
+        id: "50",
+        date: date(),
+        message: {
+          type: "REACTION",
+          reaction: {
+            type: "PATCH",
+            group: "SPACE_REQUIREMENTS",
+            patch: {
+              type: "SCALAR",
+              data: {
+                "min-bedrooms": 3,
+                "max-bedrooms": 4
+              },
+              diff: []
             }
           }
         }

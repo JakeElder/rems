@@ -4,15 +4,18 @@ import {
   AddArrayDiff,
   AddScalarDiff,
   ArrayDiff,
+  ArrayPatch,
   ChangeScalarDiff,
   Patch as PatchType,
   RemoveArrayDiff,
   RemoveScalarDiff,
-  ScalarDiff
+  ScalarDiff,
+  ScalarPatch
 } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRightArrowLeft,
+  faEquals,
   faMinus,
   faPlus
 } from "@fortawesome/free-solid-svg-icons";
@@ -111,6 +114,14 @@ const Line = (diff: ScalarDiff | ArrayDiff) => {
 };
 
 const Patch = (patch: PatchType) => {
+  if (patch.diff.length === 0) {
+    return (
+      <div className={css["root"]}>
+        <Noop {...patch} />
+      </div>
+    );
+  }
+
   return (
     <div className={css["root"]}>
       <ul className={css["list"]}>
@@ -119,6 +130,44 @@ const Patch = (patch: PatchType) => {
         ))}
       </ul>
     </div>
+  );
+};
+
+const Noop = (patch: PatchType) => {
+  if (patch.type === "ARRAY") {
+    return <ArrayNoop {...patch} />;
+  }
+
+  if (patch.type === "SCALAR") {
+    return <ScalarNoop {...patch} />;
+  }
+};
+
+const ArrayNoop = (patch: ArrayPatch) => {
+  return (
+    <div className={css["array-noop"]}>
+      <div className={css["icon"]}>
+        <FontAwesomeIcon icon={faEquals} size="sm" />
+      </div>
+      <div className={css["values"]}>{patch.value.join(", ")}</div>
+    </div>
+  );
+};
+
+const ScalarNoop = (patch: ScalarPatch) => {
+  return (
+    <ul className={css["list"]}>
+      {Object.keys(patch.data).map((k) => (
+        <li className={css["scalar-noop"]}>
+          <div className={css["icon"]}>
+            <FontAwesomeIcon icon={faEquals} size="sm" />
+          </div>
+          <div className={css["key"]}>{k}</div>
+          <div className={css["colon"]}>:</div>
+          <div className={css["value"]}>{(patch.data as any)[k]}</div>
+        </li>
+      ))}
+    </ul>
   );
 };
 
