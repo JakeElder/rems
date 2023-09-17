@@ -19,6 +19,7 @@ import {
   faMinus,
   faPlus
 } from "@fortawesome/free-solid-svg-icons";
+import { animated, useTransition } from "@react-spring/web";
 
 const AddArray = (diff: AddArrayDiff) => {
   return (
@@ -122,11 +123,23 @@ const Patch = (patch: PatchType) => {
     );
   }
 
+  return <List diff={patch.diff} />;
+};
+
+const List = ({ diff }: { diff: (ScalarDiff | ArrayDiff)[] }) => {
+  const transition = useTransition(diff, {
+    trail: 300 / diff.length,
+    from: { opacity: 0, x: 14 },
+    enter: { opacity: 1, x: 0 }
+  });
+
   return (
     <div className={css["root"]}>
       <ul className={css["list"]}>
-        {patch.diff.map((d) => (
-          <Line {...d} />
+        {transition((style, d) => (
+          <animated.div style={style}>
+            <Line {...d} key={`${d.type}.${d.k}.${d.value}`} />
+          </animated.div>
         ))}
       </ul>
     </div>
@@ -155,17 +168,26 @@ const ArrayNoop = (patch: ArrayPatch) => {
 };
 
 const ScalarNoop = (patch: ScalarPatch) => {
+  const keys = Object.keys(patch.data);
+  const transition = useTransition(keys, {
+    trail: 300 / keys.length,
+    from: { opacity: 0, x: 14 },
+    enter: { opacity: 1, x: 0 }
+  });
+
   return (
     <ul className={css["list"]}>
-      {Object.keys(patch.data).map((k) => (
-        <li className={css["scalar-noop"]}>
-          <div className={css["icon"]}>
-            <FontAwesomeIcon icon={faEquals} size="sm" />
-          </div>
-          <div className={css["key"]}>{k}</div>
-          <div className={css["colon"]}>:</div>
-          <div className={css["value"]}>{(patch.data as any)[k]}</div>
-        </li>
+      {transition((style, k) => (
+        <animated.div style={style}>
+          <li className={css["scalar-noop"]}>
+            <div className={css["icon"]}>
+              <FontAwesomeIcon icon={faEquals} size="sm" />
+            </div>
+            <div className={css["key"]}>{k}</div>
+            <div className={css["colon"]}>:</div>
+            <div className={css["value"]}>{(patch.data as any)[k]}</div>
+          </li>
+        </animated.div>
       ))}
     </ul>
   );
