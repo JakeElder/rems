@@ -79,7 +79,7 @@ export const Root = ({
       <Container full={full}>
         <div className={css["links"]}>
           <UL
-            heading="JYOPROPERTY"
+            heading="REMS"
             links={[
               { href: "/", children: "Home" },
               { href: "/real-estate", children: "Real Estate" },
@@ -89,7 +89,7 @@ export const Root = ({
                   onContactUsClick();
                 },
                 children: "Contact Us",
-                href: "#"
+                href: "/#"
               }
             ]}
           />
@@ -103,7 +103,7 @@ export const Root = ({
             <Logo />
           </Link>
           <div className={css["column-disclaimer"]}>
-            Copyright © 2023 Jyo Property Co Ltd
+            Copyright © 2023 Mindful Studio
           </div>
           <div className={css["socials"]}>
             <a className={css["linked-in"]} href={lineURL}>
@@ -121,7 +121,7 @@ export const Root = ({
           </div>
         </div>
         <div className={css["full-disclaimer"]}>
-          Copyright © 2023 JYO Property Co Ltd
+          Copyright © 2023 Mindful Studio
         </div>
       </Container>
     </footer>

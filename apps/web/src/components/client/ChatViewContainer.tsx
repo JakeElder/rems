@@ -8,10 +8,14 @@ import dynamic from "next/dynamic";
 type Props = {};
 
 const ChatViewContainer = ({}: Props) => {
+  const { timeline, spaceDown } = useAssistant();
+
   const audio = new Audio("/click.mp3");
   audio.volume = 0.1;
-  const { timeline } = useAssistant();
-  return <Chat timeline={timeline} lang="en" state="SLEEPING" open={true} />;
+
+  return (
+    <Chat timeline={timeline} lang="en" state="SLEEPING" open={spaceDown} />
+  );
 };
 
 export default dynamic(() => Promise.resolve(ChatViewContainer), {
