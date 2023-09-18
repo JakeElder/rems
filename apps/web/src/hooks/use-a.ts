@@ -56,6 +56,12 @@ const useAssistant = (): Return => {
   const { transcript, listening } = useSpeechRecognition();
   const { query, reset, patch, commit } = useRealEstateQuery();
 
+  $state.use();
+  $enterDown.use();
+  $spaceDown.use();
+  $timeline.use();
+  $sessions.use();
+
   const session = useSelector(
     () => $sessions.get()[$sessions.get().length - 1]
   );
@@ -98,11 +104,12 @@ const useAssistant = (): Return => {
     code: "Space",
     down: () => {
       $spaceDown.set(true);
-      SpeechRecognition.startListening();
+      // SpeechRecognition.startListening();
     },
     up: () => {
+      console.log("up");
       $spaceDown.set(false);
-      SpeechRecognition.stopListening();
+      // SpeechRecognition.stopListening();
     }
   });
 

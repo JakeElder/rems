@@ -167,24 +167,61 @@ const Input = React.forwardRef<
     leave: hidden
   });
 
-  const t = useTransition(Array.from(Array(sessions.length).keys()), {
+  const t = useTransition(sessions, {
+    keys: (s) => s.id,
     from: { height: 0 },
     enter: { height: 36 }
   });
 
+  const s = sessions[sessions.length - 1];
+
   return (
     <animated.div style={style} className={css["container"]}>
       <div className={css["session-container"]}>
-        {t((style, idx) => {
-          const s = sessions[idx];
+        <input
+          ref={ref}
+          key={s.id}
+          value={s.value}
+          className={css["input"]}
+          disabled={state !== "inactive" && state !== "inputting"}
+          {...props}
+        />
+      </div>
+
+      <div className={css["enter-and-status"]}>
+        <div className={css["status"]}>
+          <Status state={state} />
+        </div>
+        {submit(
+          (style, show) =>
+            show && (
+              <animated.div style={style}>
+                <div
+                  className={cn(css["enter"], {
+                    [css["enter-down"]]: enterDown
+                  })}
+                >
+                  <EnterIcon />
+                </div>
+              </animated.div>
+            )
+        )}
+      </div>
+    </animated.div>
+  );
+
+  return (
+    <animated.div style={style} className={css["container"]}>
+      <div className={css["session-container"]}>
+        {t((style, s) => {
           return (
             <animated.div style={style}>
               {(() => {
-                if (idx !== sessions.length - 1) {
+                if (!s.current) {
                   return (
                     <input
                       key={s.id}
-                      value={sessions[idx].value}
+                      value={s.value}
                       className={css["input"]}
                       disabled
                     />

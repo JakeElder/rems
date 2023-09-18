@@ -3,9 +3,10 @@
 import "regenerator-runtime";
 import React, { useEffect, useRef } from "react";
 import { AiSearch } from "@rems/ui";
-import useAssistant from "@/hooks/use-assistant";
+import useAssistant from "@/hooks/use-a";
 
 const AiSearchViewContainer = () => {
+  return null;
   const assistant = useAssistant();
   const $input = useRef<HTMLInputElement>(null);
 

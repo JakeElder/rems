@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Chat } from "@rems/ui";
-import useAssistant from "@/hooks/use-assistant";
+import useAssistant from "@/hooks/use-a";
 import dynamic from "next/dynamic";
 
 type Props = {};

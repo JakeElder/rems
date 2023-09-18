@@ -18,6 +18,9 @@ const useKeyDown = ({
           return;
         }
         e.preventDefault();
+        if (e.repeat) {
+          return;
+        }
         down();
       }
     };
@@ -32,6 +35,7 @@ const useKeyDown = ({
       }
     };
 
+    console.log("binding");
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup", onKeyUp);
 
