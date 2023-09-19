@@ -25,6 +25,7 @@ import fetch from "@/fetch";
 import { RealEstateIndexPageStateProvider } from "../hooks/use-real-estate-index-page-state";
 import { enableReactUse } from "@legendapp/state/config/enableReactUse";
 import ChatViewContainer from "@/components/client/ChatViewContainer";
+import AssistantProvider from "@/components/AssistantProvider";
 
 enableReactUse();
 
@@ -46,33 +47,35 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
   return (
     <Layout.Root>
       <RealEstateIndexPageStateProvider>
-        <ChatViewContainer />
-        <ToastHub>
-          <Layout.Header>
-            <HeaderViewContainer full mode="standard" search={true} />
-            <FilterBarViewContainer {...filterBarProps} />
-          </Layout.Header>
-          <Layout.Main>
-            <Layout.Content>
-              <RealEstateIndexPageTitleViewContainer />
-              <Layout.CountAndSort>
-                <CountAndSortViewContainer />
-              </Layout.CountAndSort>
-              <Layout.Properties>
-                <PropertyGridViewContainer />
-              </Layout.Properties>
-              <Layout.Pagination>
-                <PaginationViewContainer />
-              </Layout.Pagination>
-            </Layout.Content>
-            <Layout.Map>
-              <ListingMapViewContainer />
-            </Layout.Map>
-          </Layout.Main>
-          <Layout.Footer>
-            <FooterViewContainer config={config} searches={searches} full />
-          </Layout.Footer>
-        </ToastHub>
+        <AssistantProvider>
+          <ChatViewContainer />
+          <ToastHub>
+            <Layout.Header>
+              <HeaderViewContainer full mode="standard" search={true} />
+              <FilterBarViewContainer {...filterBarProps} />
+            </Layout.Header>
+            <Layout.Main>
+              <Layout.Content>
+                <RealEstateIndexPageTitleViewContainer />
+                <Layout.CountAndSort>
+                  <CountAndSortViewContainer />
+                </Layout.CountAndSort>
+                <Layout.Properties>
+                  <PropertyGridViewContainer />
+                </Layout.Properties>
+                <Layout.Pagination>
+                  <PaginationViewContainer />
+                </Layout.Pagination>
+              </Layout.Content>
+              <Layout.Map>
+                <ListingMapViewContainer />
+              </Layout.Map>
+            </Layout.Main>
+            <Layout.Footer>
+              <FooterViewContainer config={config} searches={searches} full />
+            </Layout.Footer>
+          </ToastHub>
+        </AssistantProvider>
       </RealEstateIndexPageStateProvider>
     </Layout.Root>
   );

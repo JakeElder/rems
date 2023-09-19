@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 type Props = {};
 
 const ChatViewContainer = ({}: Props) => {
+  return null;
   const { timeline, spaceDown } = useAssistant();
 
   const audio = new Audio("/click.mp3");
