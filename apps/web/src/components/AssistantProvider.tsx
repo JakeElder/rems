@@ -1,3 +1,4 @@
+import useSpaceBar from "@/hooks/use-space-bar";
 import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { observable, Observable as LegendObservable } from "@legendapp/state";
 import {
@@ -37,7 +38,7 @@ type Context = {
   sessions: AiSearchSession[];
   state: AiSearchInputState;
   enterDown: boolean;
-  // spaceDown: boolean;
+  spaceDown: boolean;
   $timeline: LegendObservable<Timeline>;
 
   // Computed
@@ -56,6 +57,7 @@ const AssistantProvider = ({ children }: Props) => {
     sessions: [{ id: uuid.generate(), value: "" }],
     state: "inactive",
     enterDown: false,
+    spaceDown: false
   });
 
   const debouncedSetInactive = useDebouncedCallback(
@@ -66,8 +68,14 @@ const AssistantProvider = ({ children }: Props) => {
   const session = state.sessions[state.sessions.length - 1];
 
   useEffect(() => {
-    if (!listening && session.value) {
+    if (listening) {
+      dispatch({ type: "LISTENING_STARTED" });
+      return;
+    } else if (session.value) {
+      dispatch({ type: "LISTENING_COMPLETE" });
       process();
+    } else {
+      dispatch({ type: "LISTENING_ABORTED" });
     }
   }, [listening]);
 
@@ -76,6 +84,17 @@ const AssistantProvider = ({ children }: Props) => {
       dispatch({ type: "VOICE_INPUT_RECEIVED", value: transcript });
     }
   }, [listening, transcript]);
+
+  useSpaceBar({
+    down: () => {
+      dispatch({ type: "SPACE_KEY_DOWN" });
+      SpeechRecognition.startListening();
+    },
+    up: () => {
+      dispatch({ type: "SPACE_KEY_UP" });
+      SpeechRecognition.stopListening();
+    }
+  });
 
   const request = () =>
     new Observable<AssistantMessage>((sub) => {
@@ -210,6 +229,7 @@ const AssistantProvider = ({ children }: Props) => {
         sessions: state.sessions,
         enterDown: state.enterDown,
         state: state.state,
+        spaceDown: state.spaceDown,
         $timeline,
 
         session,

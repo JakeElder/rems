@@ -5,6 +5,7 @@ type ComponentState = {
   sessions: AiSearchSession[];
   state: AiSearchInputState;
   enterDown: boolean;
+  spaceDown: boolean;
 };
 
 type ComponentAction =
@@ -16,6 +17,8 @@ type ComponentAction =
   | { type: "MIC_BUTTON_CLICKED" }
   | { type: "ENTER_KEY_DOWN" }
   | { type: "ENTER_KEY_UP" }
+  | { type: "SPACE_KEY_DOWN" }
+  | { type: "SPACE_KEY_UP" }
   | { type: "KEYBOARD_INPUT_RECEIVED"; value: string }
   | { type: "LISTENING_STARTED" }
   | { type: "LISTENING_ABORTED" }
@@ -57,6 +60,12 @@ const assistantReducer = (
 
     case "ENTER_KEY_UP":
       return { ...prev, enterDown: false };
+
+    case "SPACE_KEY_DOWN":
+      return { ...prev, spaceDown: true };
+
+    case "SPACE_KEY_UP":
+      return { ...prev, spaceDown: false };
 
     case "KEYBOARD_INPUT_RECEIVED":
       return {
