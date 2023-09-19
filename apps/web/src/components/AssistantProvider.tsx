@@ -1,4 +1,5 @@
 import useRealEstateQuery from "@/hooks/use-real-estate-query";
+import { observable, Observable as LegendObservable } from "@legendapp/state";
 import {
   AiSearchInputState,
   AiSearchSession,
@@ -24,6 +25,8 @@ type FormAttributes = React.FormHTMLAttributes<HTMLFormElement>;
 type InputHTMLAttributes = React.InputHTMLAttributes<HTMLInputElement>;
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
+const $timeline: Context["$timeline"] = observable<Timeline>([]);
+
 type Context = {
   onKeyDown: FormAttributes["onKeyDown"];
   onKeyUp: FormAttributes["onKeyUp"];
@@ -35,7 +38,7 @@ type Context = {
   state: AiSearchInputState;
   enterDown: boolean;
   // spaceDown: boolean;
-  // timeline: Timeline;
+  $timeline: LegendObservable<Timeline>;
 
   // Computed
   session: AiSearchSession;
@@ -52,7 +55,7 @@ const AssistantProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(assistantReducer, {
     sessions: [{ id: uuid.generate(), value: "" }],
     state: "inactive",
-    enterDown: false
+    enterDown: false,
   });
 
   const debouncedSetInactive = useDebouncedCallback(
@@ -148,10 +151,28 @@ const AssistantProvider = ({ children }: Props) => {
     }
 
     dispatch({ type: "START_ASSISTANT_REQUEST" });
+    $timeline.set((prev) => [
+      ...prev,
+      {
+        type: "USER",
+        id: uuid.generate(),
+        date: Date.now(),
+        interaction: { type: "WRITTEN", input: session.value }
+      }
+    ]);
     const req = request();
 
     req.subscribe({
       next: (c) => {
+        $timeline.set((prev) => [
+          ...prev,
+          {
+            type: "ASSISTANT",
+            id: uuid.generate(),
+            date: Date.now(),
+            message: c
+          }
+        ]);
         if (c.type === "ANALYSIS" && c.capability === "CLEAR_QUERY") {
           reset();
         }
@@ -189,6 +210,7 @@ const AssistantProvider = ({ children }: Props) => {
         sessions: state.sessions,
         enterDown: state.enterDown,
         state: state.state,
+        $timeline,
 
         session,
         submittable:

@@ -173,42 +173,7 @@ const Input = React.forwardRef<
     enter: { height: 36 }
   });
 
-  const s = sessions[sessions.length - 1];
-
-  return (
-    <animated.div style={style} className={css["container"]}>
-      <div className={css["session-container"]}>
-        <input
-          ref={ref}
-          key={s.id}
-          value={s.value}
-          className={css["input"]}
-          disabled={state !== "inactive" && state !== "inputting"}
-          {...props}
-        />
-      </div>
-
-      <div className={css["enter-and-status"]}>
-        <div className={css["status"]}>
-          <Status state={state} />
-        </div>
-        {submit(
-          (style, show) =>
-            show && (
-              <animated.div style={style}>
-                <div
-                  className={cn(css["enter"], {
-                    [css["enter-down"]]: enterDown
-                  })}
-                >
-                  <EnterIcon />
-                </div>
-              </animated.div>
-            )
-        )}
-      </div>
-    </animated.div>
-  );
+  const session = sessions[sessions.length - 1];
 
   return (
     <animated.div style={style} className={css["container"]}>
@@ -217,7 +182,7 @@ const Input = React.forwardRef<
           return (
             <animated.div style={style}>
               {(() => {
-                if (!s.current) {
+                if (s.id !== session.id) {
                   return (
                     <input
                       key={s.id}

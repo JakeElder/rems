@@ -20,26 +20,34 @@ type Props = React.ComponentProps<typeof Dialog.Root> & {
 };
 
 const Indicator = ({ amount }: { amount: number }) => {
-  const $ref = useRef<HTMLDivElement>(null);
-
-  const [style, api] = useSpring(() => ({
-    width: $ref.current?.clientWidth || 0
-  }));
-
-  useEffect(() => {
-    api.start({
-      width: amount > 0 ? $ref.current?.offsetWidth : 0
-    });
-  }, [amount, $ref.current?.offsetWidth]);
-
   return (
-    <animated.div style={style} className={css["indicator-container"]}>
-      <div ref={$ref} className={css["indicator"]}>
-        {amount}
-      </div>
-    </animated.div>
+    <div className={css["indicator-container"]}>
+      <div className={css["indicator"]}>{amount}</div>
+    </div>
   );
 };
+
+// const Indicator = ({ amount }: { amount: number }) => {
+//   const $ref = useRef<HTMLDivElement>(null);
+
+//   const [style, api] = useSpring(() => ({
+//     width: $ref.current?.clientWidth || 0
+//   }));
+
+//   useEffect(() => {
+//     api.start({
+//       width: amount > 0 ? $ref.current?.offsetWidth : 0
+//     });
+//   }, [amount, $ref.current?.offsetWidth]);
+
+//   return (
+//     <animated.div style={style} className={css["indicator-container"]}>
+//       <div ref={$ref} className={css["indicator"]}>
+//         {amount}
+//       </div>
+//     </animated.div>
+//   );
+// };
 
 const SidePanel = ({
   children,

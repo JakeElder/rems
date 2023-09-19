@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { MutableRefObject, useMemo } from "react";
 import css from "./Chat.module.css";
 import { Timeline } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,10 +9,11 @@ import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
 import { animated, useSpring, useTransition } from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
+import { Observable } from "@legendapp/state";
 
 type Props = {
-  audio?: { message?: HTMLAudioElement };
-  timeline: Timeline;
+  audio?: MutableRefObject<{ message?: HTMLAudioElement }>;
+  $timeline: Observable<Timeline>;
   lang: "en" | "th";
   state: "SLEEPING" | "THINKING";
   open: boolean;
@@ -43,10 +44,34 @@ const Header = ({ state, lang }: Pick<Props, "state" | "lang">) => {
 };
 
 const Body = React.memo(
-  ({ timeline, audio }: Pick<Props, "timeline" | "audio">) => {
+  ({ $timeline, audio }: Pick<Props, "$timeline" | "audio">) => {
     const refMap = useMemo(() => new WeakMap(), []);
 
-    const transitions = useTransition(timeline.slice().reverse(), {
+    // @ts-ignore
+    $timeline.use();
+
+    const messages = $timeline
+      .get()
+      .slice()
+      .reverse()
+      .filter((e) => {
+        if (e.type === "USER") {
+          if (
+            e.interaction.type === "VERBAL" ||
+            e.interaction.type === "WRITTEN"
+          ) {
+            return true;
+          }
+        }
+        if (e.type === "ASSISTANT") {
+          if (e.message.type === "REACTION") {
+            return true;
+          }
+        }
+        return false;
+      });
+
+    const transitions = useTransition(messages, {
       keys: (item) => item.id,
       from: { opacity: 0, height: 0 },
       enter: (item) => async (next) => {
@@ -55,7 +80,7 @@ const Body = React.memo(
           item.message.type === "REACTION" &&
           item.message.reaction.type === "PATCH"
         ) {
-          audio?.message?.play();
+          audio?.current?.message?.play();
         }
         const $el = refMap.get(item);
         if ($el) {
@@ -68,10 +93,23 @@ const Body = React.memo(
     return (
       <div className={css["body"]}>
         <div className={css["shadow"]} />
-        <div className={css["timeline"]}></div>
+        <div className={css["timeline"]}>
+          {transitions((style, e) => {
+            return (
+              <animated.div style={style} key={e.id}>
+                <ChatMessage
+                  key={e.id}
+                  {...e}
+                  ref={(ref: HTMLDivElement) => ref && refMap.set(e, ref)}
+                />
+              </animated.div>
+            );
+          })}
+        </div>
       </div>
     );
-  }
+  },
+  () => true
 );
 
 const BodyReveal = ({
@@ -82,15 +120,14 @@ const BodyReveal = ({
   return <animated.div style={style}>{children}</animated.div>;
 };
 
-const Chat = ({ timeline, state, lang, open, audio = {} }: Props) => {
+const Chat = ({ $timeline, state, lang, open, audio }: Props) => {
   return (
     <div className={css["root"]}>
       <Header state={state} lang={lang} />
       <BodyReveal open={open}>
-        <Body timeline={timeline} audio={audio} />
+        <Body $timeline={$timeline} audio={audio} />
       </BodyReveal>
     </div>
   );
 };
-
 export default Chat;

@@ -1,24 +1,29 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Chat } from "@rems/ui";
-import useAssistant from "@/hooks/use-a";
-import dynamic from "next/dynamic";
+import { useAssistant } from "@/components/AssistantProvider";
 
 type Props = {};
 
 const ChatViewContainer = ({}: Props) => {
-  return null;
-  const { timeline, spaceDown } = useAssistant();
+  const { $timeline } = useAssistant();
+  const audio = useRef<{ message?: HTMLAudioElement }>({});
 
-  const audio = new Audio("/click.mp3");
-  audio.volume = 0.1;
+  useEffect(() => {
+    audio.current.message = new Audio("/click.mp3");
+    audio.current.message.volume = 0.6;
+  }, []);
 
   return (
-    <Chat timeline={timeline} lang="en" state="SLEEPING" open={spaceDown} />
+    <Chat
+      $timeline={$timeline}
+      lang="en"
+      state="SLEEPING"
+      open={true}
+      audio={audio}
+    />
   );
 };
 
-export default dynamic(() => Promise.resolve(ChatViewContainer), {
-  ssr: false
-});
+export default ChatViewContainer;
