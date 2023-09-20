@@ -2,7 +2,17 @@ import { useEffect } from "react";
 
 const isHTMLElement = (el: any): el is HTMLElement => el instanceof HTMLElement;
 
-const useSpaceBar = ({ down, up }: { down: () => void; up: () => void }) => {
+const useAssistantKeys = ({
+  spaceDown,
+  spaceUp,
+  plus,
+  minus
+}: {
+  spaceDown: () => void;
+  spaceUp: () => void;
+  plus: () => void;
+  minus: () => void;
+}) => {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
@@ -13,7 +23,7 @@ const useSpaceBar = ({ down, up }: { down: () => void; up: () => void }) => {
         if (e.repeat) {
           return;
         }
-        down();
+        spaceDown();
       }
     };
 
@@ -23,18 +33,30 @@ const useSpaceBar = ({ down, up }: { down: () => void; up: () => void }) => {
           return;
         }
         e.preventDefault();
-        up();
+        spaceUp();
+      }
+    };
+
+    const onKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "+") {
+        plus();
+      }
+
+      if (e.key === "-") {
+        minus();
       }
     };
 
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("keypress", onKeyPress);
 
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("keypress", onKeyPress);
     };
   }, []);
 };
 
-export default useSpaceBar;
+export default useAssistantKeys;

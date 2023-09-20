@@ -6,6 +6,7 @@ type ComponentState = {
   state: AiSearchInputState;
   enterDown: boolean;
   spaceDown: boolean;
+  open: boolean;
 };
 
 type ComponentAction =
@@ -23,7 +24,8 @@ type ComponentAction =
   | { type: "LISTENING_STARTED" }
   | { type: "LISTENING_ABORTED" }
   | { type: "LISTENING_COMPLETE" }
-  | { type: "VOICE_INPUT_RECEIVED"; value: string };
+  | { type: "VOICE_INPUT_RECEIVED"; value: string }
+  | { type: "OPEN_CLOSE"; open: boolean };
 
 const assistantReducer = (
   prev: ComponentState,
@@ -100,6 +102,9 @@ const assistantReducer = (
 
     case "LISTENING_COMPLETE":
       return { ...prev }; // noop
+
+    case "OPEN_CLOSE":
+      return { ...prev, open: action.open };
 
     default:
       throw new Error("Invalid action type");

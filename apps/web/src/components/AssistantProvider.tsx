@@ -1,4 +1,4 @@
-import useSpaceBar from "@/hooks/use-space-bar";
+import useAssistantKeys from "@/hooks/use-assistant-keys";
 import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { observable, Observable as LegendObservable } from "@legendapp/state";
 import {
@@ -15,6 +15,7 @@ import assistantReducer from "reducers/assistant-reducer";
 import { Observable } from "rxjs";
 import uuid from "short-uuid";
 import { useDebouncedCallback } from "use-debounce";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const NEXT_PUBLIC_REMS_API_URL = process.env.NEXT_PUBLIC_REMS_API_URL;
 
@@ -33,12 +34,14 @@ type Context = {
   onKeyUp: FormAttributes["onKeyUp"];
   onMicClick: () => void;
   onChange: InputHTMLAttributes["onChange"];
+  onOpenClose: (open: boolean) => void;
 
   // State
   sessions: AiSearchSession[];
   state: AiSearchInputState;
   enterDown: boolean;
   spaceDown: boolean;
+  open: boolean;
   $timeline: LegendObservable<Timeline>;
 
   // Computed
@@ -53,11 +56,20 @@ const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening } = useSpeechRecognition();
   const { query, reset, patch, commit } = useRealEstateQuery();
 
+  useHotkeys(
+    "+",
+    () => {
+      console.log("a");
+    },
+    { combinationKey: "-" }
+  );
+
   const [state, dispatch] = useReducer(assistantReducer, {
     sessions: [{ id: uuid.generate(), value: "" }],
     state: "inactive",
     enterDown: false,
-    spaceDown: false
+    spaceDown: false,
+    open: false
   });
 
   const debouncedSetInactive = useDebouncedCallback(
@@ -85,14 +97,20 @@ const AssistantProvider = ({ children }: Props) => {
     }
   }, [listening, transcript]);
 
-  useSpaceBar({
-    down: () => {
+  useAssistantKeys({
+    spaceDown: () => {
       dispatch({ type: "SPACE_KEY_DOWN" });
       SpeechRecognition.startListening();
     },
-    up: () => {
+    spaceUp: () => {
       dispatch({ type: "SPACE_KEY_UP" });
       SpeechRecognition.stopListening();
+    },
+    plus: () => {
+      dispatch({ type: "OPEN_CLOSE", open: true });
+    },
+    minus: () => {
+      dispatch({ type: "OPEN_CLOSE", open: false });
     }
   });
 
@@ -161,6 +179,10 @@ const AssistantProvider = ({ children }: Props) => {
     debouncedSetInactive();
   };
 
+  const onOpenClose: Context["onOpenClose"] = (open) => {
+    dispatch({ type: "OPEN_CLOSE", open });
+  };
+
   const process = () => {
     debouncedSetInactive.cancel();
 
@@ -225,11 +247,13 @@ const AssistantProvider = ({ children }: Props) => {
         onKeyUp,
         onMicClick,
         onChange,
+        onOpenClose,
 
         sessions: state.sessions,
         enterDown: state.enterDown,
         state: state.state,
         spaceDown: state.spaceDown,
+        open: state.open,
         $timeline,
 
         session,

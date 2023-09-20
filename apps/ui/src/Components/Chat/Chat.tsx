@@ -4,22 +4,52 @@ import React, { MutableRefObject, useMemo } from "react";
 import css from "./Chat.module.css";
 import { Timeline } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
-import { animated, useSpring, useTransition } from "@react-spring/web";
+import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
 import { Observable } from "@legendapp/state";
 
 type Props = {
   audio?: MutableRefObject<{ message?: HTMLAudioElement }>;
+  onOpenClose: (open: boolean) => void;
   $timeline: Observable<Timeline>;
   lang: "en" | "th";
-  state: "SLEEPING" | "THINKING";
+  state:
+    | "SLEEPING"
+    | "THINKING"
+    | "REFINING_QUERY"
+    | "CLEARING_QUERY"
+    | "CHATTING";
   open: boolean;
 };
 
-const Header = ({ state, lang }: Pick<Props, "state" | "lang">) => {
+const OpenClose = ({
+  open,
+  onOpenClose
+}: Pick<Props, "open" | "onOpenClose">) => {
+  const { rotate } = useSpring({ rotate: open ? 0 : 180 });
+
+  return (
+    <animated.button
+      className={css["open-close-button"]}
+      onClick={() => onOpenClose(!open)}
+      style={{
+        transform: rotate.to((value) => `rotate(${value}deg)`)
+      }}
+    >
+      <FontAwesomeIcon className={css["close"]} icon={faCaretDown} size="xs" />
+    </animated.button>
+  );
+};
+
+const Header = ({
+  state,
+  lang,
+  open,
+  onOpenClose
+}: Pick<Props, "state" | "lang" | "open" | "onOpenClose">) => {
   return (
     <div className={css["header"]}>
       <div className={css["avatar-name-state"]}>
@@ -33,10 +63,10 @@ const Header = ({ state, lang }: Pick<Props, "state" | "lang">) => {
         <div className={css["name"]}>Remi</div>
         <div className={css["state"]}>{state}</div>
       </div>
-      <div className={css["lang-pin"]}>
+      <div className={css["lang-open-close"]}>
         <div className={css["lang"]}>{lang}</div>
-        <div className={css["pin"]}>
-          <FontAwesomeIcon icon={faThumbtack} size="xs" />
+        <div className={css["open-close"]}>
+          <OpenClose open={open} onOpenClose={onOpenClose} />
         </div>
       </div>
     </div>
@@ -120,10 +150,10 @@ const BodyReveal = ({
   return <animated.div style={style}>{children}</animated.div>;
 };
 
-const Chat = ({ $timeline, state, lang, open, audio }: Props) => {
+const Chat = ({ $timeline, state, lang, open, audio, onOpenClose }: Props) => {
   return (
     <div className={css["root"]}>
-      <Header state={state} lang={lang} />
+      <Header state={state} lang={lang} open={open} onOpenClose={onOpenClose} />
       <BodyReveal open={open}>
         <Body $timeline={$timeline} audio={audio} />
       </BodyReveal>
