@@ -1,6 +1,6 @@
 import React from "react";
 import css from "./Outline.module.css";
-import { animated, useSpring, config } from "@react-spring/web";
+import { animated, useSpring } from "@react-spring/web";
 
 type Props = {
   children: React.ReactNode;

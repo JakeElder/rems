@@ -1,8 +1,13 @@
 "use client";
 
-import React, { MutableRefObject, useMemo } from "react";
+import React, {
+  MutableRefObject,
+  useLayoutEffect,
+  useMemo,
+  useRef
+} from "react";
 import css from "./Chat.module.css";
-import { Timeline } from "@rems/types";
+import { Timeline, TimelineEvent } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../assets/avatar.png";
@@ -45,17 +50,106 @@ const OpenClose = ({
   );
 };
 
-const stateLabel = (state: Props["state"]) => {
-  const map: Record<Props["state"], string> = {
-    CHATTING: "Chatting",
-    SLEEPING: "Sleeping",
-    THINKING: "Thinking",
-    LISTENING: "Listening",
-    CLEARING_QUERY: "Clearing Query",
-    REFINING_QUERY: "Refining Query"
-  };
+type StateDef = { label: string };
+const states: Record<Props["state"], StateDef> = {
+  CHATTING: { label: "Chatting" },
+  SLEEPING: { label: "Sleeping" },
+  THINKING: { label: "Thinking" },
+  LISTENING: { label: "Listening" },
+  CLEARING_QUERY: { label: "Clearing Query" },
+  REFINING_QUERY: { label: "Refining Query" }
+};
 
+type GroupedState = "IDLE" | "LISTENING" | "THINKING" | "INTERACTING";
+type ColorDef = {
+  avatarBorder: string;
+  labelBg: string;
+  labelColor: string;
+};
+
+const stateToGroup = (state: Props["state"]): GroupedState => {
+  const map: Record<Props["state"], GroupedState> = {
+    CHATTING: "INTERACTING",
+    SLEEPING: "IDLE",
+    THINKING: "THINKING",
+    LISTENING: "LISTENING",
+    CLEARING_QUERY: "INTERACTING",
+    REFINING_QUERY: "INTERACTING"
+  };
   return map[state];
+};
+
+const colors: Record<GroupedState, ColorDef> = {
+  IDLE: {
+    avatarBorder: "#d1d1d1",
+    labelBg: "#F2F2F2",
+    labelColor: "#333333"
+  },
+  LISTENING: {
+    avatarBorder: "#8850a2",
+    labelBg: "#8850a2",
+    labelColor: "#fff"
+  },
+  THINKING: {
+    avatarBorder: "#ecbb56",
+    labelBg: "#ecbb56",
+    labelColor: "#fff"
+  },
+  INTERACTING: {
+    avatarBorder: "#439a5f",
+    labelBg: "#439a5f",
+    labelColor: "#fff"
+  }
+};
+
+const State = ({ state }: Pick<Props, "state">) => {
+  const { labelBg, labelColor } = useSpring(colors[stateToGroup(state)]);
+  const keys = Object.keys(states) as Props["state"][];
+  const firstRender = useRef(true);
+
+  const labelStyles = useSpring<Record<Props["state"], number>>(
+    keys.reduce((p, c) => {
+      return { ...p, [c]: state === c ? 1 : 0 };
+    }, {})
+  );
+
+  const refs = useRef<Partial<Record<Props["state"], HTMLSpanElement | null>>>(
+    {}
+  );
+
+  const [{ width }, api] = useSpring(() => ({ width: 0 }));
+
+  useLayoutEffect(() => {
+    firstRender.current = false;
+    const el = refs.current[state];
+    if (!el) {
+      return;
+    }
+    const rect = el.getBoundingClientRect();
+    api.start({ width: rect.width });
+  }, [state]);
+
+  return (
+    <animated.div
+      className={css["label"]}
+      style={{
+        backgroundColor: labelBg,
+        color: labelColor,
+        width: firstRender.current ? "auto" : width
+      }}
+    >
+      {keys.map((s) => (
+        <animated.div
+          className={css["state"]}
+          style={{ opacity: labelStyles[s] }}
+          key={s}
+        >
+          <span ref={(e) => (refs.current[s] = e)}>{states[s].label}</span>
+        </animated.div>
+      ))}
+      {states[state].label}
+    </animated.div>
+  );
 };
 
 const Header = ({
@@ -64,18 +158,28 @@ const Header = ({
   open,
   onOpenClose
 }: Pick<Props, "state" | "lang" | "open" | "onOpenClose">) => {
+  const { avatarBorder } = useSpring(colors[stateToGroup(state)]);
   return (
     <div className={css["header"]}>
       <div className={css["avatar-name-state"]}>
-        <div className={css["avatar"]}>
-          <img className={css["remi"]} src={avatar.src} />
-          <div className={css["ror"]}>
-            <img src={ror.src} width={ror.width / 2} height={ror.height / 2} />
+        <animated.div
+          className={css["avatar"]}
+          style={{ borderColor: avatarBorder }}
+        >
+          <div className={css["avatar-inner"]}>
+            <img className={css["remi"]} src={avatar.src} />
+            <div className={css["ror"]}>
+              <img
+                src={ror.src}
+                width={ror.width / 2}
+                height={ror.height / 2}
+              />
+            </div>
+            <div className={css["shadow"]} />
           </div>
-          <div className={css["shadow"]} />
-        </div>
+        </animated.div>
         <div className={css["name"]}>Remi</div>
-        <div className={css["state"]}>{stateLabel(state)}</div>
+        <State state={state} />
       </div>
       <div className={css["lang-open-close"]}>
         <div className={css["lang"]}>{lang}</div>
@@ -87,6 +191,38 @@ const Header = ({
   );
 };
 
+const isLanguageBasedUserMessageEvent = (e: TimelineEvent) =>
+  e.type === "USER" &&
+  (e.interaction.type === "VERBAL" || e.interaction.type === "WRITTEN");
+
+const isPatchEvent = (e: TimelineEvent) =>
+  e.type === "ASSISTANT" &&
+  e.message.type === "REACTION" &&
+  e.message.reaction.type === "PATCH";
+
+const isEmptyPatchEvent = (e: TimelineEvent) => {
+  if (
+    e.type === "ASSISTANT" &&
+    e.message.type === "REACTION" &&
+    e.message.reaction.type === "PATCH"
+  ) {
+    if (
+      e.message.reaction.patch.type === "SCALAR" &&
+      Object.keys(e.message.reaction.patch.data).length === 0
+    ) {
+      return true;
+    }
+    if (
+      e.message.reaction.patch.type === "ARRAY" &&
+      e.message.reaction.patch.diff.length === 0 &&
+      e.message.reaction.patch.value.length === 0
+    ) {
+      return true;
+    }
+  }
+  return false;
+};
+
 const Body = React.memo(
   ({ timeline, audio }: Pick<Props, "timeline" | "audio">) => {
     const refMap = useMemo(() => new WeakMap(), []);
@@ -95,34 +231,12 @@ const Body = React.memo(
       .slice()
       .reverse()
       .filter((e) => {
-        if (e.type === "USER") {
-          if (
-            e.interaction.type === "VERBAL" ||
-            e.interaction.type === "WRITTEN"
-          ) {
-            return true;
-          }
+        if (isEmptyPatchEvent(e)) {
+          return false;
         }
 
-        if (e.type === "ASSISTANT") {
-          if (e.message.type === "REACTION") {
-            if (e.message.reaction.type === "PATCH") {
-              if (
-                e.message.reaction.patch.type === "SCALAR" &&
-                Object.keys(e.message.reaction.patch.data).length === 0
-              ) {
-                return false;
-              }
-              if (
-                e.message.reaction.patch.type === "ARRAY" &&
-                e.message.reaction.patch.diff.length === 0 &&
-                e.message.reaction.patch.value.length === 0
-              ) {
-                return false;
-              }
-            }
-            return true;
-          }
+        if (isLanguageBasedUserMessageEvent(e) || isPatchEvent(e)) {
+          return true;
         }
 
         return false;

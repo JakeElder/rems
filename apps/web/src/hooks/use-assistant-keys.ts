@@ -42,7 +42,7 @@ const useAssistantKeys = ({
         plus();
       }
 
-      if (e.key === "-") {
+      if (e.key === "-" || e.key === "_") {
         minus();
       }
     };

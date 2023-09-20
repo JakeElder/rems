@@ -33,10 +33,10 @@ const useColors = (state: AiSearchInputState) => {
       color: c("#ad3dbf").darken(12).toString()
     },
     listening: {
-      borderColor: "#ad3dbf",
+      borderColor: "#8850a2",
       // backgroundColor: c("#ad3dbf").lighten(0.95).toString(),
       backgroundColor: "rgba(255, 255, 255, 0)",
-      color: c("#ad3dbf").darken(16).toString()
+      color: c("#8850a2").darken(16).toString()
     },
     resolving: {
       borderColor: "#ecbb56",
