@@ -4719,7 +4719,6 @@ __metadata:
     random-int: ^3.0.0
     react: 18.2.0
     react-dom: 18.2.0
-    react-hotkeys-hook: ^4.4.1
     react-map-gl: ^7.1.3
     react-speech-recognition: ^3.10.0
     remeda: ^1.24.0
@@ -9161,6 +9160,7 @@ __metadata:
     array-equal: ^1.0.0
     chalk: ^5.3.0
     env-cmd: ^10.1.0
+    fast-deep-equal: ^3.1.3
     json-diff: ^1.0.6
     memoizee: ^0.4.15
     next: 13.4.12
@@ -20529,7 +20529,7 @@ nextjs-cors@latest:
   languageName: node
   linkType: hard
 
-"react-hotkeys-hook@npm:^4.4.0, react-hotkeys-hook@npm:^4.4.1":
+"react-hotkeys-hook@npm:^4.4.0":
   version: 4.4.1
   resolution: "react-hotkeys-hook@npm:4.4.1"
   peerDependencies:

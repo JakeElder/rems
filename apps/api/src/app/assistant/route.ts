@@ -10,7 +10,7 @@ import {
   PatchReactionIntentResolution,
   AssistantMessage
 } from "@rems/types";
-import { RealEstateQuerySchema } from "@rems/schemas";
+import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
 import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";

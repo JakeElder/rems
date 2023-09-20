@@ -1,6 +1,6 @@
 import useAssistantKeys from "@/hooks/use-assistant-keys";
 import useRealEstateQuery from "@/hooks/use-real-estate-query";
-import { observable, Observable as LegendObservable } from "@legendapp/state";
+import { observable } from "@legendapp/state";
 import {
   AiSearchInputState,
   AiSearchSession,
@@ -15,7 +15,6 @@ import assistantReducer from "reducers/assistant-reducer";
 import { Observable } from "rxjs";
 import uuid from "short-uuid";
 import { useDebouncedCallback } from "use-debounce";
-import { useHotkeys } from "react-hotkeys-hook";
 
 const NEXT_PUBLIC_REMS_API_URL = process.env.NEXT_PUBLIC_REMS_API_URL;
 
@@ -27,7 +26,7 @@ type FormAttributes = React.FormHTMLAttributes<HTMLFormElement>;
 type InputHTMLAttributes = React.InputHTMLAttributes<HTMLInputElement>;
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
-const $timeline: Context["$timeline"] = observable<Timeline>([]);
+const $timeline = observable<Timeline>([]);
 
 type Context = {
   onKeyDown: FormAttributes["onKeyDown"];
@@ -42,7 +41,7 @@ type Context = {
   enterDown: boolean;
   spaceDown: boolean;
   open: boolean;
-  $timeline: LegendObservable<Timeline>;
+  timeline: Timeline;
 
   // Computed
   session: AiSearchSession;
@@ -56,13 +55,7 @@ const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening } = useSpeechRecognition();
   const { query, reset, patch, commit } = useRealEstateQuery();
 
-  useHotkeys(
-    "+",
-    () => {
-      console.log("a");
-    },
-    { combinationKey: "-" }
-  );
+  $timeline.use();
 
   const [state, dispatch] = useReducer(assistantReducer, {
     sessions: [{ id: uuid.generate(), value: "" }],
@@ -254,7 +247,7 @@ const AssistantProvider = ({ children }: Props) => {
         state: state.state,
         spaceDown: state.spaceDown,
         open: state.open,
-        $timeline,
+        timeline: $timeline.get(),
 
         session,
         submittable:

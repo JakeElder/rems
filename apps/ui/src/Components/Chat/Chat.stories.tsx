@@ -4,7 +4,6 @@ import timeline from "../../fixtures/timeline";
 import { useEffect, useRef, useState } from "react";
 import { Timeline } from "@rems/types";
 import randomInt from "random-int";
-import click from "../../assets/sounds/click.mp3";
 
 type Props = React.ComponentProps<typeof Chat>;
 
@@ -48,14 +47,8 @@ const meta: Meta<Props> = {
 
 type Story = StoryObj<Props>;
 
-const message = new Audio(click);
-message.volume = 0.1;
-
-var audio = { message };
-
 export const Default: Story = {
   args: {
-    audio,
     lang: "en",
     open: true,
     state: "SLEEPING",

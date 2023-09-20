@@ -9,15 +9,16 @@ import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
 import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
-import { Observable } from "@legendapp/state";
+import equal from "fast-deep-equal";
 
 type Props = {
   audio?: MutableRefObject<{ message?: HTMLAudioElement }>;
   onOpenClose: (open: boolean) => void;
-  $timeline: Observable<Timeline>;
+  timeline: Timeline;
   lang: "en" | "th";
   state:
     | "SLEEPING"
+    | "LISTENING"
     | "THINKING"
     | "REFINING_QUERY"
     | "CLEARING_QUERY"
@@ -44,6 +45,19 @@ const OpenClose = ({
   );
 };
 
+const stateLabel = (state: Props["state"]) => {
+  const map: Record<Props["state"], string> = {
+    CHATTING: "Chatting",
+    SLEEPING: "Sleeping",
+    THINKING: "Thinking",
+    LISTENING: "Listening",
+    CLEARING_QUERY: "Clearing Query",
+    REFINING_QUERY: "Refining Query"
+  };
+
+  return map[state];
+};
+
 const Header = ({
   state,
   lang,
@@ -61,7 +75,7 @@ const Header = ({
           <div className={css["shadow"]} />
         </div>
         <div className={css["name"]}>Remi</div>
-        <div className={css["state"]}>{state}</div>
+        <div className={css["state"]}>{stateLabel(state)}</div>
       </div>
       <div className={css["lang-open-close"]}>
         <div className={css["lang"]}>{lang}</div>
@@ -74,14 +88,10 @@ const Header = ({
 };
 
 const Body = React.memo(
-  ({ $timeline, audio }: Pick<Props, "$timeline" | "audio">) => {
+  ({ timeline, audio }: Pick<Props, "timeline" | "audio">) => {
     const refMap = useMemo(() => new WeakMap(), []);
 
-    // @ts-ignore
-    $timeline.use();
-
-    const messages = $timeline
-      .get()
+    const messages = timeline
       .slice()
       .reverse()
       .filter((e) => {
@@ -93,11 +103,28 @@ const Body = React.memo(
             return true;
           }
         }
+
         if (e.type === "ASSISTANT") {
           if (e.message.type === "REACTION") {
+            if (e.message.reaction.type === "PATCH") {
+              if (
+                e.message.reaction.patch.type === "SCALAR" &&
+                Object.keys(e.message.reaction.patch.data).length === 0
+              ) {
+                return false;
+              }
+              if (
+                e.message.reaction.patch.type === "ARRAY" &&
+                e.message.reaction.patch.diff.length === 0 &&
+                e.message.reaction.patch.value.length === 0
+              ) {
+                return false;
+              }
+            }
             return true;
           }
         }
+
         return false;
       });
 
@@ -139,7 +166,7 @@ const Body = React.memo(
       </div>
     );
   },
-  () => true
+  (prev, next) => equal(prev.timeline, next.timeline)
 );
 
 const BodyReveal = ({
@@ -150,12 +177,12 @@ const BodyReveal = ({
   return <animated.div style={style}>{children}</animated.div>;
 };
 
-const Chat = ({ $timeline, state, lang, open, audio, onOpenClose }: Props) => {
+const Chat = ({ timeline, state, lang, open, audio, onOpenClose }: Props) => {
   return (
     <div className={css["root"]}>
       <Header state={state} lang={lang} open={open} onOpenClose={onOpenClose} />
       <BodyReveal open={open}>
-        <Body $timeline={$timeline} audio={audio} />
+        <Body timeline={timeline} audio={audio} />
       </BodyReveal>
     </div>
   );
