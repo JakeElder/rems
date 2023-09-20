@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Chat from "./Chat";
-import timeline from "../../fixtures/timeline";
-import { useEffect, useRef, useState } from "react";
-import { Timeline } from "@rems/types";
+import * as Chat from "./Chat";
+import React, { useEffect, useRef, useState } from "react";
 import randomInt from "random-int";
+import { Timeline } from "@rems/types";
+import mockTimeline from "../../fixtures/timeline";
 
-type Props = React.ComponentProps<typeof Chat>;
+type Story = StoryObj<Chat.Props>;
 
 const next = (source: Timeline, current: Timeline): [Timeline, boolean] => {
   const e = source.shift();
   return [[...current, e!], source.length === 0];
 };
 
-const MockChat = (props: Props) => {
-  const source = useRef([...timeline]);
+export const Mock = (props: Chat.Props) => {
+  const source = useRef([...mockTimeline]);
   const to = useRef<NodeJS.Timeout>();
   const [t, setCurrent] = useState(props.timeline);
 
@@ -29,23 +29,23 @@ const MockChat = (props: Props) => {
     to.current = setTimeout(() => push(t), randomInt(500, 2200));
     () => {
       clearTimeout(to.current);
-      source.current = [...timeline];
+      source.current = [...mockTimeline];
       setCurrent([]);
     };
   }, []);
 
-  return <Chat {...props} timeline={t} />;
+  return (
+    <Chat.Root>
+      <Chat.Header {...props} />
+      <Chat.Body {...props} timeline={t} />
+    </Chat.Root>
+  );
 };
 
-const meta: Meta<Props> = {
+const meta: Meta<Chat.Props> = {
   title: "Chat/Chat",
-  component: Chat,
-  render: ({ ...args }) => {
-    return <MockChat {...args} />;
-  }
+  component: Mock
 };
-
-type Story = StoryObj<Props>;
 
 export const Default: Story = {
   args: {

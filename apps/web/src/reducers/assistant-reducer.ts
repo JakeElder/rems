@@ -30,7 +30,8 @@ type ComponentAction =
   | { type: "LISTENING_ABORTED" }
   | { type: "LISTENING_COMPLETE" }
   | { type: "VOICE_INPUT_RECEIVED"; value: string }
-  | { type: "OPEN_CLOSE"; open: boolean };
+  | { type: "OPEN_CLOSE"; open: boolean }
+  | { type: "REFINING_QUERY" };
 
 const assistantReducer = (
   prev: ComponentState,
@@ -55,6 +56,7 @@ const assistantReducer = (
       return {
         ...prev,
         state: "inactive",
+        assistantState: "SLEEPING",
         sessions: [...prev.sessions, { id: uuid.generate(), value: "" }]
       };
 
@@ -74,7 +76,7 @@ const assistantReducer = (
       return { ...prev, enterDown: false };
 
     case "SPACE_KEY_DOWN":
-      return { ...prev, spaceDown: true };
+      return { ...prev, spaceDown: true, open: true };
 
     case "SPACE_KEY_UP":
       return { ...prev, spaceDown: false };
@@ -115,6 +117,9 @@ const assistantReducer = (
 
     case "OPEN_CLOSE":
       return { ...prev, open: action.open };
+
+    case "REFINING_QUERY":
+      return { ...prev, assistantState: "REFINING_QUERY" };
 
     default:
       throw new Error("Invalid action type");

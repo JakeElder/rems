@@ -77,13 +77,19 @@ const AssistantProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (listening) {
-      dispatch({ type: "LISTENING_STARTED" });
+      setTimeout(() => {
+        dispatch({ type: "LISTENING_STARTED" });
+      }, 100);
       return;
     } else if (session.value) {
-      dispatch({ type: "LISTENING_COMPLETE" });
+      setTimeout(() => {
+        dispatch({ type: "LISTENING_COMPLETE" });
+      }, 100);
       process();
     } else {
-      dispatch({ type: "LISTENING_ABORTED" });
+      setTimeout(() => {
+        dispatch({ type: "LISTENING_ABORTED" });
+      }, 100);
     }
   }, [listening]);
 
@@ -162,10 +168,8 @@ const AssistantProvider = ({ children }: Props) => {
   const onMicClick: Context["onMicClick"] = () => {
     if (state.state === "listening") {
       SpeechRecognition.stopListening();
-      dispatch({ type: "LISTENING_ABORTED" });
     } else {
       SpeechRecognition.startListening();
-      dispatch({ type: "LISTENING_STARTED" });
     }
   };
 
@@ -210,8 +214,19 @@ const AssistantProvider = ({ children }: Props) => {
             message: c
           }
         ]);
-        if (c.type === "ANALYSIS" && c.capability === "CLEAR_QUERY") {
-          reset();
+
+        if (c.type === "ANALYSIS") {
+          if (c.capability === "CLEAR_QUERY") {
+            reset(true);
+          }
+
+          if (c.capability === "NEW_QUERY") {
+            reset(false);
+          }
+
+          if (c.capability === "REFINE_QUERY" || c.capability === "NEW_QUERY") {
+            dispatch({ type: "REFINING_QUERY" });
+          }
         }
 
         if (c.type === "REACTION" && c.reaction.type === "PATCH") {

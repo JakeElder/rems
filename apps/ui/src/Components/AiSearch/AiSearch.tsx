@@ -3,7 +3,7 @@
 import React from "react";
 import css from "./AiSearch.module.css";
 import { ColorRing, LineWave } from "react-loader-spinner";
-import { AiSearchInputState, AiSearchSession } from "@rems/types";
+import { AssistantInputState, AiSearchSession } from "@rems/types";
 import { animated, useSpring, useTransition } from "@react-spring/web";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faMicrophoneLines } from "@fortawesome/free-solid-svg-icons";
@@ -11,9 +11,9 @@ import c from "tinycolor2";
 import EnterIcon from "../../Elements/EnterIcon/EnterIcon";
 import cn from "classnames";
 
-const useColors = (state: AiSearchInputState) => {
+const useColors = (state: AssistantInputState) => {
   const map: Record<
-    AiSearchInputState,
+    AssistantInputState,
     {
       backgroundColor: string;
       borderColor: string;
@@ -71,7 +71,7 @@ type Props = {
   onMicClick?: () => void;
   enterDown: boolean;
   sessions: AiSearchSession[];
-  state: AiSearchInputState;
+  state: AssistantInputState;
   submittable: boolean;
 } & Pick<
   React.FormHTMLAttributes<HTMLFormElement>,
@@ -89,7 +89,7 @@ const useHideShow = (show: boolean) => {
   });
 };
 
-const Status = ({ state }: { state: AiSearchInputState }) => {
+const Status = ({ state }: { state: AssistantInputState }) => {
   const loader = useHideShow(state === "resolving");
   const check = useHideShow(state === "resolved");
   const inputting = useHideShow(state === "listening" || state === "inputting");
@@ -150,7 +150,7 @@ const Status = ({ state }: { state: AiSearchInputState }) => {
 const Input = React.forwardRef<
   HTMLInputElement,
   {
-    state: AiSearchInputState;
+    state: AssistantInputState;
     enterDown: boolean;
     submittable: boolean;
     sessions: AiSearchSession[];

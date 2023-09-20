@@ -50,7 +50,7 @@ type UseRealEstateQueryReturn = {
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
   onSearchOriginChange: (id: string, lng: number, lat: number) => void;
   onMapMove: (params: { zoom: number; lat: number; lng: number }) => void;
-  reset: () => void;
+  reset: (commit: boolean) => void;
   isReady: boolean;
   onSearchRadiusChange: (value: number) => void;
   onSearchRadiusEnabledChange: (enabled: boolean) => void;
@@ -231,9 +231,11 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
       commit();
     },
 
-    reset: () => {
+    reset: (c) => {
       $.stagedQuery.set(RealEstateQuerySchema.URL.parse({}));
-      commit();
+      if (c) {
+        commit();
+      }
     },
 
     onMapMove: useDebouncedCallback(({ zoom, lat, lng }) => {

@@ -1,11 +1,6 @@
 "use client";
 
-import React, {
-  MutableRefObject,
-  useLayoutEffect,
-  useMemo,
-  useRef
-} from "react";
+import React, { useLayoutEffect, useMemo, useRef } from "react";
 import css from "./Chat.module.css";
 import { AssistantState, Timeline, TimelineEvent } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,8 +11,7 @@ import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 
-type Props = {
-  audio?: MutableRefObject<{ message?: HTMLAudioElement }>;
+export type Props = {
   onOpenClose: (open: boolean) => void;
   timeline: Timeline;
   lang: "en" | "th";
@@ -44,8 +38,8 @@ const OpenClose = ({
   );
 };
 
-type StateDef = { label: string };
-const states: Record<Props["state"], StateDef> = {
+type State = { label: string };
+const states: Record<Props["state"], State> = {
   CHATTING: { label: "Chatting" },
   SLEEPING: { label: "Sleeping" },
   THINKING: { label: "Thinking" },
@@ -55,7 +49,7 @@ const states: Record<Props["state"], StateDef> = {
 };
 
 type GroupedState = "IDLE" | "LISTENING" | "THINKING" | "INTERACTING";
-type ColorDef = {
+type Color = {
   avatarBorder: string;
   labelBg: string;
   labelColor: string;
@@ -73,7 +67,7 @@ const stateToGroup = (state: Props["state"]): GroupedState => {
   return map[state];
 };
 
-const colors: Record<GroupedState, ColorDef> = {
+const colors: Record<GroupedState, Color> = {
   IDLE: {
     avatarBorder: "#d1d1d1",
     labelBg: "#F2F2F2",
@@ -146,7 +140,7 @@ const State = ({ state }: Pick<Props, "state">) => {
   );
 };
 
-const Header = ({
+export const Header = ({
   state,
   lang,
   open,
@@ -217,8 +211,16 @@ const isEmptyPatchEvent = (e: TimelineEvent) => {
   return false;
 };
 
-const Body = React.memo(
-  ({ timeline, audio }: Pick<Props, "timeline" | "audio">) => {
+const BodyReveal = ({
+  open,
+  children
+}: { children: React.ReactNode } & Pick<Props, "open">) => {
+  const style = useSpring({ height: open ? 400 : 0 });
+  return <animated.div style={style}>{children}</animated.div>;
+};
+
+export const Body = React.memo(
+  ({ timeline, open }: Pick<Props, "timeline" | "open">) => {
     const refMap = useMemo(() => new WeakMap(), []);
 
     const messages = timeline
@@ -240,59 +242,35 @@ const Body = React.memo(
       keys: (item) => item.id,
       from: { opacity: 0, height: 0 },
       enter: (item) => async (next) => {
-        if (
-          item.type === "ASSISTANT" &&
-          item.message.type === "REACTION" &&
-          item.message.reaction.type === "PATCH"
-        ) {
-          audio?.current?.message?.play();
-        }
         const $el = refMap.get(item);
-        if ($el) {
-          await next({ opacity: 1, height: $el.offsetHeight });
-        }
-      },
-      leave: [{ opacity: 0 }, { height: 0 }]
+        await next({ opacity: 1, height: $el.offsetHeight });
+      }
     });
 
     return (
-      <div className={css["body"]}>
-        <div className={css["shadow"]} />
-        <div className={css["timeline"]}>
-          {transitions((style, e) => {
-            return (
-              <animated.div style={style} key={e.id}>
-                <ChatMessage
-                  key={e.id}
-                  {...e}
-                  ref={(ref: HTMLDivElement) => ref && refMap.set(e, ref)}
-                />
-              </animated.div>
-            );
-          })}
+      <BodyReveal open={open}>
+        <div className={css["body"]}>
+          <div className={css["shadow"]} />
+          <div className={css["timeline"]}>
+            {transitions((style, e) => {
+              return (
+                <animated.div style={style} key={e.id}>
+                  <ChatMessage
+                    key={e.id}
+                    {...e}
+                    ref={(ref: HTMLDivElement) => ref && refMap.set(e, ref)}
+                  />
+                </animated.div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </BodyReveal>
     );
   },
   (prev, next) => equal(prev.timeline, next.timeline)
 );
 
-const BodyReveal = ({
-  open,
-  children
-}: { children: React.ReactNode } & Pick<Props, "open">) => {
-  const style = useSpring({ height: open ? 400 : 0 });
-  return <animated.div style={style}>{children}</animated.div>;
+export const Root = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["root"]}>{children}</div>;
 };
-
-const Chat = ({ timeline, state, lang, open, audio, onOpenClose }: Props) => {
-  return (
-    <div className={css["root"]}>
-      <Header state={state} lang={lang} open={open} onOpenClose={onOpenClose} />
-      <BodyReveal open={open}>
-        <Body timeline={timeline} audio={audio} />
-      </BodyReveal>
-    </div>
-  );
-};
-export default Chat;
