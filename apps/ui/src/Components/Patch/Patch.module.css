@@ -1,12 +1,15 @@
 .root {
   font-family: var(--font-inter);
-  overflow: hidden;
 }
 
 .list {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.item {
+  display: flex;
 }
 
 .icon {
@@ -21,6 +24,7 @@
   font-size: 12px;
   font-weight: 500;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   white-space: nowrap;
 }
