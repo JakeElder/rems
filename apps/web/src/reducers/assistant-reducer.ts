@@ -1,9 +1,14 @@
-import { AiSearchInputState, AiSearchSession } from "@rems/types";
+import {
+  AiSearchSession,
+  AssistantInputState,
+  AssistantState
+} from "@rems/types";
 import uuid from "short-uuid";
 
 type ComponentState = {
   sessions: AiSearchSession[];
-  state: AiSearchInputState;
+  state: AssistantInputState;
+  assistantState: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
   open: boolean;
@@ -36,7 +41,12 @@ const assistantReducer = (
       return { ...prev, state: "inactive" };
 
     case "START_ASSISTANT_REQUEST":
-      return { ...prev, enterDown: false, state: "resolving" };
+      return {
+        ...prev,
+        enterDown: false,
+        state: "resolving",
+        assistantState: "THINKING"
+      };
 
     case "SUCCESSFUL_ASSISTANT_REQUEST":
       return { ...prev, state: "resolved" };
@@ -83,10 +93,10 @@ const assistantReducer = (
       };
 
     case "LISTENING_STARTED":
-      return { ...prev, state: "listening" };
+      return { ...prev, state: "listening", assistantState: "LISTENING" };
 
     case "LISTENING_ABORTED":
-      return { ...prev, state: "inactive" };
+      return { ...prev, state: "inactive", assistantState: "SLEEPING" };
 
     case "VOICE_INPUT_RECEIVED":
       return {

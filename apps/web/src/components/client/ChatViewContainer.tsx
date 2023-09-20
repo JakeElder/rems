@@ -7,7 +7,7 @@ import { useAssistant } from "@/components/AssistantProvider";
 type Props = {};
 
 const ChatViewContainer = ({}: Props) => {
-  const { timeline, open, onOpenClose } = useAssistant();
+  const { timeline, open, onOpenClose, assistantState } = useAssistant();
   const audio = useRef<{ message?: HTMLAudioElement }>({});
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const ChatViewContainer = ({}: Props) => {
     <Chat
       timeline={timeline}
       lang="en"
-      state="SLEEPING"
+      state={assistantState}
       open={open}
       audio={audio}
       onOpenClose={onOpenClose}

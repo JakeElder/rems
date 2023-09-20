@@ -2,9 +2,10 @@ import useAssistantKeys from "@/hooks/use-assistant-keys";
 import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { observable } from "@legendapp/state";
 import {
-  AiSearchInputState,
   AiSearchSession,
+  AssistantInputState,
   AssistantMessage,
+  AssistantState,
   Timeline
 } from "@rems/types";
 import { createContext, useContext, useEffect, useReducer } from "react";
@@ -37,7 +38,8 @@ type Context = {
 
   // State
   sessions: AiSearchSession[];
-  state: AiSearchInputState;
+  state: AssistantInputState;
+  assistantState: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
   open: boolean;
@@ -60,6 +62,7 @@ const AssistantProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(assistantReducer, {
     sessions: [{ id: uuid.generate(), value: "" }],
     state: "inactive",
+    assistantState: "SLEEPING",
     enterDown: false,
     spaceDown: false,
     open: false
@@ -245,6 +248,7 @@ const AssistantProvider = ({ children }: Props) => {
         sessions: state.sessions,
         enterDown: state.enterDown,
         state: state.state,
+        assistantState: state.assistantState,
         spaceDown: state.spaceDown,
         open: state.open,
         timeline: $timeline.get(),

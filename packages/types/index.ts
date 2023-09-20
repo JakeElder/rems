@@ -163,13 +163,21 @@ export type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
 
-export type AiSearchInputState =
+export type AssistantInputState =
   | "inactive"
   | "inputting"
   | "listening"
   | "resolving"
   | "resolved"
   | "committed";
+
+export type AssistantState =
+  | "SLEEPING"
+  | "LISTENING"
+  | "THINKING"
+  | "REFINING_QUERY"
+  | "CLEARING_QUERY"
+  | "CHATTING";
 
 export type ResolvingFilterSet = {
   set: FilterSet;

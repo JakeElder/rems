@@ -7,7 +7,7 @@ import React, {
   useRef
 } from "react";
 import css from "./Chat.module.css";
-import { Timeline, TimelineEvent } from "@rems/types";
+import { AssistantState, Timeline, TimelineEvent } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../assets/avatar.png";
@@ -21,13 +21,7 @@ type Props = {
   onOpenClose: (open: boolean) => void;
   timeline: Timeline;
   lang: "en" | "th";
-  state:
-    | "SLEEPING"
-    | "LISTENING"
-    | "THINKING"
-    | "REFINING_QUERY"
-    | "CLEARING_QUERY"
-    | "CHATTING";
+  state: AssistantState;
   open: boolean;
 };
 
