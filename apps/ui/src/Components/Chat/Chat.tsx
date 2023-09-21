@@ -7,7 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
-import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
+import {
+  Pick,
+  animated,
+  useSpring,
+  useTransition,
+  config
+} from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 
@@ -92,29 +98,58 @@ const colors: Record<GroupedState, Color> = {
 
 const State = ({ state }: Pick<Props, "state">) => {
   const { labelBg, labelColor } = useSpring(colors[stateToGroup(state)]);
-  const keys = Object.keys(states) as Props["state"][];
+  const keys = useRef<Props["state"][]>([
+    state,
+    ...(Object.keys(states).filter((s) => s !== state) as Props["state"][])
+  ]);
   const firstRender = useRef(true);
 
   const labelStyles = useSpring<Record<Props["state"], number>>(
-    keys.reduce((p, c) => {
+    keys.current.reduce((p, c) => {
       return { ...p, [c]: state === c ? 1 : 0 };
     }, {})
   );
 
-  const refs = useRef<Partial<Record<Props["state"], HTMLSpanElement | null>>>(
-    {}
-  );
+  type Spans = Partial<Record<Props["state"], HTMLSpanElement | null>>;
+  const refs = useRef<Spans>({});
 
-  const [{ width }, api] = useSpring(() => ({ width: 0 }));
+  const [{ width, opacity }, api] = useSpring(() => ({ width: 0, opacity: 1 }));
+
+  const updateVisibility = () => {
+    keys.current.forEach((k) => {
+      refs.current[k]!.style.visibility = state === k ? "initial" : "hidden";
+    });
+  };
 
   useLayoutEffect(() => {
-    firstRender.current = false;
     const el = refs.current[state];
+
     if (!el) {
       return;
     }
+
     const rect = el.getBoundingClientRect();
-    api.start({ width: rect.width });
+
+    if (firstRender.current) {
+      api.set({ width: rect.width });
+      updateVisibility();
+      firstRender.current = false;
+      return;
+    }
+
+    const [shrink] = api.start({
+      width: 0,
+      opacity: 0,
+      config: { tension: 210, friction: 18 }
+    });
+    shrink.then(() => {
+      updateVisibility();
+      api.start({
+        width: rect.width,
+        opacity: 1,
+        config: { tension: 210, friction: 18 }
+      });
+    });
   }, [state]);
 
   return (
@@ -123,19 +158,20 @@ const State = ({ state }: Pick<Props, "state">) => {
       style={{
         backgroundColor: labelBg,
         color: labelColor,
-        width: firstRender.current ? "auto" : width
+        width
       }}
     >
-      {keys.map((s) => (
-        <animated.div
-          className={css["state"]}
-          style={{ opacity: labelStyles[s] }}
-          key={s}
-        >
-          <span ref={(e) => (refs.current[s] = e)}>{states[s].label}</span>
-        </animated.div>
-      ))}
-      {states[state].label}
+      <animated.div style={{ opacity }}>
+        {keys.current.map((s) => (
+          <animated.div
+            className={css["state"]}
+            style={{ opacity: labelStyles[s] }}
+            key={s}
+          >
+            <span ref={(e) => (refs.current[s] = e)}>{states[s].label}</span>
+          </animated.div>
+        ))}
+      </animated.div>
     </animated.div>
   );
 };

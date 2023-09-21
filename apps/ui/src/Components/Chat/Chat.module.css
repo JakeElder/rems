@@ -136,8 +136,15 @@
   font-weight: 450;
   letter-spacing: 0.4px;
   white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  height: 11px;
+  display: flex;
+
 }
 
 .state span {
   position: absolute;
+  visibility: hidden;
+  height: 11px;
 }
