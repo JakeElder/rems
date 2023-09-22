@@ -164,12 +164,12 @@ export type SearchParams = {
 };
 
 export type AssistantInputState =
-  | "inactive"
-  | "inputting"
-  | "listening"
-  | "resolving"
-  | "resolved"
-  | "committed";
+  | "INACTIVE"
+  | "INPUTTING"
+  | "LISTENING"
+  | "RESOLVING"
+  | "RESOLVED"
+  | "COMMITTED";
 
 export type AssistantState =
   | "SLEEPING"
@@ -179,6 +179,12 @@ export type AssistantState =
   | "CLEARING_QUERY"
   | "CHATTING";
 
+export type GroupedAssistantState =
+  | "IDLE"
+  | "LISTENING"
+  | "THINKING"
+  | "INTERACTING";
+
 export type ResolvingFilterSet = {
   set: FilterSet;
   data: GetPropertiesResult | undefined;
@@ -187,7 +193,7 @@ export type ResolvingFilterSet = {
   url: string;
 };
 
-export type AiSearchSession = {
+export type InputSession = {
   id: string;
   value: string;
 };

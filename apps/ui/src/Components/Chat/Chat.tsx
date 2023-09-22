@@ -2,7 +2,12 @@
 
 import React, { useLayoutEffect, useMemo, useRef } from "react";
 import css from "./Chat.module.css";
-import { AssistantState, Timeline, TimelineEvent } from "@rems/types";
+import {
+  AssistantState,
+  GroupedAssistantState,
+  Timeline,
+  TimelineEvent
+} from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../assets/avatar.png";
@@ -16,6 +21,7 @@ import {
 } from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
+import { CHAT_PALETTE } from "../../colors";
 
 export type Props = {
   onOpenClose: (open: boolean) => void;
@@ -54,15 +60,8 @@ const states: Record<Props["state"], State> = {
   REFINING_QUERY: { label: "Refining Query" }
 };
 
-type GroupedState = "IDLE" | "LISTENING" | "THINKING" | "INTERACTING";
-type Color = {
-  avatarBorder: string;
-  labelBg: string;
-  labelColor: string;
-};
-
-const stateToGroup = (state: Props["state"]): GroupedState => {
-  const map: Record<Props["state"], GroupedState> = {
+const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
+  const map: Record<Props["state"], GroupedAssistantState> = {
     CHATTING: "INTERACTING",
     SLEEPING: "IDLE",
     THINKING: "THINKING",
@@ -73,31 +72,8 @@ const stateToGroup = (state: Props["state"]): GroupedState => {
   return map[state];
 };
 
-const colors: Record<GroupedState, Color> = {
-  IDLE: {
-    avatarBorder: "#d1d1d1",
-    labelBg: "#F2F2F2",
-    labelColor: "#333333"
-  },
-  LISTENING: {
-    avatarBorder: "#8850a2",
-    labelBg: "#8850a2",
-    labelColor: "#fff"
-  },
-  THINKING: {
-    avatarBorder: "#ecbb56",
-    labelBg: "#ecbb56",
-    labelColor: "#fff"
-  },
-  INTERACTING: {
-    avatarBorder: "#439a5f",
-    labelBg: "#439a5f",
-    labelColor: "#fff"
-  }
-};
-
 const State = ({ state }: Pick<Props, "state">) => {
-  const { labelBg, labelColor } = useSpring(colors[stateToGroup(state)]);
+  const { labelBg, labelColor } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
   const keys = useRef<Props["state"][]>([
     state,
     ...(Object.keys(states).filter((s) => s !== state) as Props["state"][])
@@ -142,6 +118,7 @@ const State = ({ state }: Pick<Props, "state">) => {
       opacity: 0,
       config: { tension: 210, friction: 18 }
     });
+
     shrink.then(() => {
       updateVisibility();
       api.start({
@@ -182,7 +159,14 @@ export const Header = ({
   open,
   onOpenClose
 }: Pick<Props, "state" | "lang" | "open" | "onOpenClose">) => {
-  const { avatarBorder } = useSpring(colors[stateToGroup(state)]);
+  const { avatarBorder } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
+  const { avatarOpacity } = useSpring({
+    avatarOpacity: state === "SLEEPING" ? 0.5 : 0.7
+  });
+  const { nameOpacity } = useSpring({
+    nameOpacity: state === "SLEEPING" ? 0.7 : 1
+  });
+
   return (
     <div className={css["header"]}>
       <div className={css["avatar-name-state"]}>
@@ -191,7 +175,11 @@ export const Header = ({
           style={{ borderColor: avatarBorder }}
         >
           <div className={css["avatar-inner"]}>
-            <img className={css["remi"]} src={avatar.src} />
+            <animated.img
+              className={css["remi"]}
+              src={avatar.src}
+              style={{ opacity: avatarOpacity }}
+            />
             <div className={css["ror"]}>
               <img
                 src={ror.src}
@@ -202,7 +190,9 @@ export const Header = ({
             <div className={css["shadow"]} />
           </div>
         </animated.div>
-        <div className={css["name"]}>Remi</div>
+        <animated.div className={css["name"]} style={{ opacity: nameOpacity }}>
+          Remi
+        </animated.div>
         <State state={state} />
       </div>
       <div className={css["lang-open-close"]}>
@@ -247,12 +237,15 @@ const isEmptyPatchEvent = (e: TimelineEvent) => {
   return false;
 };
 
-const BodyReveal = ({
-  open,
-  children
+export const Dialog = ({
+  children,
+  open
 }: { children: React.ReactNode } & Pick<Props, "open">) => {
-  const style = useSpring({ height: open ? 400 : 0 });
-  return <animated.div style={style}>{children}</animated.div>;
+  return <div className={css["dialog"]}>{children}</div>;
+};
+
+export const Input = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["input"]}>{children}</div>;
 };
 
 export const Body = React.memo(
@@ -284,29 +277,52 @@ export const Body = React.memo(
     });
 
     return (
-      <BodyReveal open={open}>
-        <div className={css["body"]}>
-          <div className={css["shadow"]} />
-          <div className={css["timeline"]}>
-            {transitions((style, e) => {
-              return (
-                <animated.div style={style} key={e.id}>
-                  <ChatMessage
-                    key={e.id}
-                    {...e}
-                    ref={(ref: HTMLDivElement) => ref && refMap.set(e, ref)}
-                  />
-                </animated.div>
-              );
-            })}
-          </div>
+      <div className={css["body"]}>
+        <div className={css["shadow"]} />
+        <div className={css["timeline"]}>
+          {transitions((style, e) => {
+            return (
+              <animated.div style={style} key={e.id}>
+                <ChatMessage
+                  key={e.id}
+                  {...e}
+                  ref={(ref: HTMLDivElement) => ref && refMap.set(e, ref)}
+                />
+              </animated.div>
+            );
+          })}
         </div>
-      </BodyReveal>
+      </div>
     );
   },
   (prev, next) => equal(prev.timeline, next.timeline)
 );
 
-export const Root = ({ children }: { children: React.ReactNode }) => {
-  return <div className={css["root"]}>{children}</div>;
+// TODO: Not this
+const HEIGHT = 570;
+const HEADER_HEIGHT = 60;
+const FOREGROUND_PADDING_TOP = 20;
+
+export const Root = ({
+  children,
+  open
+}: { children: React.ReactNode } & Pick<Props, "open">) => {
+  const rootStyle = useSpring({
+    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP),
+    config: { tension: 360, friction: 90 }
+  });
+
+  const backgroundStyle = useSpring({
+    opacity: open ? 1 : 0,
+    config: { tension: 360, friction: 90 }
+  });
+
+  return (
+    <animated.div className={css["root"]} style={rootStyle}>
+      <animated.div style={backgroundStyle}>
+        <div className={css["background"]} />
+      </animated.div>
+      <animated.div className={css["foreground"]}>{children}</animated.div>
+    </animated.div>
+  );
 };

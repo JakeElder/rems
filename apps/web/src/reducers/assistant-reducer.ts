@@ -1,12 +1,8 @@
-import {
-  AiSearchSession,
-  AssistantInputState,
-  AssistantState
-} from "@rems/types";
+import { InputSession, AssistantInputState, AssistantState } from "@rems/types";
 import uuid from "short-uuid";
 
 type ComponentState = {
-  sessions: AiSearchSession[];
+  sessions: InputSession[];
   state: AssistantInputState;
   assistantState: AssistantState;
   enterDown: boolean;
@@ -39,34 +35,34 @@ const assistantReducer = (
 ): ComponentState => {
   switch (action.type) {
     case "EMPTY_SUBMISSION":
-      return { ...prev, state: "inactive" };
+      return { ...prev, state: "INACTIVE" };
 
     case "START_ASSISTANT_REQUEST":
       return {
         ...prev,
         enterDown: false,
-        state: "resolving",
+        state: "RESOLVING",
         assistantState: "THINKING"
       };
 
     case "SUCCESSFUL_ASSISTANT_REQUEST":
-      return { ...prev, state: "resolved" };
+      return { ...prev, state: "RESOLVED" };
 
     case "SESSION_COMPLETE":
       return {
         ...prev,
-        state: "inactive",
+        state: "INACTIVE",
         assistantState: "SLEEPING",
         sessions: [...prev.sessions, { id: uuid.generate(), value: "" }]
       };
 
     case "INPUT_IDLE":
-      return { ...prev, state: "inactive" };
+      return { ...prev, state: "INACTIVE" };
 
     case "MIC_BUTTON_CLICKED":
       return {
         ...prev,
-        state: prev.state === "listening" ? "inactive" : "listening"
+        state: prev.state === "LISTENING" ? "INACTIVE" : "LISTENING"
       };
 
     case "ENTER_KEY_DOWN":
@@ -91,14 +87,14 @@ const assistantReducer = (
             value: action.value
           }
         ],
-        state: "inputting"
+        state: "INPUTTING"
       };
 
     case "LISTENING_STARTED":
-      return { ...prev, state: "listening", assistantState: "LISTENING" };
+      return { ...prev, state: "LISTENING", assistantState: "LISTENING" };
 
     case "LISTENING_ABORTED":
-      return { ...prev, state: "inactive", assistantState: "SLEEPING" };
+      return { ...prev, state: "INACTIVE", assistantState: "SLEEPING" };
 
     case "VOICE_INPUT_RECEIVED":
       return {
