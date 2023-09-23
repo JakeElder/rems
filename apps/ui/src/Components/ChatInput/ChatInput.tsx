@@ -107,7 +107,8 @@ const Input = React.forwardRef<
 
   const submit = useTransition(submittable, {
     from: { opacity: 0, width: 0 },
-    enter: { opacity: 1, width: 30 }
+    enter: { opacity: 1, width: 30 },
+    leave: { opacity: 0, width: 0 }
   });
 
   const t = useTransition(sessions, {

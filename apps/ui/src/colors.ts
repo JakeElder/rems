@@ -1,4 +1,4 @@
-import { AssistantInputState, GroupedAssistantState } from "@rems/types";
+import { GroupedAssistantState, InputSession } from "@rems/types";
 
 type ChatPalette = {
   avatarBorder: string;
@@ -54,7 +54,8 @@ const INPUT_NEUTRAL: InputPalette = {
   color: "#333333"
 };
 
-export const INPUT_PALETTE: Record<AssistantInputState, InputPalette> = {
+export const INPUT_PALETTE: Record<InputSession["state"], InputPalette> = {
+  QUEUED: INPUT_NEUTRAL,
   INACTIVE: INPUT_NEUTRAL,
 
   INPUTTING: INPUT_INPUTTING,
@@ -62,15 +63,15 @@ export const INPUT_PALETTE: Record<AssistantInputState, InputPalette> = {
 
   RESOLVED: {
     borderColor: "#439a5f",
-    backgroundColor: "#439a5f",
-    color: "#fff"
+    backgroundColor: "#fff",
+    color: "#0e7730"
   },
 
   COMMITTED: INPUT_NEUTRAL,
   RESOLVING: {
     borderColor: "#ecbb56",
-    backgroundColor: "#fff",
-    color: "#333"
+    backgroundColor: "#f5f5f5",
+    color: "#8c8c8c"
   }
 };
 
@@ -81,12 +82,12 @@ type MicPalette = {
 };
 
 const MIC_DISABLED: MicPalette = {
-  borderColor: "#ddd",
-  backgroundColor: "#ddd",
-  color: "#ccc"
+  ...INPUT_NEUTRAL,
+  color: "rgba(0, 0, 0, 0.4)"
 };
 
-export const MIC_PALETTE: Record<AssistantInputState, MicPalette> = {
+export const MIC_PALETTE: Record<InputSession["state"], MicPalette> = {
+  QUEUED: INPUT_NEUTRAL,
   INACTIVE: {
     ...INPUT_NEUTRAL,
     color: "#555",

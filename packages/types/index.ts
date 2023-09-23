@@ -164,6 +164,7 @@ export type SearchParams = {
 };
 
 type InputSessionState =
+  | "QUEUED"
   | "INACTIVE"
   | "INPUTTING"
   | "LISTENING"

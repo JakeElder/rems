@@ -2,13 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react";
 import * as Chat from "./Chat";
 import React, { useEffect, useRef, useState } from "react";
 import randomInt from "random-int";
-import { AssistantInputState, InputSession, Timeline } from "@rems/types";
+import { InputSession, Timeline } from "@rems/types";
 import mockTimeline from "../../fixtures/timeline";
 import ChatInput from "../ChatInput/ChatInput";
 
 type InputProps = React.ComponentProps<typeof ChatInput>;
 type Props = Chat.Props &
-  Omit<InputProps, "state"> & { inputState: AssistantInputState };
+  Omit<InputProps, "state"> & { inputState: InputSession["state"] };
 type Story = StoryObj<Props>;
 
 const next = (source: Timeline, current: Timeline): [Timeline, boolean] => {
@@ -21,8 +21,15 @@ export const Mock = (props: Props) => {
   const to = useRef<NodeJS.Timeout>();
   const [t, setCurrent] = useState(props.timeline);
   const [sessions, setSessions] = useState<InputSession[]>([
-    { id: "one", value: "" }
+    { id: "one", value: "", state: props.inputState }
   ]);
+
+  useEffect(() => {
+    setSessions((prev) => [
+      ...prev.slice(0, -1),
+      { ...prev[prev.length - 1], state: props.inputState }
+    ]);
+  }, [props.inputState]);
 
   const push = (current: Timeline) => {
     const [nextTimeline, complete] = next(source.current, current);
@@ -50,7 +57,6 @@ export const Mock = (props: Props) => {
       <Chat.Input>
         <ChatInput
           {...props}
-          state={props.inputState}
           sessions={sessions}
           submittable={sessions[sessions.length - 1].value !== ""}
           onChange={(e) => {
@@ -80,7 +86,6 @@ export const Default: Story = {
     open: true,
     state: "SLEEPING",
     inputState: "INACTIVE",
-
     timeline: [],
     submittable: false
   }
