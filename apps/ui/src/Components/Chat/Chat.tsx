@@ -12,13 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
-import {
-  Pick,
-  animated,
-  useSpring,
-  useTransition,
-  config
-} from "@react-spring/web";
+import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
@@ -115,17 +109,12 @@ const State = ({ state }: Pick<Props, "state">) => {
 
     const [shrink] = api.start({
       width: 0,
-      opacity: 0,
-      config: { tension: 210, friction: 18 }
+      opacity: 0
     });
 
     shrink.then(() => {
       updateVisibility();
-      api.start({
-        width: rect.width,
-        opacity: 1,
-        config: { tension: 210, friction: 18 }
-      });
+      api.start({ width: rect.width, opacity: 1 });
     });
   }, [state]);
 
@@ -161,10 +150,7 @@ export const Header = ({
 }: Pick<Props, "state" | "lang" | "open" | "onOpenClose">) => {
   const { avatarBorder } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
   const { avatarOpacity } = useSpring({
-    avatarOpacity: state === "SLEEPING" ? 0.5 : 0.7
-  });
-  const { nameOpacity } = useSpring({
-    nameOpacity: state === "SLEEPING" ? 0.7 : 1
+    avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
   });
 
   return (
@@ -190,9 +176,7 @@ export const Header = ({
             <div className={css["shadow"]} />
           </div>
         </animated.div>
-        <animated.div className={css["name"]} style={{ opacity: nameOpacity }}>
-          Remi
-        </animated.div>
+        <div className={css["name"]}>Remi</div>
         <State state={state} />
       </div>
       <div className={css["lang-open-close"]}>
@@ -237,10 +221,7 @@ const isEmptyPatchEvent = (e: TimelineEvent) => {
   return false;
 };
 
-export const Dialog = ({
-  children,
-  open
-}: { children: React.ReactNode } & Pick<Props, "open">) => {
+export const Dialog = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["dialog"]}>{children}</div>;
 };
 
@@ -249,7 +230,7 @@ export const Input = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const Body = React.memo(
-  ({ timeline, open }: Pick<Props, "timeline" | "open">) => {
+  ({ timeline }: Pick<Props, "timeline">) => {
     const refMap = useMemo(() => new WeakMap(), []);
 
     const messages = timeline
@@ -298,7 +279,6 @@ export const Body = React.memo(
   (prev, next) => equal(prev.timeline, next.timeline)
 );
 
-// TODO: Not this
 const HEIGHT = 570;
 const HEADER_HEIGHT = 60;
 const FOREGROUND_PADDING_TOP = 20;
@@ -308,20 +288,20 @@ export const Root = ({
   open
 }: { children: React.ReactNode } & Pick<Props, "open">) => {
   const rootStyle = useSpring({
-    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP),
-    config: { tension: 360, friction: 90 }
+    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP)
   });
 
   const backgroundStyle = useSpring({
-    opacity: open ? 1 : 0,
-    config: { tension: 360, friction: 90 }
+    background: open ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 0)",
+    boxShadow: open
+      ? "0 0 5px 0 rgba(0, 0, 0, 0.4)"
+      : "0 0 5px 0 rgba(0, 0, 0, 0)",
+    backdropFilter: open ? "blur(4px)" : "blur(0px)"
   });
 
   return (
     <animated.div className={css["root"]} style={rootStyle}>
-      <animated.div style={backgroundStyle}>
-        <div className={css["background"]} />
-      </animated.div>
+      <animated.div className={css["background"]} style={backgroundStyle} />
       <animated.div className={css["foreground"]}>{children}</animated.div>
     </animated.div>
   );

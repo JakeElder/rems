@@ -69,8 +69,8 @@ export const INPUT_PALETTE: Record<AssistantInputState, InputPalette> = {
   COMMITTED: INPUT_NEUTRAL,
   RESOLVING: {
     borderColor: "#ecbb56",
-    backgroundColor: "#5b5b5b",
-    color: "#fff"
+    backgroundColor: "#fff",
+    color: "#333"
   }
 };
 

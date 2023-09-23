@@ -163,6 +163,11 @@ export type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
 
+export type InputSession = {
+  id: string;
+  value: string;
+};
+
 export type AssistantInputState =
   | "INACTIVE"
   | "INPUTTING"
@@ -191,11 +196,6 @@ export type ResolvingFilterSet = {
   isLoading: boolean;
   query: Partial<RealEstateQuery>;
   url: string;
-};
-
-export type InputSession = {
-  id: string;
-  value: string;
 };
 
 export type OpenAIModel =

@@ -2,7 +2,7 @@
 
 import "regenerator-runtime";
 import React, { useEffect, useRef } from "react";
-import { AiSearch } from "@rems/ui";
+import { ChatInput } from "@rems/ui";
 import { useAssistant } from "@/components/AssistantProvider";
 
 const AiSearchViewContainer = () => {
@@ -11,7 +11,7 @@ const AiSearchViewContainer = () => {
 
   useEffect(() => {
     if (assistant.session.value) {
-      if (assistant.state === "listening") {
+      if (assistant.state === "LISTENING") {
         Promise.resolve().then(() => {
           $input.current!.scrollLeft = $input.current!.scrollWidth;
         });
@@ -20,9 +20,9 @@ const AiSearchViewContainer = () => {
   }, [assistant.session.value]);
 
   return (
-    <AiSearch
-      submittable={assistant.submittable}
+    <ChatInput
       ref={$input}
+      submittable={assistant.submittable}
       onMicClick={assistant.onMicClick}
       onKeyDown={assistant.onKeyDown}
       onKeyUp={assistant.onKeyUp}
