@@ -3,7 +3,7 @@
 import React from "react";
 import css from "./ChatInput.module.css";
 import { ColorRing, LineWave } from "react-loader-spinner";
-import { AssistantInputState, InputSession } from "@rems/types";
+import { InputSession } from "@rems/types";
 import { animated, useSpring, useTransition } from "@react-spring/web";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faMicrophoneLines } from "@fortawesome/free-solid-svg-icons";
@@ -28,7 +28,7 @@ const useHideShow = (show: boolean) => {
   });
 };
 
-const Status = ({ state }: { state: AssistantInputState }) => {
+const Status = ({ state }: { state: InputSession["state"] }) => {
   const loader = useHideShow(state === "RESOLVING");
   const check = useHideShow(state === "RESOLVED");
   const inputting = useHideShow(state === "LISTENING" || state === "INPUTTING");
@@ -91,7 +91,6 @@ export type Props = {
   onMicClick?: () => void;
   enterDown: boolean;
   sessions: InputSession[];
-  state: AssistantInputState;
   submittable: boolean;
 } & Pick<
   React.FormHTMLAttributes<HTMLFormElement>,
@@ -100,18 +99,15 @@ export type Props = {
 
 const Input = React.forwardRef<
   HTMLInputElement,
-  Pick<Props, "state" | "enterDown" | "submittable" | "sessions"> &
-    InputHTMLProps
->(({ state, enterDown, submittable, sessions, ...props }, ref) => {
-  const style = useSpring(INPUT_PALETTE[state]);
+  Pick<Props, "enterDown" | "submittable" | "sessions"> & InputHTMLProps
+>(({ enterDown, submittable, sessions, ...props }, ref) => {
+  const session = sessions[sessions.length - 1];
 
-  const hidden = { opacity: 0, width: 0 };
-  const visible = { opacity: 1, width: 30 };
+  const style = useSpring(INPUT_PALETTE[session.state]);
 
   const submit = useTransition(submittable, {
-    from: hidden,
-    enter: visible,
-    leave: hidden
+    from: { opacity: 0, width: 0 },
+    enter: { opacity: 1, width: 30 }
   });
 
   const t = useTransition(sessions, {
@@ -120,8 +116,6 @@ const Input = React.forwardRef<
     enter: { height: 48 }
   });
 
-  const session = sessions[sessions.length - 1];
-
   return (
     <animated.div style={style} className={css["container"]}>
       <div className={css["session-container"]}>
@@ -129,7 +123,7 @@ const Input = React.forwardRef<
           return (
             <animated.div style={style}>
               {(() => {
-                if (s.id !== session.id) {
+                if (session.state === "COMMITTED") {
                   return (
                     <input
                       key={s.id}
@@ -145,7 +139,10 @@ const Input = React.forwardRef<
                     key={s.id}
                     value={s.value}
                     className={css["input"]}
-                    disabled={state !== "INACTIVE" && state !== "INPUTTING"}
+                    disabled={
+                      session.state !== "INACTIVE" &&
+                      session.state !== "INPUTTING"
+                    }
                     {...props}
                   />
                 );
@@ -157,7 +154,7 @@ const Input = React.forwardRef<
 
       <div className={css["enter-and-status"]}>
         <div className={css["status"]}>
-          <Status state={state} />
+          <Status state={session.state} />
         </div>
         {submit(
           (style, show) =>
@@ -180,7 +177,7 @@ const Input = React.forwardRef<
 
 const ChatInput = React.forwardRef<HTMLInputElement, Props>(
   (
-    { onChange, sessions, onMicClick, state, enterDown, submittable, ...rest },
+    { onChange, sessions, onMicClick, enterDown, submittable, ...rest },
     ref
   ) => {
     return (
@@ -192,7 +189,6 @@ const ChatInput = React.forwardRef<HTMLInputElement, Props>(
                 submittable={submittable}
                 enterDown={enterDown}
                 ref={ref}
-                state={state}
                 className={css["input"]}
                 autoComplete="off"
                 name="query"
@@ -201,7 +197,7 @@ const ChatInput = React.forwardRef<HTMLInputElement, Props>(
               />
             </div>
             <div className={css["controls"]}>
-              <Controls onMicClick={onMicClick} state={state} />
+              <Controls onMicClick={onMicClick} sessions={sessions} />
             </div>
           </div>
         </form>
@@ -212,9 +208,10 @@ const ChatInput = React.forwardRef<HTMLInputElement, Props>(
 
 const Controls = ({
   onMicClick,
-  state
-}: Pick<Props, "onMicClick" | "state">) => {
-  const style = useSpring(MIC_PALETTE[state]);
+  sessions
+}: Pick<Props, "onMicClick" | "sessions">) => {
+  const session = sessions[sessions.length - 1];
+  const style = useSpring(MIC_PALETTE[session.state]);
   return (
     <div className={css["controls"]}>
       <animated.div className={css["mic"]}>

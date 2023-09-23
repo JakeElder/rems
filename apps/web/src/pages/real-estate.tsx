@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
-import { Breadcrumbs, RealEstateIndexPage as Layout, ToastHub } from "@rems/ui";
+import { RealEstateIndexPage as Layout, ToastHub } from "@rems/ui";
 import PropertyGridViewContainer from "@/components/client/PropertyGridViewContainer";
 import ListingMapViewContainer from "@/components/client/ListingMapViewContainer";
 import CountAndSortViewContainer from "@/components/client/CountAndSortViewContainer";

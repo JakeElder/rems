@@ -20,7 +20,7 @@ const FilterDialogViewContainer = ({ children }: Props) => {
       onOpenChange={setOpen}
       open={open}
       count={data?.pagination.total}
-      onClearClick={() => reset()}
+      onClearClick={() => reset(true)}
     >
       <PropertyFilters.Root>{children}</PropertyFilters.Root>
     </FilterDialog>

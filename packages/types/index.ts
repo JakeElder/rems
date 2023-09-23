@@ -163,18 +163,19 @@ export type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
 
-export type InputSession = {
-  id: string;
-  value: string;
-};
-
-export type AssistantInputState =
+type InputSessionState =
   | "INACTIVE"
   | "INPUTTING"
   | "LISTENING"
   | "RESOLVING"
   | "RESOLVED"
   | "COMMITTED";
+
+export type InputSession = {
+  id: string;
+  value: string;
+  state: InputSessionState;
+};
 
 export type AssistantState =
   | "SLEEPING"

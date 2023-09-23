@@ -9,18 +9,6 @@ type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode"> & {
   search?: boolean;
 };
 
-const AiSearch = ({ show }: { show?: boolean }) => {
-  if (process.env.NEXT_PUBLIC_AI_SEARCH_ENABLED !== "true" || !show) {
-    return null;
-  }
-
-  return (
-    <Header.AiSearch>
-      <AiSearchViewContainer />
-    </Header.AiSearch>
-  );
-};
-
 const HeaderViewContainer = ({ search, ...props }: Props) => {
   const [slideNavOpen, setSlideNavOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -52,7 +40,11 @@ const HeaderViewContainer = ({ search, ...props }: Props) => {
     >
       <Header.Main>
         <Header.Logo />
-        <AiSearch show={search} />
+        {false ? (
+          <Header.AiSearch>
+            <AiSearchViewContainer />
+          </Header.AiSearch>
+        ) : null}
         <Header.NavAndContact />
       </Header.Main>
     </Header.Root>

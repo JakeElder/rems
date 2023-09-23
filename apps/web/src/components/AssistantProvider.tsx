@@ -3,7 +3,6 @@ import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { observable } from "@legendapp/state";
 import {
   InputSession,
-  AssistantInputState,
   AssistantMessage,
   AssistantState,
   Timeline
@@ -38,7 +37,6 @@ type Context = {
 
   // State
   sessions: InputSession[];
-  state: AssistantInputState;
   assistantState: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
@@ -60,8 +58,7 @@ const AssistantProvider = ({ children }: Props) => {
   $timeline.use();
 
   const [state, dispatch] = useReducer(assistantReducer, {
-    sessions: [{ id: uuid.generate(), value: "" }],
-    state: "INACTIVE",
+    sessions: [{ id: uuid.generate(), value: "", state: "INACTIVE" }],
     assistantState: "SLEEPING",
     enterDown: false,
     spaceDown: false,
@@ -166,7 +163,7 @@ const AssistantProvider = ({ children }: Props) => {
   };
 
   const onMicClick: Context["onMicClick"] = () => {
-    if (state.state === "LISTENING") {
+    if (session.state === "LISTENING") {
       SpeechRecognition.stopListening();
     } else {
       SpeechRecognition.startListening();
@@ -262,7 +259,6 @@ const AssistantProvider = ({ children }: Props) => {
 
         sessions: state.sessions,
         enterDown: state.enterDown,
-        state: state.state,
         assistantState: state.assistantState,
         spaceDown: state.spaceDown,
         open: state.open,
@@ -271,7 +267,7 @@ const AssistantProvider = ({ children }: Props) => {
         session,
         submittable:
           !!session.value &&
-          (state.state === "INPUTTING" || state.state === "INACTIVE")
+          (session.state === "INPUTTING" || session.state === "INACTIVE")
       }}
     >
       {children}

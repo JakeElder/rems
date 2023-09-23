@@ -13,7 +13,7 @@ const ChatViewContainer = ({}: Props) => {
 
   useEffect(() => {
     if (assistant.session.value) {
-      if (assistant.state === "LISTENING") {
+      if (assistant.session.state === "LISTENING") {
         Promise.resolve().then(() => {
           $input.current!.scrollLeft = $input.current!.scrollWidth;
         });

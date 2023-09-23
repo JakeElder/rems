@@ -1,9 +1,8 @@
-import { InputSession, AssistantInputState, AssistantState } from "@rems/types";
+import { InputSession, AssistantState } from "@rems/types";
 import uuid from "short-uuid";
 
 type ComponentState = {
   sessions: InputSession[];
-  state: AssistantInputState;
   assistantState: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
@@ -35,34 +34,84 @@ const assistantReducer = (
 ): ComponentState => {
   switch (action.type) {
     case "EMPTY_SUBMISSION":
-      return { ...prev, state: "INACTIVE" };
+      return {
+        ...prev,
+        sessions: [
+          ...prev.sessions.slice(0, -1),
+          {
+            ...prev.sessions[prev.sessions.length - 1],
+            state: "INACTIVE"
+          }
+        ]
+      };
 
     case "START_ASSISTANT_REQUEST":
       return {
         ...prev,
         enterDown: false,
-        state: "RESOLVING",
-        assistantState: "THINKING"
+        assistantState: "THINKING",
+        sessions: [
+          ...prev.sessions.slice(0, -1),
+          {
+            ...prev.sessions[prev.sessions.length - 1],
+            state: "RESOLVING"
+          }
+        ]
       };
 
     case "SUCCESSFUL_ASSISTANT_REQUEST":
-      return { ...prev, state: "RESOLVED" };
+      return {
+        ...prev,
+        sessions: [
+          ...prev.sessions.slice(0, -1),
+          {
+            ...prev.sessions[prev.sessions.length - 1],
+            state: "RESOLVED"
+          }
+        ]
+      };
 
     case "SESSION_COMPLETE":
       return {
         ...prev,
-        state: "INACTIVE",
         assistantState: "SLEEPING",
-        sessions: [...prev.sessions, { id: uuid.generate(), value: "" }]
+        sessions: [
+          ...prev.sessions.slice(0, -1),
+          {
+            ...prev.sessions[prev.sessions.length - 1],
+            state: "COMMITTED"
+          },
+          {
+            id: uuid.generate(),
+            state: "INACTIVE",
+            value: ""
+          }
+        ]
       };
 
     case "INPUT_IDLE":
-      return { ...prev, state: "INACTIVE" };
-
-    case "MIC_BUTTON_CLICKED":
       return {
         ...prev,
-        state: prev.state === "LISTENING" ? "INACTIVE" : "LISTENING"
+        sessions: [
+          ...prev.sessions.slice(0, -1),
+          {
+            ...prev.sessions[prev.sessions.length - 1],
+            state: "INACTIVE"
+          }
+        ]
+      };
+
+    case "MIC_BUTTON_CLICKED":
+      const session = prev.sessions[prev.sessions.length - 1];
+      return {
+        ...prev,
+        sessions: [
+          ...prev.sessions.slice(0, -1),
+          {
+            ...session,
+            state: session.state === "LISTENING" ? "INACTIVE" : "LISTENING"
+          }
+        ]
       };
 
     case "ENTER_KEY_DOWN":
@@ -84,17 +133,37 @@ const assistantReducer = (
           ...prev.sessions.slice(0, -1),
           {
             ...prev.sessions[prev.sessions.length - 1],
-            value: action.value
+            value: action.value,
+            state: "INPUTTING"
           }
-        ],
-        state: "INPUTTING"
+        ]
       };
 
     case "LISTENING_STARTED":
-      return { ...prev, state: "LISTENING", assistantState: "LISTENING" };
+      return {
+        ...prev,
+        sessions: [
+          ...prev.sessions.slice(0, -1),
+          {
+            ...prev.sessions[prev.sessions.length - 1],
+            state: "LISTENING"
+          }
+        ],
+        assistantState: "LISTENING"
+      };
 
     case "LISTENING_ABORTED":
-      return { ...prev, state: "INACTIVE", assistantState: "SLEEPING" };
+      return {
+        ...prev,
+        sessions: [
+          ...prev.sessions.slice(0, -1),
+          {
+            ...prev.sessions[prev.sessions.length - 1],
+            state: "INACTIVE"
+          }
+        ],
+        assistantState: "SLEEPING"
+      };
 
     case "VOICE_INPUT_RECEIVED":
       return {
