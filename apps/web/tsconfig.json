@@ -11,6 +11,9 @@
       ],
       "@/hooks/*": [
         "hooks/*"
+      ],
+      "@/utils": [
+        "utils"
       ]
     },
     "jsx": "preserve",
