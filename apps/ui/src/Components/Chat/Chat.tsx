@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useLayoutEffect, useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 import css from "./Chat.module.css";
 import {
   AssistantState,
@@ -16,6 +16,7 @@ import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
+import StateLabel from "../StateLabel/StateLabel";
 
 export type Props = {
   onOpenClose: (open: boolean) => void;
@@ -44,16 +45,6 @@ const OpenClose = ({
   );
 };
 
-type State = { label: string };
-const states: Record<Props["state"], State> = {
-  CHATTING: { label: "Chatting" },
-  SLEEPING: { label: "Sleeping" },
-  THINKING: { label: "Thinking" },
-  LISTENING: { label: "Listening" },
-  CLEARING_QUERY: { label: "Clearing Query" },
-  REFINING_QUERY: { label: "Refining Query" }
-};
-
 const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
   const map: Record<Props["state"], GroupedAssistantState> = {
     CHATTING: "INTERACTING",
@@ -64,82 +55,6 @@ const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
     REFINING_QUERY: "INTERACTING"
   };
   return map[state];
-};
-
-const State = ({ state }: Pick<Props, "state">) => {
-  const { labelBg, labelColor } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
-  const keys = useRef<Props["state"][]>([
-    state,
-    ...(Object.keys(states).filter((s) => s !== state) as Props["state"][])
-  ]);
-  const firstRender = useRef(true);
-
-  const labelStyles = useSpring<Record<Props["state"], number>>(
-    keys.current.reduce((p, c) => {
-      return { ...p, [c]: state === c ? 1 : 0 };
-    }, {})
-  );
-
-  type Spans = Partial<Record<Props["state"], HTMLSpanElement | null>>;
-  const refs = useRef<Spans>({});
-
-  const [{ width, opacity }, api] = useSpring(() => ({ width: 0, opacity: 1 }));
-
-  const updateVisibility = () => {
-    keys.current.forEach((k) => {
-      refs.current[k]!.style.visibility = state === k ? "initial" : "hidden";
-    });
-  };
-
-  useLayoutEffect(() => {
-    const el = refs.current[state];
-
-    if (!el) {
-      return;
-    }
-
-    const rect = el.getBoundingClientRect();
-
-    if (firstRender.current) {
-      api.set({ width: rect.width });
-      updateVisibility();
-      firstRender.current = false;
-      return;
-    }
-
-    const [shrink] = api.start({
-      width: 0,
-      opacity: 0
-    });
-
-    shrink.then(() => {
-      updateVisibility();
-      api.start({ width: rect.width, opacity: 1 });
-    });
-  }, [state]);
-
-  return (
-    <animated.div
-      className={css["label"]}
-      style={{
-        backgroundColor: labelBg,
-        color: labelColor,
-        width
-      }}
-    >
-      <animated.div style={{ opacity }}>
-        {keys.current.map((s) => (
-          <animated.div
-            className={css["state"]}
-            style={{ opacity: labelStyles[s] }}
-            key={s}
-          >
-            <span ref={(e) => (refs.current[s] = e)}>{states[s].label}</span>
-          </animated.div>
-        ))}
-      </animated.div>
-    </animated.div>
-  );
 };
 
 export const Header = ({
@@ -177,7 +92,7 @@ export const Header = ({
           </div>
         </animated.div>
         <div className={css["name"]}>Remi</div>
-        <State state={state} />
+        <StateLabel state={state} />
       </div>
       <div className={css["lang-open-close"]}>
         <div className={css["lang"]}>{lang}</div>
