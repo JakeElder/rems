@@ -11,6 +11,7 @@ import Split from "../../Elements/Split";
 import Button from "../../Elements/Button";
 import { Oval } from "react-loader-spinner";
 import cn from "classnames";
+import Outline from "../../Elements/Outline";
 
 type Props = React.ComponentProps<typeof Dialog.Root> & {
   loading: boolean;
@@ -20,34 +21,39 @@ type Props = React.ComponentProps<typeof Dialog.Root> & {
 };
 
 const Indicator = ({ amount }: { amount: number }) => {
+  const $ref = useRef<HTMLDivElement>(null);
+  const $firstRender = useRef(true);
+
+  const [style, api] = useSpring<{ width: "auto" | number; opacity: number }>(
+    () => ({
+      width: amount > 0 ? "auto" : 0,
+      opacity: amount > 0 ? 1 : 0
+    })
+  );
+
+  useEffect(() => {
+    if (!$ref.current) {
+      return;
+    }
+    const bb = $ref.current.getBoundingClientRect();
+    const width = amount > 0 ? bb.width : 0;
+    const opacity = amount > 0 ? 1 : 0;
+    if ($firstRender.current) {
+      api.set({ width, opacity });
+      $firstRender.current = false;
+    } else {
+      api.start({ width, opacity });
+    }
+  }, [amount, $ref.current?.offsetWidth]);
+
   return (
-    <div className={css["indicator-container"]}>
-      <div className={css["indicator"]}>{amount}</div>
-    </div>
+    <animated.div style={style} className={css["indicator-container"]}>
+      <div ref={$ref} className={css["indicator"]}>
+        {amount}
+      </div>
+    </animated.div>
   );
 };
-
-// const Indicator = ({ amount }: { amount: number }) => {
-//   const $ref = useRef<HTMLDivElement>(null);
-
-//   const [style, api] = useSpring(() => ({
-//     width: $ref.current?.clientWidth || 0
-//   }));
-
-//   useEffect(() => {
-//     api.start({
-//       width: amount > 0 ? $ref.current?.offsetWidth : 0
-//     });
-//   }, [amount, $ref.current?.offsetWidth]);
-
-//   return (
-//     <animated.div style={style} className={css["indicator-container"]}>
-//       <div ref={$ref} className={css["indicator"]}>
-//         {amount}
-//       </div>
-//     </animated.div>
-//   );
-// };
 
 const SidePanel = ({
   children,
@@ -79,13 +85,15 @@ const SidePanel = ({
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange} {...props}>
-      <Dialog.Trigger asChild>
-        <a className={cn(css["control"], { [css["on"]]: activeFilters > 0 })}>
-          <div className={css["icon"]}>
-            <FontAwesomeIcon icon={faSliders} size="sm" />
+      <Dialog.Trigger>
+        <Outline on={activeFilters > 0}>
+          <div className={css["control"]}>
+            <div className={css["icon"]}>
+              <FontAwesomeIcon icon={faSliders} size="sm" />
+            </div>
+            Filters <Indicator amount={activeFilters} />
           </div>
-          Filters <Indicator amount={activeFilters} />
-        </a>
+        </Outline>
       </Dialog.Trigger>
       {transitions((styles, show) =>
         show ? (

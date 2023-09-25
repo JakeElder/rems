@@ -1,19 +1,13 @@
 .control {
   font-size: 15px;
   font-family: var(--font-inter);
-  border: 1px solid #dfdfdf;
-  border-radius: 3px;
-  height: 36px;
+  height: 34px;
   padding: 0 11px;
   display: flex;
   align-items: center;
   gap: 5px;
   cursor: pointer;
   white-space: nowrap;
-}
-
-.on {
-  border-color: #000;
   color: #000;
 }
 

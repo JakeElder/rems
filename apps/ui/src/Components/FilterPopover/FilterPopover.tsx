@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import css from "./FilterPopover.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { inter } from "../../Utils/FontLoader";
 import cn from "classnames";
+import Outline from "../../Elements/Outline";
 
 type Props = {
   label: string;
@@ -15,14 +16,19 @@ type Props = {
 };
 
 const FilterPopover = ({ label, children, on }: Props) => {
+  const [open, setOpen] = useState(false);
   return (
-    <Popover.Root>
+    <Popover.Root onOpenChange={setOpen} open={open}>
       <Popover.Trigger asChild>
-        <button className={cn(css["control"], { [css["on"]]: on })}>
-          {label}
-          <div className={css["icon"]}>
-            <FontAwesomeIcon icon={faChevronDown} size="sm" />
-          </div>
+        <button className={css["control"]}>
+          <Outline on={open || on}>
+            <div className={css["control-inner"]}>
+              {label}
+              <div className={css["icon"]}>
+                <FontAwesomeIcon icon={faChevronDown} size="sm" />
+              </div>
+            </div>
+          </Outline>
         </button>
       </Popover.Trigger>
       <Popover.Portal>
