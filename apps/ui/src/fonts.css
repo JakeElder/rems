@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "calibre";
+  src: url("./assets/fonts/calibre/test-calibre-light.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "calibre";
+  src: url("./assets/fonts/calibre/test-calibre-regular.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "calibre";
+  src: url("./assets/fonts/calibre/test-calibre-medium.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+:root {
+  --font-inter: "calibre";
+}

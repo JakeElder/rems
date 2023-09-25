@@ -115,6 +115,9 @@ const AssistantProvider = ({ children }: Props) => {
     },
     minus: () => {
       dispatch({ type: "OPEN_CLOSE", open: false });
+    },
+    escape: () => {
+      dispatch({ type: "OPEN_CLOSE", open: false });
     }
   });
 

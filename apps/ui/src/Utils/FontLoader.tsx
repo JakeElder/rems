@@ -3,6 +3,9 @@ import cn from "classnames";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 
+// import tcl from "../assets/fonts/calibre/test-calibre-light.woff2";
+// console.log(tcl);
+
 // export const inter = Inter({
 //   subsets: ["latin"],
 //   variable: "--font-inter"
@@ -11,28 +14,26 @@ import localFont from "next/font/local";
 export const inter = localFont({
   src: [
     {
-      path: "../assets/fonts/Calibre/TestCalibre-Light.otf",
+      path: "../assets/fonts/calibre/test-calibre-light.woff2",
       weight: "300",
       style: "normal"
     },
     {
-      path: "../assets/fonts/Calibre/TestCalibre-Regular.otf",
+      path: "../assets/fonts/calibre/test-calibre-regular.woff2",
       weight: "400",
       style: "normal"
     },
     {
-      path: "../assets/fonts/Calibre/TestCalibre-Medium.otf",
+      path: "../assets/fonts/calibre/test-calibre-medium.woff2",
       weight: "500",
       style: "normal"
     }
   ],
-  display: "swap",
   variable: "--font-inter"
 });
 
 const newzald = localFont({
-  src: "../assets/fonts/Newzald/TestNewzald-Book.otf",
-  display: "swap",
+  src: "../assets/fonts/newzald/test-newzald-book.woff2",
   variable: "--font-libre"
 });
 

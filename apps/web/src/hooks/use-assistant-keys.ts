@@ -6,12 +6,14 @@ const useAssistantKeys = ({
   spaceDown,
   spaceUp,
   plus,
-  minus
+  minus,
+  escape
 }: {
   spaceDown: () => void;
   spaceUp: () => void;
   plus: () => void;
   minus: () => void;
+  escape: () => void;
 }) => {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -28,6 +30,9 @@ const useAssistantKeys = ({
     };
 
     const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Escape") {
+        escape();
+      }
       if (e.code === "Space") {
         if (isHTMLElement(e.target) && e.target.nodeName === "INPUT") {
           return;
