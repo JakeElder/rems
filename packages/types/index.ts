@@ -42,18 +42,14 @@ import {
   UserVerbalInteractionSchema,
   UserWrittenInteractionSchema,
   UserInteractionSchema,
-  UserPatchInteractionSchema
+  UserPatchInteractionSchema,
+  QueryModificationInteractionSchema
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
 type Z<T extends ZodType<any, any, any>> = z.infer<T>;
 
-export type Pagination = {
-  page: number;
-  pageSize: number;
-  pageCount: number;
-  total: number;
-};
+export type Pagination = Z<typeof RealEstateQuerySchema.Pagination>;
 
 export type ResourceId = string;
 
@@ -308,3 +304,7 @@ export type Logger = (ms: number, message: AssistantMessage) => void;
 
 export type ScalarKey = keyof RealEstateQueryScalars;
 export type ArrayKey = keyof RealEstateQueryArrays;
+
+export type QueryModificationInteraction = Z<
+  typeof QueryModificationInteractionSchema
+>;

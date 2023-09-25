@@ -6,7 +6,9 @@ import {
   InputSession,
   AssistantMessage,
   AssistantState,
-  Timeline
+  Timeline,
+  TimelineEvent,
+  Interaction
 } from "@rems/types";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import SpeechRecognition, {
@@ -35,6 +37,7 @@ type Context = {
   onMicClick: () => void;
   onChange: InputHTMLAttributes["onChange"];
   onOpenClose: (open: boolean) => void;
+  onEventRendered: (e: TimelineEvent) => void;
 
   // State
   sessions: InputSession[];
@@ -54,7 +57,7 @@ export const useAssistant = () => useContext(AssistantContext)!;
 
 const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening } = useSpeechRecognition();
-  const { query, reset, patch, commit } = useRealEstateQuery();
+  const { reset, patch, commit, serverQuery } = useRealEstateQuery();
 
   $timeline.use();
 
@@ -118,7 +121,10 @@ const AssistantProvider = ({ children }: Props) => {
     new Observable<AssistantMessage>((sub) => {
       fetch(`${NEXT_PUBLIC_REMS_API_URL}/assistant`, {
         method: "POST",
-        body: JSON.stringify({ query, nl: session.value })
+        body: JSON.stringify({
+          query: serverQuery,
+          nl: session.value
+        })
       }).then((res) => {
         if (!res.ok || !res.body) {
           sub.error();
@@ -177,6 +183,10 @@ const AssistantProvider = ({ children }: Props) => {
     debouncedSetInactive();
   };
 
+  const onEventRendered: Context["onEventRendered"] = (e) => {
+    console.log(e);
+  };
+
   const onOpenClose: Context["onOpenClose"] = (open) => {
     dispatch({ type: "OPEN_CLOSE", open });
   };
@@ -200,6 +210,9 @@ const AssistantProvider = ({ children }: Props) => {
       }
     ]);
     const req = request();
+
+    let summary: Interaction;
+    let responsePromise: Promise<void> = Promise.resolve();
 
     req.subscribe({
       next: (c) => {
@@ -225,6 +238,10 @@ const AssistantProvider = ({ children }: Props) => {
           if (c.capability === "REFINE_QUERY" || c.capability === "NEW_QUERY") {
             dispatch({ type: "REFINING_QUERY" });
           }
+
+          if (c.capability === "RESPOND_GENERAL_QUERY") {
+            dispatch({ type: "RESPONDING_GENERAL_QUERY" });
+          }
         }
 
         if (c.type === "REACTION" && c.reaction.type === "PATCH") {
@@ -235,14 +252,29 @@ const AssistantProvider = ({ children }: Props) => {
             patch(p.data);
           }
         }
-      },
 
-      complete() {
-        commit();
-        dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
-        setTimeout(() => {
-          dispatch({ type: "SESSION_COMPLETE" });
-        }, 1200);
+        if (c.type === "SUMMARY") {
+          summary = c.summary;
+          if (
+            summary.analysis.capability === "REFINE_QUERY" ||
+            summary.analysis.capability === "NEW_QUERY"
+          ) {
+            commit();
+          }
+        }
+
+        if (c.type === "REACTION" && c.reaction.type === "LANGUAGE_BASED") {
+          responsePromise = Sound.speak(c.reaction.message);
+        }
+
+        if (c.type === "UPDATE" && c.phase === "COMPLETE") {
+          responsePromise.then(() => {
+            dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
+            setTimeout(() => {
+              dispatch({ type: "SESSION_COMPLETE" });
+            }, 1200);
+          });
+        }
       }
     });
 
@@ -257,6 +289,7 @@ const AssistantProvider = ({ children }: Props) => {
         onMicClick,
         onChange,
         onOpenClose,
+        onEventRendered,
 
         sessions: state.sessions,
         enterDown: state.enterDown,

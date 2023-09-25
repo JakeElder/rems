@@ -234,18 +234,18 @@ export const Scalars = z
   .merge(MapState);
 
 export const Group = z.enum([
-    "LOCATION",
-    "MAP_STATE",
-    "PAGE",
-    "SORT",
-    "SPACE_REQUIREMENTS",
-    "BUDGET_AND_AVAILABILITY",
-    "INDOOR_FEATURES",
-    "LOT_FEATURES",
-    "OUTDOOR_FEATURES",
-    "PROPERTY_TYPES",
-    "VIEW_TYPES"
-  ])
+  "LOCATION",
+  "MAP_STATE",
+  "PAGE",
+  "SORT",
+  "SPACE_REQUIREMENTS",
+  "BUDGET_AND_AVAILABILITY",
+  "INDOOR_FEATURES",
+  "LOT_FEATURES",
+  "OUTDOOR_FEATURES",
+  "PROPERTY_TYPES",
+  "VIEW_TYPES"
+]);
 
 export const URL = z.object({}).merge(Arrays).merge(Scalars);
 
@@ -258,3 +258,10 @@ export const Server = z
     limit: z.enum(["true", "false"]).default("true").catch("true")
   })
   .merge(URL);
+
+export const Pagination = z.object({
+  page: z.number(),
+  pageSize: z.number(),
+  pageCount: z.number(),
+  total: z.number()
+});

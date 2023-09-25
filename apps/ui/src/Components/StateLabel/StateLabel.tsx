@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import css from "./StateLabel.module.css";
 import { AssistantState, GroupedAssistantState } from "@rems/types";
 import { animated, useSpring } from "@react-spring/web";
@@ -47,7 +47,7 @@ const StateLabel = ({ state }: Props) => {
 
   const [{ width, opacity }, api] = useSpring(() => ({ width: 0, opacity: 1 }));
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const el = refs.current[state];
 
     if (!el) {

@@ -26,7 +26,8 @@ type ComponentAction =
   | { type: "LISTENING_COMPLETE" }
   | { type: "VOICE_INPUT_RECEIVED"; value: string }
   | { type: "OPEN_CLOSE"; open: boolean }
-  | { type: "REFINING_QUERY" };
+  | { type: "REFINING_QUERY" }
+  | { type: "RESPONDING_GENERAL_QUERY" };
 
 const assistantReducer = (
   prev: ComponentState,
@@ -185,6 +186,9 @@ const assistantReducer = (
 
     case "REFINING_QUERY":
       return { ...prev, assistantState: "REFINING_QUERY" };
+
+    case "RESPONDING_GENERAL_QUERY":
+      return { ...prev, assistantState: "CHATTING" };
 
     default:
       throw new Error("Invalid action type");

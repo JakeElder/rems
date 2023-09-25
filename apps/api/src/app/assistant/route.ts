@@ -6,11 +6,12 @@ import {
   IntentResolution,
   PatchReaction,
   Interaction,
-  RealEstateQuery,
+  ServerRealEstateQuery,
   PatchReactionIntentResolution,
-  AssistantMessage
+  AssistantMessage,
+  Reaction
 } from "@rems/types";
-import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
+import { RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
@@ -19,6 +20,8 @@ import { pickBy } from "remeda";
 import prettyjson from "prettyjson";
 import { z } from "zod";
 import dedent from "ts-dedent";
+import update from "immutability-helper";
+import resolveProperties from "../properties/resolve";
 
 const { SpaceRequirements, BudgetAndAvailability, MapState } =
   RealEstateQuerySchema;
@@ -29,12 +32,18 @@ type ArrayKey = keyof Arrays;
 const defined = (obj: Record<string, any>) =>
   pickBy(obj, (v) => typeof v !== "undefined");
 
+const isError = (r: IntentResolution): r is ErrorIntentResolution =>
+  r.type === "ERROR";
+
+const isReaction = (r: IntentResolution): r is PatchReactionIntentResolution =>
+  r.type === "PATCH";
+
 const encoder = new TextEncoder();
 
 const scalarPatch = (
   group: PatchReaction["group"],
-  query: RealEstateQuery,
-  data: Partial<RealEstateQuery>
+  query: ServerRealEstateQuery,
+  data: Partial<ServerRealEstateQuery>
 ): PatchReaction => ({
   type: "PATCH",
   group,
@@ -47,7 +56,7 @@ const scalarPatch = (
 
 const arrayPatch = (
   group: PatchReaction["group"],
-  query: RealEstateQuery,
+  query: ServerRealEstateQuery,
   key: ArrayKey,
   value: Arrays[ArrayKey]
 ): PatchReaction => ({
@@ -61,9 +70,24 @@ const arrayPatch = (
   }
 });
 
+const isPatchReaction = (r: Reaction): r is PatchReaction => r.type === "PATCH";
+
+const apply = (
+  query: ServerRealEstateQuery,
+  patches: PatchReaction[]
+): ServerRealEstateQuery => {
+  return patches.reduce((a, v) => {
+    if (v.patch.type === "ARRAY") {
+      return update(a, { $merge: { [v.patch.key]: v.patch.value } });
+    } else {
+      return update(a, { $merge: v.patch.data });
+    }
+  }, query);
+};
+
 type Stream = (
   nl: string,
-  query: RealEstateQuery
+  query: ServerRealEstateQuery
 ) => UnderlyingDefaultSource["start"];
 
 const stream: Stream = (input, query) => async (c) => {
@@ -249,25 +273,62 @@ const stream: Stream = (input, query) => async (c) => {
     )
   ]);
 
-  const isError = (r: IntentResolution): r is ErrorIntentResolution =>
-    r.type === "ERROR";
-
-  const isReaction = (
-    r: IntentResolution
-  ): r is PatchReactionIntentResolution => r.type === "PATCH";
-
   const { capability } = await analyze();
 
-  if (capability === "REFINE_QUERY" || capability === "NEW_QUERY") {
+  if (
+    capability === "REFINE_QUERY" ||
+    capability === "NEW_QUERY" ||
+    capability === "CLEAR_QUERY"
+  ) {
+    const reactions = resolutions.filter(isReaction).map((i) => i.reaction);
+
+    const nextQuery = apply(query, reactions.filter(isPatchReaction));
+    const [before, after] = await Promise.all([
+      resolveProperties(query),
+      resolveProperties(nextQuery)
+    ]);
+
     const summary: Interaction = {
       type: capability,
       input,
       analysis: await analyze(),
-      reactions: resolutions.filter(isReaction).map((i) => i.reaction)
+      reactions,
+      result: {
+        before: before.pagination,
+        after: after.pagination
+      }
     };
 
     send({ type: "SUMMARY", summary });
+
+    const res = await remi.capability.summarize(summary);
+
+    if (res.ok) {
+      send({
+        type: "REACTION",
+        reaction: { type: "LANGUAGE_BASED", message: res.data }
+      });
+    } else {
+      console.log(res.error);
+    }
   }
+
+  if (capability === "RESPOND_GENERAL_QUERY") {
+    const properties = await resolveProperties(query);
+    const res = await remi.capability.respondGeneral({
+      input,
+      query,
+      properties: properties.pagination
+    });
+    if (res.ok) {
+      send({
+        type: "REACTION",
+        reaction: { type: "LANGUAGE_BASED", message: res.data }
+      });
+    }
+  }
+
+  send({ type: "UPDATE", phase: "COMPLETE" });
 
   const errors = resolutions.filter(isError).map(
     (res) => dedent`
@@ -284,7 +345,7 @@ const stream: Stream = (input, query) => async (c) => {
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
-  const query = RealEstateQuerySchema.URL.parse(data.query);
+  const query = RealEstateQuerySchema.Server.parse(data.query);
 
   return new Response(new ReadableStream({ start: stream(data.nl, query) }), {
     headers: { "Content-Type": "application/json; charset=utf-8" }

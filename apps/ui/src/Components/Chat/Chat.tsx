@@ -17,6 +17,7 @@ import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
 import StateLabel from "../StateLabel/StateLabel";
+import tinycolor from "tinycolor2";
 
 export type Props = {
   onOpenClose: (open: boolean) => void;
@@ -24,6 +25,7 @@ export type Props = {
   lang: "en" | "th";
   state: AssistantState;
   open: boolean;
+  onEventRendered: (e: TimelineEvent) => void;
 };
 
 const OpenClose = ({
@@ -108,6 +110,14 @@ const isLanguageBasedUserMessageEvent = (e: TimelineEvent) =>
   e.type === "USER" &&
   (e.interaction.type === "VERBAL" || e.interaction.type === "WRITTEN");
 
+const isLanguageBasedAssistantMessageEvent = (e: TimelineEvent) =>
+  e.type === "ASSISTANT" &&
+  e.message.type === "REACTION" &&
+  e.message.reaction.type === "LANGUAGE_BASED";
+
+const isLanguageBasedEvent = (e: TimelineEvent) =>
+  isLanguageBasedUserMessageEvent(e) || isLanguageBasedAssistantMessageEvent(e);
+
 const isPatchEvent = (e: TimelineEvent) =>
   e.type === "ASSISTANT" &&
   e.message.type === "REACTION" &&
@@ -148,7 +158,7 @@ export const Body = React.memo(
   ({ timeline }: Pick<Props, "timeline">) => {
     const refMap = useMemo(() => new WeakMap(), []);
 
-    const messages = timeline
+    const events = timeline
       .slice()
       .reverse()
       .filter((e) => {
@@ -156,14 +166,14 @@ export const Body = React.memo(
           return false;
         }
 
-        if (isLanguageBasedUserMessageEvent(e) || isPatchEvent(e)) {
+        if (isLanguageBasedEvent(e) || isPatchEvent(e)) {
           return true;
         }
 
         return false;
       });
 
-    const transitions = useTransition(messages, {
+    const transitions = useTransition(events, {
       keys: (item) => item.id,
       from: { opacity: 0, height: 0 },
       enter: (item) => async (next) => {
@@ -200,14 +210,17 @@ const FOREGROUND_PADDING_TOP = 20;
 
 export const Root = ({
   children,
-  open
-}: { children: React.ReactNode } & Pick<Props, "open">) => {
+  open,
+  state
+}: { children: React.ReactNode } & Pick<Props, "open" | "state">) => {
   const rootStyle = useSpring({
     y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP)
   });
 
   const backgroundStyle = useSpring({
-    background: open ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 0)",
+    background: tinycolor(CHAT_PALETTE[stateToGroup(state)].labelBg)
+      .setAlpha(open ? 0.5 : 0)
+      .toRgbString(),
     boxShadow: open
       ? "0 0 5px 0 rgba(0, 0, 0, 0.4)"
       : "0 0 5px 0 rgba(0, 0, 0, 0)",

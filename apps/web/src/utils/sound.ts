@@ -16,9 +16,15 @@ export const speak = async (text: string): Promise<void> => {
 
   if (res.ok) {
     const json = await res.json();
-
-    const url = `data:audio/mp3;base64,${json.audioContent}`;
-    const audio = new Audio(url);
-    audio.play();
+    return new Promise((resolve, reject) => {
+      var audio = new Audio();
+      audio.preload = "auto";
+      audio.autoplay = true;
+      audio.onerror = () => reject;
+      audio.onended = () => resolve();
+      audio.src = `data:audio/mp3;base64,${json.audioContent}`;
+    });
   }
+
+  return Promise.reject();
 };
