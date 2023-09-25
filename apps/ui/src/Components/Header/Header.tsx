@@ -111,17 +111,17 @@ export const Root = ({
   const styles = useSpring(
     style === "transparent"
       ? {
-          background: "rgba(255, 255, 255, 0)",
-          color: "rgba(255, 255, 255, 0.7)",
-          fill: "rgba(255, 255, 255, 1)",
-          borderBottomColor: "rgba(255, 255, 255, 0.2)"
-        }
+        background: "rgba(255, 255, 255, 0)",
+        color: "rgba(255, 255, 255, 0.7)",
+        fill: "rgba(255, 255, 255, 1)",
+        borderBottomColor: "rgba(255, 255, 255, 0.2)"
+      }
       : {
-          background: "rgba(255, 255, 255, 1)",
-          color: "rgba(0, 0, 0, 0.7)",
-          fill: "rgba(0, 0, 0, 1)",
-          borderBottomColor: "rgb(234, 234, 234, 1)"
-        }
+        background: "rgba(255, 255, 255, 1)",
+        color: "rgba(0, 0, 0, 0.7)",
+        fill: "rgba(0, 0, 0, 1)",
+        borderBottomColor: "rgb(234, 234, 234, 1)"
+      }
   );
 
   return (

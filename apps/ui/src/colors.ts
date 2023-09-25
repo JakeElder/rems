@@ -11,7 +11,7 @@ export const CHAT_PALETTE: Record<GroupedAssistantState, ChatPalette> = {
   IDLE: {
     avatarBorder: "#d1d1d1",
     labelBg: "#F2F2F2",
-    labelColor: "#333333"
+    labelColor: "#555"
   },
 
   // Purple

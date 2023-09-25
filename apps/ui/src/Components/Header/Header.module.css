@@ -19,11 +19,12 @@
   font-family: var(--font-inter);
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .logo {
   position: relative;
+  fill: black;
   top: 2px;
 }
 

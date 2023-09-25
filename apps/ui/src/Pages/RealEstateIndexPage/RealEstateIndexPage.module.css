@@ -17,9 +17,9 @@
 
 .title {
   font-family: var(--font-libre);
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 300;
-  margin-bottom: 14px;
+  margin-bottom: 6px;
 }
 
 .count-and-sort {

@@ -56,7 +56,7 @@ const AssistantContext = createContext<Context | null>(null);
 export const useAssistant = () => useContext(AssistantContext)!;
 
 const AssistantProvider = ({ children }: Props) => {
-  const { transcript, listening } = useSpeechRecognition();
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const { reset, patch, commit, serverQuery } = useRealEstateQuery();
 
   $timeline.use();
@@ -103,7 +103,8 @@ const AssistantProvider = ({ children }: Props) => {
   useAssistantKeys({
     spaceDown: () => {
       dispatch({ type: "SPACE_KEY_DOWN" });
-      SpeechRecognition.startListening();
+      resetTranscript();
+      SpeechRecognition.startListening({ continuous: true });
     },
     spaceUp: () => {
       dispatch({ type: "SPACE_KEY_UP" });
@@ -173,6 +174,7 @@ const AssistantProvider = ({ children }: Props) => {
     if (session.state === "LISTENING") {
       SpeechRecognition.stopListening();
     } else {
+      resetTranscript();
       SpeechRecognition.startListening();
     }
   };
