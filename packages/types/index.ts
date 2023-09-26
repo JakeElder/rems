@@ -195,7 +195,6 @@ export type ResolvingFilterSet = {
   query: Partial<RealEstateQuery>;
   url: string;
 };
-
 export type OpenAIModel =
   | "ada"
   | "ada-code-search-code"
@@ -204,6 +203,7 @@ export type OpenAIModel =
   | "ada-search-query"
   | "ada-similarity"
   | "babbage"
+  | "babbage-002"
   | "babbage-code-search-code"
   | "babbage-code-search-text"
   | "babbage-search-document"
@@ -220,6 +220,7 @@ export type OpenAIModel =
   | "curie-search-query"
   | "curie-similarity"
   | "davinci"
+  | "davinci-002"
   | "davinci-instruct-beta"
   | "davinci-search-document"
   | "davinci-search-query"
@@ -229,6 +230,8 @@ export type OpenAIModel =
   | "gpt-3.5-turbo-0613"
   | "gpt-3.5-turbo-16k"
   | "gpt-3.5-turbo-16k-0613"
+  | "gpt-3.5-turbo-instruct"
+  | "gpt-3.5-turbo-instruct-0914"
   | "gpt-4"
   | "gpt-4-0314"
   | "gpt-4-0613"
