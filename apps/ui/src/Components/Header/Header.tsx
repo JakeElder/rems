@@ -134,10 +134,17 @@ export const Root = ({
 };
 
 export const Logo = () => {
+  const { style } = useContext();
+  const styles = useSpring({
+    fill:
+      style === "transparent" ? "rgba(255, 255, 255, 1)" : "rgba(0, 0, 0, 1)"
+  });
   return (
-    <Link href="/" className={css["logo"]}>
-      <LogoElement />
-    </Link>
+    <animated.div style={styles}>
+      <Link href="/" className={css["logo"]}>
+        <LogoElement />
+      </Link>
+    </animated.div>
   );
 };
 
