@@ -126,6 +126,7 @@ const AssistantProvider = ({ children }: Props) => {
       fetch(`${NEXT_PUBLIC_REMS_API_URL}/assistant`, {
         method: "POST",
         body: JSON.stringify({
+          timeline: $timeline.get(),
           query: serverQuery,
           nl: session.value
         })

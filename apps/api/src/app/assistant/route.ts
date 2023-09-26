@@ -9,9 +9,10 @@ import {
   ServerRealEstateQuery,
   PatchReactionIntentResolution,
   AssistantMessage,
-  Reaction
+  Reaction,
+  Timeline
 } from "@rems/types";
-import { RealEstateQuerySchema } from "@rems/schemas";
+import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
 import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
@@ -85,12 +86,15 @@ const apply = (
   }, query);
 };
 
-type Stream = (
-  nl: string,
-  query: ServerRealEstateQuery
-) => UnderlyingDefaultSource["start"];
+type Stream = (args: {
+  input: string;
+  query: ServerRealEstateQuery;
+  timeline: Timeline;
+}) => UnderlyingDefaultSource["start"];
 
-const stream: Stream = (input, query) => async (c) => {
+const stream: Stream = (props) => async (c) => {
+  const { input, query } = props;
+
   const log = remi.logger.init(input);
 
   const send = (message: AssistantMessage, l: boolean = true) => {
@@ -318,7 +322,8 @@ const stream: Stream = (input, query) => async (c) => {
     const res = await remi.capability.respondGeneral({
       input,
       query,
-      properties: properties.pagination
+      properties: properties.pagination,
+      capabilities: remi.capabilities
     });
     if (res.ok) {
       send({
@@ -345,9 +350,17 @@ const stream: Stream = (input, query) => async (c) => {
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
-  const query = RealEstateQuerySchema.Server.parse(data.query);
 
-  return new Response(new ReadableStream({ start: stream(data.nl, query) }), {
-    headers: { "Content-Type": "application/json; charset=utf-8" }
-  });
+  return new Response(
+    new ReadableStream({
+      start: stream({
+        input: data.nl,
+        query: RealEstateQuerySchema.Server.parse(data.query),
+        timeline: TimelineSchema.parse(data.timeline)
+      })
+    }),
+    {
+      headers: { "Content-Type": "application/json; charset=utf-8" }
+    }
+  );
 }
