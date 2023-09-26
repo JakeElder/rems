@@ -43,7 +43,7 @@
   margin-left: 16px;
 }
 
-.ai-search {
+.chat-input {
   flex: 1;
   max-width: 400px;
 }

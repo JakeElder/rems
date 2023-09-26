@@ -7,8 +7,11 @@
   font-family: var(--font-inter);
   display: flex;
   align-items: center;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   overflow: hidden;
+}
+
+.container-chat {
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
 }
 
 .session-container {
@@ -114,5 +117,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 5px;
+}
+
+.listen-button-chat {
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
 }

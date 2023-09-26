@@ -3,7 +3,7 @@ import uuid from "short-uuid";
 
 type ComponentState = {
   sessions: InputSession[];
-  assistantState: AssistantState;
+  state: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
   open: boolean;
@@ -51,7 +51,7 @@ const assistantReducer = (
       return {
         ...prev,
         enterDown: false,
-        assistantState: "THINKING",
+        state: "THINKING",
         sessions: [
           ...prev.sessions.slice(0, -1),
           {
@@ -76,7 +76,7 @@ const assistantReducer = (
     case "SESSION_COMPLETE":
       return {
         ...prev,
-        assistantState: "SLEEPING",
+        state: "SLEEPING",
         sessions: [
           ...prev.sessions.slice(0, -1),
           {
@@ -151,7 +151,7 @@ const assistantReducer = (
             state: "LISTENING"
           }
         ],
-        assistantState: "LISTENING"
+        state: "LISTENING"
       };
 
     case "LISTENING_ABORTED":
@@ -164,7 +164,7 @@ const assistantReducer = (
             state: "INACTIVE"
           }
         ],
-        assistantState: "SLEEPING"
+        state: "SLEEPING"
       };
 
     case "VOICE_INPUT_RECEIVED":
@@ -191,7 +191,7 @@ const assistantReducer = (
         case "REFINE_QUERY":
           return {
             ...prev,
-            assistantState: "REFINING_QUERY",
+            state: "REFINING_QUERY",
             sessions: [
               ...prev.sessions.slice(0, -1),
               {
@@ -203,7 +203,7 @@ const assistantReducer = (
         case "RESPOND_GENERAL_QUERY":
           return {
             ...prev,
-            assistantState: "CHATTING",
+            state: "CHATTING",
             sessions: [
               ...prev.sessions.slice(0, -1),
               {

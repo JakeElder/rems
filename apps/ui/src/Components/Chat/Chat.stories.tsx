@@ -91,7 +91,8 @@ export const Default: Story = {
     state: "SLEEPING",
     inputState: "INACTIVE",
     timeline: [],
-    submittable: false
+    submittable: false,
+    theme: "chat"
   }
 };
 

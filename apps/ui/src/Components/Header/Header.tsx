@@ -81,7 +81,7 @@ const useContext = () => {
   return ctx;
 };
 
-type Props = {
+export type Props = {
   children: React.ReactNode;
   mode: "standard" | "hero";
   full?: boolean;
@@ -148,8 +148,8 @@ export const Logo = () => {
   );
 };
 
-export const AiSearch = ({ children }: { children: React.ReactNode }) => {
-  return <div className={css["ai-search"]}>{children}</div>;
+export const ChatInput = ({ children }: { children: React.ReactNode }) => {
+  return <div className={css["chat-input"]}>{children}</div>;
 };
 
 export const NavAndContact = () => {

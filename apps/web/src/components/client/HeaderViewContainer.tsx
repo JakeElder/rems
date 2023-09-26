@@ -2,14 +2,12 @@
 
 import React, { useState } from "react";
 import { ContactModal, Header, SlideNav } from "@rems/ui";
-import AiSearchViewContainer from "./AiSearchViewContainer";
+import HeaderChatInputContainer from "./HeaderChatInputContainer";
 import useContactForm from "@/hooks/use-contact-form";
 
-type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode"> & {
-  search?: boolean;
-};
+type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode">;
 
-const HeaderViewContainer = ({ search, ...props }: Props) => {
+const HeaderViewContainer = ({ ...props }: Props) => {
   const [slideNavOpen, setSlideNavOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
 
@@ -40,11 +38,9 @@ const HeaderViewContainer = ({ search, ...props }: Props) => {
     >
       <Header.Main>
         <Header.Logo />
-        {false ? (
-          <Header.AiSearch>
-            <AiSearchViewContainer />
-          </Header.AiSearch>
-        ) : null}
+        <Header.ChatInput>
+          <HeaderChatInputContainer />
+        </Header.ChatInput>
         <Header.NavAndContact />
       </Header.Main>
     </Header.Root>

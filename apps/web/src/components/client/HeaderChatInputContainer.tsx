@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from "react";
 import { ChatInput } from "@rems/ui";
 import { useAssistant } from "@/components/AssistantProvider";
 
-const AiSearchViewContainer = () => {
+const HeaderChatInputContainer = () => {
   const assistant = useAssistant();
   const $input = useRef<HTMLInputElement>(null);
 
@@ -27,11 +27,11 @@ const AiSearchViewContainer = () => {
       onKeyDown={assistant.onKeyDown}
       onKeyUp={assistant.onKeyUp}
       enterDown={assistant.enterDown}
-      state={assistant.state}
       sessions={assistant.sessions}
       onChange={assistant.onChange}
+      theme="header"
     />
   );
 };
 
-export default AiSearchViewContainer;
+export default HeaderChatInputContainer;

@@ -28,8 +28,7 @@ const ChatViewContainer = ({}: Props) => {
 
   const props: Chat.Props = {
     ...assistant,
-    lang: "en",
-    state: assistant.assistantState
+    lang: "en"
   };
 
   return (
@@ -39,7 +38,7 @@ const ChatViewContainer = ({}: Props) => {
         <Chat.Body {...props} />
       </Chat.Dialog>
       <Chat.Input>
-        <ChatInput ref={$input} {...assistant} />
+        <ChatInput ref={$input} {...assistant} theme="chat" />
       </Chat.Input>
     </Chat.Root>
   );

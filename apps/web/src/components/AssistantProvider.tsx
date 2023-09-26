@@ -41,7 +41,7 @@ type Context = {
 
   // State
   sessions: InputSession[];
-  assistantState: AssistantState;
+  state: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
   open: boolean;
@@ -63,7 +63,7 @@ const AssistantProvider = ({ children }: Props) => {
 
   const [state, dispatch] = useReducer(assistantReducer, {
     sessions: [{ id: uuid.generate(), value: "", state: "INACTIVE" }],
-    assistantState: "SLEEPING",
+    state: "SLEEPING",
     enterDown: false,
     spaceDown: false,
     open: false
@@ -293,7 +293,7 @@ const AssistantProvider = ({ children }: Props) => {
 
         sessions: state.sessions,
         enterDown: state.enterDown,
-        assistantState: state.assistantState,
+        state: state.state,
         spaceDown: state.spaceDown,
         open: state.open,
         timeline: $timeline.get(),
