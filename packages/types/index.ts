@@ -47,7 +47,7 @@ import {
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
-type Z<T extends ZodType<any, any, any>> = z.infer<T>;
+export type Z<T extends ZodType<any, any, any>> = z.infer<T>;
 
 export type Pagination = Z<typeof RealEstateQuerySchema.Pagination>;
 

@@ -1,19 +1,17 @@
 import { z } from "zod";
 import NlInputSchema from "../nl-input";
 import { txt } from "../utils";
-import { FilterSchema, IntentSchema, RealEstateQuerySchema } from "..";
+import { IntentSchema, RealEstateQuerySchema } from "..";
 
 export const ArgsSchema = z.tuple([NlInputSchema, RealEstateQuerySchema.URL]);
 
-const CompressedFilter = z.lazy(() => FilterSchema.omit({ slug: true }));
-
 export const ContextSchema = z.object({
   intents: z.lazy(() => z.array(IntentSchema)),
-  indoorFeatures: z.lazy(() => z.array(CompressedFilter)),
-  outdoorFeatures: z.lazy(() => z.array(CompressedFilter)),
-  lotFeatures: z.lazy(() => z.array(CompressedFilter)),
-  viewTypes: z.lazy(() => z.array(CompressedFilter)),
-  propertyTypes: z.lazy(() => z.array(CompressedFilter)),
+  indoorFeatures: z.array(z.string()),
+  outdoorFeatures: z.array(z.string()),
+  lotFeatures: z.array(z.string()),
+  viewTypes: z.array(z.string()),
+  propertyTypes: z.array(z.string()),
   currentQuery: z.object({
     LOCATION: RealEstateQuerySchema.Origin,
     MAP_STATE: RealEstateQuerySchema.MapState,

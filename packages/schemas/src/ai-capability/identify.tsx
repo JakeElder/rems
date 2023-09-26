@@ -6,7 +6,27 @@ import { CapabilitySchema } from "..";
 export const ArgsSchema = z.tuple([NlInputSchema]);
 
 export const ContextSchema = z.object({
-  capabilities: z.lazy(() => z.array(CapabilitySchema))
+  capabilities: z.lazy(() => z.array(CapabilitySchema)),
+  indoorFeatures: z.array(z.string()),
+  outdoorFeatures: z.array(z.string()),
+  lotFeatures: z.array(z.string()),
+  viewTypes: z.array(z.string()),
+  propertyTypes: z.array(z.string()),
+  queryStructure: z
+    .object({
+      LOCATION: z.record(z.any()),
+      MAP_STATE: z.record(z.any()),
+      PAGE: z.record(z.any()),
+      SORT: z.record(z.any()),
+      SPACE_REQUIREMENTS: z.record(z.any()),
+      BUDGET_AND_AVAILABILITY: z.record(z.any()),
+      INDOOR_FEATURES: z.record(z.any()),
+      LOT_FEATURES: z.record(z.any()),
+      OUTDOOR_FEATURES: z.record(z.any()),
+      PROPERTY_TYPES: z.record(z.any()),
+      VIEW_TYPES: z.record(z.any())
+    })
+    .describe(txt(<>The JSON schema of the query object the user can set</>))
 });
 
 export const ReturnsSchema = z

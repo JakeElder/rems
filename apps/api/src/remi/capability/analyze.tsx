@@ -11,14 +11,18 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import * as Models from "@/models";
 import { ChatCompletionRequestMessage } from "openai";
+import { Z } from "@rems/types";
+import { Model } from "sequelize";
 
 const { ArgsSchema, ReturnsSchema, ContextSchema } = AiCapability.Analyze;
 
-type Args = z.infer<typeof ArgsSchema>;
-type Returns = z.infer<typeof ReturnsSchema>;
+type Args = Z<typeof ArgsSchema>;
+type Context = Z<typeof ContextSchema>;
+type Returns = Z<typeof ReturnsSchema>;
 type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
 
 const analyze: Fn = async (nl, query) => {
+  const parse = (r: Model<any, any>[]) => r.map((m: any) => m.slug);
   const [
     lotFeatures,
     outdoorFeatures,
@@ -26,11 +30,11 @@ const analyze: Fn = async (nl, query) => {
     viewTypes,
     propertyTypes
   ] = await Promise.all([
-    Models.LotFeature.findAll({ raw: true }),
-    Models.OutdoorFeature.findAll({ raw: true }),
-    Models.IndoorFeature.findAll({ raw: true }),
-    Models.ViewType.findAll({ raw: true }),
-    Models.PropertyType.findAll({ raw: true })
+    Models.LotFeature.findAll({ raw: true }).then(parse),
+    Models.OutdoorFeature.findAll({ raw: true }).then(parse),
+    Models.IndoorFeature.findAll({ raw: true }).then(parse),
+    Models.ViewType.findAll({ raw: true }).then(parse),
+    Models.PropertyType.findAll({ raw: true }).then(parse)
   ]);
 
   const currentQuery: z.infer<(typeof ContextSchema.shape)["currentQuery"]> = {
@@ -48,17 +52,15 @@ const analyze: Fn = async (nl, query) => {
     LOCATION: RealEstateQuerySchema.Origin.parse(query)
   };
 
-  const context = stringify(
-    ContextSchema.parse({
-      indoorFeatures,
-      outdoorFeatures,
-      lotFeatures,
-      viewTypes,
-      propertyTypes,
-      intents,
-      currentQuery
-    })
-  );
+  const context = stringify<Context>({
+    indoorFeatures,
+    outdoorFeatures,
+    lotFeatures,
+    viewTypes,
+    propertyTypes,
+    intents,
+    currentQuery
+  });
 
   const schema = stringify(zodToJsonSchema(ContextSchema));
 
