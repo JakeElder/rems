@@ -164,6 +164,7 @@ type InputSessionState =
   | "INACTIVE"
   | "INPUTTING"
   | "LISTENING"
+  | "ANALYZING"
   | "RESOLVING"
   | "RESOLVED"
   | "COMMITTED";

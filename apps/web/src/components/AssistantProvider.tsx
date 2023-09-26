@@ -233,20 +233,14 @@ const AssistantProvider = ({ children }: Props) => {
         ]);
 
         if (c.type === "ANALYSIS") {
+          dispatch({ type: "ANALYSIS_COMPLETE", capability: c.capability });
+
           if (c.capability === "CLEAR_QUERY") {
             reset(true);
           }
 
           if (c.capability === "NEW_QUERY") {
             reset(false);
-          }
-
-          if (c.capability === "REFINE_QUERY" || c.capability === "NEW_QUERY") {
-            dispatch({ type: "REFINING_QUERY" });
-          }
-
-          if (c.capability === "RESPOND_GENERAL_QUERY") {
-            dispatch({ type: "RESPONDING_GENERAL_QUERY" });
           }
         }
 

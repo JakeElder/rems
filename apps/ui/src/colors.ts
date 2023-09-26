@@ -61,18 +61,25 @@ export const INPUT_PALETTE: Record<InputSession["state"], InputPalette> = {
   INPUTTING: INPUT_INPUTTING,
   LISTENING: INPUT_INPUTTING,
 
+  ANALYZING: {
+    borderColor: "#ecbb56",
+    backgroundColor: "#f5f5f5",
+    color: "#ebdbbc"
+  },
+
+  RESOLVING: {
+    borderColor: "#439a5f",
+    backgroundColor: "#f5f5f5",
+    color: "#accbb6"
+  },
+
   RESOLVED: {
     borderColor: "#439a5f",
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f5f5",
     color: "#0e7730"
   },
 
-  COMMITTED: INPUT_NEUTRAL,
-  RESOLVING: {
-    borderColor: "#ecbb56",
-    backgroundColor: "#f5f5f5",
-    color: "#8c8c8c"
-  }
+  COMMITTED: INPUT_NEUTRAL
 };
 
 type MicPalette = {
@@ -94,6 +101,7 @@ export const MIC_PALETTE: Record<InputSession["state"], MicPalette> = {
     borderColor: "#fff"
   },
 
+  ANALYZING: MIC_DISABLED,
   INPUTTING: MIC_DISABLED,
   LISTENING: INPUT_INPUTTING,
 

@@ -21,7 +21,11 @@ export const Mock = (props: Props) => {
   const to = useRef<NodeJS.Timeout>();
   const [t, setCurrent] = useState(props.timeline);
   const [sessions, setSessions] = useState<InputSession[]>([
-    { id: "one", value: "", state: props.inputState }
+    {
+      id: "one",
+      value: "3 bedroom condos in Phuket",
+      state: props.inputState
+    }
   ]);
 
   useEffect(() => {

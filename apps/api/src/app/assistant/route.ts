@@ -21,7 +21,7 @@ import { pickBy } from "remeda";
 import prettyjson from "prettyjson";
 import { z } from "zod";
 import dedent from "ts-dedent";
-import update from "immutability-helper";
+// import update from "immutability-helper";
 import resolveProperties from "../properties/resolve";
 
 const { SpaceRequirements, BudgetAndAvailability, MapState } =
@@ -73,18 +73,18 @@ const arrayPatch = (
 
 const isPatchReaction = (r: Reaction): r is PatchReaction => r.type === "PATCH";
 
-const apply = (
-  query: ServerRealEstateQuery,
-  patches: PatchReaction[]
-): ServerRealEstateQuery => {
-  return patches.reduce((a, v) => {
-    if (v.patch.type === "ARRAY") {
-      return update(a, { $merge: { [v.patch.key]: v.patch.value } });
-    } else {
-      return update(a, { $merge: v.patch.data });
-    }
-  }, query);
-};
+// const apply = (
+//   query: ServerRealEstateQuery,
+//   patches: PatchReaction[]
+// ): ServerRealEstateQuery => {
+//   return patches.reduce((a, v) => {
+//     if (v.patch.type === "ARRAY") {
+//       return update(a, { $merge: { [v.patch.key]: v.patch.value } });
+//     } else {
+//       return update(a, { $merge: v.patch.data });
+//     }
+//   }, query);
+// };
 
 type Stream = (args: {
   input: string;
@@ -286,21 +286,21 @@ const stream: Stream = (props) => async (c) => {
   ) {
     const reactions = resolutions.filter(isReaction).map((i) => i.reaction);
 
-    const nextQuery = apply(query, reactions.filter(isPatchReaction));
-    const [before, after] = await Promise.all([
-      resolveProperties(query),
-      resolveProperties(nextQuery)
-    ]);
+    // const nextQuery = apply(query, reactions.filter(isPatchReaction));
+    // const [before, after] = await Promise.all([
+    //   resolveProperties(query),
+    //   resolveProperties(nextQuery)
+    // ]);
 
     const summary: Interaction = {
       type: capability,
       input,
       analysis: await analyze(),
       reactions,
-      result: {
-        before: before.pagination,
-        after: after.pagination
-      }
+      // result: {
+      //   before: before.pagination,
+      //   after: after.pagination
+      // }
     };
 
     send({ type: "SUMMARY", summary });

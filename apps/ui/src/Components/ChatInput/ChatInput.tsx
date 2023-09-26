@@ -29,13 +29,14 @@ const useHideShow = (show: boolean) => {
 };
 
 const Status = ({ state }: { state: InputSession["state"] }) => {
-  const loader = useHideShow(state === "RESOLVING");
+  const analyzing = useHideShow(state === "ANALYZING");
+  const resolving = useHideShow(state === "RESOLVING");
   const check = useHideShow(state === "RESOLVED");
   const inputting = useHideShow(state === "LISTENING" || state === "INPUTTING");
 
   return (
     <div className={css["state"]}>
-      {loader(
+      {resolving(
         (style, show) =>
           show && (
             <animated.div style={style} className={css["loader"]}>
@@ -47,9 +48,29 @@ const Status = ({ state }: { state: InputSession["state"] }) => {
                 wrapperStyle={{}}
                 wrapperClass="blocks-wrapper"
                 colors={
-                  c("#ecbb56")
+                  c(INPUT_PALETTE["RESOLVING"].borderColor)
                     .analogous(5)
-                    .map((c) => c.toString()) as any
+                    .map((c) => c.setAlpha(0.25).toString()) as any
+                }
+              />
+            </animated.div>
+          )
+      )}
+      {analyzing(
+        (style, show) =>
+          show && (
+            <animated.div style={style} className={css["loader"]}>
+              <ColorRing
+                visible={true}
+                height={38}
+                width={38}
+                ariaLabel="blocks-loading"
+                wrapperStyle={{}}
+                wrapperClass="blocks-wrapper"
+                colors={
+                  c(INPUT_PALETTE["ANALYZING"].borderColor)
+                    .analogous(5)
+                    .map((c) => c.setAlpha(0.2).toString()) as any
                 }
               />
             </animated.div>

@@ -72,6 +72,10 @@ const analyze: Fn = async (nl, query) => {
       <p>Here is additional context to assist with the analysis: `{context}`</p>
       <p>Here is the schema of the context: `{schema}`</p>
       <p>The next message is the users input.</p>
+      <p>
+        Ensure REFINE_SPACE_REQUIREMENTS is set when the user specifies the
+        number of bedrooms.
+      </p>
     </>
   );
 

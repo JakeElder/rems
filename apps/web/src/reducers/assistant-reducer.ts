@@ -1,4 +1,4 @@
-import { InputSession, AssistantState } from "@rems/types";
+import { InputSession, AssistantState, CapabilityCode } from "@rems/types";
 import uuid from "short-uuid";
 
 type ComponentState = {
@@ -12,6 +12,7 @@ type ComponentState = {
 type ComponentAction =
   | { type: "EMPTY_SUBMISSION" }
   | { type: "START_ASSISTANT_REQUEST" }
+  | { type: "ANALYSIS_COMPLETE"; capability: CapabilityCode }
   | { type: "SUCCESSFUL_ASSISTANT_REQUEST" }
   | { type: "SESSION_COMPLETE" }
   | { type: "INPUT_IDLE" }
@@ -55,7 +56,7 @@ const assistantReducer = (
           ...prev.sessions.slice(0, -1),
           {
             ...prev.sessions[prev.sessions.length - 1],
-            state: "RESOLVING"
+            state: "ANALYZING"
           }
         ]
       };
@@ -184,11 +185,36 @@ const assistantReducer = (
     case "OPEN_CLOSE":
       return { ...prev, open: action.open };
 
-    case "REFINING_QUERY":
-      return { ...prev, assistantState: "REFINING_QUERY" };
-
-    case "RESPONDING_GENERAL_QUERY":
-      return { ...prev, assistantState: "CHATTING" };
+    case "ANALYSIS_COMPLETE":
+      switch (action.capability) {
+        case "NEW_QUERY":
+        case "REFINE_QUERY":
+          return {
+            ...prev,
+            assistantState: "REFINING_QUERY",
+            sessions: [
+              ...prev.sessions.slice(0, -1),
+              {
+                ...prev.sessions[prev.sessions.length - 1],
+                state: "RESOLVING"
+              }
+            ]
+          };
+        case "RESPOND_GENERAL_QUERY":
+          return {
+            ...prev,
+            assistantState: "CHATTING",
+            sessions: [
+              ...prev.sessions.slice(0, -1),
+              {
+                ...prev.sessions[prev.sessions.length - 1],
+                state: "RESOLVING"
+              }
+            ]
+          };
+        default:
+          return { ...prev };
+      }
 
     default:
       throw new Error("Invalid action type");
