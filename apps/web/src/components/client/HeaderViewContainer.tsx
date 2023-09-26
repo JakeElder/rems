@@ -5,9 +5,11 @@ import { ContactModal, Header, SlideNav } from "@rems/ui";
 import HeaderChatInputContainer from "./HeaderChatInputContainer";
 import useContactForm from "@/hooks/use-contact-form";
 
-type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode">;
+type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode"> & {
+  chat?: boolean;
+};
 
-const HeaderViewContainer = ({ ...props }: Props) => {
+const HeaderViewContainer = ({ chat, ...props }: Props) => {
   const [slideNavOpen, setSlideNavOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
 
@@ -39,7 +41,7 @@ const HeaderViewContainer = ({ ...props }: Props) => {
       <Header.Main>
         <Header.Logo />
         <Header.ChatInput>
-          <HeaderChatInputContainer />
+          {chat ? <HeaderChatInputContainer /> : null}
         </Header.ChatInput>
         <Header.NavAndContact />
       </Header.Main>

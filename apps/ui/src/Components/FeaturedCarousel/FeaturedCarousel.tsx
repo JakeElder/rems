@@ -67,7 +67,7 @@ const FeaturedCarousel = ({ properties, duration = 5000 }: Props) => {
           <div className={css["intro-and-journey-description"]}>
             <div className={css["intro"]}>
               <h1 className={css["h1"]}>
-                Bangkoks #1 Luxury Real Estate Marketplace
+                The Worlds #1 AI Powered Real Estate Management System
               </h1>
               <p className={css["strapline"]}></p>
             </div>
