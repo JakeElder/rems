@@ -212,6 +212,18 @@ const assistantReducer = (
               }
             ]
           };
+        case "CLEAR_QUERY":
+          return {
+            ...prev,
+            state: "CLEARING_QUERY",
+            sessions: [
+              ...prev.sessions.slice(0, -1),
+              {
+                ...prev.sessions[prev.sessions.length - 1],
+                state: "RESOLVING"
+              }
+            ]
+          };
         case "OPEN_ASSISTANT":
           return {
             ...prev,

@@ -37,13 +37,8 @@ const analyze: Fn = async (interaction) => {
         <li>2. Analayzed the users input</li>
         <li>3. Performed reaction(s) based on the analysis</li>
       </ul>
-      <p>
-        Now it is time to respond to the user, in natural language to inform
-        them of the assistance you have provided, and if appropriate - offer
-        insight on how they may issue further commands to aid in their task.
-      </p>
+      <p>Respond to the user in natural language</p>
       <p>Here is additional context: `{context}`</p>
-      <p>This is the schema of the context: `{schema}`</p>
       <p>Some notes to take in consideration;</p>
       <ul>
         <li>
@@ -69,7 +64,7 @@ const analyze: Fn = async (interaction) => {
   );
 
   const request: ChatCompletionRequest = {
-    model: "gpt-3.5-turbo",
+    model: "gpt-4",
     messages: [{ role: "system", content: instruction }],
     function_call: { name: "f" },
     functions: [
