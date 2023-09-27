@@ -60,6 +60,10 @@ const analyze: Fn = async (interaction) => {
           Speak in past tense. The interaction provided in the context has
           already occured, so you are informing the user what you have done
         </li>
+        <li>
+          Do not inform user of intended actions, IE "I will retrieve the
+          properties"
+        </li>
       </ul>
     </>
   );

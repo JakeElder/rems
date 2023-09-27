@@ -1,20 +1,26 @@
-import { ChatCompletionRequest, RemiResponse, txt, execute } from "@/remi";
+import {
+  ChatCompletionRequest,
+  RemiResponse,
+  txt,
+  execute,
+  stringify
+} from "@/remi";
 import { AiRefinement } from "@rems/schemas";
-import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import RefineCaveats from "../components/RefineCaveats";
+import { Z } from "@rems/types";
 
-AiRefinement.Location.ReturnsSchema
+const { ArgsSchema, ReturnsSchema, ContextSchema } = AiRefinement.Location;
 
-const { ArgsSchema, ReturnsSchema } = AiRefinement.Location;
+type Args = Z<typeof ArgsSchema>;
+type Context = Z<typeof ContextSchema>;
+type Returns = Z<typeof ReturnsSchema>;
+type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-type Args = z.infer<typeof ArgsSchema>;
-type Returns = z.infer<typeof ReturnsSchema>;
-type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
-
-const location: Fn = async (nl) => {
+const location: Fn = async (context: Context) => {
+  const schema = stringify(zodToJsonSchema(ContextSchema));
   const request: ChatCompletionRequest = {
-    model: "gpt-3.5-turbo-0613",
+    model: "gpt-4",
     messages: [
       {
         role: "system",
@@ -25,25 +31,16 @@ const location: Fn = async (nl) => {
               real estate website. Your task is to process their input and
               identify the "search origin" within their query.
             </p>
-            <RefineCaveats>
-              <li>
-                It may be possible that the user has not specified the location.
-                In this eventuality, it is fine to leave the relevant value null
-              </li>
-            </RefineCaveats>
+            <p>Here is context: `{stringify<Context>(context)}`</p>
+            <p>This is schema context: `{schema}`</p>
           </>
         )
-      },
-      {
-        role: "user",
-        content: nl
       }
     ],
     function_call: { name: "f" },
     functions: [
       {
         name: "f",
-        description: txt(<>Updates the location based on the users input.</>),
         parameters: zodToJsonSchema(AiRefinement.Location.ReturnsSchema)
       }
     ]

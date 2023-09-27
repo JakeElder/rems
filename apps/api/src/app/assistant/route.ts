@@ -9,10 +9,10 @@ import {
   ServerRealEstateQuery,
   PatchReactionIntentResolution,
   AssistantMessage,
-  Reaction,
-  Timeline
+  ChatContext,
+  CapabilityCode
 } from "@rems/types";
-import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
+import { ChatContextSchema, RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
@@ -21,7 +21,6 @@ import { pickBy } from "remeda";
 import prettyjson from "prettyjson";
 import { z } from "zod";
 import dedent from "ts-dedent";
-// import update from "immutability-helper";
 import resolveProperties from "../properties/resolve";
 
 const { SpaceRequirements, BudgetAndAvailability, MapState } =
@@ -71,29 +70,14 @@ const arrayPatch = (
   }
 });
 
-const isPatchReaction = (r: Reaction): r is PatchReaction => r.type === "PATCH";
-
-// const apply = (
-//   query: ServerRealEstateQuery,
-//   patches: PatchReaction[]
-// ): ServerRealEstateQuery => {
-//   return patches.reduce((a, v) => {
-//     if (v.patch.type === "ARRAY") {
-//       return update(a, { $merge: { [v.patch.key]: v.patch.value } });
-//     } else {
-//       return update(a, { $merge: v.patch.data });
-//     }
-//   }, query);
-// };
-
 type Stream = (args: {
   input: string;
   query: ServerRealEstateQuery;
-  timeline: Timeline;
+  chatContext: ChatContext;
 }) => UnderlyingDefaultSource["start"];
 
-const stream: Stream = (props) => async (c) => {
-  const { input, query } = props;
+const stream: Stream = (args) => async (c) => {
+  const { input, query, chatContext } = args;
 
   const log = remi.logger.init(input);
 
@@ -108,11 +92,12 @@ const stream: Stream = (props) => async (c) => {
 
   const analyze = memoize(async () => {
     const [i, c] = await Promise.all([
-      remi.capability.analyze(input, query),
+      remi.capability.analyze({ input, query, chatContext }),
       remi.capability.identify(input)
     ]);
 
     if (!i.ok || !c.ok) {
+      console.log(i, c);
       throw new Error();
     }
 
@@ -125,11 +110,6 @@ const stream: Stream = (props) => async (c) => {
 
   analyze();
 
-  const intends = async (intent: IntentCode) => {
-    const { intents } = await analyze();
-    return intents.includes(intent);
-  };
-
   const resolve = async <T extends RemiFn>(
     intent: IntentCode,
     fn: T,
@@ -137,8 +117,15 @@ const stream: Stream = (props) => async (c) => {
       res: Extract<Awaited<ReturnType<T>>, { ok: true }>["data"]
     ) => Promise<PatchReaction | null>
   ): Promise<IntentResolution> => {
-    const op = await intends(intent);
-    if (!op) {
+    const { intents, capability } = await analyze();
+
+    const OP_CAPABILITIES: CapabilityCode[] = [
+      "NEW_QUERY",
+      "CLEAR_QUERY",
+      "REFINE_QUERY"
+    ];
+
+    if (!intents.includes(intent) || !OP_CAPABILITIES.includes(capability)) {
       return { type: "NOOP", intent };
     }
 
@@ -163,7 +150,7 @@ const stream: Stream = (props) => async (c) => {
      */
     resolve(
       "REFINE_LOCATION",
-      () => remi.refine.location(input),
+      () => remi.refine.location({ input, chatContext }),
       async ({ origin }) => {
         if (!origin) return null;
 
@@ -286,21 +273,12 @@ const stream: Stream = (props) => async (c) => {
   ) {
     const reactions = resolutions.filter(isReaction).map((i) => i.reaction);
 
-    // const nextQuery = apply(query, reactions.filter(isPatchReaction));
-    // const [before, after] = await Promise.all([
-    //   resolveProperties(query),
-    //   resolveProperties(nextQuery)
-    // ]);
-
     const summary: Interaction = {
       type: capability,
+      chatContext,
       input,
       analysis: await analyze(),
-      reactions,
-      // result: {
-      //   before: before.pagination,
-      //   after: after.pagination
-      // }
+      reactions
     };
 
     send({ type: "SUMMARY", summary });
@@ -320,6 +298,7 @@ const stream: Stream = (props) => async (c) => {
   if (capability === "RESPOND_GENERAL_QUERY") {
     const properties = await resolveProperties(query);
     const res = await remi.capability.respondGeneral({
+      chatContext,
       input,
       query,
       properties: properties.pagination,
@@ -356,7 +335,7 @@ export async function POST(req: NextRequest) {
       start: stream({
         input: data.nl,
         query: RealEstateQuerySchema.Server.parse(data.query),
-        timeline: TimelineSchema.parse(data.timeline)
+        chatContext: ChatContextSchema.parse(data.chatContext)
       })
     }),
     {

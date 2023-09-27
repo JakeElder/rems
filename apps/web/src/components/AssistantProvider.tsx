@@ -18,6 +18,7 @@ import assistantReducer from "reducers/assistant-reducer";
 import { Observable } from "rxjs";
 import uuid from "short-uuid";
 import { useDebouncedCallback } from "use-debounce";
+import timelineToChatContext from "utils/timeline-to-chat-context";
 
 const NEXT_PUBLIC_REMS_API_URL = process.env.NEXT_PUBLIC_REMS_API_URL;
 
@@ -126,7 +127,7 @@ const AssistantProvider = ({ children }: Props) => {
       fetch(`${NEXT_PUBLIC_REMS_API_URL}/assistant`, {
         method: "POST",
         body: JSON.stringify({
-          timeline: $timeline.get(),
+          chatContext: timelineToChatContext($timeline.get()),
           query: serverQuery,
           nl: session.value
         })
@@ -272,7 +273,7 @@ const AssistantProvider = ({ children }: Props) => {
             dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
             setTimeout(() => {
               dispatch({ type: "SESSION_COMPLETE" });
-            }, 1200);
+            }, 400);
           });
         }
       }

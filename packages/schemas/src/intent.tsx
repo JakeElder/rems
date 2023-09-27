@@ -16,6 +16,7 @@ export const IntentCodeSchema = z
     "REFINE_MAP_STATE",
     "PRESENT_GENERAL_INFORMATION",
     "CLEAR_QUERY",
+    "RECEIVE_GENERAL_INFORMATION",
     "UNKNOWN"
   ])
   .describe(txt(<>A unique identifier for the intent</>));

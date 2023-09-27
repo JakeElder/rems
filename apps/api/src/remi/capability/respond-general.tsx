@@ -6,16 +6,16 @@ import {
   stringify
 } from "@/remi";
 import { AiCapability } from "@rems/schemas";
-import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { ChatCompletionRequestMessage } from "openai";
+import { Z } from "@rems/types";
 
 const { ArgsSchema, ReturnsSchema, ContextSchema } =
   AiCapability.RespondGeneral;
 
-type Args = z.infer<typeof ArgsSchema>;
-type Context = z.infer<typeof ContextSchema>;
-type Returns = z.infer<typeof ReturnsSchema>;
+type Args = Z<typeof ArgsSchema>;
+type Context = Z<typeof ContextSchema>;
+type Returns = Z<typeof ReturnsSchema>;
 type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
 const analyze: Fn = async (context) => {

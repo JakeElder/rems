@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { txt } from "../utils";
 import { InteractionSchema } from "../interaction";
+import { ChatContextSchema } from "../chat-context";
 
 export const ArgsSchema = z.tuple([InteractionSchema]);
 

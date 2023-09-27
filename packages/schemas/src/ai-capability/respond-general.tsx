@@ -2,10 +2,11 @@ import { z } from "zod";
 import { txt } from "../utils";
 import NlInputSchema from "../nl-input";
 import { Pagination } from "../real-estate-query";
-import { CapabilitySchema, RealEstateQuerySchema } from "..";
+import { CapabilitySchema, ChatContextSchema, RealEstateQuerySchema } from "..";
 
 export const ContextSchema = z.object({
   input: NlInputSchema,
+  chatContext: ChatContextSchema,
   query: RealEstateQuerySchema.Server.extend({}).describe(
     txt(<>The currently active query</>)
   ),

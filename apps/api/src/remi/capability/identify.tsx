@@ -72,17 +72,18 @@ const analyze: Fn = async (nl) => {
       )
     }
   });
-  const schema = stringify(zodToJsonSchema(ContextSchema));
 
   const instruction: ChatCompletionRequestMessage["content"] = txt(
     <>
       <p>
         You are an assistant responsible for helping the user of a real estate
-        website. Your task is to analyze their input and assess which of our
-        capabilities should be used to react to the user.
+        website. Analyze their input and choose a capability to react with.
       </p>
-      <p>Here is additional context: `{context}`</p>
-      <p>This is the schema of the context: `{schema}`</p>
+      <p>
+        Prefer REFINE_QUERY over NEW_QUERY. Only set NEW_QUERY when it is clear
+        the user wants to start a new search entirely.
+      </p>
+      <p>Here is context: `{context}`</p>
     </>
   );
 

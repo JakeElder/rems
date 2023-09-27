@@ -9,9 +9,9 @@ import {
 import { AiCapability, RealEstateQuerySchema } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import * as Models from "@/models";
 import { ChatCompletionRequestMessage } from "openai";
 import { Z } from "@rems/types";
+import * as Models from "@/models";
 import { Model } from "sequelize";
 
 const { ArgsSchema, ReturnsSchema, ContextSchema } = AiCapability.Analyze;
@@ -19,9 +19,9 @@ const { ArgsSchema, ReturnsSchema, ContextSchema } = AiCapability.Analyze;
 type Args = Z<typeof ArgsSchema>;
 type Context = Z<typeof ContextSchema>;
 type Returns = Z<typeof ReturnsSchema>;
-type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
+type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-const analyze: Fn = async (nl, query) => {
+const analyze: Fn = async ({ input, query, chatContext }) => {
   const parse = (r: Model<any, any>[]) => r.map((m: any) => m.slug);
   const [
     lotFeatures,
@@ -53,6 +53,8 @@ const analyze: Fn = async (nl, query) => {
   };
 
   const context = stringify<Context>({
+    chatContext,
+    input,
     indoorFeatures,
     outdoorFeatures,
     lotFeatures,
@@ -62,39 +64,30 @@ const analyze: Fn = async (nl, query) => {
     currentQuery
   });
 
-  const schema = stringify(zodToJsonSchema(ContextSchema));
-
   const instruction: ChatCompletionRequestMessage["content"] = txt(
     <>
       <p>
         You are Remi, an assistant responsible for helping the user of a real
-        estate website. Your task is to process their input and analyze it, so
-        that it can be further processed and actioned.
+        estate website. Your task is to process their input and analyze it ready
+        for further action
       </p>
-      <p>Here is additional context to assist with the analysis: `{context}`</p>
-      <p>Here is the schema of the context: `{schema}`</p>
-      <p>The next message is the users input.</p>
+      <p>Here is context: `{context}`</p>
       <p>
-        Ensure REFINE_SPACE_REQUIREMENTS is set when the user specifies the
-        number of bedrooms.
+        If the user asks to show properties in an area, REFINE_LOCATION should
+        be set.
+      </p>
+      <p>
+        If the user specifies a number of bedrooms, REFINE_SPACE_REQUIREMENTS
+        should be set
       </p>
     </>
   );
 
   const request: ChatCompletionRequest = {
     model: "gpt-4",
-    messages: [
-      { role: "system", content: instruction },
-      { role: "user", content: nl }
-    ],
+    messages: [{ role: "system", content: instruction }],
     function_call: { name: "f" },
-    functions: [
-      {
-        name: "f",
-        description: txt(<>Further processes a users input/command.</>),
-        parameters: zodToJsonSchema(ReturnsSchema)
-      }
-    ]
+    functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]
   };
 
   return execute(request, ReturnsSchema);

@@ -1,11 +1,11 @@
 import { z } from "zod";
 import NlInputSchema from "../nl-input";
 import { txt } from "../utils";
-import { IntentSchema, RealEstateQuerySchema } from "..";
-
-export const ArgsSchema = z.tuple([NlInputSchema, RealEstateQuerySchema.URL]);
+import { ChatContextSchema, IntentSchema, RealEstateQuerySchema } from "..";
 
 export const ContextSchema = z.object({
+  chatContext: ChatContextSchema,
+  input: NlInputSchema,
   intents: z.lazy(() => z.array(IntentSchema)),
   indoorFeatures: z.array(z.string()),
   outdoorFeatures: z.array(z.string()),
@@ -25,6 +25,12 @@ export const ContextSchema = z.object({
     PROPERTY_TYPES: RealEstateQuerySchema.Arrays.shape["property-types"],
     VIEW_TYPES: RealEstateQuerySchema.Arrays.shape["view-types"]
   })
+});
+
+export const ArgsSchema = z.object({
+  input: NlInputSchema,
+  query: RealEstateQuerySchema.Server,
+  chatContext: ChatContextSchema
 });
 
 export const ReturnsSchema = z

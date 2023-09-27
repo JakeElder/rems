@@ -23,12 +23,16 @@ const capabilities: Capability[] = [
     id: 2,
     code: "REFINE_QUERY",
     name: "Refine Query",
-    description: txt(<>Remi is able to refine queries.</>),
+    description: txt(
+      <>
+        Remi is able to refine queries. Prefer to refine over start a new
+        search. It is better to refine over start new when there is ambiguity.
+      </>
+    ),
     exampleTriggers: [
       txt(<>Actually, 2 bedrooms is enough</>),
       txt(<>Remove the 'City View' filter</>),
-      txt(<>I should be able to bring my dog</>),
-      txt(<>It needs to have a pool</>)
+      txt(<>I should be able to bring my dog</>)
     ]
   },
 

@@ -43,7 +43,12 @@ import {
   UserWrittenInteractionSchema,
   UserInteractionSchema,
   UserPatchInteractionSchema,
-  QueryModificationInteractionSchema
+  QueryModificationInteractionSchema,
+  LanguageBasedContextEntrySchema,
+  ChatContextEntrySchema,
+  ChatContextSchema,
+  UserTimelineEventSchema,
+  AssistantTimelineEventSchema
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
@@ -301,9 +306,12 @@ export type SummaryAssistantMessage = Z<typeof SummaryAssistantMessageSchema>;
 export type AssistantMessage = Z<typeof AssistantMessageSchema>;
 
 export type TimelineEvent = Z<typeof TimelineEventSchema>;
+export type UserTimelineEvent = Z<typeof UserTimelineEventSchema>;
+export type AssitantTimelineEvent = Z<typeof AssistantTimelineEventSchema>;
 export type Timeline = Z<typeof TimelineSchema>;
 
 export type Interaction = Z<typeof InteractionSchema>;
+
 export type Logger = (ms: number, message: AssistantMessage) => void;
 
 export type ScalarKey = keyof RealEstateQueryScalars;
@@ -312,3 +320,9 @@ export type ArrayKey = keyof RealEstateQueryArrays;
 export type QueryModificationInteraction = Z<
   typeof QueryModificationInteractionSchema
 >;
+
+export type LanguageBasedContextEntry = Z<
+  typeof LanguageBasedContextEntrySchema
+>;
+export type ChatContextEntry = Z<typeof ChatContextEntrySchema>;
+export type ChatContext = Z<typeof ChatContextSchema>;

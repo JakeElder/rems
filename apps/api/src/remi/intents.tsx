@@ -198,7 +198,7 @@ const intents: Intent[] = [
     id: 12,
     code: "CLEAR_QUERY",
     name: "Resets the Search",
-    description: txt(<>The user wants to reset the listings to default.</>),
+    description: txt(<>The user wants to reset the listings to default</>),
     examples: [
       {
         input: "Clear the search",
@@ -208,9 +208,24 @@ const intents: Intent[] = [
   },
 
   {
+    id: 13,
+    code: "RECEIVE_GENERAL_INFORMATION",
+    name: "Receive General Information",
+    description: txt(
+      <>The user is trying to extrapolate general information</>
+    ),
+    examples: [
+      {
+        input: "What's the land area of Chiang Mai",
+        matches: ["What's the land area of Chiang Mai"]
+      }
+    ]
+  },
+
+  {
     id: 100,
     code: "UNKNOWN",
-    name: "It is unclear what the users intent is.",
+    name: "Unknown",
     description: txt(
       <>
         The user has issued a command that is either incomprehnsible, or lacks
