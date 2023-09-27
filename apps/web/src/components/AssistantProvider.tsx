@@ -265,7 +265,9 @@ const AssistantProvider = ({ children }: Props) => {
         }
 
         if (c.type === "REACTION" && c.reaction.type === "LANGUAGE_BASED") {
-          responsePromise = Sound.speak(c.reaction.message);
+          responsePromise = state.open
+            ? Sound.speak(c.reaction.message)
+            : Promise.resolve();
         }
 
         if (c.type === "UPDATE" && c.phase === "COMPLETE") {
