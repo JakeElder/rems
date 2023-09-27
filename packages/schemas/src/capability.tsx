@@ -9,6 +9,7 @@ export const CapabilityCodeSchema = z
     "SHOW_PROPERTY",
     "REQUEST_VIEWING",
     "RESPOND_GENERAL_QUERY",
+    "OPEN_ASSISTANT",
     "REQUEST_CLARIFICATION"
   ])
   .describe(txt(<>A unique identifier for the capability</>));

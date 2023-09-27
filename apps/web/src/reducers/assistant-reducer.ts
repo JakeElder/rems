@@ -123,7 +123,7 @@ const assistantReducer = (
       return { ...prev, enterDown: false };
 
     case "SPACE_KEY_DOWN":
-      return { ...prev, spaceDown: true, open: true };
+      return { ...prev, spaceDown: true };
 
     case "SPACE_KEY_UP":
       return { ...prev, spaceDown: false };
@@ -204,6 +204,18 @@ const assistantReducer = (
           return {
             ...prev,
             state: "CHATTING",
+            sessions: [
+              ...prev.sessions.slice(0, -1),
+              {
+                ...prev.sessions[prev.sessions.length - 1],
+                state: "RESOLVING"
+              }
+            ]
+          };
+        case "OPEN_ASSISTANT":
+          return {
+            ...prev,
+            state: "OPENING",
             sessions: [
               ...prev.sessions.slice(0, -1),
               {

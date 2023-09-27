@@ -5,10 +5,12 @@ import { observable } from "@legendapp/state";
 import {
   InputSession,
   AssistantMessage,
+  AssistantPayload,
   AssistantState,
   Timeline,
   TimelineEvent,
-  Interaction
+  Interaction,
+  AnalysisAssistantMessage
 } from "@rems/types";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import SpeechRecognition, {
@@ -124,13 +126,17 @@ const AssistantProvider = ({ children }: Props) => {
 
   const request = () =>
     new Observable<AssistantMessage>((sub) => {
+      const payload: AssistantPayload = {
+        chatContext: timelineToChatContext($timeline.get()),
+        query: serverQuery,
+        input: session.value,
+        open: state.open,
+        state: state.state
+      };
+
       fetch(`${NEXT_PUBLIC_REMS_API_URL}/assistant`, {
         method: "POST",
-        body: JSON.stringify({
-          chatContext: timelineToChatContext($timeline.get()),
-          query: serverQuery,
-          nl: session.value
-        })
+        body: JSON.stringify(payload)
       }).then((res) => {
         if (!res.ok || !res.body) {
           sub.error();
@@ -218,6 +224,7 @@ const AssistantProvider = ({ children }: Props) => {
     ]);
     const req = request();
 
+    let analysis: AnalysisAssistantMessage;
     let summary: Interaction;
     let responsePromise: Promise<void> = Promise.resolve();
 
@@ -234,6 +241,7 @@ const AssistantProvider = ({ children }: Props) => {
         ]);
 
         if (c.type === "ANALYSIS") {
+          analysis = c;
           dispatch({ type: "ANALYSIS_COMPLETE", capability: c.capability });
 
           if (c.capability === "CLEAR_QUERY") {
@@ -264,10 +272,18 @@ const AssistantProvider = ({ children }: Props) => {
           }
         }
 
+        if (
+          c.type === "REACTION" &&
+          c.reaction.type === "OPEN_CLOSE_ASSISTANT"
+        ) {
+          onOpenClose(c.reaction.open);
+        }
+
         if (c.type === "REACTION" && c.reaction.type === "LANGUAGE_BASED") {
-          responsePromise = state.open
-            ? Sound.speak(c.reaction.message)
-            : Promise.resolve();
+          responsePromise =
+            state.open || analysis.capability === "OPEN_ASSISTANT"
+              ? Sound.speak(c.reaction.message)
+              : Promise.resolve();
         }
 
         if (c.type === "UPDATE" && c.phase === "COMPLETE") {

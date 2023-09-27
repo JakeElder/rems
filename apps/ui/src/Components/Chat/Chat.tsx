@@ -49,6 +49,7 @@ const OpenClose = ({
 
 const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
   const map: Record<Props["state"], GroupedAssistantState> = {
+    OPENING: "INTERACTING",
     CHATTING: "INTERACTING",
     SLEEPING: "IDLE",
     THINKING: "THINKING",

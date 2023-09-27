@@ -5,6 +5,8 @@ export * as RealEstateQuerySchema from "./real-estate-query";
 
 export * from "./app-config";
 export * from "./assistant-message";
+export * from "./assistant-payload";
+export * from "./assistant-state";
 export * from "./capability";
 export * from "./chat-context";
 export * from "./contact-form";

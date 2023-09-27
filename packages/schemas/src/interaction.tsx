@@ -13,7 +13,7 @@ const StandardInteractionSchema = z.object({
 
 export const QueryModificationInteractionSchema = z
   .object({
-    type: z.enum(["REFINE_QUERY", "NEW_QUERY", "CLEAR_QUERY"])
+    type: z.enum(["REFINE_QUERY", "NEW_QUERY", "CLEAR_QUERY", "OPEN_ASSISTANT"])
   })
   .merge(StandardInteractionSchema);
 

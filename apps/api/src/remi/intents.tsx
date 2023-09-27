@@ -5,7 +5,6 @@ const intents: Intent[] = [
   {
     id: 1,
     code: "REFINE_INDOOR_FEATURES",
-    name: "Refine Indoor Features",
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of
@@ -23,7 +22,6 @@ const intents: Intent[] = [
   {
     id: 2,
     code: "REFINE_OUTDOOR_FEATURES",
-    name: "Refine Outdoor Features",
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of
@@ -41,7 +39,6 @@ const intents: Intent[] = [
   {
     id: 3,
     code: "REFINE_LOT_FEATURES",
-    name: "Refine Lot Features",
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of lot
@@ -59,7 +56,6 @@ const intents: Intent[] = [
   {
     id: 4,
     code: "REFINE_VIEW_TYPES",
-    name: "Refine View Types",
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of view
@@ -77,7 +73,6 @@ const intents: Intent[] = [
   {
     id: 5,
     code: "REFINE_PROPERTY_TYPES",
-    name: "Refine Property Types",
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of
@@ -95,7 +90,6 @@ const intents: Intent[] = [
   {
     id: 6,
     code: "REFINE_LOCATION",
-    name: "Refine Location",
     description: txt(
       <>The user wants to specify the search origin for their search</>
     ),
@@ -110,7 +104,6 @@ const intents: Intent[] = [
   {
     id: 7,
     code: "REFINE_PAGE",
-    name: "Refine Page",
     description: txt(<>The user wants to change either the current page </>),
     examples: [
       {
@@ -123,7 +116,6 @@ const intents: Intent[] = [
   {
     id: 8,
     code: "REFINE_SORT",
-    name: "Refine Sort",
     description: txt(<>The user wants to change the sort order</>),
     examples: [
       {
@@ -136,7 +128,6 @@ const intents: Intent[] = [
   {
     id: 9,
     code: "REFINE_SPACE_REQUIREMENTS",
-    name: "Refine Sort",
     description: txt(
       <>
         <p>The user wants to specify search criteria relating to space.</p>
@@ -160,7 +151,6 @@ const intents: Intent[] = [
   {
     id: 10,
     code: "REFINE_BUDGET_AVAILABILITY",
-    name: "Refine Budget & Availability",
     description: txt(
       <>
         The user wants to set their budget/whether they are looking to rent or
@@ -178,7 +168,6 @@ const intents: Intent[] = [
   {
     id: 11,
     code: "REFINE_MAP_STATE",
-    name: "Refine Map State",
     description: txt(
       <>The user wants to modify the state of the listings map</>
     ),
@@ -197,7 +186,6 @@ const intents: Intent[] = [
   {
     id: 12,
     code: "CLEAR_QUERY",
-    name: "Resets the Search",
     description: txt(<>The user wants to reset the listings to default</>),
     examples: [
       {
@@ -210,7 +198,6 @@ const intents: Intent[] = [
   {
     id: 13,
     code: "RECEIVE_GENERAL_INFORMATION",
-    name: "Receive General Information",
     description: txt(
       <>The user is trying to extrapolate general information</>
     ),
@@ -223,9 +210,20 @@ const intents: Intent[] = [
   },
 
   {
+    id: 14,
+    code: "OPEN_ASSISTANT",
+    description: txt(<>The user wants to open the assistant</>),
+    examples: [
+      {
+        input: "Hey Remi",
+        matches: ["Hey Remi"]
+      }
+    ]
+  },
+
+  {
     id: 100,
     code: "UNKNOWN",
-    name: "Unknown",
     description: txt(
       <>
         The user has issued a command that is either incomprehnsible, or lacks

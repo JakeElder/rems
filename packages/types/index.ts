@@ -48,7 +48,10 @@ import {
   ChatContextEntrySchema,
   ChatContextSchema,
   UserTimelineEventSchema,
-  AssistantTimelineEventSchema
+  AssistantTimelineEventSchema,
+  AssistantStateSchema,
+  AssistantPayloadSchema,
+  OpenCloseAssistantReactionSchema
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
@@ -180,13 +183,8 @@ export type InputSession = {
   state: InputSessionState;
 };
 
-export type AssistantState =
-  | "SLEEPING"
-  | "LISTENING"
-  | "THINKING"
-  | "REFINING_QUERY"
-  | "CLEARING_QUERY"
-  | "CHATTING";
+export type AssistantState = Z<typeof AssistantStateSchema>;
+export type AssistantPayload = Z<typeof AssistantPayloadSchema>;
 
 export type GroupedAssistantState =
   | "IDLE"
@@ -273,6 +271,9 @@ export type PatchReactionIntentResolution = Z<
 export type Reaction = Z<typeof ReactionSchema>;
 export type PatchReaction = Z<typeof PatchReactionSchema>;
 export type LanguageBasedReaction = Z<typeof LanguageBasedReactionSchema>;
+export type OpenCloseAssistantReaction = Z<
+  typeof OpenCloseAssistantReactionSchema
+>;
 
 export type RemiState = Z<typeof RemiStateSchema>;
 export type SleepingRemiState = Z<typeof SleepingRemiStateSchema>;

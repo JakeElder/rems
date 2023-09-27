@@ -31,6 +31,7 @@ const analyze: Fn = async (context) => {
         properties. It is your task to take the users input and respond. You
         should be polite and friendly with your response.
       </p>
+      <p>Ensure you're responding to the most recent message</p>
       <p>Here is additional context: `{stringify<Context>(context)}`</p>
       <p>This is the schema of the context: `{schema}`</p>
     </>

@@ -99,6 +99,14 @@ const capabilities: Capability[] = [
   },
 
   {
+    id: 7,
+    code: "OPEN_ASSISTANT",
+    name: "Open the assistant chat window",
+    description: txt(<>Remi can be in closed or open mode</>),
+    exampleTriggers: [txt(<>Hey, Remi</>)]
+  },
+
+  {
     id: 100,
     code: "REQUEST_CLARIFICATION",
     name: "Request Clarification",

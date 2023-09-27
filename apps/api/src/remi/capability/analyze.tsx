@@ -68,8 +68,8 @@ const analyze: Fn = async ({ input, query, chatContext }) => {
     <>
       <p>
         You are Remi, an assistant responsible for helping the user of a real
-        estate website. Your task is to process their input and analyze it ready
-        for further action
+        estate website. Your task is to process their input and analyze it for
+        their intent
       </p>
       <p>Here is context: `{context}`</p>
       <p>

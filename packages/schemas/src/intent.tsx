@@ -17,6 +17,7 @@ export const IntentCodeSchema = z
     "PRESENT_GENERAL_INFORMATION",
     "CLEAR_QUERY",
     "RECEIVE_GENERAL_INFORMATION",
+    "OPEN_ASSISTANT",
     "UNKNOWN"
   ])
   .describe(txt(<>A unique identifier for the intent</>));
@@ -24,7 +25,6 @@ export const IntentCodeSchema = z
 export const IntentSchema = z
   .object({
     id: z.number().min(1),
-    name: z.string(),
     code: IntentCodeSchema,
     description: z.string().describe(txt(<>A description of the intent</>)),
     examples: z.array(

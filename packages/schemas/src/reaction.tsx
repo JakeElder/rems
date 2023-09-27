@@ -13,7 +13,13 @@ export const LanguageBasedReactionSchema = z.object({
   message: z.string()
 });
 
+export const OpenCloseAssistantReactionSchema = z.object({
+  type: z.literal("OPEN_CLOSE_ASSISTANT"),
+  open: z.boolean()
+});
+
 export const ReactionSchema = z.discriminatedUnion("type", [
   PatchReactionSchema,
-  LanguageBasedReactionSchema
+  LanguageBasedReactionSchema,
+  OpenCloseAssistantReactionSchema
 ]);

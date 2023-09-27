@@ -9,10 +9,11 @@ import {
   ServerRealEstateQuery,
   PatchReactionIntentResolution,
   AssistantMessage,
-  ChatContext,
-  CapabilityCode
+  CapabilityCode,
+  AssistantPayload,
+  OpenCloseAssistantReaction
 } from "@rems/types";
-import { ChatContextSchema, RealEstateQuerySchema } from "@rems/schemas";
+import { AssistantPayloadSchema, RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
 import { nlToLocation } from "../../utils/nl-to-location";
 import { RemiFn } from "@/remi";
@@ -70,11 +71,7 @@ const arrayPatch = (
   }
 });
 
-type Stream = (args: {
-  input: string;
-  query: ServerRealEstateQuery;
-  chatContext: ChatContext;
-}) => UnderlyingDefaultSource["start"];
+type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
 const stream: Stream = (args) => async (c) => {
   const { input, query, chatContext } = args;
@@ -282,7 +279,6 @@ const stream: Stream = (args) => async (c) => {
     };
 
     send({ type: "SUMMARY", summary });
-
     const res = await remi.capability.summarize(summary);
 
     if (res.ok) {
@@ -312,6 +308,38 @@ const stream: Stream = (args) => async (c) => {
     }
   }
 
+  if (capability === "OPEN_ASSISTANT") {
+    const reaction: OpenCloseAssistantReaction = {
+      type: "OPEN_CLOSE_ASSISTANT",
+      open: true
+    };
+
+    send({
+      type: "REACTION",
+      reaction: { type: "OPEN_CLOSE_ASSISTANT", open: true }
+    });
+
+    const summary: Interaction = {
+      type: capability,
+      chatContext,
+      input,
+      analysis: await analyze(),
+      reactions: [reaction]
+    };
+
+    send({ type: "SUMMARY", summary });
+    const res = await remi.capability.summarize(summary);
+
+    if (res.ok) {
+      send({
+        type: "REACTION",
+        reaction: { type: "LANGUAGE_BASED", message: res.data }
+      });
+    } else {
+      console.log(res.error);
+    }
+  }
+
   send({ type: "UPDATE", phase: "COMPLETE" });
 
   const errors = resolutions.filter(isError).map(
@@ -328,18 +356,9 @@ const stream: Stream = (args) => async (c) => {
 };
 
 export async function POST(req: NextRequest) {
-  const data = await req.json();
+  const payload = AssistantPayloadSchema.parse(await req.json());
 
-  return new Response(
-    new ReadableStream({
-      start: stream({
-        input: data.nl,
-        query: RealEstateQuerySchema.Server.parse(data.query),
-        chatContext: ChatContextSchema.parse(data.chatContext)
-      })
-    }),
-    {
-      headers: { "Content-Type": "application/json; charset=utf-8" }
-    }
-  );
+  return new Response(new ReadableStream({ start: stream(payload) }), {
+    headers: { "Content-Type": "application/json; charset=utf-8" }
+  });
 }

@@ -13,7 +13,8 @@ const states: Record<Props["state"], State> = {
   THINKING: { label: "Thinking" },
   LISTENING: { label: "Listening" },
   CLEARING_QUERY: { label: "Clearing Query" },
-  REFINING_QUERY: { label: "Refining Query" }
+  REFINING_QUERY: { label: "Refining Query" },
+  OPENING: { label: "Opening" }
 };
 
 const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
@@ -23,7 +24,8 @@ const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
     THINKING: "THINKING",
     LISTENING: "LISTENING",
     CLEARING_QUERY: "INTERACTING",
-    REFINING_QUERY: "INTERACTING"
+    REFINING_QUERY: "INTERACTING",
+    OPENING: "INTERACTING"
   };
   return map[state];
 };
