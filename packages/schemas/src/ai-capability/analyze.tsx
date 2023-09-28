@@ -1,12 +1,13 @@
 import { z } from "zod";
 import NlInputSchema from "../nl-input";
 import { txt } from "../utils";
-import { ChatContextSchema, IntentSchema, RealEstateQuerySchema } from "..";
+import { ChatContextSchema, RealEstateQuerySchema } from "..";
+import { TerseIntentSchema } from "../intent";
 
 export const ContextSchema = z.object({
   chatContext: ChatContextSchema,
   input: NlInputSchema,
-  intents: z.lazy(() => z.array(IntentSchema)),
+  intents: z.lazy(() => z.array(TerseIntentSchema)),
   indoorFeatures: z.array(z.string()),
   outdoorFeatures: z.array(z.string()),
   lotFeatures: z.array(z.string()),
@@ -36,7 +37,7 @@ export const ArgsSchema = z.object({
 export const ReturnsSchema = z
   .object({
     i: z
-      .array(IntentSchema.shape["id"])
+      .array(TerseIntentSchema.shape["id"])
       .describe(
         txt(
           <>

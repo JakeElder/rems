@@ -47,3 +47,5 @@ export const IntentSchema = z
       </>
     )
   );
+
+export const TerseIntentSchema = IntentSchema.pick({ id: true, code: true });

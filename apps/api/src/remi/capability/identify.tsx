@@ -6,7 +6,11 @@ import {
   capabilities,
   stringify
 } from "@/remi";
-import { AiCapability, RealEstateQuerySchema } from "@rems/schemas";
+import {
+  AiCapability,
+  RealEstateQuerySchema,
+  TerseCapabilitySchema
+} from "@rems/schemas";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { ChatCompletionRequestMessage } from "openai";
 import { Z } from "@rems/types";
@@ -43,7 +47,7 @@ const analyze: Fn = async (nl) => {
     lotFeatures,
     viewTypes,
     propertyTypes,
-    capabilities,
+    capabilities: capabilities.map((c) => TerseCapabilitySchema.parse(c)),
     queryStructure: {
       LOCATION: zodToJsonSchema(RealEstateQuerySchema.Origin),
       MAP_STATE: zodToJsonSchema(RealEstateQuerySchema.MapState),

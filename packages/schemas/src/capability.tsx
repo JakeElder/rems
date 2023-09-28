@@ -53,3 +53,8 @@ export const CapabilitySchema = z
       </>
     )
   );
+
+export const TerseCapabilitySchema = CapabilitySchema.pick({
+  id: true,
+  code: true
+});

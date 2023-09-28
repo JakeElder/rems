@@ -1,12 +1,12 @@
 import { z } from "zod";
 import NlInputSchema from "../nl-input";
 import { txt } from "../utils";
-import { CapabilitySchema } from "..";
+import { TerseCapabilitySchema } from "../capability";
 
 export const ArgsSchema = z.tuple([NlInputSchema]);
 
 export const ContextSchema = z.object({
-  capabilities: z.lazy(() => z.array(CapabilitySchema)),
+  capabilities: z.lazy(() => z.array(TerseCapabilitySchema)),
   indoorFeatures: z.array(z.string()),
   outdoorFeatures: z.array(z.string()),
   lotFeatures: z.array(z.string()),
@@ -31,12 +31,11 @@ export const ContextSchema = z.object({
 
 export const ReturnsSchema = z
   .object({
-    c: CapabilitySchema.shape["id"].describe(
+    c: TerseCapabilitySchema.shape["id"].describe(
       txt(
         <>
-          The id of the *Capability* that is best suited to service the user,
-          given the input they have issued. It must be the id of a single
-          capability from our defined set.
+          The id of the *Capability* that is best suited to service the user, .
+          It must be the id of a single capability from our defined set.
         </>
       )
     )

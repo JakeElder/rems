@@ -6,7 +6,11 @@ import {
   intents,
   stringify
 } from "@/remi";
-import { AiCapability, RealEstateQuerySchema } from "@rems/schemas";
+import {
+  AiCapability,
+  RealEstateQuerySchema,
+  TerseIntentSchema
+} from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { ChatCompletionRequestMessage } from "openai";
@@ -60,7 +64,7 @@ const analyze: Fn = async ({ input, query, chatContext }) => {
     lotFeatures,
     viewTypes,
     propertyTypes,
-    intents,
+    intents: intents.map((i) => TerseIntentSchema.parse(i)),
     currentQuery
   });
 
