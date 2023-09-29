@@ -4,14 +4,12 @@ import {
   ErrorIntentResolution,
   IntentCode,
   IntentResolution,
-  PatchReaction,
-  Interaction,
   ServerRealEstateQuery,
-  PatchReactionIntentResolution,
-  AssistantMessage,
   CapabilityCode,
   AssistantPayload,
-  OpenCloseAssistantReaction
+  AssistantTimelineEvent,
+  AssistantEvent,
+  Patch
 } from "@rems/types";
 import { AssistantPayloadSchema, RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
@@ -22,7 +20,7 @@ import { pickBy } from "remeda";
 import prettyjson from "prettyjson";
 import { z } from "zod";
 import dedent from "ts-dedent";
-import resolveProperties from "../properties/resolve";
+import uuid from "short-uuid";
 
 const { SpaceRequirements, BudgetAndAvailability, MapState } =
   RealEstateQuerySchema;
@@ -36,61 +34,59 @@ const defined = (obj: Record<string, any>) =>
 const isError = (r: IntentResolution): r is ErrorIntentResolution =>
   r.type === "ERROR";
 
-const isReaction = (r: IntentResolution): r is PatchReactionIntentResolution =>
-  r.type === "PATCH";
-
 const encoder = new TextEncoder();
 
 const scalarPatch = (
-  group: PatchReaction["group"],
+  group: Patch["group"],
   query: ServerRealEstateQuery,
   data: Partial<ServerRealEstateQuery>
-): PatchReaction => ({
-  type: "PATCH",
+): Patch => ({
+  type: "SCALAR",
   group,
-  patch: {
-    type: "SCALAR",
-    data,
-    diff: remi.diff.scalar(query, data)
-  }
+  data,
+  diff: remi.diff.scalar(query, data)
 });
 
 const arrayPatch = (
-  group: PatchReaction["group"],
+  group: Patch["group"],
   query: ServerRealEstateQuery,
   key: ArrayKey,
   value: Arrays[ArrayKey]
-): PatchReaction => ({
-  type: "PATCH",
+): Patch => ({
+  type: "ARRAY",
   group,
-  patch: {
-    type: "ARRAY",
-    key,
-    value,
-    diff: remi.diff.array(query, key, value)
-  }
+  key,
+  value,
+  diff: remi.diff.array(query, key, value)
 });
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
 const stream: Stream = (args) => async (c) => {
-  const { input, query, chatContext } = args;
+  const { timeline, query } = args;
 
-  const log = remi.logger.init(input);
+  const log = remi.logger.init(timeline);
 
-  const send = (message: AssistantMessage, l: boolean = true) => {
-    const chunk = encoder.encode(`${JSON.stringify(message)}\n`);
+  const send = (event: AssistantEvent, outputToLog: boolean = true) => {
+    const timelineEvent: AssistantTimelineEvent = {
+      id: uuid.generate(),
+      role: "ASSISTANT",
+      date: Date.now(),
+      event
+    };
+
+    const chunk = encoder.encode(`${JSON.stringify(timelineEvent)}\n`);
     c.enqueue(chunk);
 
-    if (l) {
-      log(message);
+    if (outputToLog) {
+      log(event);
     }
   };
 
   const analyze = memoize(async () => {
     const [i, c] = await Promise.all([
-      remi.capability.analyze({ input, query, chatContext }),
-      remi.capability.identify(input)
+      remi.capability.analyze({ timeline, query }),
+      remi.capability.identify({ timeline })
     ]);
 
     if (!i.ok || !c.ok) {
@@ -101,7 +97,11 @@ const stream: Stream = (args) => async (c) => {
     const capability = remi.terse.capability(c.data);
     const intents = remi.terse.intents(i.data);
 
-    send({ type: "ANALYSIS", capability, intents });
+    send({
+      type: "ANALYSIS_PERFORMED",
+      analysis: { capability, intents }
+    });
+
     return { intents, capability };
   });
 
@@ -112,7 +112,7 @@ const stream: Stream = (args) => async (c) => {
     fn: T,
     process: (
       res: Extract<Awaited<ReturnType<T>>, { ok: true }>["data"]
-    ) => Promise<PatchReaction | null>
+    ) => Promise<Patch | null>
   ): Promise<IntentResolution> => {
     const { intents, capability } = await analyze();
 
@@ -132,13 +132,14 @@ const stream: Stream = (args) => async (c) => {
       return { type: "ERROR", intent, error: res.error };
     }
 
-    const reaction = await process(res.data);
-    if (!reaction) {
+    const patch = await process(res.data);
+
+    if (!patch) {
       return { type: "NOOP", intent };
     }
 
-    send({ type: "REACTION", reaction });
-    return { type: "PATCH", intent, reaction };
+    send({ type: "PATCH", patch });
+    return { type: "PATCH", intent, patch };
   };
 
   const resolutions = await Promise.all([
@@ -147,7 +148,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_LOCATION",
-      () => remi.refine.location({ input, chatContext }),
+      () => remi.refine.location({ timeline }),
       async ({ origin }) => {
         if (!origin) return null;
 
@@ -167,7 +168,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_PAGE",
-      () => remi.refine.page(input, query["page"]),
+      () => remi.refine.page({ timeline, current: query["page"] }),
       async (page) => (page ? scalarPatch("PAGE", query, { page }) : null)
     ),
 
@@ -176,7 +177,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_SORT",
-      () => remi.refine.sort(input, query["sort"]),
+      () => remi.refine.sort({ timeline, current: query["sort"] }),
       async (sort) => (sort ? scalarPatch("SORT", query, { sort }) : null)
     ),
 
@@ -186,7 +187,10 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_SPACE_REQUIREMENTS",
       () =>
-        remi.refine.spaceRequirements(input, SpaceRequirements.parse(query)),
+        remi.refine.spaceRequirements({
+          timeline,
+          current: SpaceRequirements.parse(query)
+        }),
       async (props) => scalarPatch("SPACE_REQUIREMENTS", query, defined(props))
     ),
 
@@ -196,10 +200,10 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_BUDGET_AVAILABILITY",
       () =>
-        remi.refine.budgetAndAvailability(
-          input,
-          BudgetAndAvailability.parse(query)
-        ),
+        remi.refine.budgetAndAvailability({
+          timeline,
+          current: BudgetAndAvailability.parse(query)
+        }),
       async (props) =>
         scalarPatch("BUDGET_AND_AVAILABILITY", query, defined(props))
     ),
@@ -209,7 +213,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_MAP_STATE",
-      () => remi.refine.mapState(input, MapState.parse(query)),
+      () => remi.refine.mapState({ timeline, current: MapState.parse(query) }),
       async (props) => scalarPatch("MAP_STATE", query, defined(props))
     ),
 
@@ -218,7 +222,11 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_INDOOR_FEATURES",
-      () => remi.refine.indoorFeatures(input, query["indoor-features"]),
+      () =>
+        remi.refine.indoorFeatures({
+          timeline,
+          current: query["indoor-features"]
+        }),
       async (res) =>
         arrayPatch("INDOOR_FEATURES", query, "indoor-features", res)
     ),
@@ -228,7 +236,11 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_OUTDOOR_FEATURES",
-      () => remi.refine.outdoorFeatures(input, query["outdoor-features"]),
+      () =>
+        remi.refine.outdoorFeatures({
+          timeline,
+          current: query["outdoor-features"]
+        }),
       async (res) =>
         arrayPatch("OUTDOOR_FEATURES", query, "outdoor-features", res)
     ),
@@ -238,7 +250,11 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_LOT_FEATURES",
-      () => remi.refine.lotFeatures(input, query["lot-features"]),
+      () =>
+        remi.refine.lotFeatures({
+          timeline,
+          current: query["lot-features"]
+        }),
       async (res) => arrayPatch("LOT_FEATURES", query, "lot-features", res)
     ),
 
@@ -247,7 +263,11 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_PROPERTY_TYPES",
-      () => remi.refine.propertyTypes(input, query["property-types"]),
+      () =>
+        remi.refine.propertyTypes({
+          timeline,
+          current: query["property-types"]
+        }),
       async (res) => arrayPatch("PROPERTY_TYPES", query, "property-types", res)
     ),
 
@@ -256,7 +276,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_VIEW_TYPES",
-      () => remi.refine.viewTypes(input, query["view-types"]),
+      () => remi.refine.viewTypes({ timeline, current: query["view-types"] }),
       async (res) => arrayPatch("VIEW_TYPES", query, "view-types", res)
     )
   ]);
@@ -268,79 +288,29 @@ const stream: Stream = (args) => async (c) => {
     capability === "NEW_QUERY" ||
     capability === "CLEAR_QUERY"
   ) {
-    const reactions = resolutions.filter(isReaction).map((i) => i.reaction);
-
-    const summary: Interaction = {
-      type: capability,
-      chatContext,
-      input,
-      analysis: await analyze(),
-      reactions
-    };
-
-    send({ type: "SUMMARY", summary });
-    const res = await remi.capability.summarize(summary);
-
-    if (res.ok) {
-      send({
-        type: "REACTION",
-        reaction: { type: "LANGUAGE_BASED", message: res.data }
-      });
-    } else {
-      console.log(res.error);
-    }
+    // const res = await remi.capability.summarize(summary);
+    // if (res.ok) {
+    //   send({
+    //     type: "REACTION",
+    //     reaction: { type: "LANGUAGE_BASED", message: res.data }
+    //   });
+    // } else {
+    //   console.log(res.error);
+    // }
   }
 
   if (capability === "RESPOND_GENERAL_QUERY") {
-    const properties = await resolveProperties(query);
     const res = await remi.capability.respondGeneral({
-      chatContext,
-      input,
+      timeline,
       query,
-      properties: properties.pagination,
       capabilities: remi.capabilities
     });
     if (res.ok) {
-      send({
-        type: "REACTION",
-        reaction: { type: "LANGUAGE_BASED", message: res.data }
-      });
+      send({ type: "LANGUAGE_BASED", message: res.data });
     }
   }
 
-  if (capability === "OPEN_ASSISTANT") {
-    const reaction: OpenCloseAssistantReaction = {
-      type: "OPEN_CLOSE_ASSISTANT",
-      open: true
-    };
-
-    send({
-      type: "REACTION",
-      reaction: { type: "OPEN_CLOSE_ASSISTANT", open: true }
-    });
-
-    const summary: Interaction = {
-      type: capability,
-      chatContext,
-      input,
-      analysis: await analyze(),
-      reactions: [reaction]
-    };
-
-    send({ type: "SUMMARY", summary });
-    const res = await remi.capability.summarize(summary);
-
-    if (res.ok) {
-      send({
-        type: "REACTION",
-        reaction: { type: "LANGUAGE_BASED", message: res.data }
-      });
-    } else {
-      console.log(res.error);
-    }
-  }
-
-  send({ type: "UPDATE", phase: "COMPLETE" });
+  send({ type: "YIELD" });
 
   const errors = resolutions.filter(isError).map(
     (res) => dedent`

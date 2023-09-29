@@ -4,28 +4,23 @@ import { txt } from "./utils";
 export * as RealEstateQuerySchema from "./real-estate-query";
 
 export * from "./app-config";
-export * from "./assistant-message";
 export * from "./assistant-payload";
 export * from "./assistant-state";
 export * from "./capability";
-export * from "./chat-context";
 export * from "./contact-form";
 export * from "./diff";
+export * from "./event";
 export * from "./file";
 export * from "./filter-set";
 export * from "./image";
 export * from "./intent";
 export * from "./intent-resolution";
-export * from "./interaction";
 export * from "./patch";
 export * from "./property";
-export * from "./reaction";
-export * from "./remi-state";
 export * from "./timeline";
-export * from "./user-interaction";
 
-export * as AiRefinement from "./ai-refinement";
-export * as AiCapability from "./ai-capability";
+export * as Refinements from "./refinements";
+export * as Capabilities from "./capabilities";
 
 export const FilterSchema = z.object({
   id: z.number(),

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "storybook dev -p 3001 --no-open",
     "build": "storybook build",
-    "gen": "hygen component new"
+    "gen": "hygen component new",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",

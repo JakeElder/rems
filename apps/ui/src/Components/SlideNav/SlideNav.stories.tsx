@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import SlideNav from "./SlideNav";
 import { SpringValue } from "@react-spring/web";

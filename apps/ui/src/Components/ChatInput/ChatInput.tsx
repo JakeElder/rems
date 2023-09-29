@@ -54,7 +54,7 @@ const Status = ({
                   c(INPUT_THEMES[theme].input["RESOLVING"].borderColor)
                     .analogous(5)
                     .map((c) =>
-                      c.setAlpha(theme === "header" ? .8 : 0.25).toString()
+                      c.setAlpha(theme === "header" ? 0.8 : 0.25).toString()
                     ) as any
                 }
               />
@@ -76,7 +76,7 @@ const Status = ({
                   c(INPUT_THEMES[theme].input["ANALYZING"].borderColor)
                     .analogous(5)
                     .map((c) =>
-                      c.setAlpha(theme === "header" ? .8 : 0.2).toString()
+                      c.setAlpha(theme === "header" ? 0.8 : 0.2).toString()
                     ) as any
                 }
               />
@@ -129,7 +129,7 @@ export type Props = {
 const Input = React.forwardRef<
   HTMLInputElement,
   Pick<Props, "enterDown" | "submittable" | "sessions" | "theme"> &
-  InputHTMLProps
+    InputHTMLProps
 >(({ enterDown, submittable, sessions, theme, ...props }, ref) => {
   const session = sessions[sessions.length - 1];
 

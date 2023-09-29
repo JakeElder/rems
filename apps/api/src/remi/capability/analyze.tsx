@@ -4,28 +4,28 @@ import {
   txt,
   execute,
   intents,
-  stringify
+  stringify,
+  timelineToCompletionMessages
 } from "@/remi";
 import {
-  AiCapability,
+  Capabilities,
   RealEstateQuerySchema,
   TerseIntentSchema
 } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ChatCompletionRequestMessage } from "openai";
 import { Z } from "@rems/types";
 import * as Models from "@/models";
 import { Model } from "sequelize";
 
-const { ArgsSchema, ReturnsSchema, ContextSchema } = AiCapability.Analyze;
+const { ArgsSchema, ReturnsSchema, ContextSchema } = Capabilities.Analyze;
 
 type Args = Z<typeof ArgsSchema>;
 type Context = Z<typeof ContextSchema>;
 type Returns = Z<typeof ReturnsSchema>;
 type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-const analyze: Fn = async ({ input, query, chatContext }) => {
+const analyze: Fn = async ({ timeline, query }) => {
   const parse = (r: Model<any, any>[]) => r.map((m: any) => m.slug);
   const [
     lotFeatures,
@@ -57,8 +57,6 @@ const analyze: Fn = async ({ input, query, chatContext }) => {
   };
 
   const context = stringify<Context>({
-    chatContext,
-    input,
     indoorFeatures,
     outdoorFeatures,
     lotFeatures,
@@ -68,20 +66,25 @@ const analyze: Fn = async ({ input, query, chatContext }) => {
     currentQuery
   });
 
-  const instruction: ChatCompletionRequestMessage["content"] = txt(
-    <>
-      <p>
-        You are Remi, an assistant responsible for helping the user of a real
-        estate website. Your task is to process their input and analyze it for
-        their intents
-      </p>
-      <p>Here is context: `{context}`</p>
-    </>
-  );
-
   const request: ChatCompletionRequest = {
     model: "gpt-4",
-    messages: [{ role: "system", content: instruction }],
+    messages: [
+      {
+        role: "system",
+        content: txt(
+          <>
+            You are Remi, an assistant responsible for helping the user of a
+            real estate website. Your task is to process their input and analyze
+            it for their intent. Context will follow.
+          </>
+        )
+      },
+      {
+        role: "system",
+        content: context
+      },
+      ...timelineToCompletionMessages(timeline)
+    ],
     function_call: { name: "f" },
     functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]
   };

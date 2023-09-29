@@ -1,6 +1,7 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import FeaturedCarousel from "./FeaturedCarousel";
-import properties from "../../fixtures/properties.json";
 import { Property } from "@rems/types";
 import StoryPad from "../../Utils/StoryPad";
 

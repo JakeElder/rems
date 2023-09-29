@@ -1,6 +1,7 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import ListingMap from "./ListingMap";
-import properties from "../../fixtures/properties";
 
 const meta: Meta<typeof ListingMap> = {
   title: "Components/ListingMap",

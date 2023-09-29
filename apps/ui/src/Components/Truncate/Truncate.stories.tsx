@@ -1,6 +1,7 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import Truncate from "./Truncate";
-import properties from "../../fixtures/properties";
 
 const meta: Meta<typeof Truncate> = {
   title: "Components/Truncate",

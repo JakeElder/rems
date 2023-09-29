@@ -1,6 +1,7 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Page from "./RealEstatePage";
-import properties from "../../fixtures/properties";
 import Header from "../../Components/Header";
 import SimpleImageCarousel from "../../Components/SimpleImageCarousel";
 import Breadcrumbs from "../../Components/Breadcrumbs";

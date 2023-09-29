@@ -9182,6 +9182,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     remeda: ^1.24.1
+    short-uuid: ^4.2.2
     snake-case: ^3.0.4
     table: ^6.8.1
     ts-dedent: ^2.2.0

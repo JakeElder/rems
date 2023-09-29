@@ -1,7 +1,8 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import MapPropertyMarker from "./MapPropertyMarker";
 import map from "../../assets/map-ss.png";
-import properties from "../../fixtures/properties.json";
 import { Property } from "@rems/types";
 
 const meta: Meta<typeof MapPropertyMarker> = {

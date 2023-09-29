@@ -9,15 +9,13 @@ export const CapabilityCodeSchema = z
     "SHOW_PROPERTY",
     "REQUEST_VIEWING",
     "RESPOND_GENERAL_QUERY",
-    "OPEN_ASSISTANT",
-    "REQUEST_CLARIFICATION"
+    "INFORM_MORE_INFO_NEEDED"
   ])
   .describe(txt(<>A unique identifier for the capability</>));
 
 export const CapabilitySchema = z
   .object({
     id: z.number().min(1),
-    name: z.string(),
     code: CapabilityCodeSchema,
     description: z
       .string()

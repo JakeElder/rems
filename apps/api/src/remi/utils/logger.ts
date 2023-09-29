@@ -1,21 +1,23 @@
 import {
-  AnalysisAssistantMessage,
+  Analysis,
   ArrayPatch,
-  AssistantMessage,
-  PatchReaction,
-  ScalarPatch
+  AssistantEvent,
+  Patch,
+  ScalarPatch,
+  Timeline
 } from "@rems/types";
 import { createStream, WritableStream } from "table";
 import ms from "pretty-ms";
 import chalk from "chalk";
+import timelineToInput from "../utils/timeline-to-input";
 
-export const init = (input: string) => {
+export const init = (timeline: Timeline) => {
   const t = Date.now();
   let stream: WritableStream | null = null;
 
-  const i = (analysis: AnalysisAssistantMessage) => {
+  const i = ({ intents }: Analysis) => {
     const headings = [
-      ...analysis.intents.map((s) => s.replace("REFINE_", "")),
+      ...intents.map((s) => s.replace("REFINE_", "")),
       "Input",
       "Intents",
       "Capability"
@@ -38,29 +40,27 @@ export const init = (input: string) => {
     chalk.yellow(chalk.bold(s.replace("REFINE_", "")));
   const val = (s: string) => chalk.cyan(s);
 
-  return (message: AssistantMessage) => {
-    if (message.type === "ANALYSIS") {
-      i(message);
+  return (e: AssistantEvent) => {
+    if (e.type === "ANALYSIS_PERFORMED") {
+      const { analysis } = e;
+
+      i(analysis);
 
       if (!stream) throw new Error();
 
-      stream.write([now(), heading("Input"), val(input)]);
-      stream.write([now(), heading("Capability"), val(message.capability)]);
+      stream.write([now(), heading("Input"), val(timelineToInput(timeline))]);
+      stream.write([now(), heading("Capability"), val(analysis.capability)]);
       stream.write([
         now(),
         heading("Intents"),
-        val(message.intents.join(", "))
+        val(analysis.intents.join(", "))
       ]);
     }
 
     if (!stream) throw new Error();
 
-    if (message.type === "REACTION" && message.reaction.type === "PATCH") {
-      stream.write([
-        now(),
-        heading(message.reaction.group),
-        diff(message.reaction)
-      ]);
+    if (e.type === "PATCH") {
+      stream.write([now(), heading(e.patch.group), diff(e.patch)]);
     }
   };
 };
@@ -105,5 +105,5 @@ const scalarDiff = (patch: ScalarPatch) => {
     .join("\n");
 };
 
-const diff = ({ patch }: PatchReaction) =>
+const diff = (patch: Patch) =>
   patch.type === "ARRAY" ? arrayDiff(patch) : scalarDiff(patch);

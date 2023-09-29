@@ -1,13 +1,10 @@
 "use client";
 
-import React, { useMemo, MutableRefObject, useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import css from "./Chat.module.css";
-import {
-  AssistantState,
-  AssistantUiState,
-  Timeline,
-  TimelineEvent
-} from "@rems/types";
+import { AssistantState, Timeline, TimelineEvent } from "@rems/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
 import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
@@ -15,124 +12,98 @@ import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
 import StateLabel from "../StateLabel/StateLabel";
-import useAssistantUiLayout from "../../hooks/use-assistant-ui-layout";
-import { assistantStateToGroupedAssistantState } from "../../adapters";
-
-type Spacing = {
-  xDivide: number;
-  marginTop: number;
-};
-
-export type SpacingUtilityReturn =
-  | { ready: false }
-  | { ready: true; props: Spacing };
+import tinycolor from "tinycolor2";
+import { stateToGroup } from "../../Utils/src/assistant-states";
 
 export type Props = {
+  onOpenClose: (open: boolean) => void;
+  timeline: Timeline;
   lang: "en" | "th";
   state: AssistantState;
-  timeline: Timeline;
-  uiState: AssistantUiState;
-  spacing: SpacingUtilityReturn;
+  open: boolean;
+  onEventRendered: (e: TimelineEvent) => void;
 };
 
-export type ReadyProps = Omit<Props, "spacing"> & Spacing;
+const OpenClose = ({
+  open,
+  onOpenClose
+}: Pick<Props, "open" | "onOpenClose">) => {
+  const { rotate } = useSpring({ rotate: open ? 0 : 180 });
 
-export const Header = React.memo(
-  ({ state, lang }: Pick<Props, "state" | "lang">) => {
-    const group = assistantStateToGroupedAssistantState(state);
+  return (
+    <animated.button
+      className={css["open-close-button"]}
+      onClick={() => onOpenClose(!open)}
+      style={{
+        transform: rotate.to((value) => `rotate(${value}deg)`)
+      }}
+    >
+      <FontAwesomeIcon className={css["close"]} icon={faCaretDown} size="xs" />
+    </animated.button>
+  );
+};
 
-    const palette = CHAT_PALETTE[group];
+export const Header = ({
+  state,
+  lang,
+  open,
+  onOpenClose
+}: Pick<Props, "state" | "lang" | "open" | "onOpenClose">) => {
+  const { avatarBorder } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
+  const { avatarOpacity } = useSpring({
+    avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
+  });
 
-    const { avatarBorder } = useSpring(palette);
-    const { avatarOpacity } = useSpring({
-      avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
-    });
-
-    const pulseStyle = useSpring({
-      from: { transform: "scale(1)", opacity: 1 },
-      to: { transform: "scale(1.2)", opacity: 0 },
-      reset: true,
-      loop: true,
-      config: { tension: 170, friction: 50 }
-    });
-
-    const { pulseOpacity } = useSpring({
-      pulseOpacity: state === "LISTENING" ? 1 : 0
-    });
-
-    return (
-      <div className={css["header"]}>
-        <div className={css["avatar-name-state"]}>
-          <animated.div
-            className={css["avatar"]}
-            style={{ borderColor: avatarBorder }}
-          >
-            <animated.span style={{ opacity: pulseOpacity }}>
-              <animated.div
-                className={css["avatar-ring"]}
-                style={{ ...pulseStyle, borderColor: palette.avatarBorder }}
+  return (
+    <div className={css["header"]}>
+      <div className={css["avatar-name-state"]}>
+        <animated.div
+          className={css["avatar"]}
+          style={{ borderColor: avatarBorder }}
+        >
+          <div className={css["avatar-inner"]}>
+            <animated.img
+              className={css["remi"]}
+              src={avatar.src}
+              style={{ opacity: avatarOpacity }}
+            />
+            <div className={css["ror"]}>
+              <img
+                src={ror.src}
+                width={ror.width / 2}
+                height={ror.height / 2}
               />
-            </animated.span>
-            <div className={css["avatar-inner"]}>
-              <animated.img
-                className={css["remi"]}
-                src={avatar.src}
-                style={{ opacity: avatarOpacity }}
-              />
-              <div className={css["ror"]}>
-                <img
-                  src={ror.src}
-                  width={ror.width / 2}
-                  height={ror.height / 2}
-                />
-              </div>
-              <div className={css["shadow"]} />
             </div>
-          </animated.div>
-          <div className={css["name"]}>Remi</div>
-          <StateLabel state={state} />
-        </div>
-        <div className={css["lang-manage-ui-state"]}>
-          <div className={css["lang"]}>{lang}</div>
+            <div className={css["shadow"]} />
+          </div>
+        </animated.div>
+        <div className={css["name"]}>Remi</div>
+        <StateLabel state={state} />
+      </div>
+      <div className={css["lang-open-close"]}>
+        <div className={css["lang"]}>{lang}</div>
+        <div className={css["open-close"]}>
+          <OpenClose open={open} onOpenClose={onOpenClose} />
         </div>
       </div>
-    );
-  }
-);
-
-const isLanguageBasedUserMessageEvent = (e: TimelineEvent) =>
-  e.type === "USER" &&
-  (e.interaction.type === "VERBAL" || e.interaction.type === "WRITTEN");
-
-const isLanguageBasedAssistantMessageEvent = (e: TimelineEvent) =>
-  e.type === "ASSISTANT" &&
-  e.message.type === "REACTION" &&
-  e.message.reaction.type === "LANGUAGE_BASED";
+    </div>
+  );
+};
 
 const isLanguageBasedEvent = (e: TimelineEvent) =>
-  isLanguageBasedUserMessageEvent(e) || isLanguageBasedAssistantMessageEvent(e);
+  e.event.type === "LANGUAGE_BASED";
 
-const isPatchEvent = (e: TimelineEvent) =>
-  e.type === "ASSISTANT" &&
-  e.message.type === "REACTION" &&
-  e.message.reaction.type === "PATCH";
+const isPatchEvent = (e: TimelineEvent) => e.event.type === "PATCH";
 
-const isEmptyPatchEvent = (e: TimelineEvent) => {
-  if (
-    e.type === "ASSISTANT" &&
-    e.message.type === "REACTION" &&
-    e.message.reaction.type === "PATCH"
-  ) {
-    if (
-      e.message.reaction.patch.type === "SCALAR" &&
-      Object.keys(e.message.reaction.patch.data).length === 0
-    ) {
+const isEmptyPatchEvent = ({ role, event: e }: TimelineEvent) => {
+  if (role === "ASSISTANT" && e.type === "PATCH") {
+    if (e.patch.type === "SCALAR" && Object.keys(e.patch.data).length === 0) {
       return true;
     }
     if (
-      e.message.reaction.patch.type === "ARRAY" &&
-      e.message.reaction.patch.diff.length === 0 &&
-      e.message.reaction.patch.value.length === 0
+      e.patch.type === "ARRAY" &&
+      e.patch.diff.length === 0 &&
+      e.patch.value.length === 0
     ) {
       return true;
     }
@@ -152,6 +123,7 @@ export const Body = React.memo(
   ({ timeline }: Pick<Props, "timeline">) => {
     const refMap = useMemo(() => new WeakMap(), []);
 
+    console.log(timeline);
     const events = timeline
       .slice()
       .reverse()
@@ -198,74 +170,33 @@ export const Body = React.memo(
   (prev, next) => equal(prev.timeline, next.timeline)
 );
 
-export const useAssistantSpacingUtility = ({
-  $top,
-  $left
-}: {
-  $top: MutableRefObject<HTMLDivElement | null>;
-  $left: MutableRefObject<HTMLDivElement | null>;
-}): SpacingUtilityReturn => {
-  const [spacing, setSpacing] = useState<Spacing | null>(null);
-
-  useEffect(() => {
-    if ($left.current && $top.current) {
-      const { width } = $left.current.getBoundingClientRect();
-      const { height } = $top.current.getBoundingClientRect();
-      setSpacing({ xDivide: width, marginTop: height });
-    }
-  }, [$left]);
-
-  return spacing === null ? { ready: false } : { ready: true, props: spacing };
-};
+const HEIGHT = 570;
+const HEADER_HEIGHT = 60;
+const FOREGROUND_PADDING_TOP = 20;
 
 export const Root = ({
-  spacing,
-  ...props
-}: { children: React.ReactNode } & Props) => {
-  if (spacing.ready) {
-    return <ReadyRoot {...props} {...spacing.props} />;
-  }
-  return null;
-};
-
-export const ReadyRoot = ({
   children,
-  uiState,
-  state,
-  xDivide,
-  marginTop
-}: { children: React.ReactNode } & ReadyProps) => {
-  const {
-    padding,
-    borderRadius,
-    boxShadow,
-    backdropFilter,
-    background,
-    left,
-    top,
-    right,
-    bottom
-  } = useAssistantUiLayout({
-    state: uiState,
-    assistantState: state,
-    xDivide,
-    marginTop
+  open,
+  state
+}: { children: React.ReactNode } & Pick<Props, "open" | "state">) => {
+  const rootStyle = useSpring({
+    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP)
+  });
+
+  const backgroundStyle = useSpring({
+    background: tinycolor(CHAT_PALETTE[stateToGroup(state)].labelBg)
+      .setAlpha(open ? 0.5 : 0)
+      .toRgbString(),
+    boxShadow: open
+      ? "0 0 5px 0 rgba(0, 0, 0, 0.4)"
+      : "0 0 5px 0 rgba(0, 0, 0, 0)",
+    backdropFilter: open ? "blur(4px)" : "blur(0px)"
   });
 
   return (
-    <animated.div className={css["root"]} style={{ left, top, right, bottom }}>
-      <animated.div
-        className={css["background"]}
-        style={{
-          borderRadius,
-          boxShadow,
-          backdropFilter,
-          background
-        }}
-      />
-      <animated.div className={css["foreground"]} style={{ padding }}>
-        {children}
-      </animated.div>
+    <animated.div className={css["root"]} style={rootStyle}>
+      <animated.div className={css["background"]} style={backgroundStyle} />
+      <animated.div className={css["foreground"]}>{children}</animated.div>
     </animated.div>
   );
 };

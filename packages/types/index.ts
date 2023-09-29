@@ -11,15 +11,9 @@ import {
   IntentSchema,
   CapabilityCodeSchema,
   IntentCodeSchema,
-  ReactionSchema,
   IntentResolutionSchema,
   NoopIntentResolutionSchema,
   ErrorIntentResolutionSchema,
-  PatchReactionIntentResolutionSchema,
-  RemiStateSchema,
-  SleepingRemiStateSchema,
-  ThinkingRemiStateSchema,
-  ReactingRemiStateSchema,
   AddScalarDiffSchema,
   RemoveScalarDiffSchema,
   ChangeScalarDiffSchema,
@@ -27,32 +21,24 @@ import {
   RemoveArrayDiffSchema,
   ScalarDiffSchema,
   ArrayDiffSchema,
-  InteractionSchema,
-  AnalysisAssistantMessageSchema,
-  ReactionAssistantMessageSchema,
-  SummaryAssistantMessageSchema,
-  AssistantMessageSchema,
-  LanguageBasedReactionSchema,
-  PatchReactionSchema,
   TimelineSchema,
-  TimelineEventSchema,
   ArrayPatchSchema,
   ScalarPatchSchema,
   PatchSchema,
-  UserVerbalInteractionSchema,
-  UserWrittenInteractionSchema,
-  UserInteractionSchema,
-  UserPatchInteractionSchema,
-  QueryModificationInteractionSchema,
-  LanguageBasedContextEntrySchema,
-  ChatContextEntrySchema,
-  ChatContextSchema,
-  UserTimelineEventSchema,
-  AssistantTimelineEventSchema,
   AssistantStateSchema,
   AssistantPayloadSchema,
-  OpenCloseAssistantReactionSchema
+  TimelineEventSchema,
+  UserTimelineEventSchema,
+  AssistantTimelineEventSchema,
+  AssistantEventSchema,
+  UserEventSchema,
+  LanguageBasedInteractionEventSchema,
+  PatchInteractionEventSchema,
+  AnalysisPerformedEventSchema,
+  YieldEventSchema,
+  PatchInteractionIntentResolutionSchema
 } from "@rems/schemas";
+import { AnalysisSchema } from "@rems/schemas/src/analysis";
 import { ZodType, z } from "zod";
 
 export type Z<T extends ZodType<any, any, any>> = z.infer<T>;
@@ -207,6 +193,7 @@ export type ResolvingFilterSet = {
   query: Partial<RealEstateQuery>;
   url: string;
 };
+
 export type OpenAIModel =
   | "ada"
   | "ada-code-search-code"
@@ -272,21 +259,9 @@ export type OpenAIModel =
 export type IntentResolution = Z<typeof IntentResolutionSchema>;
 export type NoopIntentResolution = Z<typeof NoopIntentResolutionSchema>;
 export type ErrorIntentResolution = Z<typeof ErrorIntentResolutionSchema>;
-export type PatchReactionIntentResolution = Z<
-  typeof PatchReactionIntentResolutionSchema
+export type PatchInteractionIntentResolution = Z<
+  typeof PatchInteractionIntentResolutionSchema
 >;
-
-export type Reaction = Z<typeof ReactionSchema>;
-export type PatchReaction = Z<typeof PatchReactionSchema>;
-export type LanguageBasedReaction = Z<typeof LanguageBasedReactionSchema>;
-export type OpenCloseAssistantReaction = Z<
-  typeof OpenCloseAssistantReactionSchema
->;
-
-export type RemiState = Z<typeof RemiStateSchema>;
-export type SleepingRemiState = Z<typeof SleepingRemiStateSchema>;
-export type ThinkingRemiState = Z<typeof ThinkingRemiStateSchema>;
-export type ReactingRemiState = Z<typeof ReactingRemiStateSchema>;
 
 export type AddScalarDiff = Z<typeof AddScalarDiffSchema>;
 export type RemoveScalarDiff = Z<typeof RemoveScalarDiffSchema>;
@@ -301,40 +276,27 @@ export type ArrayPatch = Z<typeof ArrayPatchSchema>;
 export type ScalarPatch = Z<typeof ScalarPatchSchema>;
 export type Patch = Z<typeof PatchSchema>;
 
-export type UserVerbalInteraction = Z<typeof UserVerbalInteractionSchema>;
-export type UserWrittenInteraction = Z<typeof UserWrittenInteractionSchema>;
-export type UserLanguageBasedInteraction =
-  | UserVerbalInteraction
-  | UserWrittenInteraction;
-export type UserPatchInteraction = Z<typeof UserPatchInteractionSchema>;
-export type UserInteraction = Z<typeof UserInteractionSchema>;
-
-export type AnalysisAssistantMessage = Z<typeof AnalysisAssistantMessageSchema>;
-export type ReactionAssistantMessage = Z<typeof ReactionAssistantMessageSchema>;
-export type SummaryAssistantMessage = Z<typeof SummaryAssistantMessageSchema>;
-export type AssistantMessage = Z<typeof AssistantMessageSchema>;
-
-export type TimelineEvent = Z<typeof TimelineEventSchema>;
-export type UserTimelineEvent = Z<typeof UserTimelineEventSchema>;
-export type AssitantTimelineEvent = Z<typeof AssistantTimelineEventSchema>;
 export type Timeline = Z<typeof TimelineSchema>;
+export type UserTimelineEvent = Z<typeof UserTimelineEventSchema>;
+export type AssistantTimelineEvent = Z<typeof AssistantTimelineEventSchema>;
 
-export type Interaction = Z<typeof InteractionSchema>;
+export type AssistantEvent = Z<typeof AssistantEventSchema>;
+export type UserEvent = Z<typeof UserEventSchema>;
 
-export type Logger = (ms: number, message: AssistantMessage) => void;
+export type LanguageBasedInteractionEvent = Z<
+  typeof LanguageBasedInteractionEventSchema
+>;
+export type PatchInteractionEvent = Z<typeof PatchInteractionEventSchema>;
+export type AnalysisPerformedEvent = Z<typeof AnalysisPerformedEventSchema>;
+export type YieldEventSchemas = Z<typeof YieldEventSchema>;
+export type TimelineEvent = Z<typeof TimelineEventSchema>;
+
+export type Analysis = Z<typeof AnalysisSchema>;
+
+export type Logger = (ms: number, message: AssistantTimelineEvent) => void;
 
 export type ScalarKey = keyof RealEstateQueryScalars;
 export type ArrayKey = keyof RealEstateQueryArrays;
-
-export type QueryModificationInteraction = Z<
-  typeof QueryModificationInteractionSchema
->;
-
-export type LanguageBasedContextEntry = Z<
-  typeof LanguageBasedContextEntrySchema
->;
-export type ChatContextEntry = Z<typeof ChatContextEntrySchema>;
-export type ChatContext = Z<typeof ChatContextSchema>;
 
 export type AssistantUiState =
   | "MINIMISED"

@@ -4,27 +4,27 @@ import {
   txt,
   execute,
   capabilities,
-  stringify
+  stringify,
+  timelineToCompletionMessages
 } from "@/remi";
 import {
-  AiCapability,
+  Capabilities,
   RealEstateQuerySchema,
   TerseCapabilitySchema
 } from "@rems/schemas";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ChatCompletionRequestMessage } from "openai";
 import { Z } from "@rems/types";
 import * as Models from "@/models";
 import { Model } from "sequelize";
 
-const { ArgsSchema, ReturnsSchema, ContextSchema } = AiCapability.Identify;
+const { ArgsSchema, ReturnsSchema, ContextSchema } = Capabilities.Identify;
 
 type Args = Z<typeof ArgsSchema>;
 type Context = Z<typeof ContextSchema>;
 type Returns = Z<typeof ReturnsSchema>;
-type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
+type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-const analyze: Fn = async (nl) => {
+const analyze: Fn = async ({ timeline }) => {
   const parse = (r: Model<any, any>[]) => r.map((m: any) => m.slug);
 
   const [
@@ -77,33 +77,34 @@ const analyze: Fn = async (nl) => {
     }
   });
 
-  const instruction: ChatCompletionRequestMessage["content"] = txt(
-    <>
-      <p>
-        You are an assistant responsible for helping the user of a real estate
-        website. Analyze their input and choose a capability to react with.
-      </p>
-      <p>
-        Prefer REFINE_QUERY over NEW_QUERY. Only set NEW_QUERY when it is clear
-        the user wants to start a new search entirely.
-      </p>
-      <p>Here is context: `{context}`</p>
-    </>
-  );
-
   const request: ChatCompletionRequest = {
     model: "gpt-4",
     messages: [
-      { role: "system", content: instruction },
-      { role: "user", content: nl }
+      {
+        role: "system",
+        content: txt(
+          <>
+            <p>
+              You are Remi, an assistant responsible for helping the user of a
+              real estate website. Your task is to process their input and
+              analyze it for their intent.
+            </p>
+            <p>
+              Prefer REFINE_QUERY over NEW_QUERY. Only set NEW_QUERY when it is
+              clear the user wants to start a new search entirely.
+            </p>
+            <p>Context will follow.</p>
+          </>
+        )
+      },
+      {
+        role: "system",
+        content: context
+      },
+      ...timelineToCompletionMessages(timeline)
     ],
     function_call: { name: "f" },
-    functions: [
-      {
-        name: "f",
-        parameters: zodToJsonSchema(ReturnsSchema)
-      }
-    ]
+    functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]
   };
 
   return execute(request, ReturnsSchema);

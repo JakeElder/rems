@@ -7,6 +7,7 @@ export const openai = new OpenAIApi(
 export { default as txt } from "./utils/txt";
 export { default as execute } from "./utils/execute";
 export { default as stringify } from "./utils/stringify";
+export { default as timelineToCompletionMessages } from "./utils/timeline-to-completion-messages";
 export * as diff from "./utils/diff";
 export * as terse from "./utils/terse";
 export * as mapFilter from "./utils/map-filter";

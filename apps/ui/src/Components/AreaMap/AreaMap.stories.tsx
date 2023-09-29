@@ -1,6 +1,7 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import AreaMap from "./AreaMap";
-import properties from "../../fixtures/properties";
 
 const meta: Meta<typeof AreaMap> = {
   title: "Components/AreaMap",

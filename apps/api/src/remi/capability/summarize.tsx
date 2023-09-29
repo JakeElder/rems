@@ -5,21 +5,20 @@ import {
   execute,
   stringify
 } from "@/remi";
-import { AiCapability } from "@rems/schemas";
+import { Capabilities } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { ChatCompletionRequestMessage } from "openai";
 
-const { ArgsSchema, ReturnsSchema, ContextSchema } = AiCapability.Summarize;
+const { ArgsSchema, ReturnsSchema, ContextSchema } = Capabilities.Summarize;
 
 type Args = z.infer<typeof ArgsSchema>;
 type Context = z.infer<typeof ContextSchema>;
 type Returns = z.infer<typeof ReturnsSchema>;
-type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
+type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-const analyze: Fn = async (interaction) => {
-  const context = stringify<Context>({ interaction });
-  const schema = stringify(zodToJsonSchema(ContextSchema));
+const analyze: Fn = async ({ timeline }) => {
+  const context = stringify<Context>({ timeline });
 
   const instruction: ChatCompletionRequestMessage["content"] = txt(
     <>

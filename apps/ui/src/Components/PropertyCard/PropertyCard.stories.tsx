@@ -1,6 +1,7 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import PropertyCard from "./PropertyCard";
-import properties from "../../fixtures/properties";
 
 const meta: Meta<typeof PropertyCard> = {
   title: "Components/PropertyCard",

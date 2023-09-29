@@ -184,18 +184,6 @@ const intents: Intent[] = [
   },
 
   {
-    id: 12,
-    code: "CLEAR_QUERY",
-    description: txt(<>The user wants to reset the listings to default</>),
-    examples: [
-      {
-        input: "Clear the search",
-        matches: ["Clear the search"]
-      }
-    ]
-  },
-
-  {
     id: 13,
     code: "RECEIVE_GENERAL_INFORMATION",
     description: txt(
@@ -205,18 +193,6 @@ const intents: Intent[] = [
       {
         input: "What's the land area of Chiang Mai",
         matches: ["What's the land area of Chiang Mai"]
-      }
-    ]
-  },
-
-  {
-    id: 14,
-    code: "OPEN_ASSISTANT",
-    description: txt(<>The user wants to open the assistant</>),
-    examples: [
-      {
-        input: "Hey Remi",
-        matches: ["Hey Remi"]
       }
     ]
   },

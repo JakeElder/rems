@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { IntentCodeSchema } from "./intent";
-import { PatchReactionSchema } from "./reaction";
+import { PatchSchema } from "./patch";
 
 export const NoopIntentResolutionSchema = z.object({
   type: z.literal("NOOP"),
@@ -13,14 +13,14 @@ export const ErrorIntentResolutionSchema = z.object({
   error: z.any()
 });
 
-export const PatchReactionIntentResolutionSchema = z.object({
+export const PatchInteractionIntentResolutionSchema = z.object({
   type: z.literal("PATCH"),
   intent: IntentCodeSchema,
-  reaction: PatchReactionSchema
+  patch: PatchSchema
 });
 
 export const IntentResolutionSchema = z.discriminatedUnion("type", [
   NoopIntentResolutionSchema,
   ErrorIntentResolutionSchema,
-  PatchReactionIntentResolutionSchema
+  PatchInteractionIntentResolutionSchema
 ]);

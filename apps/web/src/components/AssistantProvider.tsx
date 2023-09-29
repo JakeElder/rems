@@ -4,22 +4,14 @@ import { Sound } from "@/utils";
 import { observable } from "@legendapp/state";
 import {
   InputSession,
-  AssistantMessage,
   AssistantPayload,
   AssistantState,
   Timeline,
   TimelineEvent,
-  Interaction,
-  AnalysisAssistantMessage,
-  AssistantUiState
+  AssistantTimelineEvent,
+  Analysis
 } from "@rems/types";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useRef
-} from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -27,7 +19,6 @@ import assistantReducer from "reducers/assistant-reducer";
 import { Observable } from "rxjs";
 import uuid from "short-uuid";
 import { useDebouncedCallback } from "use-debounce";
-import timelineToChatContext from "utils/timeline-to-chat-context";
 
 const NEXT_PUBLIC_REMS_API_URL = process.env.NEXT_PUBLIC_REMS_API_URL;
 
@@ -46,6 +37,7 @@ type Context = {
   onKeyUp: FormAttributes["onKeyUp"];
   onMicClick: () => void;
   onChange: InputHTMLAttributes["onChange"];
+  onOpenClose: (open: boolean) => void;
   onEventRendered: (e: TimelineEvent) => void;
 
   // State
@@ -53,8 +45,8 @@ type Context = {
   state: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
+  open: boolean;
   timeline: Timeline;
-  uiState: AssistantUiState;
 
   // Computed
   session: InputSession;
@@ -67,16 +59,15 @@ export const useAssistant = () => useContext(AssistantContext)!;
 const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const { reset, patch, commit, serverQuery } = useRealEstateQuery();
-  const $keyChain = useRef<string[]>([]);
 
   $timeline.use();
 
   const [state, dispatch] = useReducer(assistantReducer, {
     sessions: [{ id: uuid.generate(), value: "", state: "INACTIVE" }],
     state: "SLEEPING",
-    uiState: "MINIMISED",
     enterDown: false,
-    spaceDown: false
+    spaceDown: false,
+    open: false
   });
 
   const debouncedSetInactive = useDebouncedCallback(
@@ -110,37 +101,6 @@ const AssistantProvider = ({ children }: Props) => {
     }
   }, [listening, transcript]);
 
-  const debouncedClearKeyChain = useDebouncedCallback(() => {
-    $keyChain.current = [];
-  }, 500);
-
-  const handleUiStateChange = (key: string) => {
-    if (
-      $keyChain.current.length > 10 &&
-      $keyChain.current[$keyChain.current.length - 1] == "}" &&
-      $keyChain.current[$keyChain.current.length - 2] == "}"
-    ) {
-      const message = "Dude what are you doing? You're making me dizzy";
-      $timeline.set((prev) => [
-        ...prev,
-        {
-          type: "ASSISTANT",
-          id: uuid.generate(),
-          date: Date.now(),
-          message: {
-            type: "REACTION",
-            reaction: { type: "LANGUAGE_BASED", message }
-          }
-        }
-      ]);
-      Sound.speak(message);
-      $keyChain.current = [];
-      return;
-    }
-    $keyChain.current.push(key);
-    debouncedClearKeyChain();
-  };
-
   useAssistantKeys({
     spaceDown: () => {
       dispatch({ type: "SPACE_KEY_DOWN" });
@@ -152,34 +112,22 @@ const AssistantProvider = ({ children }: Props) => {
       SpeechRecognition.stopListening();
     },
     plus: () => {
-      dispatch({ type: "UI_STATE_CHANGE", value: "EXPAND" });
-      handleUiStateChange("+");
+      dispatch({ type: "OPEN_CLOSE", open: true });
     },
     minus: () => {
-      dispatch({ type: "UI_STATE_CHANGE", value: "CONTRACT" });
-      handleUiStateChange("-");
+      dispatch({ type: "OPEN_CLOSE", open: false });
     },
     escape: () => {
-      dispatch({ type: "UI_STATE_CHANGE", value: "MINIMIZE" });
-      handleUiStateChange("ESC");
-    },
-    leftBrace: () => {
-      dispatch({ type: "UI_STATE_CHANGE", value: "FRAME_LEFT" });
-      handleUiStateChange("{");
-    },
-    rightBrace: () => {
-      dispatch({ type: "UI_STATE_CHANGE", value: "FRAME_RIGHT" });
-      handleUiStateChange("}");
+      dispatch({ type: "OPEN_CLOSE", open: false });
     }
   });
 
   const request = () =>
-    new Observable<AssistantMessage>((sub) => {
+    new Observable<AssistantTimelineEvent>((sub) => {
       const payload: AssistantPayload = {
-        chatContext: timelineToChatContext($timeline.get()),
+        timeline: $timeline.get(),
         query: serverQuery,
-        input: session.value,
-        state: state.state
+        open: state.open
       };
 
       fetch(`${NEXT_PUBLIC_REMS_API_URL}/assistant`, {
@@ -200,7 +148,7 @@ const AssistantProvider = ({ children }: Props) => {
             return;
           }
 
-          const chunks: AssistantMessage[] = decoder
+          const chunks: AssistantTimelineEvent[] = decoder
             .decode(value)
             .split("\n")
             .filter(Boolean)
@@ -248,6 +196,10 @@ const AssistantProvider = ({ children }: Props) => {
     console.log(e);
   };
 
+  const onOpenClose: Context["onOpenClose"] = (open) => {
+    dispatch({ type: "OPEN_CLOSE", open });
+  };
+
   const process = () => {
     debouncedSetInactive.cancel();
 
@@ -260,45 +212,45 @@ const AssistantProvider = ({ children }: Props) => {
     $timeline.set((prev) => [
       ...prev,
       {
-        type: "USER",
+        role: "USER",
         id: uuid.generate(),
         date: Date.now(),
-        interaction: { type: "WRITTEN", input: session.value }
+        event: {
+          type: "LANGUAGE_BASED",
+          message: session.value
+        }
       }
     ]);
+
     const req = request();
 
-    let analysis: AnalysisAssistantMessage;
-    let summary: Interaction;
+    let analysis: Analysis;
     let responsePromise: Promise<void> = Promise.resolve();
 
     req.subscribe({
       next: (c) => {
-        $timeline.set((prev) => [
-          ...prev,
-          {
-            type: "ASSISTANT",
-            id: uuid.generate(),
-            date: Date.now(),
-            message: c
-          }
-        ]);
+        $timeline.set((prev) => [...prev, c]);
+        const { event: e } = c;
 
-        if (c.type === "ANALYSIS") {
-          analysis = c;
-          dispatch({ type: "ANALYSIS_COMPLETE", capability: c.capability });
+        if (e.type === "ANALYSIS_PERFORMED") {
+          analysis = e.analysis;
 
-          if (c.capability === "CLEAR_QUERY") {
+          dispatch({
+            type: "ANALYSIS_COMPLETE",
+            capability: analysis.capability
+          });
+
+          if (analysis.capability === "CLEAR_QUERY") {
             reset(true);
           }
 
-          if (c.capability === "NEW_QUERY") {
+          if (analysis.capability === "NEW_QUERY") {
             reset(false);
           }
         }
 
-        if (c.type === "REACTION" && c.reaction.type === "PATCH") {
-          const { patch: p } = c.reaction;
+        if (e.type === "PATCH") {
+          const { patch: p } = e;
           if (p.type === "ARRAY") {
             patch({ [p.key]: p.value });
           } else {
@@ -306,24 +258,21 @@ const AssistantProvider = ({ children }: Props) => {
           }
         }
 
-        if (c.type === "SUMMARY") {
-          summary = c.summary;
-          if (
-            summary.analysis.capability === "REFINE_QUERY" ||
-            summary.analysis.capability === "NEW_QUERY"
-          ) {
-            commit();
-          }
-        }
-
-        if (c.type === "REACTION" && c.reaction.type === "LANGUAGE_BASED") {
+        if (e.type === "LANGUAGE_BASED") {
           responsePromise =
-            state.uiState !== "MINIMISED"
-              ? Sound.speak(c.reaction.message)
+            state.open || analysis.capability === "OPEN_ASSISTANT"
+              ? Sound.speak(e.message)
               : Promise.resolve();
         }
 
-        if (c.type === "UPDATE" && c.phase === "COMPLETE") {
+        if (e.type === "YIELD") {
+          if (
+            analysis.capability === "REFINE_QUERY" ||
+            analysis.capability === "NEW_QUERY"
+          ) {
+            commit();
+          }
+
           responsePromise.then(() => {
             dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
             setTimeout(() => {
@@ -344,14 +293,15 @@ const AssistantProvider = ({ children }: Props) => {
         onKeyUp,
         onMicClick,
         onChange,
+        onOpenClose,
         onEventRendered,
 
         sessions: state.sessions,
         enterDown: state.enterDown,
         state: state.state,
         spaceDown: state.spaceDown,
+        open: state.open,
         timeline: $timeline.get(),
-        uiState: state.uiState,
 
         session,
         submittable:

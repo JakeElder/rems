@@ -1,22 +1,21 @@
 import { z } from "zod";
-import { UserInteractionSchema } from "./user-interaction";
-import { AssistantMessageSchema } from "./assistant-message";
+import { UserEventSchema, AssistantEventSchema } from "./event";
 
 export const UserTimelineEventSchema = z.object({
   id: z.string(),
-  type: z.literal("USER"),
   date: z.number(),
-  interaction: UserInteractionSchema
+  role: z.literal("USER"),
+  event: UserEventSchema
 });
 
 export const AssistantTimelineEventSchema = z.object({
   id: z.string(),
-  type: z.literal("ASSISTANT"),
   date: z.number(),
-  message: AssistantMessageSchema
+  role: z.literal("ASSISTANT"),
+  event: AssistantEventSchema
 });
 
-export const TimelineEventSchema = z.discriminatedUnion("type", [
+export const TimelineEventSchema = z.discriminatedUnion("role", [
   UserTimelineEventSchema,
   AssistantTimelineEventSchema
 ]);
@@ -24,25 +23,15 @@ export const TimelineEventSchema = z.discriminatedUnion("type", [
 export const TimelineSchema = z.array(TimelineEventSchema);
 
 `
-- TimelineSchema
-  - UserTimelineEventSchema
-    - UserInteractionSchema
-      - UserVerbalInteractionSchema
-      - UserWrittenInteractionSchema
-      - UserPatchInteractionSchema
-        - ScalarPatchSchema
-          - ScalarDiffSchema
-        - ArrayPatchSchema
-          - ArrayDiffSchema
-    - AssistantMessageSchema
-      - AnalysisAssistantMessageSchema
-      - ReactionAssistantMessageSchema
-        - PatchReactionSchema
-          - ScalarPatchSchema
-            - ScalarDiffSchema
-          - ArrayPatchSchema
-            - ArrayDiffSchema
-        - VerbalReactionSchema
-      - SummaryAssistantMessageSchema
-  - AssistantTimelineEventSchema
-`
+- Timeline
+  - TimelineEvent
+    - LanguageBasedInteraction
+    - PatchInteraction
+      - ScalarPatch
+        - ScalarDiff
+      - ArrayPatch
+        - ArrayDiff
+    - ContextEstablished
+      - Analysis
+      - Summary
+`;

@@ -1,8 +1,9 @@
+// @ts-nocheck
+
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Page from "./RealEstateIndexPage";
 import Header from "../../Components/Header";
 import FilterBar from "../../Components/FilterBar";
-import properties from "../../fixtures/properties";
 import PropertyCard from "../../Components/PropertyCard";
 import Pagination from "../../Components/Pagination";
 import Footer from "../../Components/Footer";

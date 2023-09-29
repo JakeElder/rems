@@ -5,7 +5,6 @@ const capabilities: Capability[] = [
   {
     id: 1,
     code: "NEW_QUERY",
-    name: "New Query",
     description: txt(
       <>
         Remi is able to understand search queries and show you suitable
@@ -22,7 +21,6 @@ const capabilities: Capability[] = [
   {
     id: 2,
     code: "REFINE_QUERY",
-    name: "Refine Query",
     description: txt(
       <>
         Remi is able to refine queries. Prefer to refine over start a new
@@ -37,22 +35,8 @@ const capabilities: Capability[] = [
   },
 
   {
-    id: 3,
-    code: "CLEAR_QUERY",
-    name: "Clear Query",
-    description: txt(
-      <>Remi can clear the search, resetting the listings to their defaults.</>
-    ),
-    exampleTriggers: [
-      txt(<>Reset the search</>),
-      txt(<>Actually let's start again</>)
-    ]
-  },
-
-  {
     id: 4,
     code: "SHOW_PROPERTY",
-    name: "Show Property",
     description: txt(
       <>
         When you've found a property that looks interesting, Remi can show you
@@ -70,7 +54,6 @@ const capabilities: Capability[] = [
   {
     id: 5,
     code: "REQUEST_VIEWING",
-    name: "Request Viewing",
     description: txt(
       <>
         Once you've found a property you like, Remi can connect you to an agent
@@ -83,7 +66,6 @@ const capabilities: Capability[] = [
   {
     id: 6,
     code: "RESPOND_GENERAL_QUERY",
-    name: "Respond to General Query",
     description: txt(
       <>
         Remi can just chat with you ¯\_(ツ)_/¯. Ask her a general question,
@@ -99,17 +81,8 @@ const capabilities: Capability[] = [
   },
 
   {
-    id: 7,
-    code: "OPEN_ASSISTANT",
-    name: "Open the assistant chat window",
-    description: txt(<>Remi can be in closed or open mode</>),
-    exampleTriggers: [txt(<>Hey, Remi</>)]
-  },
-
-  {
     id: 100,
-    code: "REQUEST_CLARIFICATION",
-    name: "Request Clarification",
+    code: "INFORM_MORE_INFO_NEEDED",
     description: txt(
       <>
         When Remi is unsure about your intent or needs more information, she

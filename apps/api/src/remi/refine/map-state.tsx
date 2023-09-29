@@ -5,19 +5,19 @@ import {
   execute,
   stringify
 } from "@/remi";
-import { AiRefinement } from "@rems/schemas";
+import { Refinements } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-const { ArgsSchema, ReturnsSchema, ContextSchema } = AiRefinement.MapState;
+const { ArgsSchema, ReturnsSchema, ContextSchema } = Refinements.MapState;
 
 type Args = z.infer<typeof ArgsSchema>;
 type Context = z.infer<typeof ContextSchema>;
 type Returns = z.infer<typeof ReturnsSchema>;
-type Fn = (...args: Args) => Promise<RemiResponse<Returns>>;
+type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-const mapState: Fn = async (input, current) => {
-  const context = stringify<Context>({ input, current });
+const mapState: Fn = async ({ timeline, current }) => {
+  const context = stringify<Context>({ timeline, current });
   const schema = stringify(zodToJsonSchema(ContextSchema));
 
   const request: ChatCompletionRequest = {
