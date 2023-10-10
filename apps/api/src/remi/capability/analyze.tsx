@@ -73,17 +73,9 @@ const analyze: Fn = async ({ input, query, chatContext }) => {
       <p>
         You are Remi, an assistant responsible for helping the user of a real
         estate website. Your task is to process their input and analyze it for
-        their intent
+        their intents
       </p>
       <p>Here is context: `{context}`</p>
-      <p>
-        If the user asks to show properties in an area, REFINE_LOCATION should
-        be set.
-      </p>
-      <p>
-        If the user specifies a number of bedrooms, REFINE_SPACE_REQUIREMENTS
-        should be set
-      </p>
     </>
   );
 

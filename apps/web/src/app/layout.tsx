@@ -4,8 +4,8 @@ import { FontLoader, IconLoader } from "@rems/ui";
 import ExternalScripts from "@/components/client/ExternalScripts";
 
 export const metadata = {
-  title: "JYO Property",
-  description: "Luxury Real Estate",
+  title: "Rems",
+  description: "The worlds most advanced AI powered real estate platform",
   icons: "/favicon.svg"
 };
 

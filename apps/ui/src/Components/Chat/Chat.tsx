@@ -6,7 +6,7 @@ import {
   AssistantState,
   GroupedAssistantState,
   Timeline,
-  TimelineEvent
+  TimelineEvent,
 } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
@@ -30,7 +30,7 @@ export type Props = {
 
 const OpenClose = ({
   open,
-  onOpenClose
+  onOpenClose,
 }: Pick<Props, "open" | "onOpenClose">) => {
   const { rotate } = useSpring({ rotate: open ? 0 : 180 });
 
@@ -39,7 +39,7 @@ const OpenClose = ({
       className={css["open-close-button"]}
       onClick={() => onOpenClose(!open)}
       style={{
-        transform: rotate.to((value) => `rotate(${value}deg)`)
+        transform: rotate.to((value) => `rotate(${value}deg)`),
       }}
     >
       <FontAwesomeIcon className={css["close"]} icon={faCaretDown} size="xs" />
@@ -55,7 +55,7 @@ const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
     THINKING: "THINKING",
     LISTENING: "LISTENING",
     CLEARING_QUERY: "INTERACTING",
-    REFINING_QUERY: "INTERACTING"
+    REFINING_QUERY: "INTERACTING",
   };
   return map[state];
 };
@@ -64,11 +64,11 @@ export const Header = ({
   state,
   lang,
   open,
-  onOpenClose
+  onOpenClose,
 }: Pick<Props, "state" | "lang" | "open" | "onOpenClose">) => {
   const { avatarBorder } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
   const { avatarOpacity } = useSpring({
-    avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
+    avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8,
   });
 
   return (
@@ -180,7 +180,7 @@ export const Body = React.memo(
       enter: (item) => async (next) => {
         const $el = refMap.get(item);
         await next({ opacity: 1, height: $el.offsetHeight });
-      }
+      },
     });
 
     return (
@@ -212,10 +212,10 @@ const FOREGROUND_PADDING_TOP = 20;
 export const Root = ({
   children,
   open,
-  state
+  state,
 }: { children: React.ReactNode } & Pick<Props, "open" | "state">) => {
   const rootStyle = useSpring({
-    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP)
+    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP),
   });
 
   const backgroundStyle = useSpring({
@@ -225,7 +225,7 @@ export const Root = ({
     boxShadow: open
       ? "0 0 5px 0 rgba(0, 0, 0, 0.4)"
       : "0 0 5px 0 rgba(0, 0, 0, 0)",
-    backdropFilter: open ? "blur(4px)" : "blur(0px)"
+    backdropFilter: open ? "blur(4px)" : "blur(0px)",
   });
 
   return (
