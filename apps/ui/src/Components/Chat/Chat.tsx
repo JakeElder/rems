@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { createContext, useMemo } from "react";
 import css from "./Chat.module.css";
 import {
   AssistantState,
   GroupedAssistantState,
   Timeline,
-  TimelineEvent,
+  TimelineEvent
 } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
@@ -28,10 +28,11 @@ export type Props = {
   onEventRendered: (e: TimelineEvent) => void;
 };
 
-const OpenClose = ({
-  open,
-  onOpenClose,
-}: Pick<Props, "open" | "onOpenClose">) => {
+const Context = createContext<Props | null>(null);
+const useContext = () => React.useContext(Context)!;
+
+const OpenClose = () => {
+  const { open, onOpenClose } = useContext();
   const { rotate } = useSpring({ rotate: open ? 0 : 180 });
 
   return (
@@ -39,7 +40,7 @@ const OpenClose = ({
       className={css["open-close-button"]}
       onClick={() => onOpenClose(!open)}
       style={{
-        transform: rotate.to((value) => `rotate(${value}deg)`),
+        transform: rotate.to((value) => `rotate(${value}deg)`)
       }}
     >
       <FontAwesomeIcon className={css["close"]} icon={faCaretDown} size="xs" />
@@ -55,20 +56,17 @@ const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
     THINKING: "THINKING",
     LISTENING: "LISTENING",
     CLEARING_QUERY: "INTERACTING",
-    REFINING_QUERY: "INTERACTING",
+    REFINING_QUERY: "INTERACTING"
   };
   return map[state];
 };
 
-export const Header = ({
-  state,
-  lang,
-  open,
-  onOpenClose,
-}: Pick<Props, "state" | "lang" | "open" | "onOpenClose">) => {
+export const Header = () => {
+  const { state, lang } = useContext();
+
   const { avatarBorder } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
   const { avatarOpacity } = useSpring({
-    avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8,
+    avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
   });
 
   return (
@@ -100,7 +98,7 @@ export const Header = ({
       <div className={css["lang-open-close"]}>
         <div className={css["lang"]}>{lang}</div>
         <div className={css["open-close"]}>
-          <OpenClose open={open} onOpenClose={onOpenClose} />
+          <OpenClose />
         </div>
       </div>
     </div>
@@ -180,7 +178,7 @@ export const Body = React.memo(
       enter: (item) => async (next) => {
         const $el = refMap.get(item);
         await next({ opacity: 1, height: $el.offsetHeight });
-      },
+      }
     });
 
     return (
@@ -211,11 +209,11 @@ const FOREGROUND_PADDING_TOP = 20;
 
 export const Root = ({
   children,
-  open,
-  state,
-}: { children: React.ReactNode } & Pick<Props, "open" | "state">) => {
+  ...props
+}: { children: React.ReactNode } & Props) => {
+  const { open, state } = props;
   const rootStyle = useSpring({
-    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP),
+    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP)
   });
 
   const backgroundStyle = useSpring({
@@ -225,13 +223,15 @@ export const Root = ({
     boxShadow: open
       ? "0 0 5px 0 rgba(0, 0, 0, 0.4)"
       : "0 0 5px 0 rgba(0, 0, 0, 0)",
-    backdropFilter: open ? "blur(4px)" : "blur(0px)",
+    backdropFilter: open ? "blur(4px)" : "blur(0px)"
   });
 
   return (
-    <animated.div className={css["root"]} style={rootStyle}>
-      <animated.div className={css["background"]} style={backgroundStyle} />
-      <animated.div className={css["foreground"]}>{children}</animated.div>
-    </animated.div>
+    <Context.Provider value={props}>
+      <animated.div className={css["root"]} style={rootStyle}>
+        <animated.div className={css["background"]} style={backgroundStyle} />
+        <animated.div className={css["foreground"]}>{children}</animated.div>
+      </animated.div>
+    </Context.Provider>
   );
 };

@@ -53,35 +53,48 @@ export const Mock = (props: Props) => {
   }, []);
 
   return (
-    <Chat.Root {...props}>
-      <Chat.Dialog>
-        <Chat.Header {...props} />
-        <Chat.Body {...props} timeline={t} />
-      </Chat.Dialog>
-      <Chat.Input>
-        <ChatInput
-          {...props}
-          sessions={sessions}
-          submittable={sessions[sessions.length - 1].value !== ""}
-          onChange={(e) => {
-            e.preventDefault();
-            setSessions((prev) => [
-              ...prev.slice(0, -1),
-              { ...prev[prev.length - 1], value: e.target.value }
-            ]);
-          }}
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        />
-      </Chat.Input>
-    </Chat.Root>
+    <>
+      <div>
+        <div style={{ height: 90, background: "#a7a7a7" }}></div>
+        <div style={{ minHeight: "100vh", display: "flex" }}>
+          <div style={{ flex: 4, background: "#983434" }} />
+          <div style={{ flex: 5 }} />
+        </div>
+      </div>
+      <Chat.Root {...props}>
+        <Chat.Dialog>
+          <Chat.Header {...props} />
+          <Chat.Body {...props} timeline={t} />
+        </Chat.Dialog>
+        <Chat.Input>
+          <ChatInput
+            {...props}
+            sessions={sessions}
+            submittable={sessions[sessions.length - 1].value !== ""}
+            onChange={(e) => {
+              e.preventDefault();
+              setSessions((prev) => [
+                ...prev.slice(0, -1),
+                { ...prev[prev.length - 1], value: e.target.value }
+              ]);
+            }}
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          />
+        </Chat.Input>
+      </Chat.Root>
+    </>
   );
 };
 
 const meta: Meta<Props> = {
   title: "Chat/Chat",
-  component: Mock
+  component: Mock,
+  parameters: {
+    layout: "fullscreen",
+    backgrounds: { default: "dark" }
+  }
 };
 
 export const Default: Story = {
