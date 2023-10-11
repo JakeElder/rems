@@ -5,6 +5,7 @@ import css from "./Chat.module.css";
 import {
   AssistantState,
   AssistantUiState,
+  MakeNonNullable,
   Timeline,
   TimelineEvent
 } from "@rems/types";
@@ -18,15 +19,19 @@ import StateLabel from "../StateLabel/StateLabel";
 import useAssistantUiLayout from "../../hooks/use-assistant-ui-layout";
 import { assistantStateToGroupedAssistantState } from "../../adapters";
 
-export type Props = {
-  timeline: Timeline;
+type ContextProps = {
   lang: "en" | "th";
   state: AssistantState;
-  uiState: AssistantUiState;
-  onEventRendered: (e: TimelineEvent) => void;
 };
 
-const Context = createContext<Props | null>(null);
+export type Props = {
+  timeline: Timeline;
+  uiState: AssistantUiState;
+  xDivide: number | null;
+  marginTop: number | null;
+} & ContextProps;
+
+const Context = createContext<ContextProps | null>(null);
 const useContext = () => React.useContext(Context)!;
 
 export const Header = () => {
@@ -171,10 +176,27 @@ export const Body = React.memo(
 );
 
 export const Root = ({
-  children,
+  marginTop,
+  xDivide,
   ...props
 }: { children: React.ReactNode } & Props) => {
-  const { uiState, state } = props;
+  if (marginTop !== null && xDivide !== null) {
+    return <ReadyRoot {...props} marginTop={marginTop} xDivide={xDivide} />;
+  }
+  return null;
+};
+
+export const ReadyRoot = ({
+  children,
+  uiState,
+  state,
+  xDivide,
+  marginTop,
+  lang
+}: { children: React.ReactNode } & MakeNonNullable<
+  Props,
+  "xDivide" | "marginTop"
+>) => {
   const {
     padding,
     borderRadius,
@@ -188,13 +210,13 @@ export const Root = ({
   } = useAssistantUiLayout({
     state: uiState,
     assistantState: state,
-    xDivide: 664,
-    marginTop: 90
+    xDivide,
+    marginTop
   });
 
   return (
     <div className={css["root"]}>
-      <Context.Provider value={props}>
+      <Context.Provider value={{ lang, state }}>
         <animated.div
           className={css["background"]}
           style={{
