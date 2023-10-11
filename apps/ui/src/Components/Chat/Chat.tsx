@@ -215,28 +215,24 @@ export const ReadyRoot = ({
   });
 
   return (
-    <div className={css["root"]}>
-      <Context.Provider value={{ lang, state }}>
+    <Context.Provider value={{ lang, state }}>
+      <animated.div
+        className={css["root"]}
+        style={{ left, top, right, bottom }}
+      >
         <animated.div
           className={css["background"]}
           style={{
-            left,
-            top,
-            right,
-            bottom,
             borderRadius,
             boxShadow,
             backdropFilter,
             background
           }}
         />
-        <animated.div
-          className={css["foreground"]}
-          style={{ left, top, right, bottom, padding }}
-        >
+        <animated.div className={css["foreground"]} style={{ padding }}>
           {children}
         </animated.div>
-      </Context.Provider>
-    </div>
+      </animated.div>
+    </Context.Provider>
   );
 };

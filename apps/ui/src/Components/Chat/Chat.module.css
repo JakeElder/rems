@@ -1,7 +1,14 @@
-.background,
-.foreground {
+.root {
   position: fixed;
   min-height: 300px;
+  min-width: 400px;
+}
+
+.background,
+.foreground {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .foreground {
