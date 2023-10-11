@@ -331,6 +331,6 @@ export type ChatContext = Z<typeof ChatContextSchema>;
 export type AssistantUiState =
   | "MINIMISED"
   | "DOCKED"
-  | "WINDOW"
+  | "WINDOWED"
   | "LEFT"
   | "RIGHT";

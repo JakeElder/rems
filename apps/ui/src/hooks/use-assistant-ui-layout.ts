@@ -7,6 +7,11 @@ import { assistantStateToGroupedAssistantState } from "../adapters";
 type UiState = AssistantUiState;
 
 type ViewportWidth = number;
+type ViewportHeight = number;
+
+const HEADER_HEIGHT = 60;
+const DEFAULT_WIDTH = 480;
+const DEFAULT_HEIGHT = 570;
 
 const calc = {
   width({ state }: { state: UiState }) {
@@ -24,30 +29,96 @@ const calc = {
   }: {
     state: UiState;
     right: number;
-    width: number;
     vw: ViewportWidth;
   }) {
-    return 500;
+    if (state === "MINIMISED" || state === "DOCKED") {
+      return vw - (right + DEFAULT_WIDTH);
+    }
+
+    if (state === "WINDOWED") {
+      return 0;
+    }
+
+    throw new Error();
   },
 
   right({ state }: { state: UiState }) {
-    return 30;
+    if (state === "MINIMISED" || state === "DOCKED") {
+      return 30;
+    }
+
+    if (state === "WINDOWED") {
+      return 0;
+    }
+
+    throw new Error();
   },
 
-  top({ state }: { state: UiState }) {
-    return 50;
+  top({
+    state,
+    vh,
+    padding
+  }: {
+    state: UiState;
+    vh: ViewportHeight;
+    padding: number;
+  }) {
+    if (state === "MINIMISED") {
+      return vh - (HEADER_HEIGHT + padding);
+    }
+
+    if (state === "DOCKED") {
+      return vh - (DEFAULT_HEIGHT + padding);
+    }
+
+    if (state === "WINDOWED") {
+      return 0;
+    }
+
+    throw new Error();
   },
 
-  bottom({ state }: { state: UiState }) {
-    return 50;
+  bottom({
+    state,
+    vh,
+    padding
+  }: {
+    state: UiState;
+    vh: ViewportHeight;
+    padding: number;
+  }) {
+    if (state === "MINIMISED") {
+      return -(DEFAULT_HEIGHT - (HEADER_HEIGHT + padding));
+    }
+
+    if (state === "DOCKED") {
+      return 0;
+    }
+
+    if (state === "WINDOWED") {
+      return 0;
+    }
+
+    throw new Error();
   },
 
   padding({ state }: { state: UiState }) {
+    if (state === "WINDOWED") {
+      return 60;
+    }
     return 20;
   },
 
   borderRadius({ state }: { state: UiState }) {
-    return 13;
+    if (state === "DOCKED") {
+      return "13px 13px 0px 0px";
+    }
+
+    if (state === "WINDOWED") {
+      return "0px 0px 0px 0px";
+    }
+
+    return "13px 13px 13px 13px";
   },
 
   boxShadow({ state }: { state: UiState }) {
@@ -57,7 +128,7 @@ const calc = {
   },
 
   backdropFilter({ state }: { state: UiState }) {
-    return state === "MINIMISED" ? "blur(4px)" : "blur(0px)";
+    return state === "MINIMISED" ? "blur(0px)" : "blur(4px)";
   },
 
   backgroundColor({
@@ -80,13 +151,14 @@ type Props = {
 };
 
 const useAssistantUiLayout = ({ state, assistantState }: Props) => {
-  const width = calc.width({ state });
-  const height = calc.height({ state });
-  const right = calc.right({ state });
-  const left = calc.left({ state, right, width, vw: 1000 });
-  const top = calc.top({ state });
-  const bottom = calc.bottom({ state });
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
   const padding = calc.padding({ state });
+  const right = calc.right({ state });
+  const left = calc.left({ state, right, vw });
+  const top = calc.top({ state, vh, padding });
+  const bottom = calc.bottom({ state, vh, padding });
   const background = calc.backgroundColor({ state, assistantState });
   const borderRadius = calc.borderRadius({ state });
   const boxShadow = calc.boxShadow({ state });

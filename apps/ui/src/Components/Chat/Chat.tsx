@@ -191,8 +191,8 @@ export const Root = ({
   });
 
   return (
-    <Context.Provider value={props}>
-      <animated.div className={css["root"]}>
+    <div className={css["root"]}>
+      <Context.Provider value={props}>
         <animated.div
           className={css["background"]}
           style={{
@@ -212,7 +212,7 @@ export const Root = ({
         >
           {children}
         </animated.div>
-      </animated.div>
-    </Context.Provider>
+      </Context.Provider>
+    </div>
   );
 };

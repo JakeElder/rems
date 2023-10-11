@@ -9,16 +9,18 @@ import Patch from "../Patch";
 const PatchMessage = (reaction: PatchReaction) => {
   return (
     <div className={css["root"]}>
-      <div className={css["heading"]}>
-        <div className={css["icon"]}>
-          <FontAwesomeIcon icon={faSliders} size="sm" />
+      <div className={css["container"]}>
+        <div className={css["heading"]}>
+          <div className={css["icon"]}>
+            <FontAwesomeIcon icon={faSliders} size="sm" />
+          </div>
+          <div className={css["group"]}>
+            {titleCase(reaction.group.replace(/_/g, " ").toLowerCase())}
+          </div>
         </div>
-        <div className={css["group"]}>
-          {titleCase(reaction.group.replace(/_/g, " ").toLowerCase())}
+        <div className={css["body"]}>
+          <Patch {...reaction.patch} />
         </div>
-      </div>
-      <div className={css["body"]}>
-        <Patch {...reaction.patch} />
       </div>
     </div>
   );

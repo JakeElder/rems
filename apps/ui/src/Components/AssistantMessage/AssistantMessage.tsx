@@ -12,9 +12,11 @@ const AssistantMessage = forwardRef<HTMLDivElement, AssistantMessageType>(
     ) {
       return (
         <div className={css["root"]} ref={ref}>
-          <LanguageBasedAssistantMessage>
-            {message.reaction.message}
-          </LanguageBasedAssistantMessage>
+          <div className={css["message"]}>
+            <LanguageBasedAssistantMessage>
+              {message.reaction.message}
+            </LanguageBasedAssistantMessage>
+          </div>
         </div>
       );
     }
@@ -22,7 +24,9 @@ const AssistantMessage = forwardRef<HTMLDivElement, AssistantMessageType>(
     if (message.type === "REACTION" && message.reaction.type === "PATCH") {
       return (
         <div className={css["root"]} ref={ref}>
-          <PatchMessage {...message.reaction} />
+          <div className={css["message"]}>
+            <PatchMessage {...message.reaction} />
+          </div>
         </div>
       );
     }

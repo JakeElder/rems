@@ -101,6 +101,7 @@ export const Default: Story = {
   args: {
     lang: "en",
     state: "SLEEPING",
+    uiState: "MINIMISED",
     inputState: "INACTIVE",
     timeline: [],
     submittable: false,
