@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import css from "./StateLabel.module.css";
-import { AssistantState, GroupedAssistantState } from "@rems/types";
+import { AssistantState } from "@rems/types";
 import { animated, useSpring } from "@react-spring/web";
 import { CHAT_PALETTE } from "../../colors";
+import { assistantStateToGroupedAssistantState } from "../../adapters";
 
 type Props = { state: AssistantState };
 
@@ -17,21 +18,9 @@ const states: Record<Props["state"], State> = {
   OPENING: { label: "Opening" }
 };
 
-const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
-  const map: Record<Props["state"], GroupedAssistantState> = {
-    CHATTING: "INTERACTING",
-    SLEEPING: "IDLE",
-    THINKING: "THINKING",
-    LISTENING: "LISTENING",
-    CLEARING_QUERY: "INTERACTING",
-    REFINING_QUERY: "INTERACTING",
-    OPENING: "INTERACTING"
-  };
-  return map[state];
-};
-
 const StateLabel = ({ state }: Props) => {
-  const { labelBg, labelColor } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
+  const group = assistantStateToGroupedAssistantState(state);
+  const { labelBg, labelColor } = useSpring(CHAT_PALETTE[group]);
   const keys = useRef<Props["state"][]>([
     state,
     ...(Object.keys(states).filter((s) => s !== state) as Props["state"][])

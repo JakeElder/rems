@@ -4,12 +4,10 @@ import React, { createContext, useMemo } from "react";
 import css from "./Chat.module.css";
 import {
   AssistantState,
-  GroupedAssistantState,
+  AssistantUiState,
   Timeline,
   TimelineEvent
 } from "@rems/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
 import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
@@ -17,54 +15,26 @@ import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
 import StateLabel from "../StateLabel/StateLabel";
-import tinycolor from "tinycolor2";
+import useAssistantUiLayout from "../../hooks/use-assistant-ui-layout";
+import { assistantStateToGroupedAssistantState } from "../../adapters";
 
 export type Props = {
-  onOpenClose: (open: boolean) => void;
   timeline: Timeline;
   lang: "en" | "th";
   state: AssistantState;
-  open: boolean;
+  uiState: AssistantUiState;
   onEventRendered: (e: TimelineEvent) => void;
 };
 
 const Context = createContext<Props | null>(null);
 const useContext = () => React.useContext(Context)!;
 
-const OpenClose = () => {
-  const { open, onOpenClose } = useContext();
-  const { rotate } = useSpring({ rotate: open ? 0 : 180 });
-
-  return (
-    <animated.button
-      className={css["open-close-button"]}
-      onClick={() => onOpenClose(!open)}
-      style={{
-        transform: rotate.to((value) => `rotate(${value}deg)`)
-      }}
-    >
-      <FontAwesomeIcon className={css["close"]} icon={faCaretDown} size="xs" />
-    </animated.button>
-  );
-};
-
-const stateToGroup = (state: Props["state"]): GroupedAssistantState => {
-  const map: Record<Props["state"], GroupedAssistantState> = {
-    OPENING: "INTERACTING",
-    CHATTING: "INTERACTING",
-    SLEEPING: "IDLE",
-    THINKING: "THINKING",
-    LISTENING: "LISTENING",
-    CLEARING_QUERY: "INTERACTING",
-    REFINING_QUERY: "INTERACTING"
-  };
-  return map[state];
-};
-
 export const Header = () => {
   const { state, lang } = useContext();
 
-  const { avatarBorder } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
+  const group = assistantStateToGroupedAssistantState(state);
+
+  const { avatarBorder } = useSpring(CHAT_PALETTE[group]);
   const { avatarOpacity } = useSpring({
     avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
   });
@@ -95,11 +65,8 @@ export const Header = () => {
         <div className={css["name"]}>Remi</div>
         <StateLabel state={state} />
       </div>
-      <div className={css["lang-open-close"]}>
+      <div className={css["lang-manage-ui-state"]}>
         <div className={css["lang"]}>{lang}</div>
-        <div className={css["open-close"]}>
-          <OpenClose />
-        </div>
       </div>
     </div>
   );
@@ -203,34 +170,48 @@ export const Body = React.memo(
   (prev, next) => equal(prev.timeline, next.timeline)
 );
 
-const HEIGHT = 570;
-const HEADER_HEIGHT = 60;
-const FOREGROUND_PADDING_TOP = 20;
-
 export const Root = ({
   children,
   ...props
 }: { children: React.ReactNode } & Props) => {
-  const { open, state } = props;
-  const rootStyle = useSpring({
-    y: open ? 0 : HEIGHT - (HEADER_HEIGHT + FOREGROUND_PADDING_TOP)
-  });
-
-  const backgroundStyle = useSpring({
-    background: tinycolor(CHAT_PALETTE[stateToGroup(state)].labelBg)
-      .setAlpha(open ? 0.5 : 0)
-      .toRgbString(),
-    boxShadow: open
-      ? "0 0 5px 0 rgba(0, 0, 0, 0.4)"
-      : "0 0 5px 0 rgba(0, 0, 0, 0)",
-    backdropFilter: open ? "blur(4px)" : "blur(0px)"
+  const { uiState, state } = props;
+  const {
+    padding,
+    borderRadius,
+    boxShadow,
+    backdropFilter,
+    background,
+    left,
+    top,
+    right,
+    bottom
+  } = useAssistantUiLayout({
+    state: uiState,
+    assistantState: state
   });
 
   return (
     <Context.Provider value={props}>
-      <animated.div className={css["root"]} style={rootStyle}>
-        <animated.div className={css["background"]} style={backgroundStyle} />
-        <animated.div className={css["foreground"]}>{children}</animated.div>
+      <animated.div className={css["root"]}>
+        <animated.div
+          className={css["background"]}
+          style={{
+            left,
+            top,
+            right,
+            bottom,
+            borderRadius,
+            boxShadow,
+            backdropFilter,
+            background
+          }}
+        />
+        <animated.div
+          className={css["foreground"]}
+          style={{ left, top, right, bottom, padding }}
+        >
+          {children}
+        </animated.div>
       </animated.div>
     </Context.Provider>
   );

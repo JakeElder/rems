@@ -56,15 +56,15 @@ export const Mock = (props: Props) => {
     <>
       <div>
         <div style={{ height: 90, background: "#a7a7a7" }}></div>
-        <div style={{ minHeight: "100vh", display: "flex" }}>
+        <div style={{ minHeight: "calc(100vh - 90px)", display: "flex" }}>
           <div style={{ flex: 4, background: "#983434" }} />
           <div style={{ flex: 5 }} />
         </div>
       </div>
       <Chat.Root {...props}>
         <Chat.Dialog>
-          <Chat.Header {...props} />
-          <Chat.Body {...props} timeline={t} />
+          <Chat.Header />
+          <Chat.Body timeline={t} />
         </Chat.Dialog>
         <Chat.Input>
           <ChatInput
@@ -100,7 +100,6 @@ const meta: Meta<Props> = {
 export const Default: Story = {
   args: {
     lang: "en",
-    open: true,
     state: "SLEEPING",
     inputState: "INACTIVE",
     timeline: [],

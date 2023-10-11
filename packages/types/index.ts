@@ -327,3 +327,10 @@ export type LanguageBasedContextEntry = Z<
 >;
 export type ChatContextEntry = Z<typeof ChatContextEntrySchema>;
 export type ChatContext = Z<typeof ChatContextSchema>;
+
+export type AssistantUiState =
+  | "MINIMISED"
+  | "DOCKED"
+  | "WINDOW"
+  | "LEFT"
+  | "RIGHT";
