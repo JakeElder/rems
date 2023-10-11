@@ -187,7 +187,9 @@ export const Root = ({
     bottom
   } = useAssistantUiLayout({
     state: uiState,
-    assistantState: state
+    assistantState: state,
+    xDivide: 664,
+    marginTop: 90
   });
 
   return (

@@ -8,28 +8,24 @@ type UiState = AssistantUiState;
 
 type ViewportWidth = number;
 type ViewportHeight = number;
+type XDivide = number;
 
 const HEADER_HEIGHT = 60;
 const DEFAULT_WIDTH = 480;
 const DEFAULT_HEIGHT = 570;
+const FRAME_PAD = 30;
 
 const calc = {
-  width({ state }: { state: UiState }) {
-    return 440;
-  },
-
-  height({ state }: { state: UiState }) {
-    return 570;
-  },
-
   left({
     state,
     right,
-    vw
+    vw,
+    xDivide
   }: {
     state: UiState;
     right: number;
     vw: ViewportWidth;
+    xDivide: XDivide;
   }) {
     if (state === "MINIMISED" || state === "DOCKED") {
       return vw - (right + DEFAULT_WIDTH);
@@ -39,10 +35,30 @@ const calc = {
       return 0;
     }
 
+    if (state === "LEFT") {
+      return FRAME_PAD;
+    }
+
+    if (state === "RIGHT") {
+      const padding = FRAME_PAD * 2;
+      const available = vw - xDivide - padding;
+
+      const width = Math.max(DEFAULT_WIDTH, available);
+      return vw - (FRAME_PAD + width);
+    }
+
     throw new Error();
   },
 
-  right({ state }: { state: UiState }) {
+  right({
+    state,
+    vw,
+    xDivide
+  }: {
+    state: UiState;
+    vw: ViewportWidth;
+    xDivide: XDivide;
+  }) {
     if (state === "MINIMISED" || state === "DOCKED") {
       return 30;
     }
@@ -51,17 +67,31 @@ const calc = {
       return 0;
     }
 
+    if (state === "LEFT") {
+      const padding = FRAME_PAD * 2;
+      const available = xDivide - padding;
+
+      const width = Math.max(DEFAULT_WIDTH, available);
+      return vw - (FRAME_PAD + width);
+    }
+
+    if (state === "RIGHT") {
+      return FRAME_PAD;
+    }
+
     throw new Error();
   },
 
   top({
     state,
     vh,
-    padding
+    padding,
+    marginTop
   }: {
     state: UiState;
     vh: ViewportHeight;
     padding: number;
+    marginTop: number;
   }) {
     if (state === "MINIMISED") {
       return vh - (HEADER_HEIGHT + padding);
@@ -75,38 +105,31 @@ const calc = {
       return 0;
     }
 
+    if (state === "LEFT" || state === "RIGHT") {
+      return marginTop + FRAME_PAD;
+    }
+
     throw new Error();
   },
 
-  bottom({
-    state,
-    vh,
-    padding
-  }: {
-    state: UiState;
-    vh: ViewportHeight;
-    padding: number;
-  }) {
+  bottom({ state, padding }: { state: UiState; padding: number }) {
     if (state === "MINIMISED") {
       return -(DEFAULT_HEIGHT - (HEADER_HEIGHT + padding));
     }
 
-    if (state === "DOCKED") {
+    if (state === "DOCKED" || state === "WINDOWED") {
       return 0;
     }
 
-    if (state === "WINDOWED") {
-      return 0;
+    if (state === "LEFT" || state === "RIGHT") {
+      return FRAME_PAD;
     }
 
     throw new Error();
   },
 
   padding({ state }: { state: UiState }) {
-    if (state === "WINDOWED") {
-      return 60;
-    }
-    return 20;
+    return state === "WINDOWED" ? 60 : 20;
   },
 
   borderRadius({ state }: { state: UiState }) {
@@ -148,17 +171,24 @@ const calc = {
 type Props = {
   state: UiState;
   assistantState: AssistantState;
+  xDivide: number;
+  marginTop: number;
 };
 
-const useAssistantUiLayout = ({ state, assistantState }: Props) => {
+const useAssistantUiLayout = ({
+  state,
+  assistantState,
+  xDivide,
+  marginTop
+}: Props) => {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
 
   const padding = calc.padding({ state });
-  const right = calc.right({ state });
-  const left = calc.left({ state, right, vw });
-  const top = calc.top({ state, vh, padding });
-  const bottom = calc.bottom({ state, vh, padding });
+  const right = calc.right({ state, vw, xDivide });
+  const left = calc.left({ state, right, vw, xDivide });
+  const top = calc.top({ state, vh, padding, marginTop });
+  const bottom = calc.bottom({ state, padding });
   const background = calc.backgroundColor({ state, assistantState });
   const borderRadius = calc.borderRadius({ state });
   const boxShadow = calc.boxShadow({ state });
