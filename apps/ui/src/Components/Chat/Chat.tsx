@@ -1,23 +1,16 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, MutableRefObject, useEffect, useState } from "react";
 import css from "./Chat.module.css";
 import {
   AssistantState,
   AssistantUiState,
-  MakeNonNullable,
   Timeline,
   TimelineEvent
 } from "@rems/types";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
-import {
-  Pick,
-  animated,
-  useSpring,
-  useTransition,
-  config
-} from "@react-spring/web";
+import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
@@ -25,14 +18,24 @@ import StateLabel from "../StateLabel/StateLabel";
 import useAssistantUiLayout from "../../hooks/use-assistant-ui-layout";
 import { assistantStateToGroupedAssistantState } from "../../adapters";
 
+type Spacing = {
+  xDivide: number;
+  marginTop: number;
+};
+
+export type SpacingUtilityReturn =
+  | { ready: false }
+  | { ready: true; props: Spacing };
+
 export type Props = {
   lang: "en" | "th";
   state: AssistantState;
   timeline: Timeline;
   uiState: AssistantUiState;
-  xDivide: number | null;
-  marginTop: number | null;
+  spacing: SpacingUtilityReturn;
 };
+
+export type ReadyProps = Omit<Props, "spacing"> & Spacing;
 
 export const Header = React.memo(
   ({ state, lang }: Pick<Props, "state" | "lang">) => {
@@ -195,13 +198,32 @@ export const Body = React.memo(
   (prev, next) => equal(prev.timeline, next.timeline)
 );
 
+export const useAssistantSpacingUtility = ({
+  $top,
+  $left
+}: {
+  $top: MutableRefObject<HTMLDivElement | null>;
+  $left: MutableRefObject<HTMLDivElement | null>;
+}): SpacingUtilityReturn => {
+  const [spacing, setSpacing] = useState<Spacing | null>(null);
+
+  useEffect(() => {
+    if ($left.current && $top.current) {
+      const { width } = $left.current.getBoundingClientRect();
+      const { height } = $top.current.getBoundingClientRect();
+      setSpacing({ xDivide: width, marginTop: height });
+    }
+  }, [$left]);
+
+  return spacing === null ? { ready: false } : { ready: true, props: spacing };
+};
+
 export const Root = ({
-  marginTop,
-  xDivide,
+  spacing,
   ...props
 }: { children: React.ReactNode } & Props) => {
-  if (marginTop !== null && xDivide !== null) {
-    return <ReadyRoot {...props} marginTop={marginTop} xDivide={xDivide} />;
+  if (spacing.ready) {
+    return <ReadyRoot {...props} {...spacing.props} />;
   }
   return null;
 };
@@ -212,10 +234,7 @@ export const ReadyRoot = ({
   state,
   xDivide,
   marginTop
-}: { children: React.ReactNode } & MakeNonNullable<
-  Props,
-  "xDivide" | "marginTop"
->) => {
+}: { children: React.ReactNode } & ReadyProps) => {
   const {
     padding,
     borderRadius,

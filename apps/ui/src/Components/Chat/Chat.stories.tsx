@@ -20,12 +20,11 @@ export const Mock = (props: Props) => {
   const source = useRef([...mockTimeline]);
   const to = useRef<NodeJS.Timeout>();
   const [t, setCurrent] = useState(props.timeline);
+
   const $left = useRef<HTMLDivElement | null>(null);
   const $top = useRef<HTMLDivElement | null>(null);
-  const [spacing, setSpacing] = useState<{
-    xDivide: number;
-    marginTop: number;
-  } | null>(null);
+  const spacing = Chat.useAssistantSpacingUtility({ $left, $top });
+
   const [sessions, setSessions] = useState<InputSession[]>([
     {
       id: "one",
@@ -33,14 +32,6 @@ export const Mock = (props: Props) => {
       state: props.inputState
     }
   ]);
-
-  useEffect(() => {
-    if ($left.current && $top.current) {
-      const { width } = $left.current.getBoundingClientRect();
-      const { height } = $top.current.getBoundingClientRect();
-      setSpacing({ xDivide: width, marginTop: height });
-    }
-  }, [$left]);
 
   useEffect(() => {
     setSessions((prev) => [
@@ -75,11 +66,7 @@ export const Mock = (props: Props) => {
           <div style={{ flex: 5 }} />
         </div>
       </div>
-      <Chat.Root
-        {...props}
-        xDivide={spacing ? spacing.xDivide : null}
-        marginTop={spacing ? spacing.marginTop : null}
-      >
+      <Chat.Root {...props} spacing={spacing}>
         <Chat.Dialog>
           <Chat.Header {...props} />
           <Chat.Body timeline={t} />
