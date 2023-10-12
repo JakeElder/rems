@@ -3,6 +3,7 @@ import { AssistantState, AssistantUiState } from "@rems/types";
 import tinycolor from "tinycolor2";
 import { CHAT_PALETTE } from "../colors";
 import { assistantStateToGroupedAssistantState } from "../adapters";
+import { scrollbarWidth } from "@xobotyi/scrollbar-width";
 
 type UiState = AssistantUiState;
 
@@ -13,7 +14,7 @@ type XDivide = number;
 const HEADER_HEIGHT = 60;
 const DEFAULT_WIDTH = 480;
 const DEFAULT_HEIGHT = 570;
-const FRAME_PAD = 30;
+const FRAME_PAD = 26;
 
 const calc = {
   left({
@@ -181,7 +182,7 @@ const useAssistantUiLayout = ({
   xDivide,
   marginTop
 }: Props) => {
-  const vw = window.innerWidth;
+  const vw = window.innerWidth - scrollbarWidth()!;
   const vh = window.innerHeight;
 
   const padding = calc.padding({ state });

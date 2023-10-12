@@ -8,9 +8,16 @@ export const Root = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["root"]}>{children}</div>;
 };
 
-export const Header = ({ children }: { children: React.ReactNode }) => {
-  return <div className={css["header"]}>{children}</div>;
-};
+export const Header = React.forwardRef<
+  HTMLDivElement,
+  { children: React.ReactNode }
+>(({ children }, ref) => {
+  return (
+    <div className={css["header"]} ref={ref}>
+      {children}
+    </div>
+  );
+});
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -20,9 +27,16 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const Content = ({ children }: { children: React.ReactNode }) => {
-  return <div className={css["content"]}>{children}</div>;
-};
+export const Content = React.forwardRef<
+  HTMLDivElement,
+  { children: React.ReactNode }
+>(({ children }, ref) => {
+  return (
+    <div className={css["content"]} ref={ref}>
+      {children}
+    </div>
+  );
+});
 
 export const Breadcrumbs = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["breadcrumbs"]}>{children}</div>;

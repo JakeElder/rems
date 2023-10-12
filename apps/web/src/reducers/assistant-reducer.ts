@@ -1,4 +1,10 @@
-import { InputSession, AssistantState, CapabilityCode } from "@rems/types";
+import {
+  InputSession,
+  AssistantState,
+  CapabilityCode,
+  AssistantUiState,
+  UiStateAction
+} from "@rems/types";
 import uuid from "short-uuid";
 
 type ComponentState = {
@@ -6,7 +12,7 @@ type ComponentState = {
   state: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
-  open: boolean;
+  uiState: AssistantUiState;
 };
 
 type ComponentAction =
@@ -21,14 +27,38 @@ type ComponentAction =
   | { type: "ENTER_KEY_UP" }
   | { type: "SPACE_KEY_DOWN" }
   | { type: "SPACE_KEY_UP" }
+  | { type: "UI_STATE_CHANGE"; value: UiStateAction }
   | { type: "KEYBOARD_INPUT_RECEIVED"; value: string }
   | { type: "LISTENING_STARTED" }
   | { type: "LISTENING_ABORTED" }
   | { type: "LISTENING_COMPLETE" }
   | { type: "VOICE_INPUT_RECEIVED"; value: string }
-  | { type: "OPEN_CLOSE"; open: boolean }
   | { type: "REFINING_QUERY" }
   | { type: "RESPONDING_GENERAL_QUERY" };
+
+const EXPANSION_STATES: AssistantUiState[] = [
+  "MINIMISED",
+  "DOCKED",
+  "WINDOWED"
+];
+
+const ui = {
+  expand(current: AssistantUiState): AssistantUiState {
+    const idx = EXPANSION_STATES.indexOf(current);
+    if (idx === -1) {
+      return "WINDOWED";
+    }
+    return EXPANSION_STATES[Math.min(idx + 1, EXPANSION_STATES.length - 1)];
+  },
+
+  contract(current: AssistantUiState): AssistantUiState {
+    const idx = EXPANSION_STATES.indexOf(current);
+    if (idx === -1) {
+      return "DOCKED";
+    }
+    return EXPANSION_STATES[Math.max(idx - 1, 0)];
+  }
+};
 
 const assistantReducer = (
   prev: ComponentState,
@@ -72,6 +102,24 @@ const assistantReducer = (
           }
         ]
       };
+
+    case "UI_STATE_CHANGE":
+      switch (action.value) {
+        case "EXPAND":
+          return { ...prev, uiState: ui.expand(prev.uiState) };
+        case "CONTRACT":
+          return { ...prev, uiState: ui.contract(prev.uiState) };
+        case "FRAME_LEFT":
+          return { ...prev, uiState: "LEFT" };
+        case "FRAME_RIGHT":
+          return { ...prev, uiState: "RIGHT" };
+        case "MINIMIZE":
+          return { ...prev, uiState: "MINIMISED" };
+        case "MAXIMIZE":
+          return { ...prev, uiState: "WINDOWED" };
+        default:
+          return { ...prev };
+      }
 
     case "SESSION_COMPLETE":
       return {
@@ -181,9 +229,6 @@ const assistantReducer = (
 
     case "LISTENING_COMPLETE":
       return { ...prev }; // noop
-
-    case "OPEN_CLOSE":
-      return { ...prev, open: action.open };
 
     case "ANALYSIS_COMPLETE":
       switch (action.capability) {

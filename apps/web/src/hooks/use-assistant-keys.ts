@@ -7,13 +7,17 @@ const useAssistantKeys = ({
   spaceUp,
   plus,
   minus,
-  escape
+  escape,
+  leftBrace,
+  rightBrace
 }: {
   spaceDown: () => void;
   spaceUp: () => void;
   plus: () => void;
   minus: () => void;
   escape: () => void;
+  leftBrace: () => void;
+  rightBrace: () => void;
 }) => {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -45,6 +49,14 @@ const useAssistantKeys = ({
     const onKeyPress = (e: KeyboardEvent) => {
       if (e.key === "+") {
         plus();
+      }
+
+      if (e.key === "{") {
+        leftBrace();
+      }
+
+      if (e.key === "}") {
+        rightBrace();
       }
 
       if (e.key === "-" || e.key === "_") {

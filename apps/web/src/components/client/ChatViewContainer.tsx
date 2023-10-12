@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { Chat, ChatInput } from "@rems/ui";
 import { useAssistant } from "@/components/AssistantProvider";
+import { useDomElements } from "@/components/DomElementsProvider";
 
 type Props = {};
 
@@ -10,6 +11,12 @@ const ChatViewContainer = ({}: Props) => {
   const assistant = useAssistant();
   const audio = useRef<{ message?: HTMLAudioElement }>({});
   const $input = useRef<HTMLInputElement>(null);
+
+  const { $header, $listings } = useDomElements();
+  const spacing = Chat.useAssistantSpacingUtility({
+    $top: $header,
+    $left: $listings
+  });
 
   useEffect(() => {
     if (assistant.session.value) {
@@ -27,6 +34,8 @@ const ChatViewContainer = ({}: Props) => {
   }, []);
 
   const props: Chat.Props = {
+    uiState: "DOCKED",
+    spacing,
     ...assistant,
     lang: "en"
   };

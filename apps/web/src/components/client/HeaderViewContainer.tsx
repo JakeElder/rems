@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ContactModal, Header, SlideNav } from "@rems/ui";
 import HeaderChatInputContainer from "./HeaderChatInputContainer";
 import useContactForm from "@/hooks/use-contact-form";
+import { useDomElements } from "../DomElementsProvider";
 
 type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode"> & {
   chat?: boolean;

@@ -1,6 +1,5 @@
 "use client";
 
-import "regenerator-runtime";
 import React, { useEffect, useRef } from "react";
 import { ChatInput } from "@rems/ui";
 import { useAssistant } from "@/components/AssistantProvider";

@@ -7,6 +7,5 @@ export const AssistantPayloadSchema = z.object({
   chatContext: ChatContextSchema,
   query: RealEstateQuerySchema.Server,
   input: z.string(),
-  open: z.boolean(),
   state: AssistantStateSchema
 });

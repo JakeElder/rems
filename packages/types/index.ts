@@ -186,6 +186,14 @@ export type InputSession = {
 export type AssistantState = Z<typeof AssistantStateSchema>;
 export type AssistantPayload = Z<typeof AssistantPayloadSchema>;
 
+export type UiStateAction =
+  | "MINIMIZE"
+  | "MAXIMIZE"
+  | "CONTRACT"
+  | "EXPAND"
+  | "FRAME_LEFT"
+  | "FRAME_RIGHT";
+
 export type GroupedAssistantState =
   | "IDLE"
   | "LISTENING"

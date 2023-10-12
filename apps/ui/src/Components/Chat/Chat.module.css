@@ -2,6 +2,7 @@
   position: fixed;
   min-height: 300px;
   min-width: 400px;
+  z-index: 1000;
 }
 
 .background,
