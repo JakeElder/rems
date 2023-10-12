@@ -13,7 +13,13 @@ import {
   AnalysisAssistantMessage,
   AssistantUiState
 } from "@rems/types";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef
+} from "react";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -61,6 +67,7 @@ export const useAssistant = () => useContext(AssistantContext)!;
 const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const { reset, patch, commit, serverQuery } = useRealEstateQuery();
+  const $keyChain = useRef<string[]>([]);
 
   $timeline.use();
 
@@ -103,6 +110,37 @@ const AssistantProvider = ({ children }: Props) => {
     }
   }, [listening, transcript]);
 
+  const debouncedClearKeyChain = useDebouncedCallback(() => {
+    $keyChain.current = [];
+  }, 500);
+
+  const handleUiStateChange = (key: string) => {
+    if (
+      $keyChain.current.length > 10 &&
+      $keyChain.current[$keyChain.current.length - 1] == "}" &&
+      $keyChain.current[$keyChain.current.length - 2] == "}"
+    ) {
+      const message = "Dude what are you doing? You're making me dizzy";
+      $timeline.set((prev) => [
+        ...prev,
+        {
+          type: "ASSISTANT",
+          id: uuid.generate(),
+          date: Date.now(),
+          message: {
+            type: "REACTION",
+            reaction: { type: "LANGUAGE_BASED", message }
+          }
+        }
+      ]);
+      Sound.speak(message);
+      $keyChain.current = [];
+      return;
+    }
+    $keyChain.current.push(key);
+    debouncedClearKeyChain();
+  };
+
   useAssistantKeys({
     spaceDown: () => {
       dispatch({ type: "SPACE_KEY_DOWN" });
@@ -115,18 +153,23 @@ const AssistantProvider = ({ children }: Props) => {
     },
     plus: () => {
       dispatch({ type: "UI_STATE_CHANGE", value: "EXPAND" });
+      handleUiStateChange("+");
     },
     minus: () => {
       dispatch({ type: "UI_STATE_CHANGE", value: "CONTRACT" });
+      handleUiStateChange("-");
     },
     escape: () => {
       dispatch({ type: "UI_STATE_CHANGE", value: "MINIMIZE" });
+      handleUiStateChange("ESC");
     },
     leftBrace: () => {
       dispatch({ type: "UI_STATE_CHANGE", value: "FRAME_LEFT" });
+      handleUiStateChange("{");
     },
     rightBrace: () => {
       dispatch({ type: "UI_STATE_CHANGE", value: "FRAME_RIGHT" });
+      handleUiStateChange("}");
     }
   });
 
