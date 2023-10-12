@@ -134,7 +134,7 @@ const calc = {
 
   borderRadius({ state }: { state: UiState }) {
     if (state === "DOCKED") {
-      return "13px 13px 0px 0px";
+      return "13px 13px 13px 13px";
     }
 
     if (state === "WINDOWED") {
@@ -203,7 +203,12 @@ const useAssistantUiLayout = ({
     borderRadius,
     boxShadow,
     backdropFilter,
-    background
+    background,
+    config: {
+      tension: 180,
+      friction: 23,
+      mass: 1.1
+    }
   });
 
   return style;

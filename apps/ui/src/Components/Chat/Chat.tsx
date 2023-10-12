@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import css from "./Chat.module.css";
 import {
   AssistantState,
@@ -11,7 +11,13 @@ import {
 } from "@rems/types";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
-import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
+import {
+  Pick,
+  animated,
+  useSpring,
+  useTransition,
+  config
+} from "@react-spring/web";
 import ChatMessage from "../ChatMessage";
 import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
@@ -19,63 +25,77 @@ import StateLabel from "../StateLabel/StateLabel";
 import useAssistantUiLayout from "../../hooks/use-assistant-ui-layout";
 import { assistantStateToGroupedAssistantState } from "../../adapters";
 
-type ContextProps = {
+export type Props = {
   lang: "en" | "th";
   state: AssistantState;
-};
-
-export type Props = {
   timeline: Timeline;
   uiState: AssistantUiState;
   xDivide: number | null;
   marginTop: number | null;
-} & ContextProps;
-
-const Context = createContext<ContextProps | null>(null);
-const useContext = () => React.useContext(Context)!;
-
-export const Header = () => {
-  const { state, lang } = useContext();
-
-  const group = assistantStateToGroupedAssistantState(state);
-
-  const { avatarBorder } = useSpring(CHAT_PALETTE[group]);
-  const { avatarOpacity } = useSpring({
-    avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
-  });
-
-  return (
-    <div className={css["header"]}>
-      <div className={css["avatar-name-state"]}>
-        <animated.div
-          className={css["avatar"]}
-          style={{ borderColor: avatarBorder }}
-        >
-          <div className={css["avatar-inner"]}>
-            <animated.img
-              className={css["remi"]}
-              src={avatar.src}
-              style={{ opacity: avatarOpacity }}
-            />
-            <div className={css["ror"]}>
-              <img
-                src={ror.src}
-                width={ror.width / 2}
-                height={ror.height / 2}
-              />
-            </div>
-            <div className={css["shadow"]} />
-          </div>
-        </animated.div>
-        <div className={css["name"]}>Remi</div>
-        <StateLabel state={state} />
-      </div>
-      <div className={css["lang-manage-ui-state"]}>
-        <div className={css["lang"]}>{lang}</div>
-      </div>
-    </div>
-  );
 };
+
+export const Header = React.memo(
+  ({ state, lang }: Pick<Props, "state" | "lang">) => {
+    const group = assistantStateToGroupedAssistantState(state);
+
+    const palette = CHAT_PALETTE[group];
+
+    const { avatarBorder } = useSpring(palette);
+    const { avatarOpacity } = useSpring({
+      avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
+    });
+
+    const pulseStyle = useSpring({
+      from: { transform: "scale(1)", opacity: 1 },
+      to: { transform: "scale(1.2)", opacity: 0 },
+      reset: true,
+      loop: true,
+      config: { tension: 170, friction: 50 }
+    });
+
+    const { pulseOpacity } = useSpring({
+      pulseOpacity: state === "LISTENING" ? 1 : 0
+    });
+
+    return (
+      <div className={css["header"]}>
+        <div className={css["avatar-name-state"]}>
+          <animated.div
+            className={css["avatar"]}
+            style={{ borderColor: avatarBorder }}
+          >
+            <animated.span style={{ opacity: pulseOpacity }}>
+              <animated.div
+                className={css["avatar-ring"]}
+                style={{ ...pulseStyle, borderColor: palette.avatarBorder }}
+              />
+            </animated.span>
+            <div className={css["avatar-inner"]}>
+              <animated.img
+                className={css["remi"]}
+                src={avatar.src}
+                style={{ opacity: avatarOpacity }}
+              />
+              <div className={css["ror"]}>
+                <img
+                  src={ror.src}
+                  width={ror.width / 2}
+                  height={ror.height / 2}
+                />
+              </div>
+              <div className={css["shadow"]} />
+            </div>
+          </animated.div>
+          <div className={css["name"]}>Remi</div>
+          <StateLabel state={state} />
+        </div>
+        <div className={css["lang-manage-ui-state"]}>
+          <div className={css["lang"]}>{lang}</div>
+        </div>
+      </div>
+    );
+  }
+);
 
 const isLanguageBasedUserMessageEvent = (e: TimelineEvent) =>
   e.type === "USER" &&
@@ -191,8 +211,7 @@ export const ReadyRoot = ({
   uiState,
   state,
   xDivide,
-  marginTop,
-  lang
+  marginTop
 }: { children: React.ReactNode } & MakeNonNullable<
   Props,
   "xDivide" | "marginTop"
@@ -215,24 +234,19 @@ export const ReadyRoot = ({
   });
 
   return (
-    <Context.Provider value={{ lang, state }}>
+    <animated.div className={css["root"]} style={{ left, top, right, bottom }}>
       <animated.div
-        className={css["root"]}
-        style={{ left, top, right, bottom }}
-      >
-        <animated.div
-          className={css["background"]}
-          style={{
-            borderRadius,
-            boxShadow,
-            backdropFilter,
-            background
-          }}
-        />
-        <animated.div className={css["foreground"]} style={{ padding }}>
-          {children}
-        </animated.div>
+        className={css["background"]}
+        style={{
+          borderRadius,
+          boxShadow,
+          backdropFilter,
+          background
+        }}
+      />
+      <animated.div className={css["foreground"]} style={{ padding }}>
+        {children}
       </animated.div>
-    </Context.Provider>
+    </animated.div>
   );
 };

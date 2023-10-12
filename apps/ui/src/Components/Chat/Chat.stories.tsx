@@ -81,7 +81,7 @@ export const Mock = (props: Props) => {
         marginTop={spacing ? spacing.marginTop : null}
       >
         <Chat.Dialog>
-          <Chat.Header />
+          <Chat.Header {...props} />
           <Chat.Body timeline={t} />
         </Chat.Dialog>
         <Chat.Input>

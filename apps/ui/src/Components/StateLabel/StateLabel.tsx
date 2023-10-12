@@ -56,6 +56,20 @@ const StateLabel = ({ state }: Props) => {
     api.start({ width: rect.width, opacity: 1 });
   }, [state]);
 
+  const palette = CHAT_PALETTE[group];
+
+  const pulseStyle = useSpring({
+    from: { scaleX: 1, scaleY: 1, opacity: 1 },
+    to: { scaleX: 1.1, scaleY: 1.4, opacity: 0 },
+    reset: true,
+    loop: true,
+    config: { tension: 170, friction: 50 }
+  });
+
+  const { pulseOpacity } = useSpring({
+    pulseOpacity: state === "LISTENING" ? 1 : 0
+  });
+
   return (
     <animated.div
       className={css["root"]}
@@ -65,6 +79,12 @@ const StateLabel = ({ state }: Props) => {
         width
       }}
     >
+      <animated.span style={{ opacity: pulseOpacity }}>
+        <animated.span
+          style={{ ...pulseStyle, borderColor: palette.labelBg }}
+          className={css["pulse"]}
+        />
+      </animated.span>
       <animated.div style={{ opacity }}>
         {keys.current.map((s) => (
           <animated.div
