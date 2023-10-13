@@ -34,9 +34,8 @@ const ChatViewContainer = ({}: Props) => {
   }, []);
 
   const props: Chat.Props = {
-    uiState: "DOCKED",
-    spacing,
     ...assistant,
+    spacing,
     lang: "en"
   };
 

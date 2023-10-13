@@ -9,9 +9,16 @@ import {
   Timeline,
   TimelineEvent,
   AssistantTimelineEvent,
-  Analysis
+  Analysis,
+  AssistantUiState
 } from "@rems/types";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef
+} from "react";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -37,7 +44,6 @@ type Context = {
   onKeyUp: FormAttributes["onKeyUp"];
   onMicClick: () => void;
   onChange: InputHTMLAttributes["onChange"];
-  onOpenClose: (open: boolean) => void;
   onEventRendered: (e: TimelineEvent) => void;
 
   // State
@@ -45,8 +51,8 @@ type Context = {
   state: AssistantState;
   enterDown: boolean;
   spaceDown: boolean;
-  open: boolean;
   timeline: Timeline;
+  uiState: AssistantUiState;
 
   // Computed
   session: InputSession;
@@ -59,15 +65,16 @@ export const useAssistant = () => useContext(AssistantContext)!;
 const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const { reset, patch, commit, serverQuery } = useRealEstateQuery();
+  const $keyChain = useRef<string[]>([]);
 
   $timeline.use();
 
   const [state, dispatch] = useReducer(assistantReducer, {
     sessions: [{ id: uuid.generate(), value: "", state: "INACTIVE" }],
     state: "SLEEPING",
+    uiState: "MINIMISED",
     enterDown: false,
-    spaceDown: false,
-    open: false
+    spaceDown: false
   });
 
   const debouncedSetInactive = useDebouncedCallback(
@@ -101,6 +108,37 @@ const AssistantProvider = ({ children }: Props) => {
     }
   }, [listening, transcript]);
 
+  const debouncedClearKeyChain = useDebouncedCallback(() => {
+    $keyChain.current = [];
+  }, 500);
+
+  const handleUiStateChange = (key: string) => {
+    if (
+      $keyChain.current.length > 10 &&
+      $keyChain.current[$keyChain.current.length - 1] == "}" &&
+      $keyChain.current[$keyChain.current.length - 2] == "}"
+    ) {
+      const message = "Dude what are you doing? You're making me dizzy";
+      $timeline.set((prev) => [
+        ...prev,
+        {
+          role: "ASSISTANT",
+          id: uuid.generate(),
+          date: Date.now(),
+          event: {
+            type: "LANGUAGE_BASED",
+            message
+          }
+        }
+      ]);
+      Sound.speak(message);
+      $keyChain.current = [];
+      return;
+    }
+    $keyChain.current.push(key);
+    debouncedClearKeyChain();
+  };
+
   useAssistantKeys({
     spaceDown: () => {
       dispatch({ type: "SPACE_KEY_DOWN" });
@@ -112,13 +150,24 @@ const AssistantProvider = ({ children }: Props) => {
       SpeechRecognition.stopListening();
     },
     plus: () => {
-      dispatch({ type: "OPEN_CLOSE", open: true });
+      dispatch({ type: "UI_STATE_CHANGE", value: "EXPAND" });
+      handleUiStateChange("+");
     },
     minus: () => {
-      dispatch({ type: "OPEN_CLOSE", open: false });
+      dispatch({ type: "UI_STATE_CHANGE", value: "CONTRACT" });
+      handleUiStateChange("-");
     },
     escape: () => {
-      dispatch({ type: "OPEN_CLOSE", open: false });
+      dispatch({ type: "UI_STATE_CHANGE", value: "MINIMIZE" });
+      handleUiStateChange("ESC");
+    },
+    leftBrace: () => {
+      dispatch({ type: "UI_STATE_CHANGE", value: "FRAME_LEFT" });
+      handleUiStateChange("{");
+    },
+    rightBrace: () => {
+      dispatch({ type: "UI_STATE_CHANGE", value: "FRAME_RIGHT" });
+      handleUiStateChange("}");
     }
   });
 
@@ -126,8 +175,7 @@ const AssistantProvider = ({ children }: Props) => {
     new Observable<AssistantTimelineEvent>((sub) => {
       const payload: AssistantPayload = {
         timeline: $timeline.get(),
-        query: serverQuery,
-        open: state.open
+        query: serverQuery
       };
 
       fetch(`${NEXT_PUBLIC_REMS_API_URL}/assistant`, {
@@ -196,10 +244,6 @@ const AssistantProvider = ({ children }: Props) => {
     console.log(e);
   };
 
-  const onOpenClose: Context["onOpenClose"] = (open) => {
-    dispatch({ type: "OPEN_CLOSE", open });
-  };
-
   const process = () => {
     debouncedSetInactive.cancel();
 
@@ -259,9 +303,10 @@ const AssistantProvider = ({ children }: Props) => {
         }
 
         if (e.type === "LANGUAGE_BASED") {
-          responsePromise = state.open
-            ? Sound.speak(e.message)
-            : Promise.resolve();
+          responsePromise =
+            state.uiState !== "MINIMISED"
+              ? Sound.speak(e.message)
+              : Promise.resolve();
         }
 
         if (e.type === "YIELD") {
@@ -292,15 +337,14 @@ const AssistantProvider = ({ children }: Props) => {
         onKeyUp,
         onMicClick,
         onChange,
-        onOpenClose,
         onEventRendered,
 
         sessions: state.sessions,
         enterDown: state.enterDown,
         state: state.state,
         spaceDown: state.spaceDown,
-        open: state.open,
         timeline: $timeline.get(),
+        uiState: state.uiState,
 
         session,
         submittable:

@@ -269,18 +269,6 @@ const assistantReducer = (
               }
             ]
           };
-        case "OPEN_ASSISTANT":
-          return {
-            ...prev,
-            state: "OPENING",
-            sessions: [
-              ...prev.sessions.slice(0, -1),
-              {
-                ...prev.sessions[prev.sessions.length - 1],
-                state: "RESOLVING"
-              }
-            ]
-          };
         default:
           return { ...prev };
       }
