@@ -259,10 +259,9 @@ const AssistantProvider = ({ children }: Props) => {
         }
 
         if (e.type === "LANGUAGE_BASED") {
-          responsePromise =
-            state.open || analysis.capability === "OPEN_ASSISTANT"
-              ? Sound.speak(e.message)
-              : Promise.resolve();
+          responsePromise = state.open
+            ? Sound.speak(e.message)
+            : Promise.resolve();
         }
 
         if (e.type === "YIELD") {
