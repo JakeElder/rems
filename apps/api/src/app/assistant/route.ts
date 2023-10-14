@@ -147,24 +147,32 @@ const stream: Stream = (args) => async (c) => {
       return null;
     }
 
-    const res = await fn();
+    try {
+      const res = await fn();
 
-    if (!res.ok) {
+      if (!res.ok) {
+        return event("SYSTEM", {
+          type: "INTENT_RESOLUTION_ERROR",
+          intent,
+          error: res.error
+        });
+      }
+
+      const e = await process(res.data);
+
+      if (!e) {
+        return null;
+      }
+
+      send(e);
+      return e;
+    } catch (e) {
       return event("SYSTEM", {
         type: "INTENT_RESOLUTION_ERROR",
         intent,
-        error: res.error
+        error: e
       });
     }
-
-    const e = await process(res.data);
-
-    if (!e) {
-      return null;
-    }
-
-    send(e);
-    return e;
   };
 
   const resolutions = await Promise.all([

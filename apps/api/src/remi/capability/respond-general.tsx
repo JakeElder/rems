@@ -54,7 +54,7 @@ const analyze: Fn = async ({ timeline, capabilities, query }) => {
     functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]
   };
 
-  return execute(request, ReturnsSchema);
+  return execute.fn(request, ReturnsSchema);
 };
 
 export default analyze;

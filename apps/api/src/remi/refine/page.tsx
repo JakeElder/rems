@@ -3,7 +3,8 @@ import {
   RemiResponse,
   txt,
   execute,
-  stringify
+  stringify,
+  timelineToCompletionMessages
 } from "@/remi";
 import { Refinements } from "@rems/schemas";
 import { z } from "zod";
@@ -17,7 +18,7 @@ type Returns = z.infer<typeof ReturnsSchema>;
 type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
 const page: Fn = async ({ timeline, current }) => {
-  const context = stringify<Context>({ timeline, current });
+  const context = stringify<Context>({ current });
   const schema = stringify(zodToJsonSchema(ContextSchema));
 
   const request: ChatCompletionRequest = {
@@ -35,7 +36,8 @@ const page: Fn = async ({ timeline, current }) => {
             <p>The context schema: `{schema}`</p>
           </>
         )
-      }
+      },
+      ...timelineToCompletionMessages(timeline)
     ],
     function_call: { name: "f" },
     functions: [
@@ -47,7 +49,7 @@ const page: Fn = async ({ timeline, current }) => {
     ]
   };
 
-  return execute(request, ReturnsSchema);
+  return execute.fn(request, ReturnsSchema);
 };
 
 export default page;

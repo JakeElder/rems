@@ -40,7 +40,7 @@ const location: Fn = async ({ timeline }) => {
     ]
   };
 
-  return execute(request, ReturnsSchema);
+  return execute.fn(request, ReturnsSchema);
 };
 
 export default location;

@@ -3,10 +3,13 @@ import { Page } from "../real-estate-query";
 import { TimelineSchema } from "../timeline";
 
 export const ContextSchema = z.object({
-  timeline: TimelineSchema,
   current: z.lazy(() => Page)
 });
-export const ArgsSchema = ContextSchema;
+
+export const ArgsSchema = z.object({
+  current: z.lazy(() => Page),
+  timeline: TimelineSchema
+});
 
 export const ReturnsSchema = z
   .object({ p: Page })

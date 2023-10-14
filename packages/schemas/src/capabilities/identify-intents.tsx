@@ -39,10 +39,8 @@ export const ReturnsSchema = z
       .describe(
         txt(
           <>
-            An array of *Secondary Intents*. This contains an array of numerical
-            id's that apply to this natural language. This must only include
-            id's taken from the array of defined intents provided in the
-            context.
+            An array of *Secondary Intents*. An array of id's that apply to this
+            request.
           </>
         )
       )

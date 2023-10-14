@@ -3,11 +3,13 @@ import { SpaceRequirements } from "../real-estate-query";
 import { TimelineSchema } from "../timeline";
 
 export const ContextSchema = z.object({
-  timeline: TimelineSchema,
   current: SpaceRequirements
 });
 
-export const ArgsSchema = ContextSchema;
+export const ArgsSchema = z.object({
+  timeline: TimelineSchema,
+  current: SpaceRequirements
+});
 
 export const ReturnsSchema = z
   .object({

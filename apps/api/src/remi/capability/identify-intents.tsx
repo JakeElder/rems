@@ -79,10 +79,16 @@ const identifyIntents: Fn = async ({ timeline, query }) => {
         role: "system",
         content: txt(
           <>
-            You are Remi, an assistant responsible for helping the user of a
-            real estate website. Your task is to process their input and analyze
-            it for their intent. Select one primary intent, and as many
-            secondary as required. Context will follow.
+            <p>
+              You are Remi, an assistant responsible for helping the user of a
+              real estate website. Your task is to process their input and
+              analyze it for their intent. Select one primary intent, and as
+              many secondary as required. Context will follow.
+            </p>
+            <p>
+              The zoom state is part of the query. Zoom changes fall under
+              'REFINE_QUERY'
+            </p>
           </>
         )
       },
@@ -96,7 +102,7 @@ const identifyIntents: Fn = async ({ timeline, query }) => {
     functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]
   };
 
-  return execute(request, ReturnsSchema);
+  return execute.fn(request, ReturnsSchema);
 };
 
 export default identifyIntents;

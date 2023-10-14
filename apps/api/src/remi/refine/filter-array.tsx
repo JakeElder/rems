@@ -4,7 +4,8 @@ import {
   execute,
   RemiResponse,
   stringify,
-  mapFilters
+  mapFilters,
+  timelineToCompletionMessages
 } from "@/remi";
 import { Refinements } from "@rems/schemas";
 import { z } from "zod";
@@ -23,7 +24,6 @@ const factory = (type: string, filtersPromise: Promise<Filter[]>): Fn => {
 
     const context = stringify<Context>(
       ContextSchema.parse({
-        timeline,
         filters,
         current: mapFilters.slugsToIds(filters, current)
       })
@@ -47,13 +47,14 @@ const factory = (type: string, filtersPromise: Promise<Filter[]>): Fn => {
               <p>The schema for this context: `{schema}`</p>
             </>
           )
-        }
+        },
+        ...timelineToCompletionMessages(timeline)
       ],
       function_call: { name: "f" },
       functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]
     };
 
-    const res = await execute(request, ReturnsSchema);
+    const res = await execute.fn(request, ReturnsSchema);
 
     if (res?.ok) {
       return {
