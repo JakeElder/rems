@@ -1,3 +1,5 @@
+import "regenerator-runtime";
+
 import useAssistantKeys from "@/hooks/use-assistant-keys";
 import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { Sound } from "@/utils";

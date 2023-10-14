@@ -6,8 +6,6 @@ export const CapabilityCodeSchema = z
     "NEW_QUERY",
     "REFINE_QUERY",
     "CLEAR_QUERY",
-    "SHOW_PROPERTY",
-    "REQUEST_VIEWING",
     "RESPOND_GENERAL_QUERY",
     "INFORM_MORE_INFO_NEEDED"
   ])

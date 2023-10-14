@@ -4,7 +4,8 @@ import { RealEstateQuerySchema, TimelineSchema } from "..";
 import { TerseIntentSchema } from "../intent";
 
 export const ContextSchema = z.object({
-  intents: z.lazy(() => z.array(TerseIntentSchema)),
+  primaryIntents: z.lazy(() => z.array(TerseIntentSchema)),
+  secondaryIntents: z.lazy(() => z.array(TerseIntentSchema)),
   indoorFeatures: z.array(z.string()),
   outdoorFeatures: z.array(z.string()),
   lotFeatures: z.array(z.string()),
@@ -32,14 +33,16 @@ export const ArgsSchema = z.object({
 
 export const ReturnsSchema = z
   .object({
-    i: z
+    p: TerseIntentSchema.shape["id"].describe(txt(<>The *primary* intent</>)),
+    s: z
       .array(TerseIntentSchema.shape["id"])
       .describe(
         txt(
           <>
-            An array of *Intents*. This contains an array of numerical id's that
-            apply to this natural language. This must only include id's taken
-            from the array of defined intents provided in the context.
+            An array of *Secondary Intents*. This contains an array of numerical
+            id's that apply to this natural language. This must only include
+            id's taken from the array of defined intents provided in the
+            context.
           </>
         )
       )
@@ -52,4 +55,4 @@ export const ReturnsSchema = z
       </>
     )
   )
-  .transform(({ i }) => i);
+  .transform(({ p, s }) => ({ primary: p, secondary: s }));

@@ -35,33 +35,45 @@ const capabilities: Capability[] = [
   },
 
   {
-    id: 4,
-    code: "SHOW_PROPERTY",
+    id: 3,
+    code: "CLEAR_QUERY",
     description: txt(
       <>
-        When you've found a property that looks interesting, Remi can show you
-        more details. Just tell her which property you're interested in by
-        number or description and she will show you more details.
+        Remi is able to refine queries. can clear the current query, returning
+        to default.
       </>
     ),
-
-    exampleTriggers: [
-      txt(<>Show me that third property</>),
-      txt(<>Show me the "Scenic villa with mountain views"</>)
-    ]
+    exampleTriggers: [txt(<>Clear the query</>)]
   },
 
-  {
-    id: 5,
-    code: "REQUEST_VIEWING",
-    description: txt(
-      <>
-        Once you've found a property you like, Remi can connect you to an agent
-        so that you can see the property.
-      </>
-    ),
-    exampleTriggers: [txt(<>Ok, I'd like to book a viewing</>)]
-  },
+  // {
+  //   id: 4,
+  //   code: "SHOW_PROPERTY",
+  //   description: txt(
+  //     <>
+  //       When you've found a property that looks interesting, Remi can show you
+  //       more details. Just tell her which property you're interested in by
+  //       number or description and she will show you more details.
+  //     </>
+  //   ),
+
+  //   exampleTriggers: [
+  //     txt(<>Show me that third property</>),
+  //     txt(<>Show me the "Scenic villa with mountain views"</>)
+  //   ]
+  // },
+
+  // {
+  //   id: 5,
+  //   code: "REQUEST_VIEWING",
+  //   description: txt(
+  //     <>
+  //       Once you've found a property you like, Remi can connect you to an agent
+  //       so that you can see the property.
+  //     </>
+  //   ),
+  //   exampleTriggers: [txt(<>Ok, I'd like to book a viewing</>)]
+  // },
 
   {
     id: 6,
@@ -93,7 +105,6 @@ const capabilities: Capability[] = [
     exampleTriggers: [
       txt(<>asdfghjkl</>),
       txt(<>Show me a 3-bedroom within...actually nevermind</>),
-      txt(<>How do I...you know what?</>),
       txt(<>So, um, could you, like...</>)
     ]
   }

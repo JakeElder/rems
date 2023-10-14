@@ -3,6 +3,12 @@ import { txt } from "./utils";
 
 export const IntentCodeSchema = z
   .enum([
+    "NEW_QUERY",
+    "REFINE_QUERY",
+    "CLEAR_QUERY",
+    "OBTAIN_GENERAL_INFORMATION",
+    "UNKNOWN",
+
     "REFINE_INDOOR_FEATURES",
     "REFINE_OUTDOOR_FEATURES",
     "REFINE_LOT_FEATURES",
@@ -13,12 +19,7 @@ export const IntentCodeSchema = z
     "REFINE_SORT",
     "REFINE_SPACE_REQUIREMENTS",
     "REFINE_BUDGET_AVAILABILITY",
-    "REFINE_MAP_STATE",
-    "PRESENT_GENERAL_INFORMATION",
-    "CLEAR_QUERY",
-    "RECEIVE_GENERAL_INFORMATION",
-    "OPEN_ASSISTANT",
-    "UNKNOWN"
+    "REFINE_MAP_STATE"
   ])
   .describe(txt(<>A unique identifier for the intent</>));
 
@@ -26,6 +27,7 @@ export const IntentSchema = z
   .object({
     id: z.number().min(1),
     code: IntentCodeSchema,
+    primary: z.boolean(),
     description: z.string().describe(txt(<>A description of the intent</>)),
     examples: z.array(
       z.object({

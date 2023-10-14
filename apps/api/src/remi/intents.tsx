@@ -3,8 +3,54 @@ import { Intent } from "@rems/types";
 
 const intents: Intent[] = [
   {
+    id: 200,
+    primary: true,
+    code: "NEW_QUERY",
+    description: txt(<></>),
+    examples: []
+  },
+
+  {
+    id: 210,
+    code: "REFINE_QUERY",
+    primary: true,
+    description: txt(<></>),
+    examples: []
+  },
+
+  {
+    id: 220,
+    code: "CLEAR_QUERY",
+    primary: true,
+    description: txt(<></>),
+    examples: []
+  },
+
+  {
+    id: 230,
+    code: "OBTAIN_GENERAL_INFORMATION",
+    primary: true,
+    description: txt(<></>),
+    examples: []
+  },
+
+  {
+    id: 240,
+    code: "UNKNOWN",
+    primary: true,
+    description: txt(
+      <>
+        The user has issued a command that is either incomprehnsible, or lacks
+        the clarity required to properly identify an appropriate reaction.
+      </>
+    ),
+    examples: [{ input: "asdfas", matches: ["asdfas"] }]
+  },
+
+  {
     id: 1,
     code: "REFINE_INDOOR_FEATURES",
+    primary: false,
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of
@@ -22,6 +68,7 @@ const intents: Intent[] = [
   {
     id: 2,
     code: "REFINE_OUTDOOR_FEATURES",
+    primary: false,
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of
@@ -39,6 +86,7 @@ const intents: Intent[] = [
   {
     id: 3,
     code: "REFINE_LOT_FEATURES",
+    primary: false,
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of lot
@@ -56,6 +104,7 @@ const intents: Intent[] = [
   {
     id: 4,
     code: "REFINE_VIEW_TYPES",
+    primary: false,
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of view
@@ -73,6 +122,7 @@ const intents: Intent[] = [
   {
     id: 5,
     code: "REFINE_PROPERTY_TYPES",
+    primary: false,
     description: txt(
       <>
         The user wants to add or remove a filter from the available set of
@@ -90,6 +140,7 @@ const intents: Intent[] = [
   {
     id: 6,
     code: "REFINE_LOCATION",
+    primary: false,
     description: txt(
       <>The user wants to specify the search origin for their search</>
     ),
@@ -104,6 +155,7 @@ const intents: Intent[] = [
   {
     id: 7,
     code: "REFINE_PAGE",
+    primary: false,
     description: txt(<>The user wants to change either the current page </>),
     examples: [
       {
@@ -116,6 +168,7 @@ const intents: Intent[] = [
   {
     id: 8,
     code: "REFINE_SORT",
+    primary: false,
     description: txt(<>The user wants to change the sort order</>),
     examples: [
       {
@@ -128,6 +181,7 @@ const intents: Intent[] = [
   {
     id: 9,
     code: "REFINE_SPACE_REQUIREMENTS",
+    primary: false,
     description: txt(
       <>
         <p>The user wants to specify search criteria relating to space.</p>
@@ -151,6 +205,7 @@ const intents: Intent[] = [
   {
     id: 10,
     code: "REFINE_BUDGET_AVAILABILITY",
+    primary: false,
     description: txt(
       <>
         The user wants to set their budget/whether they are looking to rent or
@@ -168,6 +223,7 @@ const intents: Intent[] = [
   {
     id: 11,
     code: "REFINE_MAP_STATE",
+    primary: false,
     description: txt(
       <>The user wants to modify the state of the listings map</>
     ),
@@ -181,32 +237,6 @@ const intents: Intent[] = [
         matches: ["Enable the zoom radius"]
       }
     ]
-  },
-
-  {
-    id: 13,
-    code: "RECEIVE_GENERAL_INFORMATION",
-    description: txt(
-      <>The user is trying to extrapolate general information</>
-    ),
-    examples: [
-      {
-        input: "What's the land area of Chiang Mai",
-        matches: ["What's the land area of Chiang Mai"]
-      }
-    ]
-  },
-
-  {
-    id: 100,
-    code: "UNKNOWN",
-    description: txt(
-      <>
-        The user has issued a command that is either incomprehnsible, or lacks
-        the clarity required to properly identify an appropriate reaction.
-      </>
-    ),
-    examples: [{ input: "asdfas", matches: ["asdfas"] }]
   }
 ];
 

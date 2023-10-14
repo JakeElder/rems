@@ -8,7 +8,8 @@ import {
   Patch,
   Event,
   TimelineEvent,
-  IntentResolutionErrorEvent
+  IntentResolutionErrorEvent,
+  Analysis
 } from "@rems/types";
 import { AssistantPayloadSchema, RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
@@ -91,27 +92,38 @@ const stream: Stream = (args) => async (c) => {
   };
 
   const analyze = memoize(async () => {
-    const [i, c] = await Promise.all([
-      remi.capability.analyze({ timeline, query }),
-      remi.capability.identify({ timeline })
-    ]);
+    const i = await remi.capability.identifyIntents({ timeline, query });
 
-    if (!i.ok || !c.ok) {
-      console.log(i, c);
+    if (!i.ok) {
+      console.log(i);
       throw new Error();
     }
 
-    const capability = remi.terse.capability(c.data);
-    const intents = remi.terse.intents(i.data);
+    const primary = remi.terse.intent(i.data.primary);
+    const secondary = remi.terse.intents(i.data.secondary);
 
-    send(
-      event("SYSTEM", {
-        type: "ANALYSIS_PERFORMED",
-        analysis: { capability, intents }
-      })
-    );
+    if (!primary) {
+      throw new Error();
+    }
 
-    return { intents, capability };
+    const map: Partial<Record<IntentCode, CapabilityCode>> = {
+      NEW_QUERY: "NEW_QUERY",
+      REFINE_QUERY: "REFINE_QUERY",
+      CLEAR_QUERY: "CLEAR_QUERY",
+      OBTAIN_GENERAL_INFORMATION: "RESPOND_GENERAL_QUERY",
+      UNKNOWN: "INFORM_MORE_INFO_NEEDED"
+    };
+
+    const capability = map[primary];
+
+    if (!capability) {
+      throw new Error();
+    }
+
+    const analysis: Analysis = { capability, intents: secondary };
+    send(event("SYSTEM", { type: "ANALYSIS_PERFORMED", analysis }));
+
+    return analysis;
   });
 
   analyze();

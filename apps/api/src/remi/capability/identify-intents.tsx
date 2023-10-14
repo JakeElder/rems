@@ -18,14 +18,15 @@ import { Z } from "@rems/types";
 import * as Models from "@/models";
 import { Model } from "sequelize";
 
-const { ArgsSchema, ReturnsSchema, ContextSchema } = Capabilities.Analyze;
+const { ArgsSchema, ReturnsSchema, ContextSchema } =
+  Capabilities.IdentifyIntents;
 
 type Args = Z<typeof ArgsSchema>;
 type Context = Z<typeof ContextSchema>;
 type Returns = Z<typeof ReturnsSchema>;
 type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-const analyze: Fn = async ({ timeline, query }) => {
+const identifyIntents: Fn = async ({ timeline, query }) => {
   const parse = (r: Model<any, any>[]) => r.map((m: any) => m.slug);
   const [
     lotFeatures,
@@ -62,7 +63,12 @@ const analyze: Fn = async ({ timeline, query }) => {
     lotFeatures,
     viewTypes,
     propertyTypes,
-    intents: intents.map((i) => TerseIntentSchema.parse(i)),
+    primaryIntents: intents
+      .filter((i) => i.primary)
+      .map((i) => TerseIntentSchema.parse(i)),
+    secondaryIntents: intents
+      .filter((i) => !i.primary)
+      .map((i) => TerseIntentSchema.parse(i)),
     currentQuery
   });
 
@@ -75,7 +81,8 @@ const analyze: Fn = async ({ timeline, query }) => {
           <>
             You are Remi, an assistant responsible for helping the user of a
             real estate website. Your task is to process their input and analyze
-            it for their intent. Context will follow.
+            it for their intent. Select one primary intent, and as many
+            secondary as required. Context will follow.
           </>
         )
       },
@@ -92,4 +99,4 @@ const analyze: Fn = async ({ timeline, query }) => {
   return execute(request, ReturnsSchema);
 };
 
-export default analyze;
+export default identifyIntents;

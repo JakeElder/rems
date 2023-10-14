@@ -1,4 +1,3 @@
-import "regenerator-runtime";
 import { GetServerSideProps, NextPage } from "next";
 import { RealEstateIndexPage as Layout, ToastHub } from "@rems/ui";
 import ListingMapViewContainer from "@/components/client/ListingMapViewContainer";
