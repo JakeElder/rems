@@ -9,9 +9,11 @@ const AssistantChatEvent = forwardRef<HTMLDivElement, AssistantEvent>(
     if (e.type === "LANGUAGE_BASED") {
       return (
         <div className={css["root"]} ref={ref}>
-          <LanguageBasedAssistantChatEvent>
-            {e.message}
-          </LanguageBasedAssistantChatEvent>
+          <div className={css["message"]}>
+            <LanguageBasedAssistantChatEvent>
+              {e.message}
+            </LanguageBasedAssistantChatEvent>
+          </div>
         </div>
       );
     }
@@ -19,7 +21,9 @@ const AssistantChatEvent = forwardRef<HTMLDivElement, AssistantEvent>(
     if (e.type === "PATCH") {
       return (
         <div className={css["root"]} ref={ref}>
-          <PatchMessage {...e.patch} />
+          <div className={css["message"]}>
+            <PatchMessage {...e.patch} />
+          </div>
         </div>
       );
     }

@@ -49,12 +49,10 @@ const analyze: Fn = async ({ timeline, capabilities, query }) => {
         content: context
       },
       ...timelineToCompletionMessages(timeline)
-    ],
-    function_call: { name: "f" },
-    functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]
+    ]
   };
 
-  return execute.fn(request, ReturnsSchema);
+  return execute.chat(request);
 };
 
 export default analyze;

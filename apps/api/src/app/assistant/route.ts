@@ -358,10 +358,7 @@ const stream: Stream = (args) => async (c) => {
     )
   ]);
 
-  const timelineEvents: TimelineEvent[] = resolutions.filter(
-    isTimelineEventResolution
-  );
-
+  const timelineEvents = resolutions.filter(isTimelineEventResolution);
   const { capability } = await analyze();
 
   if (
@@ -417,9 +414,12 @@ const stream: Stream = (args) => async (c) => {
 };
 
 export async function POST(req: NextRequest) {
-  const payload = AssistantPayloadSchema.parse(await req.json());
+  const { query, timeline } = AssistantPayloadSchema.parse(await req.json());
 
-  return new Response(new ReadableStream({ start: stream(payload) }), {
-    headers: { "Content-Type": "application/json; charset=utf-8" }
-  });
+  return new Response(
+    new ReadableStream({
+      start: stream({ query, timeline: timeline.slice(-10) })
+    }),
+    { headers: { "Content-Type": "application/json; charset=utf-8" } }
+  );
 }
