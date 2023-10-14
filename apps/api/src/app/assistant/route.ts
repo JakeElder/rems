@@ -1,15 +1,14 @@
 import { NextRequest } from "next/server";
 import * as remi from "@/remi";
 import {
-  ErrorIntentResolution,
   IntentCode,
-  IntentResolution,
   ServerRealEstateQuery,
   CapabilityCode,
   AssistantPayload,
-  AssistantTimelineEvent,
-  AssistantEvent,
-  Patch
+  Patch,
+  Event,
+  TimelineEvent,
+  IntentResolutionErrorEvent
 } from "@rems/types";
 import { AssistantPayloadSchema, RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
@@ -22,6 +21,14 @@ import { z } from "zod";
 import dedent from "ts-dedent";
 import uuid from "short-uuid";
 
+type IntentResolution = TimelineEvent | null;
+
+const isTimelineEventResolution = (r: IntentResolution): r is TimelineEvent =>
+  r !== null;
+
+const isError = (r: Event): r is IntentResolutionErrorEvent =>
+  r.type === "INTENT_RESOLUTION_ERROR";
+
 const { SpaceRequirements, BudgetAndAvailability, MapState } =
   RealEstateQuerySchema;
 
@@ -30,9 +37,6 @@ type ArrayKey = keyof Arrays;
 
 const defined = (obj: Record<string, any>) =>
   pickBy(obj, (v) => typeof v !== "undefined");
-
-const isError = (r: IntentResolution): r is ErrorIntentResolution =>
-  r.type === "ERROR";
 
 const encoder = new TextEncoder();
 
@@ -60,6 +64,16 @@ const arrayPatch = (
   diff: remi.diff.array(query, key, value)
 });
 
+const event = <T extends TimelineEvent["role"]>(
+  role: T,
+  event: Extract<TimelineEvent, { role: T }>["event"]
+) => ({
+  id: uuid.generate(),
+  date: Date.now(),
+  role,
+  event
+});
+
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
 const stream: Stream = (args) => async (c) => {
@@ -67,19 +81,12 @@ const stream: Stream = (args) => async (c) => {
 
   const log = remi.logger.init(timeline);
 
-  const send = (event: AssistantEvent, outputToLog: boolean = true) => {
-    const timelineEvent: AssistantTimelineEvent = {
-      id: uuid.generate(),
-      role: "ASSISTANT",
-      date: Date.now(),
-      event
-    };
-
-    const chunk = encoder.encode(`${JSON.stringify(timelineEvent)}\n`);
+  const send = (e: TimelineEvent, outputToLog: boolean = true) => {
+    const chunk = encoder.encode(`${JSON.stringify(e)}\n`);
     c.enqueue(chunk);
 
-    if (outputToLog) {
-      log(event);
+    if (outputToLog && (e.role === "ASSISTANT" || e.role === "SYSTEM")) {
+      log(e.event);
     }
   };
 
@@ -97,10 +104,12 @@ const stream: Stream = (args) => async (c) => {
     const capability = remi.terse.capability(c.data);
     const intents = remi.terse.intents(i.data);
 
-    send({
-      type: "ANALYSIS_PERFORMED",
-      analysis: { capability, intents }
-    });
+    send(
+      event("SYSTEM", {
+        type: "ANALYSIS_PERFORMED",
+        analysis: { capability, intents }
+      })
+    );
 
     return { intents, capability };
   });
@@ -112,7 +121,7 @@ const stream: Stream = (args) => async (c) => {
     fn: T,
     process: (
       res: Extract<Awaited<ReturnType<T>>, { ok: true }>["data"]
-    ) => Promise<Patch | null>
+    ) => Promise<IntentResolution>
   ): Promise<IntentResolution> => {
     const { intents, capability } = await analyze();
 
@@ -123,23 +132,27 @@ const stream: Stream = (args) => async (c) => {
     ];
 
     if (!intents.includes(intent) || !OP_CAPABILITIES.includes(capability)) {
-      return { type: "NOOP", intent };
+      return null;
     }
 
     const res = await fn();
 
     if (!res.ok) {
-      return { type: "ERROR", intent, error: res.error };
+      return event("SYSTEM", {
+        type: "INTENT_RESOLUTION_ERROR",
+        intent,
+        error: res.error
+      });
     }
 
-    const patch = await process(res.data);
+    const e = await process(res.data);
 
-    if (!patch) {
-      return { type: "NOOP", intent };
+    if (!e) {
+      return null;
     }
 
-    send({ type: "PATCH", patch });
-    return { type: "PATCH", intent, patch };
+    send(e);
+    return e;
   };
 
   const resolutions = await Promise.all([
@@ -155,10 +168,13 @@ const stream: Stream = (args) => async (c) => {
         const l = await nlToLocation(origin);
         if (!l) return null;
 
-        return scalarPatch("LOCATION", query, {
-          "origin-lat": l.lat,
-          "origin-lng": l.lng,
-          "origin-id": l.placeId
+        return event("ASSISTANT", {
+          type: "PATCH",
+          patch: scalarPatch("LOCATION", query, {
+            "origin-lat": l.lat,
+            "origin-lng": l.lng,
+            "origin-id": l.placeId
+          })
         });
       }
     ),
@@ -169,7 +185,13 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_PAGE",
       () => remi.refine.page({ timeline, current: query["page"] }),
-      async (page) => (page ? scalarPatch("PAGE", query, { page }) : null)
+      async (page) =>
+        page
+          ? event("ASSISTANT", {
+              type: "PATCH",
+              patch: scalarPatch("PAGE", query, { page })
+            })
+          : null
     ),
 
     /*
@@ -178,7 +200,13 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_SORT",
       () => remi.refine.sort({ timeline, current: query["sort"] }),
-      async (sort) => (sort ? scalarPatch("SORT", query, { sort }) : null)
+      async (sort) =>
+        sort
+          ? event("ASSISTANT", {
+              type: "PATCH",
+              patch: scalarPatch("PAGE", query, { sort })
+            })
+          : null
     ),
 
     /*
@@ -191,7 +219,11 @@ const stream: Stream = (args) => async (c) => {
           timeline,
           current: SpaceRequirements.parse(query)
         }),
-      async (props) => scalarPatch("SPACE_REQUIREMENTS", query, defined(props))
+      async (props) =>
+        event("ASSISTANT", {
+          type: "PATCH",
+          patch: scalarPatch("SPACE_REQUIREMENTS", query, defined(props))
+        })
     ),
 
     /*
@@ -205,7 +237,10 @@ const stream: Stream = (args) => async (c) => {
           current: BudgetAndAvailability.parse(query)
         }),
       async (props) =>
-        scalarPatch("BUDGET_AND_AVAILABILITY", query, defined(props))
+        event("ASSISTANT", {
+          type: "PATCH",
+          patch: scalarPatch("BUDGET_AND_AVAILABILITY", query, defined(props))
+        })
     ),
 
     /*
@@ -214,7 +249,11 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_MAP_STATE",
       () => remi.refine.mapState({ timeline, current: MapState.parse(query) }),
-      async (props) => scalarPatch("MAP_STATE", query, defined(props))
+      async (props) =>
+        event("ASSISTANT", {
+          type: "PATCH",
+          patch: scalarPatch("MAP_STATE", query, defined(props))
+        })
     ),
 
     /**
@@ -228,7 +267,10 @@ const stream: Stream = (args) => async (c) => {
           current: query["indoor-features"]
         }),
       async (res) =>
-        arrayPatch("INDOOR_FEATURES", query, "indoor-features", res)
+        event("ASSISTANT", {
+          type: "PATCH",
+          patch: arrayPatch("INDOOR_FEATURES", query, "indoor-features", res)
+        })
     ),
 
     /**
@@ -242,7 +284,10 @@ const stream: Stream = (args) => async (c) => {
           current: query["outdoor-features"]
         }),
       async (res) =>
-        arrayPatch("OUTDOOR_FEATURES", query, "outdoor-features", res)
+        event("ASSISTANT", {
+          type: "PATCH",
+          patch: arrayPatch("OUTDOOR_FEATURES", query, "outdoor-features", res)
+        })
     ),
 
     /**
@@ -255,7 +300,11 @@ const stream: Stream = (args) => async (c) => {
           timeline,
           current: query["lot-features"]
         }),
-      async (res) => arrayPatch("LOT_FEATURES", query, "lot-features", res)
+      async (res) =>
+        event("ASSISTANT", {
+          type: "PATCH",
+          patch: arrayPatch("LOT_FEATURES", query, "lot-features", res)
+        })
     ),
 
     /**
@@ -268,7 +317,11 @@ const stream: Stream = (args) => async (c) => {
           timeline,
           current: query["property-types"]
         }),
-      async (res) => arrayPatch("PROPERTY_TYPES", query, "property-types", res)
+      async (res) =>
+        event("ASSISTANT", {
+          type: "PATCH",
+          patch: arrayPatch("PROPERTY_TYPES", query, "property-types", res)
+        })
     ),
 
     /**
@@ -277,9 +330,17 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_VIEW_TYPES",
       () => remi.refine.viewTypes({ timeline, current: query["view-types"] }),
-      async (res) => arrayPatch("VIEW_TYPES", query, "view-types", res)
+      async (res) =>
+        event("ASSISTANT", {
+          type: "PATCH",
+          patch: arrayPatch("VIEW_TYPES", query, "view-types", res)
+        })
     )
   ]);
+
+  const timelineEvents: TimelineEvent[] = resolutions.filter(
+    isTimelineEventResolution
+  );
 
   const { capability } = await analyze();
 
@@ -288,15 +349,17 @@ const stream: Stream = (args) => async (c) => {
     capability === "NEW_QUERY" ||
     capability === "CLEAR_QUERY"
   ) {
-    // const res = await remi.capability.summarize(summary);
-    // if (res.ok) {
-    //   send({
-    //     type: "REACTION",
-    //     reaction: { type: "LANGUAGE_BASED", message: res.data }
-    //   });
-    // } else {
-    //   console.log(res.error);
-    // }
+    const res = await remi.capability.summarize({ timeline: timelineEvents });
+    if (res.ok) {
+      send(
+        event("ASSISTANT", {
+          type: "LANGUAGE_BASED",
+          message: res.data
+        })
+      );
+    } else {
+      console.log(res.error);
+    }
   }
 
   if (capability === "RESPOND_GENERAL_QUERY") {
@@ -306,18 +369,26 @@ const stream: Stream = (args) => async (c) => {
       capabilities: remi.capabilities
     });
     if (res.ok) {
-      send({ type: "LANGUAGE_BASED", message: res.data });
+      send(
+        event("ASSISTANT", {
+          type: "LANGUAGE_BASED",
+          message: res.data
+        })
+      );
     }
   }
 
-  send({ type: "YIELD" });
+  send(event("SYSTEM", { type: "YIELD" }));
 
-  const errors = resolutions.filter(isError).map(
-    (res) => dedent`
+  const errors = timelineEvents
+    .map((te) => te.event)
+    .filter(isError)
+    .map(
+      (res) => dedent`
        ${chalk.red(res.intent)}
        ${prettyjson.render(res.error)}
      `
-  );
+    );
 
   console.log("\n\n");
   console.log(errors.join("\n\n"));

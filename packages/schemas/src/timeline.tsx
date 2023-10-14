@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { UserEventSchema, AssistantEventSchema } from "./event";
+import {
+  UserEventSchema,
+  AssistantEventSchema,
+  SystemEventSchema
+} from "./event";
 
 export const UserTimelineEventSchema = z.object({
   id: z.string(),
@@ -15,9 +19,17 @@ export const AssistantTimelineEventSchema = z.object({
   event: AssistantEventSchema
 });
 
+export const SystemTimelineEventSchema = z.object({
+  id: z.string(),
+  date: z.number(),
+  role: z.literal("SYSTEM"),
+  event: SystemEventSchema
+});
+
 export const TimelineEventSchema = z.discriminatedUnion("role", [
   UserTimelineEventSchema,
-  AssistantTimelineEventSchema
+  AssistantTimelineEventSchema,
+  SystemTimelineEventSchema
 ]);
 
 export const TimelineSchema = z.array(TimelineEventSchema);
@@ -31,7 +43,4 @@ export const TimelineSchema = z.array(TimelineEventSchema);
         - ScalarDiff
       - ArrayPatch
         - ArrayDiff
-    - ContextEstablished
-      - Analysis
-      - Summary
 `;

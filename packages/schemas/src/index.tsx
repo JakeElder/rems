@@ -14,7 +14,6 @@ export * from "./file";
 export * from "./filter-set";
 export * from "./image";
 export * from "./intent";
-export * from "./intent-resolution";
 export * from "./patch";
 export * from "./property";
 export * from "./timeline";

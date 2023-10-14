@@ -11,9 +11,6 @@ import {
   IntentSchema,
   CapabilityCodeSchema,
   IntentCodeSchema,
-  IntentResolutionSchema,
-  NoopIntentResolutionSchema,
-  ErrorIntentResolutionSchema,
   AddScalarDiffSchema,
   RemoveScalarDiffSchema,
   ChangeScalarDiffSchema,
@@ -32,11 +29,15 @@ import {
   AssistantTimelineEventSchema,
   AssistantEventSchema,
   UserEventSchema,
+  EventSchema,
   LanguageBasedInteractionEventSchema,
   PatchInteractionEventSchema,
   AnalysisPerformedEventSchema,
   YieldEventSchema,
-  PatchInteractionIntentResolutionSchema
+  ErrorEventSchema,
+  SystemTimelineEventSchema,
+  IntentResolutionErrorEventSchema,
+  SystemEventSchema
 } from "@rems/schemas";
 import { AnalysisSchema } from "@rems/schemas/src/analysis";
 import { ZodType, z } from "zod";
@@ -256,13 +257,6 @@ export type OpenAIModel =
   | "text-similarity-davinci-001"
   | "whisper-1";
 
-export type IntentResolution = Z<typeof IntentResolutionSchema>;
-export type NoopIntentResolution = Z<typeof NoopIntentResolutionSchema>;
-export type ErrorIntentResolution = Z<typeof ErrorIntentResolutionSchema>;
-export type PatchInteractionIntentResolution = Z<
-  typeof PatchInteractionIntentResolutionSchema
->;
-
 export type AddScalarDiff = Z<typeof AddScalarDiffSchema>;
 export type RemoveScalarDiff = Z<typeof RemoveScalarDiffSchema>;
 export type ChangeScalarDiff = Z<typeof ChangeScalarDiffSchema>;
@@ -279,16 +273,23 @@ export type Patch = Z<typeof PatchSchema>;
 export type Timeline = Z<typeof TimelineSchema>;
 export type UserTimelineEvent = Z<typeof UserTimelineEventSchema>;
 export type AssistantTimelineEvent = Z<typeof AssistantTimelineEventSchema>;
+export type SystemTimelineEvent = Z<typeof SystemTimelineEventSchema>;
 
 export type AssistantEvent = Z<typeof AssistantEventSchema>;
 export type UserEvent = Z<typeof UserEventSchema>;
+export type SystemEvent = Z<typeof SystemEventSchema>;
+export type Event = Z<typeof EventSchema>;
 
 export type LanguageBasedInteractionEvent = Z<
   typeof LanguageBasedInteractionEventSchema
 >;
 export type PatchInteractionEvent = Z<typeof PatchInteractionEventSchema>;
 export type AnalysisPerformedEvent = Z<typeof AnalysisPerformedEventSchema>;
-export type YieldEventSchemas = Z<typeof YieldEventSchema>;
+export type YieldEvent = Z<typeof YieldEventSchema>;
+export type ErrorEvent = Z<typeof ErrorEventSchema>;
+export type IntentResolutionErrorEvent = Z<
+  typeof IntentResolutionErrorEventSchema
+>;
 export type TimelineEvent = Z<typeof TimelineEventSchema>;
 
 export type Analysis = Z<typeof AnalysisSchema>;

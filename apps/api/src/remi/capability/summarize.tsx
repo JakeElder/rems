@@ -17,7 +17,7 @@ type Context = z.infer<typeof ContextSchema>;
 type Returns = z.infer<typeof ReturnsSchema>;
 type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-const analyze: Fn = async ({ timeline }) => {
+const summarize: Fn = async ({ timeline }) => {
   const context = stringify<Context>({ timeline });
 
   const instruction: ChatCompletionRequestMessage["content"] = txt(
@@ -30,7 +30,7 @@ const analyze: Fn = async ({ timeline }) => {
         Your task is to summarise an interaction you have just had with the
         user.
       </p>
-      <p>We are at this point in our interaction; you have;</p>
+      <p>you have;</p>
       <ul>
         <li>1. Taken input from the user</li>
         <li>2. Analayzed the users input</li>
@@ -77,4 +77,4 @@ const analyze: Fn = async ({ timeline }) => {
   return execute(request, ReturnsSchema);
 };
 
-export default analyze;
+export default summarize;

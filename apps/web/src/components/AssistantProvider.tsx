@@ -10,7 +10,8 @@ import {
   TimelineEvent,
   AssistantTimelineEvent,
   Analysis,
-  AssistantUiState
+  AssistantUiState,
+  SystemTimelineEvent
 } from "@rems/types";
 import {
   createContext,
@@ -172,7 +173,7 @@ const AssistantProvider = ({ children }: Props) => {
   });
 
   const request = () =>
-    new Observable<AssistantTimelineEvent>((sub) => {
+    new Observable<AssistantTimelineEvent | SystemTimelineEvent>((sub) => {
       const payload: AssistantPayload = {
         timeline: $timeline.get(),
         query: serverQuery
@@ -196,11 +197,12 @@ const AssistantProvider = ({ children }: Props) => {
             return;
           }
 
-          const chunks: AssistantTimelineEvent[] = decoder
-            .decode(value)
-            .split("\n")
-            .filter(Boolean)
-            .map((c) => JSON.parse(c));
+          const chunks: (AssistantTimelineEvent | SystemTimelineEvent)[] =
+            decoder
+              .decode(value)
+              .split("\n")
+              .filter(Boolean)
+              .map((c) => JSON.parse(c));
 
           chunks.forEach((c) => sub.next(c));
           reader.read().then(pump);

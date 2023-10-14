@@ -4,6 +4,7 @@ import {
   AssistantEvent,
   Patch,
   ScalarPatch,
+  SystemEvent,
   Timeline
 } from "@rems/types";
 import { createStream, WritableStream } from "table";
@@ -40,7 +41,7 @@ export const init = (timeline: Timeline) => {
     chalk.yellow(chalk.bold(s.replace("REFINE_", "")));
   const val = (s: string) => chalk.cyan(s);
 
-  return (e: AssistantEvent) => {
+  return (e: AssistantEvent | SystemEvent) => {
     if (e.type === "ANALYSIS_PERFORMED") {
       const { analysis } = e;
 
