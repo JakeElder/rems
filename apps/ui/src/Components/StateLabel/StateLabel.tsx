@@ -3,20 +3,27 @@ import css from "./StateLabel.module.css";
 import { AssistantState } from "@rems/types";
 import { animated, useSpring } from "@react-spring/web";
 import { CHAT_PALETTE } from "../../colors";
-import {
-  assistantStates,
-  stateToGroup
-} from "../../Utils/src/assistant-states";
+import { assistantStateToGroupedAssistantState } from "../../adapters";
 
 type Props = { state: AssistantState };
 
+type State = { label: string };
+const states: Record<Props["state"], State> = {
+  CHATTING: { label: "Chatting" },
+  SLEEPING: { label: "Sleeping" },
+  THINKING: { label: "Thinking" },
+  LISTENING: { label: "Listening" },
+  CLEARING_QUERY: { label: "Clearing Query" },
+  REFINING_QUERY: { label: "Refining Query" },
+  OPENING: { label: "Opening" }
+};
+
 const StateLabel = ({ state }: Props) => {
-  const { labelBg, labelColor } = useSpring(CHAT_PALETTE[stateToGroup(state)]);
+  const group = assistantStateToGroupedAssistantState(state);
+  const { labelBg, labelColor } = useSpring(CHAT_PALETTE[group]);
   const keys = useRef<Props["state"][]>([
     state,
-    ...(Object.keys(assistantStates).filter(
-      (s) => s !== state
-    ) as Props["state"][])
+    ...(Object.keys(states).filter((s) => s !== state) as Props["state"][])
   ]);
   const firstRender = useRef(true);
 
@@ -49,6 +56,20 @@ const StateLabel = ({ state }: Props) => {
     api.start({ width: rect.width, opacity: 1 });
   }, [state]);
 
+  const palette = CHAT_PALETTE[group];
+
+  const pulseStyle = useSpring({
+    from: { scaleX: 1, scaleY: 1, opacity: 1 },
+    to: { scaleX: 1.1, scaleY: 1.4, opacity: 0 },
+    reset: true,
+    loop: true,
+    config: { tension: 170, friction: 50 }
+  });
+
+  const { pulseOpacity } = useSpring({
+    pulseOpacity: state === "LISTENING" ? 1 : 0
+  });
+
   return (
     <animated.div
       className={css["root"]}
@@ -58,6 +79,12 @@ const StateLabel = ({ state }: Props) => {
         width
       }}
     >
+      <animated.span style={{ opacity: pulseOpacity }}>
+        <animated.span
+          style={{ ...pulseStyle, borderColor: palette.labelBg }}
+          className={css["pulse"]}
+        />
+      </animated.span>
       <animated.div style={{ opacity }}>
         {keys.current.map((s) => (
           <animated.div
@@ -65,9 +92,7 @@ const StateLabel = ({ state }: Props) => {
             style={{ opacity: labelStyles[s] }}
             key={s}
           >
-            <span ref={(e) => (refs.current[s] = e)}>
-              {assistantStates[s].label}
-            </span>
+            <span ref={(e) => (refs.current[s] = e)}>{states[s].label}</span>
           </animated.div>
         ))}
       </animated.div>
