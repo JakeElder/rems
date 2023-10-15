@@ -8,6 +8,7 @@ import {
   MAX_RENTAL_PRICE,
   MAX_PURCHASE_PRICE
 } from "./constants";
+import { Radius } from "./location";
 
 export const Arrays = z.object({
   "indoor-features": z.string().array().default([]).catch([]),
@@ -176,20 +177,7 @@ export const Origin = z.object({
 });
 
 export const MapState = z.object({
-  radius: z.coerce
-    .number()
-    .min(1000)
-    .max(20_000)
-    .default(5000)
-    .catch(5000)
-    .describe(
-      txt(
-        <>
-          The radius from the search origin, defining the area to search for
-          properties within. It should be specified in meters squared.
-        </>
-      )
-    ),
+  radius: Radius,
   "radius-enabled": z
     .enum(["true", "false"])
     .default("false")

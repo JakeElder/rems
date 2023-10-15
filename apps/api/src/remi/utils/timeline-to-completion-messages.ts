@@ -6,6 +6,20 @@ const timelineToCompletionMessages = (
 ): ChatCompletionRequestMessage[] => {
   return timeline
     .map<ChatCompletionRequestMessage | null>((e) => {
+      if (e.event.type === "YIELD") {
+        return {
+          role: "system",
+          content: "YIELD (control returned to user)"
+        };
+      }
+
+      if (e.event.type === "ANALYSIS_PERFORMED") {
+        return {
+          role: "system",
+          content: `Analysis Performed: ${JSON.stringify(e.event.analysis)}`
+        };
+      }
+
       if (e.event.type === "LANGUAGE_BASED") {
         return {
           role: e.role === "USER" ? "user" : "assistant",

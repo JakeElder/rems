@@ -182,11 +182,11 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_LOCATION",
       () => remi.refine.location({ timeline }),
-      async ({ origin }) => {
-        if (!origin) return null;
+      async ({ source, radius }) => {
+        if (!source) return null;
 
         try {
-          const l = await nlToLocation(origin);
+          const l = await nlToLocation(source);
           return event("ASSISTANT", {
             type: "PATCH",
             patch: scalarPatch("LOCATION", query, {
@@ -364,15 +364,25 @@ const stream: Stream = (args) => async (c) => {
     )
   ]);
 
-  const timelineEvents = resolutions.filter(isTimelineEventResolution);
-  const { capability } = await analyze();
+  const analysis = await analyze();
+
+  const interactionTimeline = [
+    ...timeline.slice(-3),
+    event("SYSTEM", { type: "ANALYSIS_PERFORMED", analysis }),
+    ...resolutions.filter(isTimelineEventResolution)
+  ];
+
+  const { capability } = analysis;
 
   if (
     capability === "REFINE_QUERY" ||
     capability === "NEW_QUERY" ||
     capability === "CLEAR_QUERY"
   ) {
-    const res = await remi.capability.summarize({ timeline: timelineEvents });
+    const res = await remi.capability.summarize({
+      timeline: interactionTimeline
+    });
+
     if (res.ok) {
       send(
         event("ASSISTANT", {
@@ -403,7 +413,7 @@ const stream: Stream = (args) => async (c) => {
 
   send(event("SYSTEM", { type: "YIELD" }));
 
-  const errors = timelineEvents
+  const errors = interactionTimeline
     .map((te) => te.event)
     .filter(isError)
     .map(

@@ -1,6 +1,7 @@
 import { txt } from "../utils";
 import { z } from "zod";
 import { TimelineSchema } from "../timeline";
+import { Radius } from "../location";
 
 export const ContextSchema = z.object({});
 
@@ -10,18 +11,20 @@ export const ArgsSchema = z.object({
 
 export const ReturnsSchema = z
   .object({
-    o: z
+    s: z
       .string()
       .describe(
         txt(
           <>
-            The search origin. This is the part of the users input that defines
-            a fixed location. This should only be set to a fixed location. If
-            only a relative adjustment has been made, IE "north 10km", then
-            leave undefined.
+            The location source. Natural language location. IE "Phuket", "Within
+            10km of the busiest BTS station in Bangkok".
           </>
         )
-      )
+      ),
+    r: Radius
   })
-  .partial({ o: true })
-  .transform(({ o }) => ({ origin: o }));
+  .partial({ r: true })
+  .transform(({ s, r }) => ({
+    source: s,
+    radius: r
+  }));

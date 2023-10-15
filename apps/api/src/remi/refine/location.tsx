@@ -23,9 +23,11 @@ const location: Fn = async ({ timeline }) => {
         role: "system",
         content: txt(
           <>
-            You are Remi, an assistant responsible for helping the user of a
-            real estate website. Your task is to process their input and
-            identify the "search origin" based on chat.
+            <p>
+              You are an assistant responsible for helping the user of a real
+              estate website. Process their input and extract location
+              information.
+            </p>
           </>
         )
       },
