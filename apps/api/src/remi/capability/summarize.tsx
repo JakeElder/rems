@@ -67,10 +67,17 @@ const summarize: Fn = async ({ timeline }) => {
         )
       },
       ...timelineToCompletionMessages(timeline)
+    ],
+    function_call: { name: "f" },
+    functions: [
+      {
+        name: "f",
+        parameters: zodToJsonSchema(ReturnsSchema)
+      }
     ]
   };
 
-  return execute.chat(request);
+  return execute.fn(request, ReturnsSchema);
 };
 
 export default summarize;

@@ -185,17 +185,23 @@ const stream: Stream = (args) => async (c) => {
       async ({ origin }) => {
         if (!origin) return null;
 
-        const l = await nlToLocation(origin);
-        if (!l) return null;
-
-        return event("ASSISTANT", {
-          type: "PATCH",
-          patch: scalarPatch("LOCATION", query, {
-            "origin-lat": l.lat,
-            "origin-lng": l.lng,
-            "origin-id": l.placeId
-          })
-        });
+        try {
+          const l = await nlToLocation(origin);
+          return event("ASSISTANT", {
+            type: "PATCH",
+            patch: scalarPatch("LOCATION", query, {
+              "origin-lat": l.lat,
+              "origin-lng": l.lng,
+              "origin-id": l.placeId
+            })
+          });
+        } catch (e) {
+          return event("SYSTEM", {
+            type: "INTENT_RESOLUTION_ERROR",
+            intent: "REFINE_LOCATION",
+            error: e
+          });
+        }
       }
     ),
 

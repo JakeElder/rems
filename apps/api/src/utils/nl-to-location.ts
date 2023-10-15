@@ -1,23 +1,34 @@
-import qs from "query-string";
-
-const PLACES_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
+import { google } from "googleapis";
 
 export const nlToLocation = async (
-  nl: string
-): Promise<{ lat: number; lng: number; placeId: string } | null> => {
-  const q = qs.stringify({
-    query: nl,
-    key: process.env.PLACES_API_KEY
-    // location: BIAS
+  location: string
+): Promise<{
+  lat: number;
+  lng: number;
+  placeId: string;
+}> => {
+  const places = google.places({
+    version: "v1",
+    auth: process.env.PLACES_API_KEY
   });
 
-  try {
-    const res = await fetch(`${PLACES_URL}?${q}`);
-    const { results } = await res.json();
-    const { lat, lng } = results[0].geometry.location;
-    return { lat, lng, placeId: results[0].place_id };
-  } catch (e) {
-    console.error(e);
-    return null;
+  const r = await places.places.searchText({
+    requestBody: { textQuery: location },
+    fields: ["displayName", "editorialSummary", "location", "viewport", "id"]
+      .map((l) => `places.${l}`)
+      .join(",")
+  });
+
+  const place = r.data.places?.[0];
+  const lat = place?.location?.latitude;
+  const lng = place?.location?.longitude;
+  const placeId = place?.id;
+
+  if (!lat || !lng || !placeId) {
+    throw new Error(`Couldn't resolve location: ${location}`);
   }
+
+  console.log(location, place);
+
+  return { lat, lng, placeId };
 };

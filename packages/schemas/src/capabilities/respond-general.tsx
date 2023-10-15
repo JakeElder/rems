@@ -17,4 +17,16 @@ export const ArgsSchema = ContextSchema.extend({
   timeline: TimelineSchema
 });
 
-export const ReturnsSchema = z.string();
+export const ReturnsSchema = z
+  .object({
+    r: z
+      .string()
+      .describe(
+        txt(
+          <>
+            The natural language response to be sent to the user, sent as "Remi"
+          </>
+        )
+      )
+  })
+  .transform(({ r }) => r);
