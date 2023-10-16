@@ -16,15 +16,15 @@ export const ReturnsSchema = z
       .describe(
         txt(
           <>
-            The location source. Natural language location. IE "Phuket", "Within
-            10km of the busiest BTS station in Bangkok".
+            The location source. Natural language location. IE "Phuket" or
+            "Within 10km of the busiest BTS station in Bangkok".
           </>
         )
       ),
-    r: Radius
+    r: Radius,
+    re: z
+      .boolean()
+      .describe(txt(<>Whether the radius should be enabled or not</>))
   })
-  .partial({ r: true })
-  .transform(({ s, r }) => ({
-    source: s,
-    radius: r
-  }));
+  .partial({ s: true, r: true })
+  .transform(({ s, r, re }) => ({ source: s, radius: r, radiusEnabled: re }));

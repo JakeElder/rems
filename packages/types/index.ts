@@ -149,12 +149,6 @@ export type QuickFilterQueryKey = keyof Pick<
 
 export type SortType = RealEstateQuery["sort"];
 
-export type GetPropertiesResult = {
-  query: RealEstateQuery;
-  data: Property[];
-  pagination: Pagination;
-};
-
 export type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
@@ -320,3 +314,10 @@ export type NlLocationSource = Z<typeof NlLocationSourceSchema>;
 export type LocationSource = Z<typeof LocationSourceSchema>;
 export type LocationResolution = Z<typeof LocationResolutionSchema>;
 export type Location = Z<typeof LocationSchema>;
+
+export type GetPropertiesResult = {
+  query: RealEstateQuery;
+  data: Property[];
+  location: Location;
+  pagination: Pagination;
+};

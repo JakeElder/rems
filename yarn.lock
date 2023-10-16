@@ -7475,6 +7475,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/change-case@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@types/change-case@npm:2.3.1"
+  dependencies:
+    change-case: "*"
+  checksum: 73fc8d2f4e7939de2b487ed5143c32f3729fe2f4b035be2ca52f4ed3340cabcc0a66f225cf60c34a6b3eea8133f90c4b37d7478d590963bc99070c1248e6dc0b
+  languageName: node
+  linkType: hard
+
 "@types/connect-history-api-fallback@npm:^1.3.5":
   version: 1.5.1
   resolution: "@types/connect-history-api-fallback@npm:1.5.1"
@@ -9189,6 +9198,7 @@ __metadata:
     "@rems/tsconfig": "*"
     "@rems/types": "*"
     "@types/array-equal": ^1.0.0
+    "@types/change-case": ^2.3.1
     "@types/json-diff": ^1.0.0
     "@types/memoizee": ^0.4.8
     "@types/node": 20.4.5
@@ -9199,6 +9209,7 @@ __metadata:
     "@types/turndown": ^5.0.1
     array-equal: ^1.0.0
     chalk: ^5.3.0
+    change-case: ^5.0.2
     env-cmd: ^10.1.0
     fast-deep-equal: ^3.1.3
     googleapis: ^127.0.0
@@ -10608,6 +10619,13 @@ __metadata:
   version: 5.3.0
   resolution: "chalk@npm:5.3.0"
   checksum: 623922e077b7d1e9dedaea6f8b9e9352921f8ae3afe739132e0e00c275971bdd331268183b2628cf4ab1727c45ea1f28d7e24ac23ce1db1eb653c414ca8a5a80
+  languageName: node
+  linkType: hard
+
+"change-case@npm:*, change-case@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "change-case@npm:5.0.2"
+  checksum: 6c5e0cc2d526be82fa354de51f5293e7e9f00f67b79a61950c980b8b8ae57f7fbb110a8a4eb3178e6a6f6a487f774696bdb1d43b9543d6938080428f28953c78
   languageName: node
   linkType: hard
 

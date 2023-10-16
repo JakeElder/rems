@@ -1,10 +1,9 @@
 import { createContext, useContext, useEffect } from "react";
 import { Observable } from "@legendapp/state";
 import { useObservable } from "@legendapp/state/react";
-import { MapBounds, RealEstateQuery, SearchParams } from "@rems/types";
+import { MapBounds, RealEstateQuery, SearchParams, Z } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import { flatten } from "remeda";
-import { z } from "zod";
 import { useRouter } from "next/router";
 
 const IndexPageStateProvider = createContext<{
@@ -13,17 +12,11 @@ const IndexPageStateProvider = createContext<{
   mapBounds: Observable<MapBounds | null>;
 } | null>(null);
 
-const useRealEstateIndexPageState = () => {
-  const $ = useContext(IndexPageStateProvider);
-  if ($ === null) {
-    throw new Error();
-  }
-  return $;
-};
+const useRealEstateIndexPageState = () => useContext(IndexPageStateProvider)!;
 
-type ArrayKey = keyof z.infer<typeof RealEstateQuerySchema.Arrays>;
+type ArrayKey = keyof Z<typeof RealEstateQuerySchema.Arrays>;
 
-const searchParamsToQuery = (params: SearchParams): RealEstateQuery => {
+export const searchParamsToQuery = (params: SearchParams): RealEstateQuery => {
   const arrayKeys: ArrayKey[] = [
     "indoor-features",
     "lot-features",

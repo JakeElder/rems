@@ -7,14 +7,7 @@ export const Radius = z.coerce
   .max(50_000)
   .default(5000)
   .catch(5000)
-  .describe(
-    txt(
-      <>
-        The radius from the search source to search for properties within.
-        Specified in M².
-      </>
-    )
-  );
+  .describe(txt(<>The property search radius in M².</>));
 
 export const NlLocationSourceSchema = z.object({
   type: z.literal("NL").default("NL"),
@@ -23,7 +16,7 @@ export const NlLocationSourceSchema = z.object({
 });
 
 export const LatLngLocationSourceSchema = z.object({
-  type: z.literal("LAT_LNG").default("LAT_LNG"),
+  type: z.literal("LL").default("LL"),
   source: z.object({ lat: z.number(), lng: z.number() }),
   radius: Radius.nullable().default(null)
 });

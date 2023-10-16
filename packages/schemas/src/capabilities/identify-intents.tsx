@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { txt } from "../utils";
-import { RealEstateQuerySchema, TimelineSchema } from "..";
+import { LocationSchema, RealEstateQuerySchema, TimelineSchema } from "..";
 import { TerseIntentSchema } from "../intent";
 
 export const ContextSchema = z.object({
@@ -11,8 +11,8 @@ export const ContextSchema = z.object({
   lotFeatures: z.array(z.string()),
   viewTypes: z.array(z.string()),
   propertyTypes: z.array(z.string()),
+  currentLocation: LocationSchema,
   currentQuery: z.object({
-    LOCATION: RealEstateQuerySchema.Origin,
     MAP_STATE: RealEstateQuerySchema.MapState,
     PAGE: RealEstateQuerySchema.Page,
     SORT: RealEstateQuerySchema.Sort,

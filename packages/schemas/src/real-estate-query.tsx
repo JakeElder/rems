@@ -167,16 +167,9 @@ export const SpaceRequirements = z.object({
     )
 });
 
-export const Origin = z.object({
-  "origin-lat": z.coerce.number().default(13.736717).catch(13.736717),
-  "origin-lng": z.coerce.number().default(100.523186).catch(100.523186),
-  "origin-id": z
-    .string()
-    .default("ChIJ82ENKDJgHTERIEjiXbIAAQE")
-    .catch("ChIJ82ENKDJgHTERIEjiXbIAAQE")
-});
-
-export const MapState = z.object({
+export const Location = z.object({
+  "location-source": z.string().catch("Bangkok").default("Bangkok"),
+  "location-source-type": z.enum(["nl", "ll"]).catch("nl").default("nl"),
   radius: Radius,
   "radius-enabled": z
     .enum(["true", "false"])
@@ -189,26 +182,17 @@ export const MapState = z.object({
           the search origin. Only properties within this radius will be shown.
         </>
       )
-    ),
+    )
+});
+
+export const MapState = z.object({
   zoom: z.coerce
     .number()
     .min(0)
     .max(22)
     .default(9)
     .catch(9)
-    .describe(txt(<>The zoom level of the map. A number between 0 and 22.</>)),
-  lat: z.coerce
-    .number()
-    .nullable()
-    .default(13.7563309)
-    .catch(13.7563309)
-    .describe(txt(<>The current latitude of the center point of the map.</>)),
-  lng: z.coerce
-    .number()
-    .nullable()
-    .default(100.5017651)
-    .catch(100.5017651)
-    .describe(txt(<>The current longitude of the center point of the map.</>))
+    .describe(txt(<>The zoom level of the map. A number between 0 and 22.</>))
 });
 
 export const Scalars = z
@@ -218,8 +202,8 @@ export const Scalars = z
   })
   .merge(BudgetAndAvailability)
   .merge(SpaceRequirements)
-  .merge(Origin)
-  .merge(MapState);
+  .merge(MapState)
+  .merge(Location);
 
 export const Group = z.enum([
   "LOCATION",
