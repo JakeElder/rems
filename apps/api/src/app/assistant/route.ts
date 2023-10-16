@@ -11,9 +11,13 @@ import {
   IntentResolutionErrorEvent,
   Analysis
 } from "@rems/types";
-import { AssistantPayloadSchema, RealEstateQuerySchema } from "@rems/schemas";
+import {
+  AssistantPayloadSchema,
+  NlLocationSourceSchema,
+  RealEstateQuerySchema
+} from "@rems/schemas";
 import memoize from "memoizee";
-import { nlToLocation } from "../../utils/nl-to-location";
+import resolveLocationSource from "../../utils/resolve-location-source";
 import { RemiFn } from "@/remi";
 import chalk from "chalk";
 import { pickBy } from "remeda";
@@ -185,23 +189,31 @@ const stream: Stream = (args) => async (c) => {
       async ({ source, radius }) => {
         if (!source) return null;
 
-        try {
-          const l = await nlToLocation(source);
-          return event("ASSISTANT", {
-            type: "PATCH",
-            patch: scalarPatch("LOCATION", query, {
-              "origin-lat": l.lat,
-              "origin-lng": l.lng,
-              "origin-id": l.placeId
-            })
-          });
-        } catch (e) {
+        const res = await resolveLocationSource(
+          NlLocationSourceSchema.parse({
+            source,
+            radius
+          })
+        );
+
+        console.log(res);
+
+        if (!res.ok) {
           return event("SYSTEM", {
             type: "INTENT_RESOLUTION_ERROR",
             intent: "REFINE_LOCATION",
-            error: e
+            error: "Couldn't resolve location"
           });
         }
+
+        return event("ASSISTANT", {
+          type: "PATCH",
+          patch: scalarPatch("LOCATION", query, {
+            "origin-id": res.resolution.id,
+            "origin-lat": res.resolution.lat,
+            "origin-lng": res.resolution.lng
+          })
+        });
       }
     ),
 

@@ -2,7 +2,7 @@ import { useSpring } from "@react-spring/web";
 import { AssistantState, AssistantUiState } from "@rems/types";
 import tinycolor from "tinycolor2";
 import { CHAT_PALETTE } from "../colors";
-import { assistantStateToGroupedAssistantState } from "../adapters";
+import assistantStateToGroupedAssistantState from "../adapters/assistant-state-to-grouped-assistant-state";
 import { scrollbarWidth } from "@xobotyi/scrollbar-width";
 
 type UiState = AssistantUiState;

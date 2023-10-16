@@ -16,7 +16,7 @@ import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
 import StateLabel from "../StateLabel/StateLabel";
 import useAssistantUiLayout from "../../hooks/use-assistant-ui-layout";
-import { assistantStateToGroupedAssistantState } from "../../adapters";
+import assistantStateToGroupedAssistantState from "../../adapters/assistant-state-to-grouped-assistant-state";
 
 type Spacing = {
   xDivide: number;

@@ -6,8 +6,8 @@ type Props = {
 
 const Logo = ({ height = 43 }: Props) => (
   <svg width="68.062px" height="17.34px" viewBox="0 0 68.062 17.34">
-    <g stroke="none" stroke-width="1" fill-rule="evenodd">
-      <g transform="translate(-43.414, -32.068)" fill-rule="nonzero">
+    <g stroke="none" strokeWidth="1" fillRule="evenodd">
+      <g transform="translate(-43.414, -32.068)" fillRule="nonzero">
         <g transform="translate(43.414, 32.068)">
           <path d="M10.2,0.442 C9.792,0.238 9.35,0.102 8.568,0.102 C6.494,0.102 4.828,1.36 4.012,2.992 L4.012,0.408 L7.10542736e-15,0.408 L7.10542736e-15,16.932 L4.012,16.932 L4.012,8.5 C4.012,5.814 5.678,4.046 8.092,4.046 C8.874,4.046 9.554,4.182 10.2,4.522 L10.2,0.442 Z"></path>
           <path

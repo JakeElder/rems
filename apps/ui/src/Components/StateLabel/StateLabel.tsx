@@ -3,7 +3,7 @@ import css from "./StateLabel.module.css";
 import { AssistantState } from "@rems/types";
 import { animated, useSpring } from "@react-spring/web";
 import { CHAT_PALETTE } from "../../colors";
-import { assistantStateToGroupedAssistantState } from "../../adapters";
+import assistantStateToGroupedAssistantState from "../../adapters/assistant-state-to-grouped-assistant-state";
 
 type Props = { state: AssistantState };
 
@@ -18,7 +18,7 @@ const states: Record<Props["state"], State> = {
   OPENING: { label: "Opening" }
 };
 
-const StateLabel = ({ state }: Props) => {
+const StateLabel = React.memo(({ state }: Props) => {
   const group = assistantStateToGroupedAssistantState(state);
   const { labelBg, labelColor } = useSpring(CHAT_PALETTE[group]);
   const keys = useRef<Props["state"][]>([
@@ -98,6 +98,6 @@ const StateLabel = ({ state }: Props) => {
       </animated.div>
     </animated.div>
   );
-};
+});
 
 export default StateLabel;

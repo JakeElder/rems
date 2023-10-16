@@ -37,9 +37,14 @@ import {
   ErrorEventSchema,
   SystemTimelineEventSchema,
   IntentResolutionErrorEventSchema,
-  SystemEventSchema
+  SystemEventSchema,
+  LocationSchema,
+  LocationSourceSchema,
+  NlLocationSourceSchema,
+  AnalysisSchema,
+  LatLngLocationSourceSchema,
+  LocationResolutionSchema
 } from "@rems/schemas";
-import { AnalysisSchema } from "@rems/schemas/src/analysis";
 import { ZodType, z } from "zod";
 
 export type Z<T extends ZodType<any, any, any>> = z.infer<T>;
@@ -309,3 +314,9 @@ export type AssistantUiState =
 export type MakeNonNullable<T, K extends keyof T> = Omit<T, K> & {
   [P in K]: NonNullable<T[P]>;
 };
+
+export type LatLngLocationSource = Z<typeof LatLngLocationSourceSchema>;
+export type NlLocationSource = Z<typeof NlLocationSourceSchema>;
+export type LocationSource = Z<typeof LocationSourceSchema>;
+export type LocationResolution = Z<typeof LocationResolutionSchema>;
+export type Location = Z<typeof LocationSchema>;

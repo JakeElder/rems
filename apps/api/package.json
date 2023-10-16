@@ -16,6 +16,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.41",
     "@rems/schemas": "*",
     "@rems/tsconfig": "*",
     "@rems/types": "*",
