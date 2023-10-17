@@ -23,7 +23,7 @@ const spaceRequirements: Fn = async ({ timeline, current }) => {
   const schema = stringify(zodToJsonSchema(ContextSchema));
 
   const request: ChatCompletionRequest = {
-    model: "gpt-3.5-turbo-0613",
+    model: "gpt-4",
     messages: [
       {
         role: "system",
@@ -32,7 +32,8 @@ const spaceRequirements: Fn = async ({ timeline, current }) => {
             <p>
               You an assistant responsible for helping the user of a real estate
               website. Process their input and update the current query to
-              reflect their space requirements.
+              reflect their space requirements. You are able to set location by
+              landmarks or establishments.
             </p>
             <p>Useful context: `{context}`</p>
             <p>The context schema: `{schema}`</p>

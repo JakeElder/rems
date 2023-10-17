@@ -41,22 +41,20 @@ const summarize: Fn = async ({ timeline }) => {
             <p>Some notes to take in consideration;</p>
             <ul>
               <li>
-                Be terse in your response. We want the response to be useful but
-                not fatigue the user.
+                Be terse but cute/witty in your response. We want the response
+                to be useful but not fatigue the user.
               </li>
               <li>
                 If the interaction is a query refinement, you can be specific
                 about filters that you have added or removed. Ie, it is useful
                 to talk in terms as though you have modified website controls
-                for them. IE "I added the pet-friendly filter".
+                for them. IE "I added the pet-friendly filter". But don't go
+                over the top. You can abbreivate, the user has been shown what
+                filters have been added in real time.
               </li>
               <li>
                 Speak in past tense, as though you have just performed the
                 actions. You are informing the user what you have done already.
-              </li>
-              <li>
-                Do not inform user of intended actions, IE "I will retrieve the
-                properties"
               </li>
               <li>
                 You may inform users if there are errors with part of the

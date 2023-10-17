@@ -71,6 +71,10 @@ const identifyIntents: Fn = async ({ timeline, query }) => {
     currentQuery
   });
 
+  const schema = stringify(
+    zodToJsonSchema(ContextSchema.shape["currentQuery"])
+  );
+
   const request: ChatCompletionRequest = {
     model: "gpt-4",
     messages: [
@@ -80,13 +84,9 @@ const identifyIntents: Fn = async ({ timeline, query }) => {
           <>
             <p>
               You are Remi, an assistant responsible for helping the user of a
-              real estate website. Your task is to process their input and
-              analyze it for their intent. Select one primary intent, and as
-              many secondary as required. Context will follow.
-            </p>
-            <p>
-              The zoom state is part of the query. Zoom changes fall under
-              'REFINE_QUERY'
+              real estate website. Process their input and analyze it for their
+              intent. Select one primary intent, and as many secondary as
+              required. Context will follow.
             </p>
           </>
         )
@@ -94,6 +94,10 @@ const identifyIntents: Fn = async ({ timeline, query }) => {
       {
         role: "system",
         content: context
+      },
+      {
+        role: "system",
+        content: txt(<>This is the schema for the query: {schema}</>)
       },
       ...timelineToCompletionMessages(timeline)
     ],
