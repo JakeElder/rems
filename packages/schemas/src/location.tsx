@@ -15,9 +15,14 @@ export const NlLocationSourceSchema = z.object({
   radius: Radius.nullable().default(null)
 });
 
+export const LatLngSchema = z.object({
+  lat: z.number(),
+  lng: z.number()
+});
+
 export const LatLngLocationSourceSchema = z.object({
   type: z.literal("LL").default("LL"),
-  source: z.object({ lat: z.number(), lng: z.number() }),
+  source: LatLngSchema,
   radius: Radius.nullable().default(null)
 });
 
@@ -26,9 +31,9 @@ export const LocationSourceSchema = z.discriminatedUnion("type", [
   LatLngLocationSourceSchema
 ]);
 
-const ViewportSchema = z.object({
-  sw: z.object({ lat: z.number(), lng: z.number() }),
-  ne: z.object({ lat: z.number(), lng: z.number() })
+export const BoundsSchema = z.object({
+  sw: LatLngSchema,
+  ne: LatLngSchema
 });
 
 export const LocationResolutionSchema = z
@@ -36,14 +41,13 @@ export const LocationResolutionSchema = z
     id: z.string(),
     lat: z.number(),
     lng: z.number(),
-    viewport: ViewportSchema,
+    viewport: BoundsSchema,
     displayName: z.string(),
     editorialSummary: z.string()
   })
   .partial({
     displayName: true,
-    editorialSummary: true,
-    viewport: true
+    editorialSummary: true
   });
 
 export const LocationSchema = z.object({

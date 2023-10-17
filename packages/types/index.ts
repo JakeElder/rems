@@ -43,7 +43,9 @@ import {
   NlLocationSourceSchema,
   AnalysisSchema,
   LatLngLocationSourceSchema,
-  LocationResolutionSchema
+  LocationResolutionSchema,
+  BoundsSchema,
+  LatLngSchema
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
@@ -131,16 +133,6 @@ export type RealEstateQuery = Z<typeof RealEstateQuerySchema.URL>;
 export type ServerRealEstateQuery = Z<typeof RealEstateQuerySchema.Server>;
 export type RealEstateQueryScalars = Z<typeof RealEstateQuerySchema.Scalars>;
 export type RealEstateQueryArrays = Z<typeof RealEstateQuerySchema.Arrays>;
-
-export type LngLat = {
-  lng: number;
-  lat: number;
-};
-
-export type MapBounds = {
-  sw: LngLat;
-  ne: LngLat;
-};
 
 export type QuickFilterQueryKey = keyof Pick<
   RealEstateQuery,
@@ -314,6 +306,8 @@ export type NlLocationSource = Z<typeof NlLocationSourceSchema>;
 export type LocationSource = Z<typeof LocationSourceSchema>;
 export type LocationResolution = Z<typeof LocationResolutionSchema>;
 export type Location = Z<typeof LocationSchema>;
+export type LatLng = Z<typeof LatLngSchema>;
+export type Bounds = Z<typeof BoundsSchema>;
 
 export type GetPropertiesResult = {
   query: RealEstateQuery;

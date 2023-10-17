@@ -66,29 +66,31 @@ export const Mock = (props: Props) => {
           <div style={{ flex: 5 }} />
         </div>
       </div>
-      <Chat.Root {...props} spacing={spacing}>
-        <Chat.Dialog>
-          <Chat.Header {...props} />
-          <Chat.Body timeline={t} />
-        </Chat.Dialog>
-        <Chat.Input>
-          <ChatInput
-            {...props}
-            sessions={sessions}
-            submittable={sessions[sessions.length - 1].value !== ""}
-            onChange={(e) => {
-              e.preventDefault();
-              setSessions((prev) => [
-                ...prev.slice(0, -1),
-                { ...prev[prev.length - 1], value: e.target.value }
-              ]);
-            }}
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          />
-        </Chat.Input>
-      </Chat.Root>
+      {!spacing.ready ? null : (
+        <Chat.Root {...props} {...spacing}>
+          <Chat.Dialog>
+            <Chat.Header {...props} />
+            <Chat.Body timeline={t} />
+          </Chat.Dialog>
+          <Chat.Input>
+            <ChatInput
+              {...props}
+              sessions={sessions}
+              submittable={sessions[sessions.length - 1].value !== ""}
+              onChange={(e) => {
+                e.preventDefault();
+                setSessions((prev) => [
+                  ...prev.slice(0, -1),
+                  { ...prev[prev.length - 1], value: e.target.value }
+                ]);
+              }}
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            />
+          </Chat.Input>
+        </Chat.Root>
+      )}
     </>
   );
 };

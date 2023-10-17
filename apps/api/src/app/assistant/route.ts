@@ -82,7 +82,7 @@ const event = <T extends TimelineEvent["role"]>(
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
 const stream: Stream = (args) => async (c) => {
-  const { timeline, query } = args;
+  const { timeline, query, location } = args;
 
   const log = remi.logger.init(timeline);
 
@@ -190,10 +190,7 @@ const stream: Stream = (args) => async (c) => {
         if (!source) return null;
 
         const res = await resolveLocationSource(
-          NlLocationSourceSchema.parse({
-            source,
-            radius
-          })
+          NlLocationSourceSchema.parse({ source, radius })
         );
 
         console.log(res);
@@ -206,14 +203,16 @@ const stream: Stream = (args) => async (c) => {
           });
         }
 
-        return event("ASSISTANT", {
-          type: "PATCH",
-          patch: scalarPatch("LOCATION", query, {
-            "origin-id": res.resolution.id,
-            "origin-lat": res.resolution.lat,
-            "origin-lng": res.resolution.lng
-          })
-        });
+        return null;
+
+        // return event("ASSISTANT", {
+        //   type: "PATCH",
+        //   patch: scalarPatch("LOCATION", query, {
+        //     "origin-id": res.resolution.id,
+        //     "origin-lat": res.resolution.lat,
+        //     "origin-lng": res.resolution.lng
+        //   })
+        // });
       }
     ),
 
@@ -442,11 +441,17 @@ const stream: Stream = (args) => async (c) => {
 };
 
 export async function POST(req: NextRequest) {
-  const { query, timeline } = AssistantPayloadSchema.parse(await req.json());
+  const { query, timeline, location } = AssistantPayloadSchema.parse(
+    await req.json()
+  );
 
   return new Response(
     new ReadableStream({
-      start: stream({ query, timeline: timeline.slice(-10) })
+      start: stream({
+        query,
+        timeline: timeline.slice(-10),
+        location
+      })
     }),
     { headers: { "Content-Type": "application/json; charset=utf-8" } }
   );

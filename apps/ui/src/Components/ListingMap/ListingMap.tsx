@@ -6,29 +6,28 @@ import MapPropertyMarker from "../MapPropertyMarker/MapPropertyMarker";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useIndexConnector } from "../IndexConnector/IndexConnector";
 import Link from "next/link";
-import { Property, RealEstateQuery } from "@rems/types";
+import { Bounds, Property, RealEstateQuery } from "@rems/types";
 import React from "react";
 import circle from "@turf/circle";
 import { lineString } from "@turf/helpers";
-import { Required } from "utility-types";
 
 const TOKEN =
   "pk.eyJ1IjoiamFrZS1lbGRlciIsImEiOiJjbGZtbm12d28wZGp3M3JyemlrNnp1cmRvIn0.ovmQBkbXdCh-w_rUJ82GZA";
 
-type Props = Required<
-  React.ComponentProps<typeof Map>,
-  "longitude" | "latitude"
-> & {
+type MapProps = React.ComponentProps<typeof Map>;
+
+type Props = {
+  lat: number;
+  lng: number;
+  bounds: Bounds;
   properties: Property[];
   radius: RealEstateQuery["radius"];
-  searchLat: RealEstateQuery["origin-lat"];
-  searchLng: RealEstateQuery["origin-lng"];
   showRadius: boolean;
-};
+} & MapProps;
 
 type RadiusProps = {
-  lat: RealEstateQuery["origin-lat"];
-  lng: RealEstateQuery["origin-lng"];
+  lat: number;
+  lng: number;
   radius: RealEstateQuery["radius"];
   show: boolean;
 };
@@ -64,17 +63,7 @@ const Radius = ({ lat, lng, radius, show }: RadiusProps) => {
 
 const ListingMap = React.forwardRef<MapRef, Props>(
   (
-    {
-      properties,
-      longitude,
-      latitude,
-      zoom,
-      radius,
-      searchLat,
-      searchLng,
-      showRadius,
-      ...props
-    },
+    { properties, lat, lng, radius, showRadius, bounds, zoom, ...rest },
     ref
   ) => {
     const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
@@ -89,15 +78,13 @@ const ListingMap = React.forwardRef<MapRef, Props>(
               ref={ref}
               mapboxAccessToken={TOKEN}
               mapStyle="mapbox://styles/jake-elder/clkpaxw5d00ly01qyah2jbomw"
-              initialViewState={{ longitude, latitude, zoom }}
-              {...props}
+              initialViewState={{
+                zoom,
+                bounds: [bounds.sw, bounds.ne]
+              }}
+              {...rest}
             >
-              <Radius
-                lat={searchLat}
-                lng={searchLng}
-                radius={radius}
-                show={showRadius}
-              />
+              <Radius lat={lat} lng={lng} radius={radius} show={showRadius} />
               {withGeo.map((p) => (
                 <Link
                   key={p.id}

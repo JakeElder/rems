@@ -1,11 +1,19 @@
 import useSWR from "swr";
 import qs from "query-string";
 import { GetPropertiesResult, ServerRealEstateQuery } from "@rems/types";
+import { useEffect, useState } from "react";
 
-type UsePropertiesHook = (query: ServerRealEstateQuery) => {
-  data: GetPropertiesResult | undefined;
-  isLoading: boolean;
-};
+type UsePropertiesHook = (query: ServerRealEstateQuery) =>
+  | {
+      ready: false;
+      isLoading: true;
+      data: undefined;
+    }
+  | {
+      ready: true;
+      isLoading: boolean;
+      data: GetPropertiesResult;
+    };
 
 const fetcher = async (query: string): Promise<GetPropertiesResult> => {
   const res = await fetch(
@@ -17,6 +25,7 @@ const fetcher = async (query: string): Promise<GetPropertiesResult> => {
 
 const useProperties: UsePropertiesHook = (query) => {
   const q = qs.stringify(query, { arrayFormat: "bracket" });
+  const [ready, setReady] = useState(false);
 
   const { data, isLoading } = useSWR(
     [q, "properties"],
@@ -24,7 +33,17 @@ const useProperties: UsePropertiesHook = (query) => {
     { keepPreviousData: true }
   );
 
-  return { data, isLoading };
+  useEffect(() => {
+    if (!ready && !isLoading) {
+      setReady(true);
+    }
+  }, [isLoading]);
+
+  if (ready && data) {
+    return { ready: true, data, isLoading };
+  }
+
+  return { ready: false, isLoading: true };
 };
 
 export default useProperties;

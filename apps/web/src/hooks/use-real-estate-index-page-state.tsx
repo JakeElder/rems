@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect } from "react";
 import { Observable } from "@legendapp/state";
 import { useObservable } from "@legendapp/state/react";
-import { MapBounds, RealEstateQuery, SearchParams, Z } from "@rems/types";
+import { Bounds, RealEstateQuery, SearchParams, Z } from "@rems/types";
 import { RealEstateQuerySchema } from "@rems/schemas";
 import { flatten } from "remeda";
 import { useRouter } from "next/router";
@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 const IndexPageStateProvider = createContext<{
   query: Observable<RealEstateQuery>;
   stagedQuery: Observable<RealEstateQuery>;
-  mapBounds: Observable<MapBounds | null>;
+  mapBounds: Observable<Bounds | null>;
 } | null>(null);
 
 const useRealEstateIndexPageState = () => useContext(IndexPageStateProvider)!;
@@ -47,7 +47,7 @@ export const RealEstateIndexPageStateProvider = ({
   const $ = {
     query: useObservable<RealEstateQuery>(query),
     stagedQuery: useObservable<RealEstateQuery>(query),
-    mapBounds: useObservable<MapBounds | null>(null)
+    mapBounds: useObservable<Bounds | null>(null)
   };
 
   useEffect(() => {

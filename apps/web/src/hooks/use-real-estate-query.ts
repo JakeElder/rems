@@ -48,7 +48,6 @@ type UseRealEstateQueryReturn = {
   ) => void;
   onAvailabilityChange: (availability: RealEstateQuery["availability"]) => void;
   onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
-  onSearchOriginChange: (id: string, lng: number, lat: number) => void;
   onMapMove: (params: { zoom: number; lat: number; lng: number }) => void;
   reset: (commit: boolean) => void;
   isReady: boolean;
@@ -179,11 +178,6 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
       commit();
     },
 
-    onSearchOriginChange: (id, lng, lat) => {
-      patch({ "origin-id": id, "origin-lat": lat, "origin-lng": lng });
-      commit();
-    },
-
     createLink(page, sort) {
       return `/real-estate${generateQueryString(query, page, sort)}`;
     },
@@ -239,8 +233,8 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     },
 
     onMapMove: useDebouncedCallback(({ zoom, lat, lng }) => {
-      patch({ zoom, lat, lng });
-      commit();
+      // patch({ zoom, lat, lng });
+      // commit();
     }, 500),
 
     onSearchRadiusChange: (value) => {

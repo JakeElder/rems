@@ -3,7 +3,8 @@ import {
   Image,
   ServerRealEstateQuery as Query,
   Location,
-  LocationSource
+  LocationSource,
+  Bounds
 } from "@rems/types";
 import {
   File,
@@ -180,29 +181,20 @@ const radius = (query: Query) => {
   ];
 };
 
-const hasBounds = (query: Query) => {
-  return (
-    query["map-bound-ne-lat"] &&
-    query["map-bound-ne-lng"] &&
-    query["map-bound-sw-lat"] &&
-    query["map-bound-sw-lng"]
-  );
-};
-
-const bounds = (query: Query) => {
-  if (query["radius-enabled"] === "true" || !hasBounds(query)) {
+const bounds = (query: Query, bounds: Bounds) => {
+  if (query["radius-enabled"] === "true") {
     return [];
   }
 
   return [
     {
       "location.lat": {
-        [Op.gte]: query["map-bound-sw-lat"],
-        [Op.lte]: query["map-bound-ne-lng"]
+        [Op.gte]: bounds.sw.lat,
+        [Op.lte]: bounds.ne.lat
       },
       "location.lng": {
-        [Op.gte]: query["map-bound-sw-lng"],
-        [Op.lte]: query["map-bound-ne-lng"]
+        [Op.gte]: bounds.sw.lng,
+        [Op.lte]: bounds.ne.lng
       }
     }
   ];
@@ -264,7 +256,6 @@ export default async function resolve(
   query: Query
 ): Promise<GetPropertiesResult> {
   const location = await queryToLocation(query);
-  console.dir(location, { colors: true, depth: null });
 
   const res = await Property.findAndCountAll({
     where: {
@@ -283,7 +274,7 @@ export default async function resolve(
         ...outdoorFeatures(query),
         ...lotFeatures(query),
         ...radius(query),
-        ...bounds(query),
+        ...bounds(query, location.resolution.viewport),
         ...validLngLat()
       ]
     },

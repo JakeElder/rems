@@ -31,6 +31,7 @@ import uuid from "short-uuid";
 import { useDebouncedCallback } from "use-debounce";
 import { Chat } from "@rems/ui";
 import { useDomElements } from "@/components/DomElementsProvider";
+import useProperties from "@/hooks/use-properties";
 
 const NEXT_PUBLIC_REMS_API_URL = process.env.NEXT_PUBLIC_REMS_API_URL;
 
@@ -76,6 +77,7 @@ export const useAssistant = () => useContext(AssistantContext)!;
 const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const { reset, patch, commit, serverQuery } = useRealEstateQuery();
+  const properties = useProperties(serverQuery);
   const $keyChain = useRef<string[]>([]);
 
   const { $header, $listings } = useDomElements();
@@ -190,9 +192,14 @@ const AssistantProvider = ({ children }: Props) => {
 
   const request = () =>
     new Observable<AssistantTimelineEvent | SystemTimelineEvent>((sub) => {
+      if (!properties.ready) {
+        throw new Error();
+      }
+
       const payload: AssistantPayload = {
         timeline: $timeline.get(),
-        query: serverQuery
+        query: serverQuery,
+        location: properties.data.location
       };
 
       fetch(`${NEXT_PUBLIC_REMS_API_URL}/assistant`, {
@@ -369,9 +376,10 @@ const AssistantProvider = ({ children }: Props) => {
       (session.state === "INPUTTING" || session.state === "INACTIVE")
   };
 
-  const context: Context = spacing.ready
-    ? { ready: true, ...base, ...spacing.props }
-    : { ready: false, ...base };
+  const context: Context =
+    spacing.ready && properties.ready
+      ? { ready: true, ...base, ...spacing.props }
+      : { ready: false, ...base };
 
   return (
     <AssistantContext.Provider value={context}>

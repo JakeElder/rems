@@ -85,26 +85,6 @@ const timeline: Timeline = [
   },
   {
     role: "ASSISTANT",
-    id: "4",
-    date: date(),
-    event: {
-      type: "PATCH",
-      patch: {
-        type: "SCALAR",
-        group: "LOCATION",
-        data: { "origin-lat": 9.5120168 },
-        diff: [
-          {
-            type: "CHANGE_SCALAR",
-            k: "origin-lat",
-            value: [18.7883439, 9.5120168]
-          }
-        ]
-      }
-    }
-  },
-  {
-    role: "ASSISTANT",
     id: "50",
     date: date(),
     event: {
