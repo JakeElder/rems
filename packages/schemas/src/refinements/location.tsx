@@ -1,7 +1,6 @@
 import { txt } from "../utils";
 import { z } from "zod";
 import { TimelineSchema } from "../timeline";
-import { Radius } from "../location";
 
 export const ContextSchema = z.object({});
 
@@ -21,14 +20,26 @@ export const ReturnsSchema = z
           </>
         )
       ),
-    r: Radius,
+    go: z
+      .string()
+      .describe(
+        txt(
+          <>
+            Geospatial Operator. IE "in", "around", "near", "within $x km of".
+            Lower case. Provide a default when there is a description but no
+            operator specified.
+          </>
+        )
+      ),
+    r: z.number().describe(txt(<>Radius</>)),
     re: z
       .boolean()
       .describe(txt(<>Whether the radius should be enabled or not</>))
   })
-  .partial({ d: true, r: true, re: true })
-  .transform(({ d, r, re }) => ({
+  .partial({ d: true, r: true, re: true, go: true })
+  .transform(({ d, r, re, go }) => ({
     description: d,
     radius: r,
-    radiusEnabled: re
+    radiusEnabled: re,
+    geospatialOperator: go
   }));

@@ -1,18 +1,12 @@
 import { z } from "zod";
-import { txt } from "./utils";
 
-export const Radius = z.coerce
-  .number()
-  .min(1000)
-  .max(50_000)
-  .default(5000)
-  .catch(5000)
-  .describe(txt(<>The property search radius in M².</>));
+const Radius = z.coerce.number().nullable().default(null).catch(null);
 
 export const NlLocationSourceSchema = z.object({
   type: z.literal("NL").default("NL"),
   description: z.string(),
-  radius: Radius.nullable().default(null)
+  geospatialOperator: z.string(),
+  radius: Radius
 });
 
 export const LatLngSchema = z.object({
@@ -23,7 +17,7 @@ export const LatLngSchema = z.object({
 export const LatLngLocationSourceSchema = z.object({
   type: z.literal("LL").default("LL"),
   point: LatLngSchema,
-  radius: Radius.nullable().default(null)
+  radius: Radius
 });
 
 export const LocationSourceSchema = z.discriminatedUnion("type", [

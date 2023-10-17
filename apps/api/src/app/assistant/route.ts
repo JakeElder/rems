@@ -186,12 +186,13 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_LOCATION",
       () => remi.refine.location({ timeline }),
-      async ({ description, radius }) => {
+      async ({ description, radius, geospatialOperator }) => {
         if (!description) return null;
 
         const source = NlLocationSourceSchema.parse({
           description,
-          radius
+          radius,
+          geospatialOperator
         });
 
         const res = await resolveLocationSource(source);

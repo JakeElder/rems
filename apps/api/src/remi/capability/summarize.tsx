@@ -42,7 +42,8 @@ const summarize: Fn = async ({ timeline }) => {
             <ul>
               <li>
                 Be terse but cute/witty in your response. We want the response
-                to be useful but not fatigue the user.
+                to be useful but not fatigue the user. You can use emojis (where
+                appropriate).
               </li>
               <li>
                 If the interaction is a query refinement, you can be specific
@@ -60,6 +61,7 @@ const summarize: Fn = async ({ timeline }) => {
                 You may inform users if there are errors with part of the
                 reaction
               </li>
+              <li>Mention the location resolution if the name is ambiguous</li>
             </ul>
           </>
         )

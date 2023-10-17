@@ -170,7 +170,18 @@ export const SpaceRequirements = z.object({
 export const Location = z.object({
   "location-source": z.string().catch("Bangkok").default("Bangkok"),
   "location-source-type": z.enum(["nl", "ll"]).catch("nl").default("nl"),
-  radius: Radius,
+  "location-geospatial-operator": z
+    .string()
+    .nullable()
+    .catch(null)
+    .default(null),
+  radius: z.coerce
+    .number()
+    .min(1000)
+    .max(100_000)
+    .default(10_000)
+    .catch(10_000)
+    .describe(txt(<>The property search radius in M².</>)),
   "radius-enabled": z
     .enum(["true", "false"])
     .default("false")

@@ -3,6 +3,7 @@
 import React from "react";
 import css from "./RealEstateIndexPage.module.css";
 import IndexConnector from "../../Components/IndexConnector";
+import { RealEstateQuery } from "@rems/types";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["root"]}>{children}</div>;
@@ -42,8 +43,30 @@ export const Breadcrumbs = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["breadcrumbs"]}>{children}</div>;
 };
 
-export const Title = ({ children }: { children: React.ReactNode }) => {
-  return <h1 className={css["title"]}>{children}</h1>;
+export const Title = ({
+  location,
+  type,
+  geospatialOperator,
+  resolution
+}: {
+  type: RealEstateQuery["availability"];
+  geospatialOperator: string;
+  location: string;
+  resolution?: string;
+}) => {
+  return (
+    <h1 className={css["title"]}>
+      <div className={css["title-main"]}>
+        Homes for {type} {geospatialOperator}{" "}
+        <span className={css["location"]}>{location}</span>
+      </div>
+      {resolution && (
+        <div className={css["resolution"]}>
+          <span>{resolution}</span>
+        </div>
+      )}
+    </h1>
+  );
 };
 
 export const CountAndSort = ({ children }: { children: React.ReactNode }) => {

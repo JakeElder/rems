@@ -323,7 +323,8 @@ const AssistantProvider = ({ children }: Props) => {
           console.log(location);
           if (location.source.type === "NL") {
             patch({
-              "location-source": location.source.description
+              "location-source": location.source.description,
+              "location-geospatial-operator": location.source.geospatialOperator
             });
           }
         }

@@ -1,27 +1,45 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { RealEstateIndexPage } from "@rems/ui";
+import useProperties from "@/hooks/use-properties";
 // import useSWR from "swr";
 
 type Props = {};
 
 const RealEstateIndexPageTitleViewContainer = ({}: Props) => {
-  const { query } = useRealEstateQuery();
-  const title = `Homes for ${query["availability"]} in Thailand`;
+  const { serverQuery } = useRealEstateQuery();
+  const properties = useProperties(serverQuery);
 
-  useEffect(() => {
-    document.title = title;
-  }, [title]);
+  // useEffect(() => {
+  //   document.title = title;
+  // }, [title]);
 
-  // const { data } = useSWR(
-  //   `title:${queryString}`,
-  //   () => fetch(`/api/titles?${queryString}`),
-  //   { keepPreviousData: true }
-  // );
+  if (!properties.ready) {
+    return (
+      <RealEstateIndexPage.Title
+        geospatialOperator="in"
+        location="Bangkok"
+        type={serverQuery["availability"]}
+      />
+    );
+  }
 
-  return <RealEstateIndexPage.Title>{title}</RealEstateIndexPage.Title>;
+  const { source, resolution } = properties.data.location;
+
+  if (source.type === "NL") {
+    return (
+      <RealEstateIndexPage.Title
+        geospatialOperator={source.geospatialOperator}
+        location={source.description}
+        type={serverQuery["availability"]}
+        resolution={resolution.displayName}
+      />
+    );
+  }
+
+  throw new Error("LL not implemented");
 };
 
 export default RealEstateIndexPageTitleViewContainer;

@@ -231,6 +231,7 @@ const queryToLocationSource = (query: Query): LocationSource => {
     return {
       type: "NL",
       description: query["location-source"],
+      geospatialOperator: query["location-geospatial-operator"] || "in",
       radius
     };
   }
