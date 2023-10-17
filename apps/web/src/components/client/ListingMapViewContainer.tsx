@@ -6,27 +6,24 @@ import { ListingMap } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
 import type { MapRef } from "react-map-gl";
 import usePrevious from "use-previous";
-import dynamic from "next/dynamic";
-import useRealEstateIndexPageState from "@/hooks/use-real-estate-index-page-state";
 import { useDebouncedCallback } from "use-debounce";
 
 type Props = {};
 
 const ListingMapViewContainer = ({}: Props) => {
-  const mapRef = useRef<MapRef>();
+  const $map = useRef<MapRef>();
   const { query, onMapMove, isReady, serverQuery } = useRealEstateQuery();
   const previousQuery = usePrevious(query);
   const properties = useProperties(serverQuery);
-  const { mapBounds } = useRealEstateIndexPageState();
 
-  // useEffect(() => {
-  //   if (!isReady || !previousQuery || !mapRef.current) {
-  //     return;
-  //   }
-  //   setTimeout(() => {
-  //     mapRef.current!.panTo([query["origin-lng"], query["origin-lat"]]);
-  //   }, 200);
-  // }, [query["origin-lat"], query["origin-lng"]]);
+  useEffect(() => {
+    if (!isReady || !properties.ready || !$map.current || !previousQuery) {
+      return;
+    }
+
+    const { viewport } = properties.data.location.resolution;
+    $map.current.fitBounds([viewport.sw, viewport.ne]);
+  }, [properties.data?.location]);
 
   // useEffect(() => {
   //   if (!isReady || !previousQuery || !mapRef.current) {
@@ -52,7 +49,7 @@ const ListingMapViewContainer = ({}: Props) => {
 
   return (
     <ListingMap
-      ref={mapRef as any}
+      ref={$map as any}
       properties={properties.data.data}
       lat={properties.data.location.resolution.lat}
       lng={properties.data.location.resolution.lng}
@@ -64,6 +61,4 @@ const ListingMapViewContainer = ({}: Props) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(ListingMapViewContainer), {
-  ssr: false
-});
+export default ListingMapViewContainer;

@@ -11,7 +11,7 @@ export const Radius = z.coerce
 
 export const NlLocationSourceSchema = z.object({
   type: z.literal("NL").default("NL"),
-  source: z.string(),
+  description: z.string(),
   radius: Radius.nullable().default(null)
 });
 
@@ -22,7 +22,7 @@ export const LatLngSchema = z.object({
 
 export const LatLngLocationSourceSchema = z.object({
   type: z.literal("LL").default("LL"),
-  source: LatLngSchema,
+  point: LatLngSchema,
   radius: Radius.nullable().default(null)
 });
 

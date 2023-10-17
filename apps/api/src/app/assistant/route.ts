@@ -186,14 +186,15 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_LOCATION",
       () => remi.refine.location({ timeline }),
-      async ({ source, radius }) => {
-        if (!source) return null;
+      async ({ description, radius }) => {
+        if (!description) return null;
 
-        const res = await resolveLocationSource(
-          NlLocationSourceSchema.parse({ source, radius })
-        );
+        const source = NlLocationSourceSchema.parse({
+          description,
+          radius
+        });
 
-        console.log(res);
+        const res = await resolveLocationSource(source);
 
         if (!res.ok) {
           return event("SYSTEM", {
@@ -203,16 +204,14 @@ const stream: Stream = (args) => async (c) => {
           });
         }
 
-        return null;
-
-        // return event("ASSISTANT", {
-        //   type: "PATCH",
-        //   patch: scalarPatch("LOCATION", query, {
-        //     "origin-id": res.resolution.id,
-        //     "origin-lat": res.resolution.lat,
-        //     "origin-lng": res.resolution.lng
-        //   })
-        // });
+        return event("ASSISTANT", {
+          type: "UPDATE_LOCATION",
+          prev: location,
+          next: {
+            source,
+            resolution: res.resolution
+          }
+        });
       }
     ),
 

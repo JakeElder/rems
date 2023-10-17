@@ -23,10 +23,10 @@ type ResolveLocationSourceReturn =
   | { ok: false };
 
 const resolveNlLocationSource = async (
-  ls: NlLocationSource
+  source: NlLocationSource
 ): Promise<ResolveLocationSourceReturn> => {
   const r = await places.searchText({
-    requestBody: { textQuery: ls.source },
+    requestBody: { textQuery: source.description },
     fields: ["displayName", "editorialSummary", "location", "viewport", "id"]
       .map((l) => `places.${l}`)
       .join(",")

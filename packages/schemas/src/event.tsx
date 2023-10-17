@@ -2,6 +2,7 @@ import { z } from "zod";
 import { PatchSchema } from "./patch";
 import { AnalysisSchema } from "./analysis";
 import { IntentCodeSchema } from "./intent";
+import { LocationSchema } from "./location";
 
 export const LanguageBasedInteractionEventSchema = z.object({
   type: z.literal("LANGUAGE_BASED"),
@@ -33,6 +34,12 @@ export const IntentResolutionErrorEventSchema = z.object({
   error: z.any()
 });
 
+export const UpdateLocationEventSchema = z.object({
+  type: z.literal("UPDATE_LOCATION"),
+  prev: LocationSchema,
+  next: LocationSchema
+});
+
 export const SystemEventSchema = z.discriminatedUnion("type", [
   ErrorEventSchema,
   IntentResolutionErrorEventSchema,
@@ -47,7 +54,8 @@ export const UserEventSchema = z.discriminatedUnion("type", [
 
 export const AssistantEventSchema = z.discriminatedUnion("type", [
   LanguageBasedInteractionEventSchema,
-  PatchInteractionEventSchema
+  PatchInteractionEventSchema,
+  UpdateLocationEventSchema
 ]);
 
 export const EventSchema = z.discriminatedUnion("type", [
@@ -56,5 +64,6 @@ export const EventSchema = z.discriminatedUnion("type", [
   LanguageBasedInteractionEventSchema,
   PatchInteractionEventSchema,
   AnalysisPerformedEventSchema,
-  YieldEventSchema
+  YieldEventSchema,
+  UpdateLocationEventSchema
 ]);

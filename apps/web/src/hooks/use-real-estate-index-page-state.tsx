@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 const IndexPageStateProvider = createContext<{
   query: Observable<RealEstateQuery>;
   stagedQuery: Observable<RealEstateQuery>;
-  mapBounds: Observable<Bounds | null>;
 } | null>(null);
 
 const useRealEstateIndexPageState = () => useContext(IndexPageStateProvider)!;
@@ -61,7 +60,6 @@ export const RealEstateIndexPageStateProvider = ({
       value={{
         query: $.query,
         stagedQuery: $.stagedQuery,
-        mapBounds: $.mapBounds
       }}
       children={children}
     />

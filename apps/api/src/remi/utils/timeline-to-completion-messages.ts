@@ -27,6 +27,17 @@ const timelineToCompletionMessages = (
         };
       }
 
+      if (e.event.type === "UPDATE_LOCATION") {
+        return {
+          role: "function",
+          name: "updateLocation",
+          content: JSON.stringify({
+            from: e.event.prev,
+            to: e.event.next
+          })
+        };
+      }
+
       if (e.event.type === "PATCH") {
         return {
           role: "function",

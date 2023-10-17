@@ -2,13 +2,13 @@ import { txt } from "@/remi";
 import { Intent } from "@rems/types";
 
 const intents: Intent[] = [
-  {
-    id: 200,
-    primary: true,
-    code: "NEW_QUERY",
-    description: txt(<></>),
-    examples: []
-  },
+  // {
+  //   id: 200,
+  //   primary: true,
+  //   code: "NEW_QUERY",
+  //   description: txt(<></>),
+  //   examples: []
+  // },
 
   {
     id: 210,
@@ -18,13 +18,13 @@ const intents: Intent[] = [
     examples: []
   },
 
-  {
-    id: 220,
-    code: "CLEAR_QUERY",
-    primary: true,
-    description: txt(<></>),
-    examples: []
-  },
+  // {
+  //   id: 220,
+  //   code: "CLEAR_QUERY",
+  //   primary: true,
+  //   description: txt(<></>),
+  //   examples: []
+  // },
 
   {
     id: 230,

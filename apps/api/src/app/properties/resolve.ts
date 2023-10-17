@@ -14,11 +14,7 @@ import {
   sequelize
 } from "@/models";
 import { Op, Sequelize } from "sequelize";
-import {
-  ImageSchema,
-  LocationSourceSchema,
-  PropertySchema
-} from "@rems/schemas";
+import { ImageSchema, PropertySchema } from "@rems/schemas";
 import slugify from "slugify";
 import resolveLocationSource from "../../utils/resolve-location-source";
 
@@ -229,13 +225,17 @@ const validLngLat = () => {
 };
 
 const queryToLocationSource = (query: Query): LocationSource => {
-  const source = LocationSourceSchema.parse({
-    type: query["location-source-type"] === "nl" ? "NL" : "LL",
-    radius: query["radius-enabled"] === "true" ? query["radius"] : null,
-    source: query["location-source"]
-  });
+  const radius = query["radius-enabled"] === "true" ? query["radius"] : null;
 
-  return source;
+  if (query["location-source-type"] === "nl") {
+    return {
+      type: "NL",
+      description: query["location-source"],
+      radius
+    };
+  }
+
+  throw new Error("LL not implemented");
 };
 
 const queryToLocation = async (query: Query): Promise<Location> => {

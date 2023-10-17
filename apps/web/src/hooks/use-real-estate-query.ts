@@ -106,7 +106,6 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
   $.query.use();
   $.stagedQuery.use();
-  $.mapBounds.use();
 
   const commit = () => {
     const qs = generateQueryString($.stagedQuery.get()!);
@@ -118,21 +117,6 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     $.stagedQuery.set(nextQuery);
   };
 
-  const bounds = (() => {
-    const b = $.mapBounds.get();
-
-    if (b === null) {
-      return {};
-    }
-
-    return {
-      "map-bound-sw-lng": b.sw.lng,
-      "map-bound-sw-lat": b.sw.lat,
-      "map-bound-ne-lng": b.ne.lng,
-      "map-bound-ne-lat": b.ne.lat
-    };
-  })();
-
   const query = $.query.get()!;
   const stagedQuery = $.stagedQuery.get()!;
 
@@ -141,7 +125,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
 
     query,
     stagedQuery,
-    serverQuery: RealEstateQuerySchema.Server.parse({ ...query, ...bounds }),
+    serverQuery: RealEstateQuerySchema.Server.parse({ ...query }),
     queryString: generateQueryString(query),
 
     patch,

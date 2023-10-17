@@ -11,13 +11,13 @@ export const ArgsSchema = z.object({
 
 export const ReturnsSchema = z
   .object({
-    s: z
+    d: z
       .string()
       .describe(
         txt(
           <>
-            The location source. Natural language location. IE "Phuket" or
-            "Within 10km of the busiest BTS station in Bangkok".
+            The location description. Natural language location. IE "Phuket" or
+            "The busiest BTS station in Bangkok".
           </>
         )
       ),
@@ -26,5 +26,9 @@ export const ReturnsSchema = z
       .boolean()
       .describe(txt(<>Whether the radius should be enabled or not</>))
   })
-  .partial({ s: true, r: true })
-  .transform(({ s, r, re }) => ({ source: s, radius: r, radiusEnabled: re }));
+  .partial({ d: true, r: true, re: true })
+  .transform(({ d, r, re }) => ({
+    description: d,
+    radius: r,
+    radiusEnabled: re
+  }));

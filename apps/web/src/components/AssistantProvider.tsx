@@ -318,6 +318,16 @@ const AssistantProvider = ({ children }: Props) => {
           }
         }
 
+        if (e.type === "UPDATE_LOCATION") {
+          const location = e.next;
+          console.log(location);
+          if (location.source.type === "NL") {
+            patch({
+              "location-source": location.source.description
+            });
+          }
+        }
+
         if (e.type === "PATCH") {
           const { patch: p } = e;
           if (p.type === "ARRAY") {
