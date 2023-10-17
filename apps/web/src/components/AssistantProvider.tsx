@@ -29,6 +29,8 @@ import assistantReducer from "reducers/assistant-reducer";
 import { Observable } from "rxjs";
 import uuid from "short-uuid";
 import { useDebouncedCallback } from "use-debounce";
+import { Chat } from "@rems/ui";
+import { useDomElements } from "@/components/DomElementsProvider";
 
 const NEXT_PUBLIC_REMS_API_URL = process.env.NEXT_PUBLIC_REMS_API_URL;
 
@@ -42,7 +44,8 @@ type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
 const $timeline = observable<Timeline>([]);
 
-type Context = {
+type BaseContext = {
+  // Handlers
   onKeyDown: FormAttributes["onKeyDown"];
   onKeyUp: FormAttributes["onKeyUp"];
   onMicClick: () => void;
@@ -56,11 +59,16 @@ type Context = {
   spaceDown: boolean;
   timeline: Timeline;
   uiState: AssistantUiState;
+  lang: "en";
 
   // Computed
   session: InputSession;
   submittable: boolean;
 };
+
+type Context =
+  | ({ ready: false } & BaseContext)
+  | ({ ready: true } & BaseContext & Chat.Spacing);
 
 const AssistantContext = createContext<Context | null>(null);
 export const useAssistant = () => useContext(AssistantContext)!;
@@ -69,6 +77,12 @@ const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const { reset, patch, commit, serverQuery } = useRealEstateQuery();
   const $keyChain = useRef<string[]>([]);
+
+  const { $header, $listings } = useDomElements();
+  const spacing = Chat.useAssistantSpacingUtility({
+    $top: $header,
+    $left: $listings
+  });
 
   $timeline.use();
 
@@ -334,28 +348,33 @@ const AssistantProvider = ({ children }: Props) => {
     return req;
   };
 
+  const base: BaseContext = {
+    onKeyDown,
+    onKeyUp,
+    onMicClick,
+    onChange,
+    onEventRendered,
+
+    sessions: state.sessions,
+    enterDown: state.enterDown,
+    state: state.state,
+    spaceDown: state.spaceDown,
+    timeline: $timeline.get(),
+    uiState: state.uiState,
+    lang: "en",
+
+    session,
+    submittable:
+      !!session.value &&
+      (session.state === "INPUTTING" || session.state === "INACTIVE")
+  };
+
+  const context: Context = spacing.ready
+    ? { ready: true, ...base, ...spacing.props }
+    : { ready: false, ...base };
+
   return (
-    <AssistantContext.Provider
-      value={{
-        onKeyDown,
-        onKeyUp,
-        onMicClick,
-        onChange,
-        onEventRendered,
-
-        sessions: state.sessions,
-        enterDown: state.enterDown,
-        state: state.state,
-        spaceDown: state.spaceDown,
-        timeline: $timeline.get(),
-        uiState: state.uiState,
-
-        session,
-        submittable:
-          !!session.value &&
-          (session.state === "INPUTTING" || session.state === "INACTIVE")
-      }}
-    >
+    <AssistantContext.Provider value={context}>
       {children}
     </AssistantContext.Provider>
   );

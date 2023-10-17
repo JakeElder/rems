@@ -11,7 +11,7 @@ export const ContextSchema = z.object({
   lotFeatures: z.array(z.string()),
   viewTypes: z.array(z.string()),
   propertyTypes: z.array(z.string()),
-  currentLocation: LocationSchema,
+  // currentLocation: LocationSchema,
   currentQuery: z.object({
     MAP_STATE: RealEstateQuerySchema.MapState,
     PAGE: RealEstateQuerySchema.Page,

@@ -16,17 +16,13 @@ import {
   ViewType
 } from "@rems/types";
 import fetch from "@/fetch";
-import {
-  RealEstateIndexPageStateProvider,
-  searchParamsToQuery
-} from "../hooks/use-real-estate-index-page-state";
+import { RealEstateIndexPageStateProvider } from "../hooks/use-real-estate-index-page-state";
 import { enableReactUse } from "@legendapp/state/config/enableReactUse";
 import ChatViewContainer from "@/components/client/ChatViewContainer";
 import AssistantProvider from "@/components/AssistantProvider";
 import DomElementsProvider from "@/components/DomElementsProvider";
 import RealEstateIndexPageHeaderViewContainer from "@/components/client/RealEstateIndexPageHeaderViewContainer";
 import RealEstateIndexPageContentViewContainer from "@/components/client/RealEstateIndexPageContentViewContainer";
-import { generateQueryString } from "@/hooks/use-real-estate-query";
 
 enableReactUse();
 
@@ -51,8 +47,8 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
   return (
     <Layout.Root>
       <RealEstateIndexPageStateProvider>
-        <AssistantProvider>
-          <DomElementsProvider>
+        <DomElementsProvider>
+          <AssistantProvider>
             <ChatViewContainer />
             <ToastHub>
               <RealEstateIndexPageHeaderViewContainer
@@ -68,16 +64,14 @@ const Page: NextPage<Props> = ({ searches, config, ...filterBarProps }) => {
                 <FooterViewContainer config={config} searches={searches} full />
               </Layout.Footer>
             </ToastHub>
-          </DomElementsProvider>
-        </AssistantProvider>
+          </AssistantProvider>
+        </DomElementsProvider>
       </RealEstateIndexPageStateProvider>
     </Layout.Root>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const [
     config,
     searches,
@@ -103,15 +97,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     fetch("mrt-stations"),
     fetch("bts-stations")
   ]);
-
-  const apiUrl = process.env.NEXT_PUBLIC_REMS_API_URL!;
-  const query = searchParamsToQuery(context.query);
-  const qs = generateQueryString(query);
-
-  const res = await global.fetch(`${apiUrl}/properties${qs}`);
-  const json = await res.json();
-
-  console.log(json);
 
   return {
     props: {

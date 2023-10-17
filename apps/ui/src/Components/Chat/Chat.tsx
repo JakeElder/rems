@@ -18,7 +18,7 @@ import StateLabel from "../StateLabel/StateLabel";
 import useAssistantUiLayout from "../../hooks/use-assistant-ui-layout";
 import assistantStateToGroupedAssistantState from "../../adapters/assistant-state-to-grouped-assistant-state";
 
-type Spacing = {
+export type Spacing = {
   xDivide: number;
   marginTop: number;
 };
@@ -28,14 +28,12 @@ export type SpacingUtilityReturn =
   | { ready: true; props: Spacing };
 
 export type Props = {
+  children: React.ReactNode;
   lang: "en" | "th";
   state: AssistantState;
   timeline: Timeline;
   uiState: AssistantUiState;
-  spacing: SpacingUtilityReturn;
-};
-
-export type ReadyProps = Omit<Props, "spacing"> & Spacing;
+} & Spacing;
 
 export const Header = React.memo(
   ({ state, lang }: Pick<Props, "state" | "lang">) => {
@@ -200,22 +198,12 @@ export const useAssistantSpacingUtility = ({
 };
 
 export const Root = ({
-  spacing,
-  ...props
-}: { children: React.ReactNode } & Props) => {
-  if (spacing.ready) {
-    return <ReadyRoot {...props} {...spacing.props} />;
-  }
-  return null;
-};
-
-export const ReadyRoot = ({
   children,
   uiState,
   state,
   xDivide,
   marginTop
-}: { children: React.ReactNode } & ReadyProps) => {
+}: {} & Props) => {
   const {
     padding,
     borderRadius,

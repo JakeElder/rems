@@ -1,7 +1,9 @@
 import {
   GetPropertiesResult,
   Image,
-  ServerRealEstateQuery as Query
+  ServerRealEstateQuery as Query,
+  Location,
+  LocationSource
 } from "@rems/types";
 import {
   File,
@@ -11,8 +13,13 @@ import {
   sequelize
 } from "@/models";
 import { Op, Sequelize } from "sequelize";
-import { ImageSchema, PropertySchema } from "@rems/schemas";
+import {
+  ImageSchema,
+  LocationSourceSchema,
+  PropertySchema
+} from "@rems/schemas";
 import slugify from "slugify";
+import resolveLocationSource from "../../utils/resolve-location-source";
 
 const PROPERTIES_PER_PAGE = 14;
 
@@ -229,9 +236,36 @@ const validLngLat = () => {
   ];
 };
 
+const queryToLocationSource = (query: Query): LocationSource => {
+  const source = LocationSourceSchema.parse({
+    type: query["location-source-type"] === "nl" ? "NL" : "LL",
+    radius: query["radius-enabled"] === "true" ? query["radius"] : null,
+    source: query["location-source"]
+  });
+
+  return source;
+};
+
+const queryToLocation = async (query: Query): Promise<Location> => {
+  const source = queryToLocationSource(query);
+  const res = await resolveLocationSource(source);
+
+  if (!res.ok) {
+    throw new Error();
+  }
+
+  return {
+    source,
+    resolution: res.resolution
+  };
+};
+
 export default async function resolve(
   query: Query
 ): Promise<GetPropertiesResult> {
+  const location = await queryToLocation(query);
+  console.dir(location, { colors: true, depth: null });
+
   const res = await Property.findAndCountAll({
     where: {
       [Op.and]: [
@@ -330,6 +364,7 @@ export default async function resolve(
       pageCount: res.count ? Math.ceil(res.count / PROPERTIES_PER_PAGE) : 0,
       total: res.count
     },
+    location,
     query
   };
 }

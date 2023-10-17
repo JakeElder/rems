@@ -53,8 +53,7 @@ const identifyIntents: Fn = async ({ timeline, query }) => {
     MAP_STATE: RealEstateQuerySchema.MapState.parse(query),
     SPACE_REQUIREMENTS: RealEstateQuerySchema.SpaceRequirements.parse(query),
     SORT: query["sort"],
-    PAGE: query["page"],
-    LOCATION: RealEstateQuerySchema.Origin.parse(query)
+    PAGE: query["page"]
   };
 
   const context = stringify<Context>({
