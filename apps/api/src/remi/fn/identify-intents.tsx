@@ -1,4 +1,11 @@
-import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
+import { RemiResponse } from "@/remi/types";
+import {
+  $functionCall,
+  $messages,
+  $model,
+  $request,
+  $systemMessage
+} from "@/remi/wrappers";
 import {
   txt,
   stringify,
@@ -7,9 +14,10 @@ import {
 } from "@/remi/utils";
 import { intents } from "@/remi";
 import {
-  Capabilities,
+  LocationSchema,
   RealEstateQuerySchema,
-  TerseIntentSchema
+  TerseIntentSchema,
+  TimelineSchema
 } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -17,15 +25,68 @@ import { Z } from "@rems/types";
 import * as Models from "@/models";
 import { Model } from "sequelize";
 
-const { ArgsSchema, ReturnsSchema, ContextSchema } =
-  Capabilities.IdentifyIntents;
+export const PropsSchema = z.object({
+  currentLocation: LocationSchema,
+  timeline: TimelineSchema,
+  query: RealEstateQuerySchema.Server
+});
 
-type Args = Z<typeof ArgsSchema>;
+export const ContextSchema = z.object({
+  primaryIntents: z.lazy(() => z.array(TerseIntentSchema)),
+  secondaryIntents: z.lazy(() => z.array(TerseIntentSchema)),
+  indoorFeatures: z.array(z.string()),
+  outdoorFeatures: z.array(z.string()),
+  lotFeatures: z.array(z.string()),
+  viewTypes: z.array(z.string()),
+  propertyTypes: z.array(z.string()),
+  currentLocation: LocationSchema,
+  currentQuery: z.object({
+    MAP_STATE: RealEstateQuerySchema.MapState,
+    PAGE: RealEstateQuerySchema.Page,
+    SORT: RealEstateQuerySchema.Sort,
+    SPACE_REQUIREMENTS: RealEstateQuerySchema.SpaceRequirements,
+    BUDGET_AND_AVAILABILITY: RealEstateQuerySchema.BudgetAndAvailability,
+    INDOOR_FEATURES: RealEstateQuerySchema.Arrays.shape["indoor-features"],
+    LOT_FEATURES: RealEstateQuerySchema.Arrays.shape["lot-features"],
+    OUTDOOR_FEATURES: RealEstateQuerySchema.Arrays.shape["outdoor-features"],
+    PROPERTY_TYPES: RealEstateQuerySchema.Arrays.shape["property-types"],
+    VIEW_TYPES: RealEstateQuerySchema.Arrays.shape["view-types"]
+  })
+});
+
+export const ReturnsSchema = z
+  .object({
+    p: TerseIntentSchema.shape["id"].describe(txt(<>The *primary* intent</>)),
+    s: z
+      .array(TerseIntentSchema.shape["id"])
+      .describe(
+        txt(
+          <>
+            An array of *Secondary Intents*. An array of id's that apply to this
+            request.
+          </>
+        )
+      )
+  })
+  .describe(
+    txt(
+      <>
+        An object that contains all the data necessary to further process
+        natural language issued to Remi as a command or enquiry.
+      </>
+    )
+  )
+  .transform(({ p, s }) => ({ primary: p, secondary: s }));
+
+type Props = Z<typeof PropsSchema>;
 type Context = Z<typeof ContextSchema>;
 type Returns = Z<typeof ReturnsSchema>;
-type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
-const identifyIntents: Fn = async ({ timeline, query }) => {
+const identifyIntents = async ({
+  timeline,
+  query,
+  currentLocation
+}: Props): Promise<RemiResponse<Returns>> => {
   const parse = (r: Model<any, any>[]) => r.map((m: any) => m.slug);
   const [
     lotFeatures,
@@ -61,6 +122,7 @@ const identifyIntents: Fn = async ({ timeline, query }) => {
     lotFeatures,
     viewTypes,
     propertyTypes,
+    currentLocation,
     primaryIntents: intents
       .filter((i) => i.primary)
       .map((i) => TerseIntentSchema.parse(i)),
@@ -74,35 +136,25 @@ const identifyIntents: Fn = async ({ timeline, query }) => {
     zodToJsonSchema(ContextSchema.shape["currentQuery"])
   );
 
-  const request: ChatCompletionRequest = {
-    model: "gpt-4",
-    messages: [
-      {
-        role: "system",
-        content: txt(
-          <>
-            <p>
-              You are Remi, an assistant responsible for helping the user of a
-              real estate website. Process their input and analyze it for their
-              intent. Select one primary intent, and as many secondary as
-              required. Context will follow.
-            </p>
-          </>
-        )
-      },
-      {
-        role: "system",
-        content: context
-      },
-      {
-        role: "system",
-        content: txt(<>This is the schema for the query: {schema}</>)
-      },
+  const request = $request({
+    ...$model(),
+    ...$messages(
+      $systemMessage(
+        <>
+          <p>
+            You are Remi, an assistant responsible for helping the user of a
+            real estate website. Process their input and analyze it for their
+            intent. Select one primary intent, and as many secondary as
+            required. Context will follow.
+          </p>
+        </>
+      ),
+      $systemMessage(context),
+      $systemMessage(`This is the schema for the query: ${schema}`),
       ...timelineToCompletionMessages(timeline)
-    ],
-    function_call: { name: "f" },
-    functions: [{ name: "f", parameters: zodToJsonSchema(ReturnsSchema) }]
-  };
+    ),
+    ...$functionCall({ returnsSchema: ReturnsSchema })
+  });
 
   return execute.fn(request, ReturnsSchema);
 };

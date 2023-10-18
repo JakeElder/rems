@@ -33,6 +33,10 @@ export const $systemMessage = (
   content: React.ReactNode
 ): ChatCompletionRequestMessage => $message("system", content);
 
+export const $userMessage = (
+  content: React.ReactNode
+): ChatCompletionRequestMessage => $message("user", content);
+
 export const $functionCall = ({
   description,
   returnsSchema

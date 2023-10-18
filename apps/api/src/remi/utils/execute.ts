@@ -1,13 +1,10 @@
 import { openai } from "@/remi";
 import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
-
-type Parsable<T> = {
-  parse: (object: any) => T;
-};
+import { ZodType, ZodTypeDef } from "zod";
 
 const fn = async <Returns>(
   request: ChatCompletionRequest,
-  Schema: Parsable<Returns>
+  Schema: ZodType<any, ZodTypeDef, any>
 ): Promise<RemiResponse<Returns>> => {
   try {
     const res = await openai.createChatCompletion(request, { timeout: 14000 });

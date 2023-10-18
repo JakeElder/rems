@@ -88,7 +88,11 @@ const stream: Stream = (args) => async (c) => {
   };
 
   const analyze = memoize(async () => {
-    const i = await fn.identifyIntents({ timeline, query });
+    const i = await fn.identifyIntents({
+      timeline,
+      query,
+      currentLocation: location
+    });
 
     if (!i.ok) {
       console.log(i);

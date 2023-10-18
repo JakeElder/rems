@@ -3,7 +3,7 @@ import { z } from "zod";
 const Radius = z.coerce.number().nullable().default(null).catch(null);
 
 export const NlLocationSourceSchema = z.object({
-  type: z.literal("NL").default("NL"),
+  type: z.literal("NL"),
   description: z.string(),
   geospatialOperator: z.string(),
   radius: Radius
@@ -15,7 +15,7 @@ export const LatLngSchema = z.object({
 });
 
 export const LatLngLocationSourceSchema = z.object({
-  type: z.literal("LL").default("LL"),
+  type: z.literal("LL"),
   point: LatLngSchema,
   radius: Radius
 });
