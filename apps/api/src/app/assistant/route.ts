@@ -10,33 +10,21 @@ import {
   CapabilityCode,
   AssistantPayload,
   Patch,
-  Event,
   TimelineEvent,
-  IntentResolutionErrorEvent,
   Analysis,
   NlLocationSource
 } from "@rems/types";
-import {
-  AssistantPayloadSchema,
-  NlLocationSourceSchema,
-  RealEstateQuerySchema
-} from "@rems/schemas";
+import { AssistantPayloadSchema, RealEstateQuerySchema } from "@rems/schemas";
 import memoize from "memoizee";
 import resolveLocationSource from "../../utils/resolve-location-source";
-import chalk from "chalk";
 import { pickBy } from "remeda";
-import prettyjson from "prettyjson";
 import { z } from "zod";
-import dedent from "ts-dedent";
 import uuid from "short-uuid";
 
 type IntentResolution = TimelineEvent | null;
 
 const isTimelineEventResolution = (r: IntentResolution): r is TimelineEvent =>
   r !== null;
-
-const isError = (r: Event): r is IntentResolutionErrorEvent =>
-  r.type === "INTENT_RESOLUTION_ERROR";
 
 const { SpaceRequirements, BudgetAndAvailability, MapState } =
   RealEstateQuerySchema;
@@ -437,19 +425,6 @@ const stream: Stream = (args) => async (c) => {
   }
 
   send(event("SYSTEM", { type: "YIELD" }));
-
-  const errors = interactionTimeline
-    .map((te) => te.event)
-    .filter(isError)
-    .map(
-      (res) => dedent`
-       ${chalk.red(res.intent)}
-       ${prettyjson.render(res.error)}
-     `
-    );
-
-  console.log("\n\n");
-  console.log(errors.join("\n\n"));
 
   c.close();
 };

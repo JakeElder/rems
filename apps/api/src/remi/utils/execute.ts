@@ -10,7 +10,7 @@ const fn = async <Returns>(
   Schema: Parsable<Returns>
 ): Promise<RemiResponse<Returns>> => {
   try {
-    const res = await openai.createChatCompletion(request, { timeout: 8000 });
+    const res = await openai.createChatCompletion(request, { timeout: 14000 });
     const message = res.data.choices[0].message!;
 
     try {

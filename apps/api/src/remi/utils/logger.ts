@@ -29,16 +29,20 @@ export const init = (timeline: Timeline) => {
         ...analysis.intents.map((s) => s.replace("REFINE_", "")),
         "Input",
         "Intents",
-        "Capability"
+        "Capability",
+        "Message",
+        "Error"
       ];
 
       headingWidth = Math.max(...headings.map((s) => s.length));
       tableConfig = {
-        columnDefault: { width: 20 },
         columns: [
           { width: 6, alignment: "center" },
           { width: headingWidth },
-          { width: 150 - (8 + headingWidth) }
+          {
+            width: 150 - (8 + headingWidth),
+            truncate: 150 - (8 + headingWidth)
+          }
         ]
       };
 
@@ -58,6 +62,25 @@ export const init = (timeline: Timeline) => {
       console.log(
         table([[now(t), heading(e.patch.group), diff(e.patch)]], tableConfig)
       );
+    }
+
+    if (e.type === "LANGUAGE_BASED") {
+      console.log(
+        table([[now(t), heading("Message"), e.message]], tableConfig)
+      );
+    }
+
+    if (e.type === "INTENT_RESOLUTION_ERROR") {
+      console.log(
+        table(
+          [[now(t), heading("Error"), console.dir(e.error, { colors: true })]],
+          tableConfig
+        )
+      );
+    }
+
+    if (e.type === "YIELD") {
+      console.log(table([[now(t), heading("Yield"), ""]], tableConfig));
     }
   };
 };
