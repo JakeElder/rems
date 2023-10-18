@@ -19,9 +19,6 @@ import {
   ScalarDiffSchema,
   ArrayDiffSchema,
   TimelineSchema,
-  ArrayPatchSchema,
-  ScalarPatchSchema,
-  PatchSchema,
   AssistantStateSchema,
   AssistantPayloadSchema,
   TimelineEventSchema,
@@ -39,19 +36,19 @@ import {
   IntentResolutionErrorEventSchema,
   SystemEventSchema,
   LocationSchema,
-  LocationSourceSchema,
-  NlLocationSourceSchema,
   AnalysisSchema,
-  LatLngLocationSourceSchema,
   LocationResolutionSchema,
   BoundsSchema,
-  LatLngSchema
+  LatLngSchema,
+  RealEstateQueryStringObjectSchema,
+  PaginationSchema
 } from "@rems/schemas";
+import { LocationSourceSchema } from "@rems/schemas/user-mutable-state";
 import { ZodType, z } from "zod";
 
 export type Z<T extends ZodType<any, any, any>> = z.infer<T>;
 
-export type Pagination = Z<typeof RealEstateQuerySchema.Pagination>;
+export type Pagination = Z<typeof PaginationSchema>;
 
 export type ResourceId = string;
 
@@ -129,13 +126,13 @@ export type Property = Z<typeof PropertySchema>;
 
 export type ContactFormData = Z<typeof ContactFormSchema>;
 
-export type RealEstateQuery = Z<typeof RealEstateQuerySchema.URL>;
-export type ServerRealEstateQuery = Z<typeof RealEstateQuerySchema.Server>;
-export type RealEstateQueryScalars = Z<typeof RealEstateQuerySchema.Scalars>;
-export type RealEstateQueryArrays = Z<typeof RealEstateQuerySchema.Arrays>;
+export type RealEstateQuery = Z<typeof RealEstateQuerySchema>;
+export type RealEstateQueryStringObject = Z<
+  typeof RealEstateQueryStringObjectSchema
+>;
 
 export type QuickFilterQueryKey = keyof Pick<
-  RealEstateQuery,
+  RealEstateQueryStringObject,
   "indoor-features" | "outdoor-features" | "lot-features" | "view-types"
 >;
 
@@ -257,9 +254,9 @@ export type AddArrayDiff = Z<typeof AddArrayDiffSchema>;
 export type RemoveArrayDiff = Z<typeof RemoveArrayDiffSchema>;
 export type ArrayDiff = Z<typeof ArrayDiffSchema>;
 
-export type ArrayPatch = Z<typeof ArrayPatchSchema>;
-export type ScalarPatch = Z<typeof ScalarPatchSchema>;
-export type Patch = Z<typeof PatchSchema>;
+// export type ArrayPatch = Z<typeof ArrayPatchSchema>;
+// export type ScalarPatch = Z<typeof ScalarPatchSchema>;
+// export type Patch = Z<typeof PatchSchema>;
 
 export type Timeline = Z<typeof TimelineSchema>;
 export type UserTimelineEvent = Z<typeof UserTimelineEventSchema>;
@@ -287,9 +284,6 @@ export type Analysis = Z<typeof AnalysisSchema>;
 
 export type Logger = (ms: number, message: AssistantTimelineEvent) => void;
 
-export type ScalarKey = keyof RealEstateQueryScalars;
-export type ArrayKey = keyof RealEstateQueryArrays;
-
 export type AssistantUiState =
   | "MINIMISED"
   | "DOCKED"
@@ -301,9 +295,9 @@ export type MakeNonNullable<T, K extends keyof T> = Omit<T, K> & {
   [P in K]: NonNullable<T[P]>;
 };
 
-export type LatLngLocationSource = Z<typeof LatLngLocationSourceSchema>;
-export type NlLocationSource = Z<typeof NlLocationSourceSchema>;
 export type LocationSource = Z<typeof LocationSourceSchema>;
+export type LatLngLocationSource = Extract<LocationSource, { type: "LL" }>;
+export type NlLocationSource = Extract<LocationSource, { type: "NL" }>;
 export type LocationResolution = Z<typeof LocationResolutionSchema>;
 export type Location = Z<typeof LocationSchema>;
 export type LatLng = Z<typeof LatLngSchema>;

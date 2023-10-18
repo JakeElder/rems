@@ -1,34 +1,6 @@
 import { z } from "zod";
-
-const Radius = z.coerce.number().nullable().default(null).catch(null);
-
-export const NlLocationSourceSchema = z.object({
-  type: z.literal("NL"),
-  description: z.string(),
-  geospatialOperator: z.string(),
-  radius: Radius
-});
-
-export const LatLngSchema = z.object({
-  lat: z.number(),
-  lng: z.number()
-});
-
-export const LatLngLocationSourceSchema = z.object({
-  type: z.literal("LL"),
-  point: LatLngSchema,
-  radius: Radius
-});
-
-export const LocationSourceSchema = z.discriminatedUnion("type", [
-  NlLocationSourceSchema,
-  LatLngLocationSourceSchema
-]);
-
-export const BoundsSchema = z.object({
-  sw: LatLngSchema,
-  ne: LatLngSchema
-});
+import { BoundsSchema } from "./bounds";
+import LocationSourceSchema from "./user-mutable-state/location-source";
 
 export const LocationResolutionSchema = z
   .object({

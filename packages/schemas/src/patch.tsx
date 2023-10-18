@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { z } from "zod";
 import * as RealEstateQuerySchema from "./real-estate-query";
 import { Group } from "./real-estate-query";

@@ -4,6 +4,10 @@
   "scripts": {
     "dev": "tsc --watch"
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./user-mutable-state": "./src/user-mutable-state/index.ts"
+  },
   "main": "./src",
   "dependencies": {
     "@rems/tsconfig": "*",
