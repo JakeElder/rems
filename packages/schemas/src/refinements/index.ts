@@ -1,4 +1,3 @@
-export * as Location from "./location";
 export * as MapState from "./map-state";
 export * as Page from "./page";
 export * as Sort from "./sort";

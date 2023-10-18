@@ -1,4 +1,4 @@
-import { txt } from "@/remi";
+import { txt } from "@/remi/utils";
 import { Intent } from "@rems/types";
 
 const intents: Intent[] = [

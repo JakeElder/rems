@@ -1,12 +1,11 @@
+import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
 import {
-  ChatCompletionRequest,
-  RemiResponse,
   txt,
-  execute,
-  intents,
   stringify,
-  timelineToCompletionMessages
-} from "@/remi";
+  timelineToCompletionMessages,
+  execute
+} from "@/remi/utils";
+import { intents } from "@/remi";
 import {
   Capabilities,
   RealEstateQuerySchema,

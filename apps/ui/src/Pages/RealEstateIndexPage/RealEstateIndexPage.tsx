@@ -4,6 +4,8 @@ import React from "react";
 import css from "./RealEstateIndexPage.module.css";
 import IndexConnector from "../../Components/IndexConnector";
 import { RealEstateQuery } from "@rems/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMap } from "@fortawesome/free-regular-svg-icons";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["root"]}>{children}</div>;
@@ -62,7 +64,10 @@ export const Title = ({
       </div>
       {resolution && (
         <div className={css["resolution"]}>
-          <span>{resolution}</span>
+          <span>
+            <FontAwesomeIcon className={css["icon"]} icon={faMap} size="xs" />
+            {resolution}
+          </span>
         </div>
       )}
     </h1>

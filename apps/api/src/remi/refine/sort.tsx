@@ -1,11 +1,10 @@
+import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
 import {
-  ChatCompletionRequest,
-  RemiResponse,
-  txt,
   execute,
   stringify,
-  timelineToCompletionMessages
-} from "@/remi";
+  timelineToCompletionMessages,
+  txt
+} from "@/remi/utils";
 import { Refinements } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";

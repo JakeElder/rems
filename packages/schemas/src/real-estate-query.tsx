@@ -8,7 +8,6 @@ import {
   MAX_RENTAL_PRICE,
   MAX_PURCHASE_PRICE
 } from "./constants";
-import { Radius } from "./location";
 
 export const Arrays = z.object({
   "indoor-features": z.string().array().default([]).catch([]),

@@ -1,4 +1,4 @@
-import { txt } from "@/remi";
+import { txt } from "@/remi/utils";
 import { Capability } from "@rems/types";
 
 const capabilities: Capability[] = [

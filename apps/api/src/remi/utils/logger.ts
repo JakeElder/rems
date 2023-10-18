@@ -1,5 +1,4 @@
 import {
-  Analysis,
   ArrayPatch,
   AssistantEvent,
   Patch,
@@ -7,61 +6,58 @@ import {
   SystemEvent,
   Timeline
 } from "@rems/types";
-import { createStream, WritableStream } from "table";
+import { TableUserConfig, table } from "table";
 import ms from "pretty-ms";
 import chalk from "chalk";
 import timelineToInput from "../utils/timeline-to-input";
 
+const now = (start: number) => chalk.gray(ms(Date.now() - start));
+const heading = (s: string) =>
+  chalk.yellow(chalk.bold(s.replace("REFINE_", "")));
+const val = (s: string) => chalk.cyan(s);
+
 export const init = (timeline: Timeline) => {
   const t = Date.now();
-  let stream: WritableStream | null = null;
-
-  const i = ({ intents }: Analysis) => {
-    const headings = [
-      ...intents.map((s) => s.replace("REFINE_", "")),
-      "Input",
-      "Intents",
-      "Capability"
-    ];
-    const headingWidth = Math.max(...headings.map((s) => s.length));
-
-    stream = createStream({
-      columnDefault: { width: 20 },
-      columnCount: 3,
-      columns: [
-        { width: 6, alignment: "center" },
-        { width: headingWidth },
-        { width: 150 - (8 + headingWidth) }
-      ]
-    });
-  };
-
-  const now = () => chalk.gray(ms(Date.now() - t));
-  const heading = (s: string) =>
-    chalk.yellow(chalk.bold(s.replace("REFINE_", "")));
-  const val = (s: string) => chalk.cyan(s);
+  let headingWidth: number;
+  let tableConfig: TableUserConfig;
 
   return (e: AssistantEvent | SystemEvent) => {
     if (e.type === "ANALYSIS_PERFORMED") {
       const { analysis } = e;
 
-      i(analysis);
+      const headings = [
+        ...analysis.intents.map((s) => s.replace("REFINE_", "")),
+        "Input",
+        "Intents",
+        "Capability"
+      ];
 
-      if (!stream) throw new Error();
+      headingWidth = Math.max(...headings.map((s) => s.length));
+      tableConfig = {
+        columnDefault: { width: 20 },
+        columns: [
+          { width: 6, alignment: "center" },
+          { width: headingWidth },
+          { width: 150 - (8 + headingWidth) }
+        ]
+      };
 
-      stream.write([now(), heading("Input"), val(timelineToInput(timeline))]);
-      stream.write([now(), heading("Capability"), val(analysis.capability)]);
-      stream.write([
-        now(),
-        heading("Intents"),
-        val(analysis.intents.join(", "))
-      ]);
+      console.log(
+        table(
+          [
+            [now(t), heading("Input"), val(timelineToInput(timeline))],
+            [now(t), heading("Capability"), val(analysis.capability)],
+            [now(t), heading("Intents"), val(analysis.intents.join(", "))]
+          ],
+          tableConfig
+        )
+      );
     }
 
-    if (!stream) throw new Error();
-
     if (e.type === "PATCH") {
-      stream.write([now(), heading(e.patch.group), diff(e.patch)]);
+      console.log(
+        table([[now(t), heading(e.patch.group), diff(e.patch)]], tableConfig)
+      );
     }
   };
 };

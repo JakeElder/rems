@@ -1,21 +1,20 @@
+import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
 import {
-  ChatCompletionRequest,
-  RemiResponse,
-  txt,
   execute,
   stringify,
-  timelineToCompletionMessages
-} from "@/remi";
+  timelineToCompletionMessages,
+  txt
+} from "@/remi/utils";
 import { Refinements } from "@rems/schemas";
-import { z } from "zod";
+import { Z } from "@rems/types";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
 const { ArgsSchema, ReturnsSchema, ContextSchema } =
   Refinements.BudgetAndAvailability;
 
-type Args = z.infer<typeof ArgsSchema>;
-type Context = z.infer<typeof ContextSchema>;
-type Returns = z.infer<typeof ReturnsSchema>;
+type Args = Z<typeof ArgsSchema>;
+type Context = Z<typeof ContextSchema>;
+type Returns = Z<typeof ReturnsSchema>;
 type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
 
 const budgetAndAvailability: Fn = async ({ timeline, current }) => {

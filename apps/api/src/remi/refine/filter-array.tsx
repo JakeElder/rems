@@ -1,12 +1,5 @@
-import {
-  txt,
-  ChatCompletionRequest,
-  execute,
-  RemiResponse,
-  stringify,
-  mapFilters,
-  timelineToCompletionMessages
-} from "@/remi";
+import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
+import { execute, mapFilters, stringify, timelineToCompletionMessages, txt } from "@/remi/utils";
 import { Refinements } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";

@@ -1,11 +1,10 @@
 import {
-  ChatCompletionRequest,
-  RemiResponse,
-  txt,
   execute,
   stringify,
-  timelineToCompletionMessages
-} from "@/remi";
+  timelineToCompletionMessages,
+  txt
+} from "@/remi/utils";
+import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
 import { Capabilities } from "@rems/schemas";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { Z } from "@rems/types";
@@ -25,7 +24,7 @@ const analyze: Fn = async ({ timeline, capabilities, query }) => {
   });
 
   const request: ChatCompletionRequest = {
-    model: "gpt-4",
+    model: "gpt-3.5-turbo",
     messages: [
       {
         role: "system",

@@ -1,4 +1,5 @@
-import { openai, ChatCompletionRequest, RemiResponse } from "@/remi";
+import { openai } from "@/remi";
+import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
 
 type Parsable<T> = {
   parse: (object: any) => T;

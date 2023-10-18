@@ -1,7 +1,9 @@
+import { ChatCompletionRequest } from "@/remi/types";
+import { txt } from "@/remi/utils";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { FilterSchema, PropertySchema } from "@rems/schemas";
 import * as Models from "@/models";
-import { ChatCompletionRequest, openai, txt } from "@/remi";
+import * as Remi from "@/remi";
 import { Filter } from "@rems/types";
 
 const parse = (rows: any) => rows.map((r: any) => FilterSchema.parse(r));
@@ -116,7 +118,7 @@ export const createMockProperty = async () => {
     ]
   };
 
-  const res = await openai.createChatCompletion(request);
+  const res = await Remi.openai.createChatCompletion(request);
   const function_call = res.data.choices[0].message!.function_call;
   return JSON.parse(function_call!.arguments!);
 };

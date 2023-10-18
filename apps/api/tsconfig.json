@@ -13,6 +13,18 @@
       ],
       "@/remi": [
         "./src/remi"
+      ],
+      "@/remi/utils": [
+        "./src/remi/utils"
+      ],
+      "@/remi/fn": [
+        "./src/remi/fn"
+      ],
+      "@/remi/refine": [
+        "./src/remi/refine"
+      ],
+      "@/remi/types": [
+        "./src/remi/types"
       ]
     }
   },

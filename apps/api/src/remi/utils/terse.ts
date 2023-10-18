@@ -1,11 +1,5 @@
-import { Capability, CapabilityCode, Intent, IntentCode } from "@rems/types";
-import { intents, capabilities } from "..";
-
-const capability = (id: Capability["id"]): CapabilityCode => {
-  const i = capabilities.find((i) => i.id === id);
-  if (!i) throw new Error();
-  return i.code;
-};
+import { Intent, IntentCode } from "@rems/types";
+import { intents } from "..";
 
 const intent = (id: Intent["id"]): IntentCode | undefined =>
   intents.find((i) => i.id === id)?.code;
@@ -15,4 +9,4 @@ const intentArr = (arr: Intent["id"][]) => {
   return arr.map(intent).filter(isCode);
 };
 
-export { capability, intent, intentArr as intents };
+export { intent, intentArr as intents };

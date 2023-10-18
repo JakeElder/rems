@@ -16,33 +16,45 @@
 }
 
 .title {
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
 .title-main {
   font-family: var(--font-libre);
   font-size: 32px;
   font-weight: 300;
+  margin-bottom: 2px;
 }
 
 .location {
-  color: #8f3eb5;
+  color: rgba(4, 136, 185, 1);
   text-decoration: underline;
-  text-decoration-thickness: 0.02em;
+  text-decoration-thickness: 0.001em;
   text-underline-offset: 4px;
+  text-decoration-color: rgba(4, 136, 185, 0.5);
 }
 
 .resolution {
   font-family: var(--font-inter);
   font-weight: 300;
-  font-size: 22px;
   color: #555;
+  font-size: 16px;
 }
 
 .resolution span {
-  background-color: #f5f5f5;
-  padding: 0 8px;
+  padding: 1px 7px;
   border-radius: 3px;
+  background: #9c54bd;
+  /* border: 1px solid #8850a2; */
+  /* color: #8850a2; */
+  /* border: 1px solid #555; */
+  color: #fff;
+}
+
+.icon {
+  margin-right: 5px;
+  position: relative;
+  top: 1px;
 }
 
 .count-and-sort {

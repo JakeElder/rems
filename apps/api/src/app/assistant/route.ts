@@ -1,5 +1,9 @@
+import { RemiFn } from "@/remi/types";
+import * as utils from "@/remi/utils";
+import * as fn from "@/remi/fn";
+import * as refine from "@/remi/refine";
+import { capabilities } from "@/remi";
 import { NextRequest } from "next/server";
-import * as remi from "@/remi";
 import {
   IntentCode,
   ServerRealEstateQuery,
@@ -9,7 +13,8 @@ import {
   Event,
   TimelineEvent,
   IntentResolutionErrorEvent,
-  Analysis
+  Analysis,
+  NlLocationSource
 } from "@rems/types";
 import {
   AssistantPayloadSchema,
@@ -18,7 +23,6 @@ import {
 } from "@rems/schemas";
 import memoize from "memoizee";
 import resolveLocationSource from "../../utils/resolve-location-source";
-import { RemiFn } from "@/remi";
 import chalk from "chalk";
 import { pickBy } from "remeda";
 import prettyjson from "prettyjson";
@@ -53,7 +57,7 @@ const scalarPatch = (
   type: "SCALAR",
   group,
   data,
-  diff: remi.diff.scalar(query, data)
+  diff: utils.diff.scalar(query, data)
 });
 
 const arrayPatch = (
@@ -66,7 +70,7 @@ const arrayPatch = (
   group,
   key,
   value,
-  diff: remi.diff.array(query, key, value)
+  diff: utils.diff.array(query, key, value)
 });
 
 const event = <T extends TimelineEvent["role"]>(
@@ -84,7 +88,7 @@ type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 const stream: Stream = (args) => async (c) => {
   const { timeline, query, location } = args;
 
-  const log = remi.logger.init(timeline);
+  const log = utils.logger.init(timeline);
 
   const send = (e: TimelineEvent, outputToLog: boolean = true) => {
     const chunk = encoder.encode(`${JSON.stringify(e)}\n`);
@@ -96,15 +100,15 @@ const stream: Stream = (args) => async (c) => {
   };
 
   const analyze = memoize(async () => {
-    const i = await remi.capability.identifyIntents({ timeline, query });
+    const i = await fn.identifyIntents({ timeline, query });
 
     if (!i.ok) {
       console.log(i);
       throw new Error();
     }
 
-    const primary = remi.terse.intent(i.data.primary);
-    const secondary = remi.terse.intents(i.data.secondary);
+    const primary = utils.terse.intent(i.data.primary);
+    const secondary = utils.terse.intents(i.data.secondary);
 
     if (!primary) {
       throw new Error();
@@ -185,19 +189,29 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_LOCATION",
-      () => remi.refine.location({ timeline }),
-      async ({ description, radius, geospatialOperator }) => {
+      () => refine.location({ timeline }),
+      async ({ description, radius }) => {
         if (!description) return null;
 
-        const source = NlLocationSourceSchema.parse({
-          description,
-          radius,
-          geospatialOperator
-        });
+        const parsed = await fn.parseLocationDescription(description);
+        if (!parsed.ok) {
+          return event("SYSTEM", {
+            type: "INTENT_RESOLUTION_ERROR",
+            intent: "REFINE_LOCATION",
+            error: "Couldn't resolve location"
+          });
+        }
 
-        const res = await resolveLocationSource(source);
+        const source: NlLocationSource = {
+          type: "NL",
+          description: parsed.data.description,
+          radius: radius || null,
+          geospatialOperator: parsed.data.geospatialOperator
+        };
 
-        if (!res.ok) {
+        const resolutionRes = await resolveLocationSource(source);
+
+        if (!resolutionRes.ok) {
           return event("SYSTEM", {
             type: "INTENT_RESOLUTION_ERROR",
             intent: "REFINE_LOCATION",
@@ -210,7 +224,7 @@ const stream: Stream = (args) => async (c) => {
           prev: location,
           next: {
             source,
-            resolution: res.resolution
+            resolution: resolutionRes.resolution
           }
         });
       }
@@ -221,7 +235,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_PAGE",
-      () => remi.refine.page({ timeline, current: query["page"] }),
+      () => refine.page({ timeline, current: query["page"] }),
       async (page) =>
         page
           ? event("ASSISTANT", {
@@ -236,7 +250,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_SORT",
-      () => remi.refine.sort({ timeline, current: query["sort"] }),
+      () => refine.sort({ timeline, current: query["sort"] }),
       async (sort) =>
         sort
           ? event("ASSISTANT", {
@@ -252,7 +266,7 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_SPACE_REQUIREMENTS",
       () =>
-        remi.refine.spaceRequirements({
+        refine.spaceRequirements({
           timeline,
           current: SpaceRequirements.parse(query)
         }),
@@ -269,7 +283,7 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_BUDGET_AVAILABILITY",
       () =>
-        remi.refine.budgetAndAvailability({
+        refine.budgetAndAvailability({
           timeline,
           current: BudgetAndAvailability.parse(query)
         }),
@@ -285,7 +299,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_MAP_STATE",
-      () => remi.refine.mapState({ timeline, current: MapState.parse(query) }),
+      () => refine.mapState({ timeline, current: MapState.parse(query) }),
       async (props) =>
         event("ASSISTANT", {
           type: "PATCH",
@@ -299,7 +313,7 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_INDOOR_FEATURES",
       () =>
-        remi.refine.indoorFeatures({
+        refine.indoorFeatures({
           timeline,
           current: query["indoor-features"]
         }),
@@ -316,7 +330,7 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_OUTDOOR_FEATURES",
       () =>
-        remi.refine.outdoorFeatures({
+        refine.outdoorFeatures({
           timeline,
           current: query["outdoor-features"]
         }),
@@ -333,7 +347,7 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_LOT_FEATURES",
       () =>
-        remi.refine.lotFeatures({
+        refine.lotFeatures({
           timeline,
           current: query["lot-features"]
         }),
@@ -350,7 +364,7 @@ const stream: Stream = (args) => async (c) => {
     resolve(
       "REFINE_PROPERTY_TYPES",
       () =>
-        remi.refine.propertyTypes({
+        refine.propertyTypes({
           timeline,
           current: query["property-types"]
         }),
@@ -366,7 +380,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_VIEW_TYPES",
-      () => remi.refine.viewTypes({ timeline, current: query["view-types"] }),
+      () => refine.viewTypes({ timeline, current: query["view-types"] }),
       async (res) =>
         event("ASSISTANT", {
           type: "PATCH",
@@ -390,7 +404,7 @@ const stream: Stream = (args) => async (c) => {
     capability === "NEW_QUERY" ||
     capability === "CLEAR_QUERY"
   ) {
-    const res = await remi.capability.summarize({
+    const res = await fn.summarize({
       timeline: interactionTimeline
     });
 
@@ -407,10 +421,10 @@ const stream: Stream = (args) => async (c) => {
   }
 
   if (capability === "RESPOND_GENERAL_QUERY") {
-    const res = await remi.capability.respondGeneral({
+    const res = await fn.respondGeneral({
       timeline,
       query,
-      capabilities: remi.capabilities
+      capabilities
     });
     if (res.ok) {
       send(

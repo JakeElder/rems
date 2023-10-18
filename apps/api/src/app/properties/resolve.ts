@@ -164,17 +164,17 @@ const order = (query: Query) => {
 };
 
 const radius = (query: Query) => {
-  if (query["radius-enabled"] === "false") {
+  // if (query["radius-enabled"] === "false") {
     return [];
-  }
+  // }
 
-  return [
-    Sequelize.literal(`ST_DWithin(
-      ST_MakePoint((location->>'lng')::double precision, (location->>'lat')::double precision)::geography,
-      ST_MakePoint(${query["origin-lng"]}, ${query["origin-lat"]})::geography,
-      ${query["radius"]}
-    )`)
-  ];
+  // return [
+  //   Sequelize.literal(`ST_DWithin(
+  //     ST_MakePoint((location->>'lng')::double precision, (location->>'lat')::double precision)::geography,
+  //     ST_MakePoint(${query["origin-lng"]}, ${query["origin-lat"]})::geography,
+  //     ${query["radius"]}
+  //   )`)
+  // ];
 };
 
 const bounds = (query: Query, bounds: Bounds) => {
