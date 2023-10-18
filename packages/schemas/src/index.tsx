@@ -17,5 +17,4 @@ export * from "./property";
 export * from "./timeline";
 
 export * as RealEstateQuerySchema from "./real-estate-query";
-export * as Refinements from "./refinements";
 export * as Capabilities from "./capabilities";

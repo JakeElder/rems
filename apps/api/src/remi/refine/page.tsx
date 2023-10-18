@@ -1,52 +1,64 @@
-import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
+import { RemiResponse } from "@/remi/types";
 import {
-  execute,
-  stringify,
-  timelineToCompletionMessages,
-  txt
-} from "@/remi/utils";
-import { Refinements } from "@rems/schemas";
+  $functionCall,
+  $messages,
+  $model,
+  $request,
+  $systemMessage
+} from "@/remi/wrappers";
+import { execute, stringify, timelineToCompletionMessages } from "@/remi/utils";
+import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
+import { Z } from "@rems/types";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-const { ArgsSchema, ReturnsSchema, ContextSchema } = Refinements.Page;
+const { Page } = RealEstateQuerySchema;
 
-type Args = z.infer<typeof ArgsSchema>;
-type Context = z.infer<typeof ContextSchema>;
-type Returns = z.infer<typeof ReturnsSchema>;
-type Fn = (args: Args) => Promise<RemiResponse<Returns>>;
+export const ContextSchema = z.object({
+  current: Page
+});
 
-const page: Fn = async ({ timeline, current }) => {
+export const PropsSchema = z.object({
+  current: Page,
+  timeline: TimelineSchema
+});
+
+export const ReturnsSchema = z
+  .object({ p: Page })
+  .partial()
+  .transform(({ p }) => p);
+
+type Props = Z<typeof PropsSchema>;
+type Context = Z<typeof ContextSchema>;
+type Returns = Z<typeof ReturnsSchema>;
+
+const page = async ({
+  timeline,
+  current
+}: Props): Promise<RemiResponse<Returns>> => {
   const context = stringify<Context>({ current });
   const schema = stringify(zodToJsonSchema(ContextSchema));
 
-  const request: ChatCompletionRequest = {
-    model: "gpt-3.5-turbo-0613",
-    messages: [
-      {
-        role: "system",
-        content: txt(
-          <>
-            <p>
-              You an assistant responsible for helping the user of a real estate
-              website. Process their input and update the current page
-            </p>
-            <p>Useful context: `{context}`</p>
-            <p>The context schema: `{schema}`</p>
-          </>
-        )
-      },
+  const request = $request({
+    ...$model("gpt-4-0613"),
+    ...$messages(
+      $systemMessage(
+        <>
+          <p>
+            You an assistant responsible for helping the user of a real estate
+            website. Process their input and update the current page
+          </p>
+          <p>Useful context: `{context}`</p>
+          <p>The context schema: `{schema}`</p>
+        </>
+      ),
       ...timelineToCompletionMessages(timeline)
-    ],
-    function_call: { name: "f" },
-    functions: [
-      {
-        name: "f",
-        description: txt(<>Updates the page</>),
-        parameters: zodToJsonSchema(ReturnsSchema)
-      }
-    ]
-  };
+    ),
+    ...$functionCall({
+      description: <>Updates the budget/availability</>,
+      returnsSchema: ReturnsSchema
+    })
+  });
 
   return execute.fn(request, ReturnsSchema);
 };

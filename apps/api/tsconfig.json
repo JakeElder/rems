@@ -20,6 +20,9 @@
       "@/remi/fn": [
         "./src/remi/fn"
       ],
+      "@/remi/wrappers": [
+        "./src/remi/wrappers"
+      ],
       "@/remi/refine": [
         "./src/remi/refine"
       ],

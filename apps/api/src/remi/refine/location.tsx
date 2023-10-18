@@ -1,12 +1,19 @@
-import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
+import { RemiResponse } from "@/remi/types";
 import { execute, timelineToCompletionMessages, txt } from "@/remi/utils";
-import { Timeline, Z } from "@rems/types";
+import {
+  $functionCall,
+  $messages,
+  $model,
+  $request,
+  $systemMessage
+} from "@/remi/wrappers";
+import { TimelineSchema } from "@rems/schemas";
+import { Z } from "@rems/types";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
-type Props = {
-  timeline: Timeline;
-};
+const PropsSchema = z.object({
+  timeline: TimelineSchema
+});
 
 const ReturnsSchema = z
   .object({
@@ -26,36 +33,28 @@ const ReturnsSchema = z
   .partial({ d: true, r: true })
   .transform(({ d, r }) => ({ description: d, radius: r }));
 
+type Props = Z<typeof PropsSchema>;
 type Returns = Z<typeof ReturnsSchema>;
 
 const location = async ({
   timeline
 }: Props): Promise<RemiResponse<Returns>> => {
-  const request: ChatCompletionRequest = {
-    model: "gpt-3.5-turbo",
-    messages: [
-      {
-        role: "system",
-        content: txt(
-          <>
-            <p>
-              You are an assistant responsible for helping the user of a real
-              estate website. Process their input and extract location
-              information.
-            </p>
-          </>
-        )
-      },
+  const request = $request({
+    ...$model("gpt-3.5-turbo"),
+    ...$messages(
+      $systemMessage(
+        <>
+          <p>
+            You are an assistant responsible for helping the user of a real
+            estate website. Process their input and extract location
+            information.
+          </p>
+        </>
+      ),
       ...timelineToCompletionMessages(timeline)
-    ],
-    function_call: { name: "f" },
-    functions: [
-      {
-        name: "f",
-        parameters: zodToJsonSchema(ReturnsSchema)
-      }
-    ]
-  };
+    ),
+    ...$functionCall({ returnsSchema: ReturnsSchema })
+  });
 
   return execute.fn(request, ReturnsSchema);
 };
