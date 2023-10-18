@@ -1,9 +1,9 @@
 import useSWR from "swr";
-import qs from "query-string";
-import { GetPropertiesResult, ServerRealEstateQuery } from "@rems/types";
+import qs from "qs";
+import { GetPropertiesResult, RealEstateQuery } from "@rems/types";
 import { useEffect, useState } from "react";
 
-type UsePropertiesHook = (query: ServerRealEstateQuery) =>
+type UsePropertiesHook = (query: RealEstateQuery) =>
   | {
       ready: false;
       isLoading: true;
@@ -24,7 +24,7 @@ const fetcher = async (query: string): Promise<GetPropertiesResult> => {
 };
 
 const useProperties: UsePropertiesHook = (query) => {
-  const q = qs.stringify(query, { arrayFormat: "bracket" });
+  const q = qs.stringify(query, { arrayFormat: "brackets" });
   const [ready, setReady] = useState(false);
 
   const { data, isLoading } = useSWR(
@@ -39,11 +39,11 @@ const useProperties: UsePropertiesHook = (query) => {
     }
   }, [isLoading]);
 
-  if (ready && data) {
-    return { ready: true, data, isLoading };
+  if (!data) {
+    return { ready: false, isLoading: true };
   }
 
-  return { ready: false, isLoading: true };
+  return { ready: true, data, isLoading };
 };
 
 export default useProperties;

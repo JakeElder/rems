@@ -28,7 +28,7 @@ import {
   UserEventSchema,
   EventSchema,
   LanguageBasedInteractionEventSchema,
-  PatchInteractionEventSchema,
+  // PatchInteractionEventSchema,
   AnalysisPerformedEventSchema,
   YieldEventSchema,
   ErrorEventSchema,
@@ -40,7 +40,7 @@ import {
   LocationResolutionSchema,
   BoundsSchema,
   LatLngSchema,
-  RealEstateQueryStringObjectSchema,
+  UrlRealEstateQuerySchema,
   PaginationSchema
 } from "@rems/schemas";
 import { LocationSourceSchema } from "@rems/schemas/user-mutable-state";
@@ -127,16 +127,14 @@ export type Property = Z<typeof PropertySchema>;
 export type ContactFormData = Z<typeof ContactFormSchema>;
 
 export type RealEstateQuery = Z<typeof RealEstateQuerySchema>;
-export type RealEstateQueryStringObject = Z<
-  typeof RealEstateQueryStringObjectSchema
->;
+export type UrlRealEstateQuery = Z<typeof UrlRealEstateQuerySchema>;
 
 export type QuickFilterQueryKey = keyof Pick<
-  RealEstateQueryStringObject,
+  UrlRealEstateQuery,
   "indoor-features" | "outdoor-features" | "lot-features" | "view-types"
 >;
 
-export type SortType = RealEstateQuery["sort"];
+export type SortType = RealEstateQuery["scalars"]["pageAndSort"]["sort"];
 
 export type SearchParams = {
   [key: string]: string | string[] | undefined;
@@ -271,7 +269,7 @@ export type Event = Z<typeof EventSchema>;
 export type LanguageBasedInteractionEvent = Z<
   typeof LanguageBasedInteractionEventSchema
 >;
-export type PatchInteractionEvent = Z<typeof PatchInteractionEventSchema>;
+// export type PatchInteractionEvent = Z<typeof PatchInteractionEventSchema>;
 export type AnalysisPerformedEvent = Z<typeof AnalysisPerformedEventSchema>;
 export type YieldEvent = Z<typeof YieldEventSchema>;
 export type ErrorEvent = Z<typeof ErrorEventSchema>;
@@ -309,3 +307,6 @@ export type GetPropertiesResult = {
   location: Location;
   pagination: Pagination;
 };
+
+export type RealEstateQueryArrayKey = keyof RealEstateQuery["arrays"];
+export type RealEstateQueryScalarsKey = keyof RealEstateQuery["scalars"];

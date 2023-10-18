@@ -7,40 +7,33 @@ import {
 } from "../constants";
 import { txt } from "../utils";
 
-export const SpaceRequirementsSchema = z.object({
-  minBedrooms: z.coerce.number().default(0).catch(0),
-  maxBedrooms: z.coerce.number().nullable().default(null).catch(null),
-  minBathrooms: z.coerce.number().default(0).catch(0),
-  minLivingArea: z.coerce
-    .number()
-    .default(0)
-    .catch(0)
-    .describe(
-      txt(
-        <>
-          Possible values: `{" "}
-          {JSON.stringify(MIN_LIVING_AREA_SIZES.map((s) => s.value))}`
-        </>
-      )
-    ),
-  maxLivingArea: z.coerce
-    .number()
-    .nullable()
-    .default(null)
-    .catch(null)
-    .describe(
-      txt(
-        <>
-          Possible values: `{" "}
-          {JSON.stringify(MAX_LIVING_AREA_SIZES.map((s) => s.value))}`
-        </>
-      )
-    ),
-  minLotSize: z.coerce
-    .number()
-    .default(0)
-    .catch(0)
-    .describe(
+export const SpaceRequirementsSchema = z
+  .object({
+    minBedrooms: z.number(),
+    maxBedrooms: z.number().nullable(),
+    minBathrooms: z.number(),
+    minLivingArea: z
+      .number()
+      .describe(
+        txt(
+          <>
+            Possible values: `{" "}
+            {JSON.stringify(MIN_LIVING_AREA_SIZES.map((s) => s.value))}`
+          </>
+        )
+      ),
+    maxLivingArea: z
+      .number()
+      .nullable()
+      .describe(
+        txt(
+          <>
+            Possible values: `{" "}
+            {JSON.stringify(MAX_LIVING_AREA_SIZES.map((s) => s.value))}`
+          </>
+        )
+      ),
+    minLotSize: z.number().describe(
       txt(
         <>
           The minimum lot size, specified in Meters Squared. Here are the
@@ -50,21 +43,30 @@ export const SpaceRequirementsSchema = z.object({
         </>
       )
     ),
-  maxLotSize: z.coerce
-    .number()
-    .nullable()
-    .default(null)
-    .catch(null)
-    .describe(
-      txt(
-        <>
-          The maximum lot size, specified in Meters Squared. Here are the
-          possible values: `{JSON.stringify(MAX_LOT_SIZES.map((s) => s.value))}
-          `. The user may *only select one of these values*. When the user
-          specifies a value other than these, the closest match should be used.
-        </>
+    maxLotSize: z
+      .number()
+      .nullable()
+      .describe(
+        txt(
+          <>
+            The maximum lot size, specified in Meters Squared. Here are the
+            possible values: `
+            {JSON.stringify(MAX_LOT_SIZES.map((s) => s.value))}
+            `. The user may *only select one of these values*. When the user
+            specifies a value other than these, the closest match should be
+            used.
+          </>
+        )
       )
-    )
-});
+  })
+  .default({
+    minBedrooms: 0,
+    maxBedrooms: null,
+    minBathrooms: 0,
+    minLivingArea: 0,
+    maxLivingArea: null,
+    minLotSize: 0,
+    maxLotSize: null
+  });
 
 export default SpaceRequirementsSchema;

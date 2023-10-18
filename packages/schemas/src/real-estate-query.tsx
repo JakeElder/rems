@@ -6,8 +6,7 @@ import {
   LotFeatureRequirementsSchema,
   OutdoorFeatureRequirementsSchema,
   PropertyTypeRequirementsSchema,
-  RealEstateIndexPageSchema,
-  RealEstateIndexSortSchema,
+  RealEstateIndexPageAndSortSchema,
   SpaceRequirementsSchema,
   ViewTypeRequirementsSchema
 } from "./user-mutable-state";
@@ -16,22 +15,23 @@ import { FilterSchema } from "./filter";
 const Array = z.array(FilterSchema.shape["slug"]).default([]).catch([]);
 
 export const RealEstateQuerySchema = z.object({
-  // Arrays
-  indoorFeatures: IndoorFeatureRequirementsSchema,
-  lotFeatures: LotFeatureRequirementsSchema,
-  outdoorFeatures: OutdoorFeatureRequirementsSchema,
-  propertyTypes: PropertyTypeRequirementsSchema,
-  viewTypes: ViewTypeRequirementsSchema,
+  arrays: z.object({
+    indoorFeatures: IndoorFeatureRequirementsSchema,
+    lotFeatures: LotFeatureRequirementsSchema,
+    outdoorFeatures: OutdoorFeatureRequirementsSchema,
+    propertyTypes: PropertyTypeRequirementsSchema,
+    viewTypes: ViewTypeRequirementsSchema
+  }),
 
-  // Scalar
-  budgetAndAvailability: BudgetAndAvailabilityRequirementsSchema,
-  locationSource: LocationSourceSchema,
-  page: RealEstateIndexPageSchema,
-  sort: RealEstateIndexSortSchema,
-  space: SpaceRequirementsSchema
+  scalars: z.object({
+    budgetAndAvailability: BudgetAndAvailabilityRequirementsSchema,
+    locationSource: LocationSourceSchema,
+    pageAndSort: RealEstateIndexPageAndSortSchema,
+    space: SpaceRequirementsSchema
+  })
 });
 
-export const RealEstateQueryStringObjectSchema = z.object({
+export const UrlRealEstateQuerySchema = z.object({
   // Arrays
   "indoor-features": Array,
   "lot-features": Array,

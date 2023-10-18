@@ -12,12 +12,12 @@ type Props = {};
 
 const ListingMapViewContainer = ({}: Props) => {
   const $map = useRef<MapRef>();
-  const { query, onMapMove, isReady, serverQuery } = useRealEstateQuery();
+  const { query, onMapMove } = useRealEstateQuery();
   const previousQuery = usePrevious(query);
-  const properties = useProperties(serverQuery);
+  const properties = useProperties(query);
 
   useEffect(() => {
-    if (!isReady || !properties.ready || !$map.current || !previousQuery) {
+    if (!properties.ready || !$map.current || !previousQuery) {
       return;
     }
 
@@ -26,7 +26,7 @@ const ListingMapViewContainer = ({}: Props) => {
   }, [properties.data?.location]);
 
   // useEffect(() => {
-  //   if (!isReady || !previousQuery || !mapRef.current) {
+  //   if (!previousQuery || !mapRef.current) {
   //     return;
   //   }
   //   mapRef.current.zoomTo(query["zoom"]);
@@ -41,7 +41,7 @@ const ListingMapViewContainer = ({}: Props) => {
   //   }
   // }, 200);
 
-  if (!isReady || !properties.ready) {
+  if (!properties.ready) {
     return null;
   }
 
@@ -54,9 +54,8 @@ const ListingMapViewContainer = ({}: Props) => {
       lat={properties.data.location.resolution.lat}
       lng={properties.data.location.resolution.lng}
       bounds={properties.data.location.resolution.viewport}
-      zoom={query["zoom"]}
       radius={10000}
-      showRadius={query["radius-enabled"] === "true"}
+      showRadius={false}
     />
   );
 };

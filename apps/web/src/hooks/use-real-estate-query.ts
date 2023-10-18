@@ -4,20 +4,24 @@ import { useCallback } from "react";
 import {
   QuickFilterQueryKey,
   RealEstateQuery,
-  ServerRealEstateQuery
+  UrlRealEstateQuery
 } from "@rems/types";
+import { QueryUtils } from "@/utils";
 import { useRouter } from "next/router";
-import qs from "query-string";
 import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
-import { RealEstateQuerySchema } from "@rems/schemas";
+import { RealEstateQuerySchema, UrlRealEstateQuerySchema } from "@rems/schemas";
 import { useDebouncedCallback } from "use-debounce";
 import useRealEstateIndexPageState from "./use-real-estate-index-page-state";
+import { countActiveProps } from "utils/query-utils";
+
+const { generateQueryString } = QueryUtils;
+
+type Scalars = RealEstateQuery["scalars"];
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
   stagedQuery: RealEstateQuery;
-  serverQuery: ServerRealEstateQuery;
   queryString: string;
   patch: (query: Partial<RealEstateQuery>) => void;
   commit: () => void;
@@ -38,66 +42,32 @@ type UseRealEstateQueryReturn = {
     value: string,
     checked: boolean
   ) => void;
-  onPageChange: (page: RealEstateQuery["page"]) => void;
-  createLink: (page?: number, sort?: RealEstateQuery["sort"]) => string;
-  onMinBedsChange: (min: RealEstateQuery["min-bedrooms"]) => void;
-  onMaxBedsChange: (max: RealEstateQuery["max-bedrooms"]) => void;
+  onPageChange: (page: Scalars["pageAndSort"]["page"]) => void;
+  createLink: (
+    page?: Scalars["pageAndSort"]["page"],
+    sort?: Scalars["pageAndSort"]["sort"]
+  ) => string;
+  onMinBedsChange: (min: Scalars["space"]["minBedrooms"]) => void;
+  onMaxBedsChange: (max: Scalars["space"]["maxBedrooms"]) => void;
   onPriceRangeChange: (
-    min: RealEstateQuery["min-price"],
-    max: RealEstateQuery["max-price"]
+    min: Scalars["budgetAndAvailability"]["minPrice"],
+    max: Scalars["budgetAndAvailability"]["maxPrice"]
   ) => void;
-  onAvailabilityChange: (availability: RealEstateQuery["availability"]) => void;
-  onMinBathsChange: (min: RealEstateQuery["min-bathrooms"]) => void;
+  onAvailabilityChange: (
+    availability: Scalars["budgetAndAvailability"]["type"]
+  ) => void;
+  onMinBathsChange: (min: Scalars["space"]["minBathrooms"]) => void;
   onMapMove: (params: { zoom: number; lat: number; lng: number }) => void;
   reset: (commit: boolean) => void;
-  isReady: boolean;
   onSearchRadiusChange: (value: number) => void;
   onSearchRadiusEnabledChange: (enabled: boolean) => void;
 };
 
 export const removeDefaults = (
-  query: Partial<RealEstateQuery>
-): Partial<RealEstateQuery> => {
-  const defaults = RealEstateQuerySchema.URL.parse({});
+  query: UrlRealEstateQuery
+): Partial<UrlRealEstateQuery> => {
+  const defaults = UrlRealEstateQuerySchema.parse({});
   return omitBy(query, (v, k) => equals(defaults[k], v));
-};
-
-export const generateQueryString = (
-  query: Partial<RealEstateQuery>,
-  page?: number,
-  sort?: RealEstateQuery["sort"]
-) => {
-  const string = qs.stringify(
-    removeDefaults({
-      ...query,
-      ...(page ? { page } : {}),
-      ...(sort ? { sort } : {})
-    }),
-    { arrayFormat: "bracket" }
-  );
-  return string ? `?${string}` : "";
-};
-
-const has = (query: RealEstateQuery, param: keyof RealEstateQuery) => {
-  const defaults = RealEstateQuerySchema.URL.parse({});
-  const queryWithoutDefaults = omitBy(query, (v, k) => equals(defaults[k], v));
-  return param in queryWithoutDefaults;
-};
-
-const countActiveFilters = (query: RealEstateQuery) => {
-  const h = (k: keyof RealEstateQuery) => has(query, k);
-  return [
-    ...query["property-types"],
-    h("min-price") || h("max-price"),
-    h("min-bedrooms") || h("max-bedrooms"),
-    h("min-bathrooms"),
-    ...query["view-types"],
-    ...query["indoor-features"],
-    ...query["outdoor-features"],
-    ...query["lot-features"],
-    h("min-living-area") || h("max-living-area"),
-    h("min-lot-size") || h("max-lot-size")
-  ].filter((i) => i).length;
 };
 
 const useRealEstateQuery = (): UseRealEstateQueryReturn => {
@@ -108,31 +78,28 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   $.stagedQuery.use();
 
   const commit = () => {
-    const qs = generateQueryString($.stagedQuery.get()!);
+    const qs = generateQueryString($.stagedQuery.get());
     router.push(`${router.pathname}${qs}`, "", { shallow: true });
   };
 
   const patch: UseRealEstateQueryReturn["patch"] = (data) => {
-    const nextQuery = update($.stagedQuery.get()!, { $merge: data });
+    const nextQuery = update($.stagedQuery.get(), { $merge: data });
     $.stagedQuery.set(nextQuery);
   };
 
-  const query = $.query.get()!;
-  const stagedQuery = $.stagedQuery.get()!;
+  const query = $.query.get();
+  const stagedQuery = $.stagedQuery.get();
 
   return {
-    isReady: router.isReady,
-
     query,
     stagedQuery,
-    serverQuery: RealEstateQuerySchema.Server.parse({ ...query }),
-    queryString: generateQueryString(query),
+    queryString: generateQueryString($.stagedQuery.get()),
 
     patch,
     commit,
 
-    has: (key) => has(query, key),
-    activeFilters: countActiveFilters(query),
+    has: (key) => has(queryToUrlQuery(query), key),
+    activeFilters: countActiveProps(query),
 
     isQuickFilterOn: useCallback(
       (key, value) => stagedQuery[key].includes(value),
@@ -210,7 +177,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     },
 
     reset: (c) => {
-      $.stagedQuery.set(RealEstateQuerySchema.URL.parse({}));
+      $.stagedQuery.set(RealEstateQuerySchema.parse({}));
       if (c) {
         commit();
       }

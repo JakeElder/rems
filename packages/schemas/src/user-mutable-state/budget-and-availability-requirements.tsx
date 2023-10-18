@@ -3,29 +3,25 @@ import { MAX_PURCHASE_PRICE, MAX_RENTAL_PRICE } from "../constants";
 
 const SaleBudgetAndAvailabilityRequirementsSchema = z.object({
   type: z.literal("SALE"),
-  minPrice: z.number().default(0).catch(0),
-  maxPrice: z
-    .number()
-    .max(MAX_PURCHASE_PRICE)
-    .nullable()
-    .default(null)
-    .catch(null)
+  minPrice: z.number(),
+  maxPrice: z.number().max(MAX_PURCHASE_PRICE).nullable()
 });
 
 const RentBudgetAndAvailabilityRequirementsSchema = z.object({
   type: z.literal("RENT"),
-  minPrice: z.number().default(0).catch(0),
-  maxPrice: z
-    .number()
-    .max(MAX_RENTAL_PRICE)
-    .nullable()
-    .default(null)
-    .catch(null)
+  minPrice: z.number(),
+  maxPrice: z.number().max(MAX_RENTAL_PRICE).nullable()
 });
 
-const BudgetAndAvailabilityRequirementsSchema = z.discriminatedUnion("type", [
-  SaleBudgetAndAvailabilityRequirementsSchema,
-  RentBudgetAndAvailabilityRequirementsSchema
-]);
+const BudgetAndAvailabilityRequirementsSchema = z
+  .discriminatedUnion("type", [
+    SaleBudgetAndAvailabilityRequirementsSchema,
+    RentBudgetAndAvailabilityRequirementsSchema
+  ])
+  .default({
+    type: "SALE",
+    minPrice: 0,
+    maxPrice: null
+  });
 
 export default BudgetAndAvailabilityRequirementsSchema;

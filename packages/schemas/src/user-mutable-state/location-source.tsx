@@ -1,23 +1,29 @@
 import { z } from "zod";
 import { LatLngSchema } from "../lat-lng";
-import { RadiusSchema } from "../radius";
 
 const LatLngLocationSourceSchema = z.object({
   type: z.literal("LL"),
   point: LatLngSchema,
-  radius: RadiusSchema
+  radius: z.number().nullable()
 });
 
 const NlLocationSourceSchema = z.object({
   type: z.literal("NL"),
   description: z.string(),
   geospatialOperator: z.string(),
-  radius: RadiusSchema
+  radius: z.number().nullable()
 });
 
-const LocationSourceSchema = z.discriminatedUnion("type", [
-  NlLocationSourceSchema,
-  LatLngLocationSourceSchema
-]);
+const LocationSourceSchema = z
+  .discriminatedUnion("type", [
+    NlLocationSourceSchema,
+    LatLngLocationSourceSchema
+  ])
+  .default({
+    type: "NL",
+    description: "Bangkok",
+    geospatialOperator: "in",
+    radius: null
+  });
 
 export default LocationSourceSchema;

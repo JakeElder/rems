@@ -5,6 +5,5 @@ export { default as BudgetAndAvailabilityRequirementsSchema } from "./budget-and
 export { default as OutdoorFeatureRequirementsSchema } from "./outdoor-feature-requirements";
 export { default as PropertyTypeRequirementsSchema } from "./property-type-requirements";
 export { default as ViewTypeRequirementsSchema } from "./view-type-requirements";
-export { default as RealEstateIndexPageSchema } from "./real-estate-index-page";
-export { default as RealEstateIndexSortSchema } from "./real-estate-index-sort";
+export { default as RealEstateIndexPageAndSortSchema } from "./real-estate-index-page-and-sort";
 export { default as SpaceRequirementsSchema } from "./space-requirements";
