@@ -12,24 +12,22 @@ import {
 } from "./user-mutable-state";
 import { FilterSchema } from "./filter";
 
-const Array = z.array(FilterSchema.shape["slug"]).default([]).catch([]);
-
 export const RealEstateQuerySchema = z.object({
-  arrays: z.object({
-    indoorFeatures: IndoorFeatureRequirementsSchema,
-    lotFeatures: LotFeatureRequirementsSchema,
-    outdoorFeatures: OutdoorFeatureRequirementsSchema,
-    propertyTypes: PropertyTypeRequirementsSchema,
-    viewTypes: ViewTypeRequirementsSchema
-  }),
+  // Arrays
+  indoorFeatures: IndoorFeatureRequirementsSchema,
+  lotFeatures: LotFeatureRequirementsSchema,
+  outdoorFeatures: OutdoorFeatureRequirementsSchema,
+  propertyTypes: PropertyTypeRequirementsSchema,
+  viewTypes: ViewTypeRequirementsSchema,
 
-  scalars: z.object({
-    budgetAndAvailability: BudgetAndAvailabilityRequirementsSchema,
-    locationSource: LocationSourceSchema,
-    pageAndSort: RealEstateIndexPageAndSortSchema,
-    space: SpaceRequirementsSchema
-  })
+  // Scalars
+  budgetAndAvailability: BudgetAndAvailabilityRequirementsSchema,
+  locationSource: LocationSourceSchema,
+  pageAndSort: RealEstateIndexPageAndSortSchema,
+  space: SpaceRequirementsSchema
 });
+
+const Array = z.array(FilterSchema.shape["slug"]).default([]).catch([]);
 
 export const UrlRealEstateQuerySchema = z.object({
   // Arrays

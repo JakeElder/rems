@@ -7,3 +7,8 @@ export { default as PropertyTypeRequirementsSchema } from "./property-type-requi
 export { default as ViewTypeRequirementsSchema } from "./view-type-requirements";
 export { default as RealEstateIndexPageAndSortSchema } from "./real-estate-index-page-and-sort";
 export { default as SpaceRequirementsSchema } from "./space-requirements";
+
+export {
+  NlLocationSourceSchema,
+  LatLngLocationSourceSchema
+} from "./location-source";

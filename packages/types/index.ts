@@ -130,8 +130,8 @@ export type RealEstateQuery = Z<typeof RealEstateQuerySchema>;
 export type UrlRealEstateQuery = Z<typeof UrlRealEstateQuerySchema>;
 
 export type QuickFilterQueryKey = keyof Pick<
-  UrlRealEstateQuery,
-  "indoor-features" | "outdoor-features" | "lot-features" | "view-types"
+  RealEstateQuery["arrays"],
+  "indoorFeatures" | "outdoorFeatures" | "lotFeatures" | "viewTypes"
 >;
 
 export type SortType = RealEstateQuery["scalars"]["pageAndSort"]["sort"];
@@ -310,3 +310,6 @@ export type GetPropertiesResult = {
 
 export type RealEstateQueryArrayKey = keyof RealEstateQuery["arrays"];
 export type RealEstateQueryScalarsKey = keyof RealEstateQuery["scalars"];
+
+export type HasGroup = "PRICE" | "BEDROOMS" | "PROPERTY_TYPE";
+export type HasActiveManifest = Record<HasGroup, boolean>;

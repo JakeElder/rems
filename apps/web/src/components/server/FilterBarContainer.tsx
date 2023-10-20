@@ -18,7 +18,7 @@ import LivingAreaFiltersViewContainer from "@/components/client/LivingAreaFilter
 import LotSizeFiltersViewContainer from "@/components/client/LotSizeFiltersViewContainer";
 import NearestMRTStationFilterContainer from "@/components/server/NearestMRTStationFilter";
 import NearestBTSStationFilterContainer from "@/components/server/NearestBTSStationFilter";
-import QuickFiltersContainer from "@/components/server//QuickFiltersContainer";
+import QuickFiltersContainer from "@/components/server/QuickFiltersContainer";
 import PlacesAutocompleteViewContainer from "@/components/client/PlacesAutocompleteViewContainer";
 
 type Props = {};

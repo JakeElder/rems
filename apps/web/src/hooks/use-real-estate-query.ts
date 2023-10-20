@@ -4,7 +4,8 @@ import { useCallback } from "react";
 import {
   QuickFilterQueryKey,
   RealEstateQuery,
-  UrlRealEstateQuery
+  UrlRealEstateQuery,
+  HasGroup
 } from "@rems/types";
 import { QueryUtils } from "@/utils";
 import { useRouter } from "next/router";
@@ -13,7 +14,7 @@ import { omitBy, equals } from "remeda";
 import { RealEstateQuerySchema, UrlRealEstateQuerySchema } from "@rems/schemas";
 import { useDebouncedCallback } from "use-debounce";
 import useRealEstateIndexPageState from "./use-real-estate-index-page-state";
-import { countActiveProps } from "utils/query-utils";
+import { countActiveProps, has } from "utils/query-utils";
 
 const { generateQueryString } = QueryUtils;
 
@@ -25,7 +26,7 @@ type UseRealEstateQueryReturn = {
   queryString: string;
   patch: (query: Partial<RealEstateQuery>) => void;
   commit: () => void;
-  has: (param: keyof RealEstateQuery) => boolean;
+  has: (param: HasGroup) => boolean;
   activeFilters: number;
   isQuickFilterOn: (key: QuickFilterQueryKey, value: string) => boolean;
   onQuickFilterChange: (
@@ -98,7 +99,7 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
     patch,
     commit,
 
-    has: (key) => has(queryToUrlQuery(query), key),
+    has: (group) => has(query, group),
     activeFilters: countActiveProps(query),
 
     isQuickFilterOn: useCallback(
