@@ -76,8 +76,8 @@ export const useAssistant = () => useContext(AssistantContext)!;
 
 const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
-  const { reset, patch, commit, serverQuery } = useRealEstateQuery();
-  const properties = useProperties(serverQuery);
+  const { reset, patch, commit, query } = useRealEstateQuery();
+  const properties = useProperties(query);
   const $keyChain = useRef<string[]>([]);
 
   const { $header, $listings } = useDomElements();
@@ -198,7 +198,7 @@ const AssistantProvider = ({ children }: Props) => {
 
       const payload: AssistantPayload = {
         timeline: $timeline.get(),
-        query: serverQuery,
+        query,
         location: properties.data.location
       };
 

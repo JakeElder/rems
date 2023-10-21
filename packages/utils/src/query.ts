@@ -14,10 +14,10 @@ import {
   UrlRealEstateQuery,
   Z
 } from "@rems/types";
-import { ZodType, ZodTypeDef } from "zod";
+import { ZodType } from "zod";
 import { omitBy, equals } from "remeda";
 import qs from "qs";
-import { UrlRealEstateQuerySchema } from "@rems/schemas";
+import { RealEstateQuerySchema, UrlRealEstateQuerySchema } from "@rems/schemas";
 import { constantCase, paramCase } from "change-case-all";
 
 type Schema = ZodType<any>;
@@ -235,10 +235,10 @@ export const generateQueryString = (
 };
 
 export const has = (
-  defaults: RealEstateQuery,
   query: RealEstateQuery,
   group: HasGroup
-): HasAtiveManifest[HasGroup] => {
+): HasActiveManifest[HasGroup] => {
+  const defaults = RealEstateQuerySchema.parse({});
   const manifest: HasActiveManifest = {
     PRICE:
       query.budgetAndAvailability.minPrice !==
@@ -246,16 +246,8 @@ export const has = (
       query.budgetAndAvailability.maxPrice !==
         defaults.budgetAndAvailability.maxPrice,
     BEDROOMS:
-      !sDefault(
-        SpaceRequirementsSchema,
-        "minBedrooms",
-        query.space.minBedrooms
-      ) ||
-      !isDefault(
-        SpaceRequirementsSchema,
-        maxBedrooms",
-        query.space.maxBedrooms
-      ),
+      query.space.minBedrooms !== defaults.space.minBedrooms ||
+      query.space.maxBedrooms !== defaults.space.maxBedrooms,
     PROPERTY_TYPE: query.propertyTypes.length > 0
   };
 

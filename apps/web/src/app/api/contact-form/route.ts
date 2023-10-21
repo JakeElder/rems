@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendMail } from "../../actions";
-import { ContactFormSchema } from "@rems/schemas/src/contact-form";
+import { ContactFormSchema } from "@rems/schemas";
 
 export async function POST(req: Request) {
   const form = await req.formData();

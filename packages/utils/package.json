@@ -16,7 +16,7 @@
     "@rems/tsconfig": "*",
     "@rems/types": "*",
     "qs": "^6.11.2",
-    "remeda": "^1.24.0",
+    "remeda": "^1.27.1",
     "typescript": "^5.2.2",
     "zod": "^3.22.4"
   },

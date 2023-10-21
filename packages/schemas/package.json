@@ -17,11 +17,11 @@
     "react-google-places-autocomplete": "^4.0.1",
     "turndown": "^7.1.2",
     "typescript": "^5.2.2",
-    "zod": "^3.22.2"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/react": "18.2.18",
-    "@types/react-dom": "18.2.7",
+    "@types/react": "18.2.31",
+    "@types/react-dom": "18.2.14",
     "@types/turndown": "^5.0.1"
   }
 }
