@@ -72,10 +72,8 @@ export type EntryCard = {
 };
 
 export type Area = Filter;
-export type BTSStation = Filter;
 export type IndoorFeature = Filter;
 export type LotFeature = Filter;
-export type MRTStation = Filter;
 export type OutdoorFeature = Filter;
 export type PropertyType = Filter;
 export type ViewType = Filter;
@@ -96,10 +94,8 @@ export type QuickFilter = {
 };
 
 export type Filters = {
-  btsStations: BTSStation[];
   indoorFeatures: IndoorFeature[];
   lotFeatures: LotFeature[];
-  mrtStations: MRTStation[];
   areas: Area[];
   outdoorFeatures: OutdoorFeature[];
   propertyTypes: PropertyType[];
@@ -130,11 +126,29 @@ export type RealEstateQuery = Z<typeof RealEstateQuerySchema>;
 export type UrlRealEstateQuery = Z<typeof UrlRealEstateQuerySchema>;
 
 export type QuickFilterQueryKey = keyof Pick<
-  RealEstateQuery["arrays"],
+  RealEstateQuery,
   "indoorFeatures" | "outdoorFeatures" | "lotFeatures" | "viewTypes"
 >;
 
-export type SortType = RealEstateQuery["scalars"]["pageAndSort"]["sort"];
+export type RealEstateQueryArrays = Pick<
+  RealEstateQuery,
+  | "viewTypes"
+  | "lotFeatures"
+  | "indoorFeatures"
+  | "outdoorFeatures"
+  | "propertyTypes"
+>;
+
+export type RealEstateQueryArrayKey = keyof RealEstateQueryArrays;
+
+export type RealEstateQueryScalars = Pick<
+  RealEstateQuery,
+  "space" | "locationSource" | "pageAndSort" | "budgetAndAvailability"
+>;
+
+export type RealEstateQueryScalarKey = keyof RealEstateQueryArrayKey;
+
+export type SortType = RealEstateQuery["pageAndSort"]["sort"];
 
 export type SearchParams = {
   [key: string]: string | string[] | undefined;
@@ -307,9 +321,6 @@ export type GetPropertiesResult = {
   location: Location;
   pagination: Pagination;
 };
-
-export type RealEstateQueryArrayKey = keyof RealEstateQuery["arrays"];
-export type RealEstateQueryScalarsKey = keyof RealEstateQuery["scalars"];
 
 export type HasGroup = "PRICE" | "BEDROOMS" | "PROPERTY_TYPE";
 export type HasActiveManifest = Record<HasGroup, boolean>;

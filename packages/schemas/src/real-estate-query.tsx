@@ -13,18 +13,18 @@ import {
 import { FilterSchema } from "./filter";
 
 export const RealEstateQuerySchema = z.object({
+  // Scalars
+  budgetAndAvailability: BudgetAndAvailabilityRequirementsSchema,
+  locationSource: LocationSourceSchema,
+  pageAndSort: RealEstateIndexPageAndSortSchema,
+  space: SpaceRequirementsSchema,
+
   // Arrays
   indoorFeatures: IndoorFeatureRequirementsSchema,
   lotFeatures: LotFeatureRequirementsSchema,
   outdoorFeatures: OutdoorFeatureRequirementsSchema,
   propertyTypes: PropertyTypeRequirementsSchema,
-  viewTypes: ViewTypeRequirementsSchema,
-
-  // Scalars
-  budgetAndAvailability: BudgetAndAvailabilityRequirementsSchema,
-  locationSource: LocationSourceSchema,
-  pageAndSort: RealEstateIndexPageAndSortSchema,
-  space: SpaceRequirementsSchema
+  viewTypes: ViewTypeRequirementsSchema
 });
 
 const Array = z.array(FilterSchema.shape["slug"]).default([]).catch([]);

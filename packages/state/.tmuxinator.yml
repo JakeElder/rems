@@ -1,4 +1,4 @@
-name: "TS API"
+name: "State"
 pre_window: nvm use
 tmux_options: -L rems
 attach: false
@@ -6,4 +6,4 @@ attach: false
 windows:
   - Vim: vim
   - Terminal:
-  - Check: yarn dev
+  - Test: yarn dev

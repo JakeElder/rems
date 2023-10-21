@@ -18,5 +18,11 @@
   "private": true,
   "resolutions": {
     "domino@^2.1.6": "patch:domino@npm%3A2.1.6#./.yarn/patches/domino-npm-2.1.6-b0dc3de857.patch"
+  },
+  "dependencies": {
+    "change-case-all": "^1.0.15",
+    "qs": "^6.11.2",
+    "remeda": "^1.27.1",
+    "zod": "^3.22.4"
   }
 }

@@ -1,4 +1,3 @@
-import { RealEstateQuerySchema } from "@rems/schemas";
 import {
   Property,
   Image,
@@ -12,12 +11,9 @@ import {
   FilterSet,
   QuickFilter,
   PropertyType,
-  Area,
-  MRTStation,
-  BTSStation
+  Area
 } from "@rems/types";
-import qs from "query-string";
-import { omitBy, equals } from "remeda";
+import { generateQueryString } from "./query";
 
 type Route<Route extends string, ReturnType, Args extends any[] = []> = {
   route: Route;
@@ -37,8 +33,6 @@ type Routes =
   | Route<"indoor-features", IndoorFeature[]>
   | Route<"outdoor-features", OutdoorFeature[]>
   | Route<"lot-features", LotFeature[]>
-  | Route<"mrt-stations", MRTStation[]>
-  | Route<"bts-stations", BTSStation[]>
   | Route<"properties", GetPropertiesResult, [query?: Partial<RealEstateQuery>]>
   | Route<"properties/[id]/images", Image[], [propertyId?: Property["id"]]>
   | Route<
@@ -94,29 +88,6 @@ const propertyResource = async (
   return res.json();
 };
 
-export const removeDefaults = (
-  query: Partial<RealEstateQuery>
-): Partial<RealEstateQuery> => {
-  const defaults = RealEstateQuerySchema.URL.parse({});
-  return omitBy(query, (v, k) => equals(defaults[k], v));
-};
-
-export const generateQueryString = (
-  query: Partial<RealEstateQuery>,
-  page?: number,
-  sort?: RealEstateQuery["sort"]
-) => {
-  const string = qs.stringify(
-    removeDefaults({
-      ...query,
-      ...(page ? { page } : {}),
-      ...(sort ? { sort } : {})
-    }),
-    { arrayFormat: "bracket" }
-  );
-  return string ? `?${string}` : "";
-};
-
 const wrapper = async <T extends Routes["route"]>(
   route: T,
   ...args: RouteArgs<T>
@@ -140,20 +111,13 @@ const wrapper = async <T extends Routes["route"]>(
     return res.json();
   }
 
-  // if (route === "quick-filters") {
-  //   const res = await fetch(url(`quick-filters`));
-  //   return res.json();
-  // }
-
   const filters = [
     "property-types",
     "areas",
     "view-types",
     "indoor-features",
     "outdoor-features",
-    "lot-features",
-    "mrt-stations",
-    "bts-stations"
+    "lot-features"
   ];
 
   if (filters.includes(route)) {
@@ -167,7 +131,7 @@ const wrapper = async <T extends Routes["route"]>(
   }
 
   if (route === "properties") {
-    const params = (args[0] || {}) as Partial<RealEstateQuery>;
+    const params = (args[0] || {}) as RealEstateQuery;
     const res = await fetch(url(`properties${generateQueryString(params)}`));
     return res.json();
   }

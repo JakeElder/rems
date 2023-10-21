@@ -7,18 +7,14 @@ import {
   UrlRealEstateQuery,
   HasGroup
 } from "@rems/types";
-import { QueryUtils } from "@/utils";
 import { useRouter } from "next/router";
 import update from "immutability-helper";
 import { omitBy, equals } from "remeda";
 import { RealEstateQuerySchema, UrlRealEstateQuerySchema } from "@rems/schemas";
 import { useDebouncedCallback } from "use-debounce";
 import useRealEstateIndexPageState from "./use-real-estate-index-page-state";
-import { countActiveProps, has } from "utils/query-utils";
-
-const { generateQueryString } = QueryUtils;
-
-type Scalars = RealEstateQuery["scalars"];
+import { countActiveProps, has, generateQueryString } from "@rems/utils/query";
+import { store } from "@rems/state";
 
 type UseRealEstateQueryReturn = {
   query: RealEstateQuery;
@@ -43,21 +39,21 @@ type UseRealEstateQueryReturn = {
     value: string,
     checked: boolean
   ) => void;
-  onPageChange: (page: Scalars["pageAndSort"]["page"]) => void;
+  onPageChange: (page: RealEstateQuery["pageAndSort"]["page"]) => void;
   createLink: (
-    page?: Scalars["pageAndSort"]["page"],
-    sort?: Scalars["pageAndSort"]["sort"]
+    page?: RealEstateQuery["pageAndSort"]["page"],
+    sort?: RealEstateQuery["pageAndSort"]["sort"]
   ) => string;
-  onMinBedsChange: (min: Scalars["space"]["minBedrooms"]) => void;
-  onMaxBedsChange: (max: Scalars["space"]["maxBedrooms"]) => void;
+  onMinBedsChange: (min: RealEstateQuery["space"]["minBedrooms"]) => void;
+  onMaxBedsChange: (max: RealEstateQuery["space"]["maxBedrooms"]) => void;
   onPriceRangeChange: (
-    min: Scalars["budgetAndAvailability"]["minPrice"],
-    max: Scalars["budgetAndAvailability"]["maxPrice"]
+    min: RealEstateQuery["budgetAndAvailability"]["minPrice"],
+    max: RealEstateQuery["budgetAndAvailability"]["maxPrice"]
   ) => void;
   onAvailabilityChange: (
-    availability: Scalars["budgetAndAvailability"]["type"]
+    availability: RealEstateQuery["budgetAndAvailability"]["type"]
   ) => void;
-  onMinBathsChange: (min: Scalars["space"]["minBathrooms"]) => void;
+  onMinBathsChange: (min: RealEstateQuery["space"]["minBathrooms"]) => void;
   onMapMove: (params: { zoom: number; lat: number; lng: number }) => void;
   reset: (commit: boolean) => void;
   onSearchRadiusChange: (value: number) => void;

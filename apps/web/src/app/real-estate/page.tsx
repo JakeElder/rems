@@ -14,11 +14,6 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 
 import { UrlRealEstateQuerySchema, RealEstateQuerySchema } from "@rems/schemas";
 
-console.dir(zodToJsonSchema(RealEstateQuerySchema), {
-  depth: null,
-  colors: true
-});
-
 // enableReactUse();
 
 export async function generateMetadata(): Promise<Metadata> {
