@@ -20,7 +20,7 @@ type BudgetAndAvailability = Group<
   typeof BudgetAndAvailabilityRequirementsSchema
 >;
 
-type Location = Group<"location", typeof LocationSourceSchema>;
+type Location = Group<"locationSource", typeof LocationSourceSchema>;
 
 type PageAndSort = Group<
   "pageAndSort",
@@ -67,7 +67,7 @@ const realEstateQueryStore = (initial: DeepPartial<RealEstateQuery>) => {
         schema: BudgetAndAvailabilityRequirementsSchema
       },
       {
-        id: "location",
+        id: "locationSource",
         type: "SCALAR",
         schema: LocationSourceSchema
       },
