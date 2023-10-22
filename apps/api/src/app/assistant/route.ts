@@ -2,74 +2,32 @@ import { RemiFn } from "@/remi/types";
 import * as utils from "@/remi/utils";
 import * as fn from "@/remi/fn";
 import * as refine from "@/remi/refine";
+import { $event } from "@/remi/wrappers";
 import { capabilities } from "@/remi";
+import { realEstateQueryStore } from "@rems/state/stores";
 import { NextRequest } from "next/server";
 import {
   IntentCode,
-  ServerRealEstateQuery,
   CapabilityCode,
   AssistantPayload,
-  Patch,
   TimelineEvent,
   Analysis,
   NlLocationSource
 } from "@rems/types";
-import { AssistantPayloadSchema, RealEstateQuerySchema } from "@rems/schemas";
+import { AssistantPayloadSchema } from "@rems/schemas";
 import memoize from "memoizee";
 import resolveLocationSource from "../../utils/resolve-location-source";
 import { pickBy } from "remeda";
-import { z } from "zod";
-import uuid from "short-uuid";
 
 type IntentResolution = TimelineEvent | null;
 
 const isTimelineEventResolution = (r: IntentResolution): r is TimelineEvent =>
   r !== null;
 
-const { SpaceRequirements, BudgetAndAvailability, MapState } =
-  RealEstateQuerySchema;
-
-type Arrays = z.infer<typeof RealEstateQuerySchema.Arrays>;
-type ArrayKey = keyof Arrays;
-
 const defined = (obj: Record<string, any>) =>
   pickBy(obj, (v) => typeof v !== "undefined");
 
 const encoder = new TextEncoder();
-
-const scalarPatch = (
-  group: Patch["group"],
-  query: ServerRealEstateQuery,
-  data: Partial<ServerRealEstateQuery>
-): Patch => ({
-  type: "SCALAR",
-  group,
-  data,
-  diff: utils.diff.scalar(query, data)
-});
-
-const arrayPatch = (
-  group: Patch["group"],
-  query: ServerRealEstateQuery,
-  key: ArrayKey,
-  value: Arrays[ArrayKey]
-): Patch => ({
-  type: "ARRAY",
-  group,
-  key,
-  value,
-  diff: utils.diff.array(query, key, value)
-});
-
-const event = <T extends TimelineEvent["role"]>(
-  role: T,
-  event: Extract<TimelineEvent, { role: T }>["event"]
-) => ({
-  id: uuid.generate(),
-  date: Date.now(),
-  role,
-  event
-});
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
@@ -121,7 +79,7 @@ const stream: Stream = (args) => async (c) => {
     }
 
     const analysis: Analysis = { capability, intents: secondary };
-    send(event("SYSTEM", { type: "ANALYSIS_PERFORMED", analysis }));
+    send($event("SYSTEM", { type: "ANALYSIS_PERFORMED", analysis }));
 
     return analysis;
   });
@@ -227,7 +185,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_PAGE",
-      () => refine.page({ timeline, current: query["page"] }),
+      () => refine.page({ timeline, current: query.pageAndSort.page }),
       async (page) =>
         page
           ? event("ASSISTANT", {
@@ -283,19 +241,6 @@ const stream: Stream = (args) => async (c) => {
         event("ASSISTANT", {
           type: "PATCH",
           patch: scalarPatch("BUDGET_AND_AVAILABILITY", query, defined(props))
-        })
-    ),
-
-    /*
-     * Map State
-     */
-    resolve(
-      "REFINE_MAP_STATE",
-      () => refine.mapState({ timeline, current: MapState.parse(query) }),
-      async (props) =>
-        event("ASSISTANT", {
-          type: "PATCH",
-          patch: scalarPatch("MAP_STATE", query, defined(props))
         })
     ),
 

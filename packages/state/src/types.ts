@@ -2,6 +2,10 @@ import { ZodRawShape, ZodType, z } from "zod";
 
 export type Z<T extends ZodType<any>> = z.infer<T>;
 
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
 const IdentifiableSchema = z.object({
   id: z.union([z.number(), z.string()]),
   name: z.string()
@@ -17,19 +21,19 @@ export const identifiable = <T extends ZodRawShape>(
 
 export const AddScalarDiffSchema = z.object({
   type: z.literal("ADD_SCALAR"),
-  k: z.string(),
+  prop: z.string(),
   value: z.any()
 });
 
 export const RemoveScalarDiffSchema = z.object({
   type: z.literal("REMOVE_SCALAR"),
-  k: z.string(),
+  prop: z.string(),
   value: z.any()
 });
 
 export const ChangeScalarDiffSchema = z.object({
   type: z.literal("CHANGE_SCALAR"),
-  k: z.string(),
+  prop: z.string(),
   value: z.tuple([z.any(), z.any()])
 });
 
@@ -76,7 +80,7 @@ export const ScalarPatchSchema = z.object({
 export const ArrayPatchSchema = z.object({
   type: z.literal("ARRAY"),
   group: z.string(),
-  k: z.string(),
+  prop: z.string(),
   value: z.array(IdentifiableSchema.shape["id"]),
   diff: z.array(ArrayDiffSchema)
 });
@@ -87,3 +91,17 @@ export const PatchSchema = z.discriminatedUnion("type", [
 ]);
 
 export type Patch = Z<typeof PatchSchema>;
+
+export type Group<
+  Id extends string = string,
+  S extends ZodType<any> = ZodType<any>
+> = {
+  id: Id;
+  schema: S;
+  type: "ARRAY" | "SCALAR";
+};
+
+export type ExtractModuleSchema<M extends Group<any, any>, Id> = Extract<
+  M,
+  { id: Id }
+>["schema"];

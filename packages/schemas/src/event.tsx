@@ -1,5 +1,5 @@
 import { z } from "zod";
-// import { PatchSchema } from "./patch";
+import { PatchSchema } from "@rems/state";
 import { AnalysisSchema } from "./analysis";
 import { IntentCodeSchema } from "./intent";
 import { LocationSchema } from "./location";
@@ -9,10 +9,10 @@ export const LanguageBasedInteractionEventSchema = z.object({
   message: z.string()
 });
 
-// export const PatchInteractionEventSchema = z.object({
-//   type: z.literal("PATCH"),
-//   patch: PatchSchema
-// });
+export const PatchInteractionEventSchema = z.object({
+  type: z.literal("PATCH"),
+  patch: PatchSchema
+});
 
 export const AnalysisPerformedEventSchema = z.object({
   type: z.literal("ANALYSIS_PERFORMED"),

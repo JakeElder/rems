@@ -13,15 +13,9 @@ const RentBudgetAndAvailabilityRequirementsSchema = z.object({
   maxPrice: z.number().max(MAX_RENTAL_PRICE).nullable()
 });
 
-const BudgetAndAvailabilityRequirementsSchema = z
-  .discriminatedUnion("type", [
-    SaleBudgetAndAvailabilityRequirementsSchema,
-    RentBudgetAndAvailabilityRequirementsSchema
-  ])
-  .default({
-    type: "SALE",
-    minPrice: 0,
-    maxPrice: null
-  });
+const BudgetAndAvailabilityRequirementsSchema = z.discriminatedUnion("type", [
+  SaleBudgetAndAvailabilityRequirementsSchema,
+  RentBudgetAndAvailabilityRequirementsSchema
+]);
 
 export default BudgetAndAvailabilityRequirementsSchema;

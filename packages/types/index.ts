@@ -11,13 +11,6 @@ import {
   IntentSchema,
   CapabilityCodeSchema,
   IntentCodeSchema,
-  AddScalarDiffSchema,
-  RemoveScalarDiffSchema,
-  ChangeScalarDiffSchema,
-  AddArrayDiffSchema,
-  RemoveArrayDiffSchema,
-  ScalarDiffSchema,
-  ArrayDiffSchema,
   TimelineSchema,
   AssistantStateSchema,
   AssistantPayloadSchema,
@@ -28,7 +21,7 @@ import {
   UserEventSchema,
   EventSchema,
   LanguageBasedInteractionEventSchema,
-  // PatchInteractionEventSchema,
+  PatchInteractionEventSchema,
   AnalysisPerformedEventSchema,
   YieldEventSchema,
   ErrorEventSchema,
@@ -257,19 +250,6 @@ export type OpenAIModel =
   | "text-similarity-davinci-001"
   | "whisper-1";
 
-export type AddScalarDiff = Z<typeof AddScalarDiffSchema>;
-export type RemoveScalarDiff = Z<typeof RemoveScalarDiffSchema>;
-export type ChangeScalarDiff = Z<typeof ChangeScalarDiffSchema>;
-export type ScalarDiff = Z<typeof ScalarDiffSchema>;
-
-export type AddArrayDiff = Z<typeof AddArrayDiffSchema>;
-export type RemoveArrayDiff = Z<typeof RemoveArrayDiffSchema>;
-export type ArrayDiff = Z<typeof ArrayDiffSchema>;
-
-// export type ArrayPatch = Z<typeof ArrayPatchSchema>;
-// export type ScalarPatch = Z<typeof ScalarPatchSchema>;
-// export type Patch = Z<typeof PatchSchema>;
-
 export type Timeline = Z<typeof TimelineSchema>;
 export type UserTimelineEvent = Z<typeof UserTimelineEventSchema>;
 export type AssistantTimelineEvent = Z<typeof AssistantTimelineEventSchema>;
@@ -283,7 +263,7 @@ export type Event = Z<typeof EventSchema>;
 export type LanguageBasedInteractionEvent = Z<
   typeof LanguageBasedInteractionEventSchema
 >;
-// export type PatchInteractionEvent = Z<typeof PatchInteractionEventSchema>;
+export type PatchInteractionEvent = Z<typeof PatchInteractionEventSchema>;
 export type AnalysisPerformedEvent = Z<typeof AnalysisPerformedEventSchema>;
 export type YieldEvent = Z<typeof YieldEventSchema>;
 export type ErrorEvent = Z<typeof ErrorEventSchema>;

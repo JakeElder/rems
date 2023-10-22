@@ -28,26 +28,26 @@ export const scalar = <S extends ZodType<any>>(
     !isAddition(k) && !isRemoval(k) && state[k] !== patch[k];
 
   const additions = keys.filter(isAddition).map(
-    (k: string): AddScalarDiff => ({
+    (prop: string): AddScalarDiff => ({
       type: "ADD_SCALAR",
-      k,
-      value: patch[k]
+      prop,
+      value: patch[prop]
     })
   );
 
   const removals = keys.filter(isRemoval).map(
-    (k: string): RemoveScalarDiff => ({
+    (prop: string): RemoveScalarDiff => ({
       type: "REMOVE_SCALAR",
-      k,
-      value: state[k]
+      prop,
+      value: state[prop]
     })
   );
 
   const changes = keys.filter(isChange).map(
-    (k: string): ChangeScalarDiff => ({
+    (prop: string): ChangeScalarDiff => ({
       type: "CHANGE_SCALAR",
-      k,
-      value: [state[k], patch[k]]
+      prop,
+      value: [state[prop], patch[prop]]
     })
   );
 

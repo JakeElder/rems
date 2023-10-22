@@ -3,7 +3,18 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import { txt } from "@/remi/utils";
 import { ZodType, ZodTypeDef } from "zod";
 import { ChatCompletionRequest } from "../types";
-import { OpenAIModel } from "@rems/types";
+import { OpenAIModel, TimelineEvent } from "@rems/types";
+import uuid from "short-uuid";
+
+export const $event = <T extends TimelineEvent["role"]>(
+  role: T,
+  event: Extract<TimelineEvent, { role: T }>["event"]
+) => ({
+  id: uuid.generate(),
+  date: Date.now(),
+  role,
+  event
+});
 
 export const $model = (
   type: OpenAIModel | "DEFAULT" = "DEFAULT"

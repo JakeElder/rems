@@ -4822,6 +4822,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rems/schemas@workspace:packages/schemas"
   dependencies:
+    "@rems/state": "*"
     "@rems/tsconfig": "*"
     "@rems/types": "*"
     "@types/react": 18.2.31
@@ -4842,12 +4843,15 @@ __metadata:
   dependencies:
     "@babel/core": ^7.23.2
     "@babel/preset-env": ^7.23.2
+    "@babel/preset-react": ^7.22.15
     "@babel/preset-typescript": ^7.23.2
     "@rems/schemas": "*"
     "@rems/tsconfig": "*"
     "@rems/types": "*"
+    "@types/deep-extend": ^0.6.1
     "@types/jest": ^29.5.6
     babel-jest: ^29.7.0
+    deep-extend: ^0.6.0
     jest: ^29.7.0
     qs: ^6.11.2
     remeda: ^1.27.1
@@ -7802,6 +7806,13 @@ __metadata:
   dependencies:
     "@types/ms": "*"
   checksum: 938f79c5b610f851da9c67ecd8641a09b33ce9cb38fe4c9f4d20ee743d6bccb5d8e9a833a4cd23e0684a316622af67a0634fa706baea5a01f5219961d1976314
+  languageName: node
+  linkType: hard
+
+"@types/deep-extend@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "@types/deep-extend@npm:0.6.1"
+  checksum: 39b38552d071727df87d512583753738997ea364b3ea285093c30cc805687ff1ab4bd4f70e74f3d10c70b7e8ecbdf24ea51f0b21162ad5b071f2c6e04448a1c0
   languageName: node
   linkType: hard
 

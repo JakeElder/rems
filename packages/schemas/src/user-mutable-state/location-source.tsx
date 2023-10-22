@@ -14,16 +14,9 @@ export const NlLocationSourceSchema = z.object({
   radius: z.number().nullable()
 });
 
-const LocationSourceSchema = z
-  .discriminatedUnion("type", [
-    NlLocationSourceSchema,
-    LatLngLocationSourceSchema
-  ])
-  .default({
-    type: "NL",
-    description: "Bangkok",
-    geospatialOperator: "in",
-    radius: null
-  });
+const LocationSourceSchema = z.discriminatedUnion("type", [
+  NlLocationSourceSchema,
+  LatLngLocationSourceSchema
+]);
 
 export default LocationSourceSchema;

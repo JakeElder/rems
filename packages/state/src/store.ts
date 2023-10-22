@@ -1,46 +1,40 @@
 import { ZodType } from "zod";
-import { Z, Patch } from "./types";
+import { Z, Patch, Group, ExtractModuleSchema, DeepPartial } from "./types";
 import * as diff from "./diff";
+import extend from "deep-extend";
 
-export type Group<Id extends string, S extends ZodType<any>> = {
-  id: Id;
-  k: string;
-  schema: S;
-};
-
-type ModuleSchema<M extends Group<any, any>, Id> = Extract<
-  M,
-  { id: Id }
->["schema"];
-
-const store = <S extends ZodType<any>, G extends Group<any, any>>({
+const store = <S extends ZodType<any>, G extends Group>({
   schema,
-  groups
+  groups,
+  defaults,
+  initial = {}
 }: {
   schema: S;
   groups: G[];
+  defaults: Z<S>;
+  initial: DeepPartial<Z<S>>;
 }): {
-  state: Z<S>;
+  initial: Z<S>;
   update: <T extends G["id"]>(
     id: T,
-    data: Partial<Z<ModuleSchema<G, T>>>
+    data: Partial<Z<ExtractModuleSchema<G, T>>>
   ) => { next: Z<S>; patch: Patch };
 } => {
-  let state = schema.parse({});
+  let state = schema.parse(extend({}, defaults, initial));
+
   return {
     update: (id, data) => {
       const group = groups.find((a) => a.id === id)!;
-      const prev = state[group.k];
-      const defaults = schema.parse({});
+      const prev = state[group.id];
 
-      if (Array.isArray(defaults[group.k])) {
-        state = schema.parse({ ...state, [group.k]: data });
+      if (group.type === "ARRAY") {
+        state = schema.parse({ ...state, [group.id]: data });
         return {
           next: state,
           patch: {
             type: "ARRAY",
             group: group.id,
-            k: group.k,
+            prop: group.id,
             value: data as any,
             diff: diff.array(prev, data as any)
           }
@@ -49,10 +43,10 @@ const store = <S extends ZodType<any>, G extends Group<any, any>>({
 
       state = schema.parse({
         ...state,
-        [group.k]: {
-          ...state[group.k],
+        [group.id]: extend({}, defaults[group.id], {
+          ...state[group.id],
           ...data
-        }
+        })
       });
 
       return {
@@ -61,11 +55,11 @@ const store = <S extends ZodType<any>, G extends Group<any, any>>({
           type: "SCALAR",
           group: group.id,
           data: data as any,
-          diff: diff.scalar(defaults[group.k], prev, data)
+          diff: diff.scalar(defaults[group.id], prev, data)
         }
       };
     },
-    state
+    initial: state
   };
 };
 

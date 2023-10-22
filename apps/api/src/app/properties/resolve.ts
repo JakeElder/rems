@@ -1,10 +1,9 @@
 import {
   GetPropertiesResult,
   Image,
-  ServerRealEstateQuery as Query,
+  RealEstateQuery as Query,
   Location,
-  LocationSource,
-  Bounds
+  Filter
 } from "@rems/types";
 import {
   File,
@@ -13,108 +12,116 @@ import {
   PropertyType,
   sequelize
 } from "@/models";
-import { Op, Sequelize } from "sequelize";
+import { Op } from "sequelize";
 import { ImageSchema, PropertySchema } from "@rems/schemas";
 import slugify from "slugify";
 import resolveLocationSource from "../../utils/resolve-location-source";
 
 const PROPERTIES_PER_PAGE = 14;
 
-const propertyType = (q: Query) => {
-  return q["property-types"].length
+const propertyType = (query: Query) => {
+  return query.propertyTypes.length
     ? [
         {
           model: PropertyType,
           as: "propertyTypes",
-          where: { slug: { [Op.in]: q["property-types"] } }
+          where: {
+            id: { [Op.in]: query.propertyTypes.map((f) => f.id) }
+          }
         }
       ]
     : [];
 };
 
-const purchasePrice = (q: Query) => {
-  return q["availability"] === "sale"
+const purchasePrice = (query: Query) => {
+  return query.budgetAndAvailability.type === "SALE"
     ? [
         {
           purchasePrice: {
-            [Op.gte]: q["min-price"],
-            ...(q["max-price"] ? { [Op.lte]: q["max-price"] } : {})
+            [Op.gte]: query.budgetAndAvailability.minPrice,
+            ...(query.budgetAndAvailability.maxPrice
+              ? { [Op.lte]: query.budgetAndAvailability.maxPrice }
+              : {})
           }
         }
       ]
     : [];
 };
 
-const rentalPrice = (q: Query) => {
-  return q["availability"] === "rent"
+const rentalPrice = (query: Query) => {
+  const { type, minPrice, maxPrice } = query.budgetAndAvailability;
+  return type === "RENT"
     ? [
         {
           rentalPrice: {
-            [Op.gte]: q["min-price"],
-            ...(q["max-price"] ? { [Op.lte]: q["max-price"] } : {})
+            [Op.gte]: minPrice,
+            ...(maxPrice ? { [Op.lte]: maxPrice } : {})
           }
         }
       ]
     : [];
 };
 
-const bedrooms = (q: Query) => {
+const bedrooms = (query: Query) => {
+  const { minBedrooms, maxBedrooms } = query.space;
   return [
     {
       bedrooms: {
-        [Op.gte]: q["min-bedrooms"],
-        ...(q["max-bedrooms"] ? { [Op.lte]: q["max-bedrooms"] } : {})
+        [Op.gte]: minBedrooms,
+        ...(maxBedrooms ? { [Op.lte]: maxBedrooms } : {})
       }
     }
   ];
 };
 
-const bathrooms = (q: Query) => {
-  return [{ bathrooms: { [Op.gte]: q["min-bathrooms"] } }];
+const bathrooms = (query: Query) => {
+  const { minBathrooms } = query.space;
+  return [{ bathrooms: { [Op.gte]: minBathrooms } }];
 };
 
-const livingArea = (q: Query) => {
+const livingArea = (query: Query) => {
+  const { minLivingArea, maxLivingArea } = query.space;
   return [
     {
       livingArea: {
-        [Op.gte]: q["min-living-area"],
-        ...(q["max-living-area"] ? { [Op.lte]: q["max-living-area"] } : {})
+        [Op.gte]: minLivingArea,
+        ...(maxLivingArea ? { [Op.lte]: maxLivingArea } : {})
       }
     }
   ];
 };
 
-const lotSize = (q: Query) => {
-  return q["min-lot-size"] || q["max-lot-size"]
+const lotSize = (query: Query) => {
+  const { minLotSize, maxLotSize } = query.space;
+  return minLotSize || maxLotSize
     ? [
         {
           lotSize: {
-            [Op.gte]: q["min-lot-size"],
-            ...(q["max-lot-size"] ? { [Op.lte]: q["max-lot-size"] } : {})
+            [Op.gte]: minLotSize,
+            ...(maxLotSize ? { [Op.lte]: maxLotSize } : {})
           }
         }
       ]
     : [];
 };
 
-const availableToRent = (q: Query) => {
-  return q["availability"] === "rent"
-    ? [{ availableToRent: { [Op.eq]: true } }]
-    : [];
+const availableToRent = (query: Query) => {
+  const { type } = query.budgetAndAvailability;
+  return type === "RENT" ? [{ availableToRent: { [Op.eq]: true } }] : [];
 };
 
-const availableToPurchase = (q: Query) => {
-  return q["availability"] === "sale"
-    ? [{ availableToPurchase: { [Op.eq]: true } }]
-    : [];
+const availableToPurchase = (query: Query) => {
+  const { type } = query.budgetAndAvailability;
+  return type === "SALE" ? [{ availableToPurchase: { [Op.eq]: true } }] : [];
 };
 
-const filterSubquery = (slugs: string[], relation: string) => {
-  if (slugs.length === 0) {
+const filterSubquery = (filters: Filter[], relation: string) => {
+  if (filters.length === 0) {
     return [];
   }
 
-  const escapedIn = slugs.map((s) => sequelize.escape(s)).join(",");
+  const ids = filters.map((f) => f.id).join(",");
+
   return [
     {
       id: {
@@ -122,50 +129,48 @@ const filterSubquery = (slugs: string[], relation: string) => {
           SELECT "property_id"
           FROM "properties_${relation}s_links"
           INNER JOIN "${relation}s" ON "properties_${relation}s_links"."${relation}_id" = "${relation}s"."id"
-          WHERE "${relation}s"."slug" IN (${escapedIn})
+          WHERE "${relation}s"."id" IN (${ids})
           GROUP BY "properties_${relation}s_links"."property_id"
-          HAVING COUNT(DISTINCT "${relation}s"."slug") = ${slugs.length}
+          HAVING COUNT(DISTINCT "${relation}s"."slug") = ${filters.length}
         )`)
       }
     }
   ];
 };
 
-const viewTypes = (q: Query) => filterSubquery(q["view-types"], "view_type");
+const viewTypes = (query: Query) =>
+  filterSubquery(query.viewTypes, "view_type");
 
-const indoorFeatures = (q: Query) =>
-  filterSubquery(q["indoor-features"], "indoor_feature");
+const indoorFeatures = (query: Query) =>
+  filterSubquery(query.indoorFeatures, "indoor_feature");
 
-const outdoorFeatures = (q: Query) =>
-  filterSubquery(q["outdoor-features"], "outdoor_feature");
+const outdoorFeatures = (query: Query) =>
+  filterSubquery(query.outdoorFeatures, "outdoor_feature");
 
-const lotFeatures = (q: Query) =>
-  filterSubquery(q["lot-features"], "lot_feature");
+const lotFeatures = (query: Query) =>
+  filterSubquery(query.lotFeatures, "lot_feature");
 
 const order = (query: Query) => {
-  const orders: Record<Query["sort"], any> = {
-    "newest-first": [["createdAt", "DESC"]],
-    "lowest-price-first": [
-      [
-        query["availability"] === "sale" ? "purchasePrice" : "rentalPrice",
-        "ASC"
-      ]
+  const { type } = query.budgetAndAvailability;
+
+  const orders: Record<Query["pageAndSort"]["sort"], any> = {
+    NEWEST_FIRST: [["createdAt", "DESC"]],
+    LOWEST_PRICE_FIRST: [
+      [type === "SALE" ? "purchasePrice" : "rentalPrice", "ASC"]
     ],
-    "highest-price-first": [
-      [
-        query["availability"] === "sale" ? "purchasePrice" : "rentalPrice",
-        "DESC"
-      ]
+    HIGHEST_PRICE_FIRST: [
+      [type === "SALE" ? "purchasePrice" : "rentalPrice", "DESC"]
     ],
-    "smallest-living-area-first": [["livingArea", "ASC"]],
-    "largest-living-area-first": [["livingArea", "DESC"]]
+    SMALLEST_LIVING_AREA_FIRST: [["livingArea", "ASC"]],
+    LARGEST_LIVING_AREA_FIRST: [["livingArea", "DESC"]]
   };
-  return orders[query["sort"]];
+
+  return orders[query.pageAndSort.sort];
 };
 
 const radius = (query: Query) => {
   // if (query["radius-enabled"] === "false") {
-    return [];
+  return [];
   // }
 
   // return [
@@ -177,34 +182,33 @@ const radius = (query: Query) => {
   // ];
 };
 
-const bounds = (query: Query, bounds: Bounds) => {
-  if (query["radius-enabled"] === "true") {
-    return [];
-  }
+const bounds = async (query: Query) => {
+  const location = await queryToLocation(query);
+  const { viewport } = location.resolution;
 
   return [
     {
       "location.lat": {
-        [Op.gte]: bounds.sw.lat,
-        [Op.lte]: bounds.ne.lat
+        [Op.gte]: viewport.sw.lat,
+        [Op.lte]: viewport.ne.lat
       },
       "location.lng": {
-        [Op.gte]: bounds.sw.lng,
-        [Op.lte]: bounds.ne.lng
+        [Op.gte]: viewport.sw.lng,
+        [Op.lte]: viewport.ne.lng
       }
     }
   ];
 };
 
 const limit = (query: Query) => {
-  if (query["limit"] === "true") {
+  if (query.limit) {
     return PROPERTIES_PER_PAGE;
   }
 };
 
 const offset = (query: Query) => {
-  if (query["limit"] === "true") {
-    return (query["page"] - 1) * PROPERTIES_PER_PAGE;
+  if (query.limit) {
+    return (query.pageAndSort.page - 1) * PROPERTIES_PER_PAGE;
   }
 };
 
@@ -224,31 +228,15 @@ const validLngLat = () => {
   ];
 };
 
-const queryToLocationSource = (query: Query): LocationSource => {
-  const radius = query["radius-enabled"] === "true" ? query["radius"] : null;
-
-  if (query["location-source-type"] === "nl") {
-    return {
-      type: "NL",
-      description: query["location-source"],
-      geospatialOperator: query["location-geospatial-operator"] || "in",
-      radius
-    };
-  }
-
-  throw new Error("LL not implemented");
-};
-
 const queryToLocation = async (query: Query): Promise<Location> => {
-  const source = queryToLocationSource(query);
-  const res = await resolveLocationSource(source);
+  const res = await resolveLocationSource(query.locationSource);
 
   if (!res.ok) {
     throw new Error();
   }
 
   return {
-    source,
+    source: query.locationSource,
     resolution: res.resolution
   };
 };
@@ -275,7 +263,7 @@ export default async function resolve(
         ...outdoorFeatures(query),
         ...lotFeatures(query),
         ...radius(query),
-        ...bounds(query, location.resolution.viewport),
+        ...(await bounds(query)),
         ...validLngLat()
       ]
     },

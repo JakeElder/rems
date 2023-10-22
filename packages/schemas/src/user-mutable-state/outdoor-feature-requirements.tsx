@@ -1,6 +1,6 @@
 import z from "zod";
 import { FilterSchema } from "../filter";
 
-const OutdoorFeatureRequirementsSchema = z.array(FilterSchema).default([]);
+const OutdoorFeatureRequirementsSchema = z.array(FilterSchema);
 
 export default OutdoorFeatureRequirementsSchema;

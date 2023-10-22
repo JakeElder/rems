@@ -22,7 +22,7 @@ import { constantCase, paramCase } from "change-case-all";
 
 type Schema = ZodType<any>;
 
-type ActiveCounts = Record<keyof RealEstateQuery, number>;
+type ActiveCounts = Record<keyof Omit<RealEstateQuery, "limit">, number>;
 
 const removeDefaults = <T extends Schema>(
   schema: T,
@@ -58,7 +58,7 @@ export const countActiveProps = (query: RealEstateQuery): number => {
     space: countScalars(query.space, SpaceRequirementsSchema)
   };
 
-  const keys = Object.keys(query) as (keyof RealEstateQuery)[];
+  const keys = Object.keys(query) as (keyof ActiveCounts)[];
   return keys.reduce((a, v) => a + counts[v], 0);
 };
 
@@ -184,7 +184,11 @@ export const fromUrl = (
       filters.outdoorFeatures
     ),
     viewTypes: filter.toSource(url["view-types"], filters.viewTypes),
-    propertyTypes: filter.toSource(url["property-types"], filters.propertyTypes)
+    propertyTypes: filter.toSource(
+      url["property-types"],
+      filters.propertyTypes
+    ),
+    limit: false
   };
 };
 
@@ -209,7 +213,8 @@ export const toUrl = (source: RealEstateQuery): UrlRealEstateQuery => {
     "max-lot-size": source.space.maxLotSize,
     radius: source.locationSource.radius || 10000,
     "radius-enabled": "true",
-    ...adapt.toUrl.locationSource(source)
+    ...adapt.toUrl.locationSource(source),
+    limit: source.limit ? "true" : "false"
   };
 };
 

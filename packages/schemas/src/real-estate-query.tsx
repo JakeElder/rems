@@ -27,7 +27,7 @@ export const RealEstateQuerySchema = z.object({
   viewTypes: ViewTypeRequirementsSchema
 });
 
-const Array = z.array(FilterSchema.shape["slug"]).default([]).catch([]);
+const Array = z.array(FilterSchema.shape["slug"]);
 
 export const UrlRealEstateQuerySchema = z.object({
   // Arrays
@@ -73,4 +73,8 @@ export const UrlRealEstateQuerySchema = z.object({
     .default(10_000)
     .catch(10_000),
   "radius-enabled": z.enum(["true", "false"]).default("false").catch("false")
+});
+
+export const ApiUrlRealEstateQuerySchema = UrlRealEstateQuerySchema.extend({
+  target: z.enum(["listings", "map"])
 });
