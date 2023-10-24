@@ -3,7 +3,8 @@ import { LatLngSchema } from "../lat-lng";
 
 export const LatLngLocationSourceSchema = z.object({
   type: z.literal("LL"),
-  point: LatLngSchema,
+  lat: LatLngSchema.shape["lat"],
+  lng: LatLngSchema.shape["lng"],
   radius: z.number().nullable()
 });
 

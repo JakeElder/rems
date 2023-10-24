@@ -21,7 +21,7 @@ import {
   UserEventSchema,
   EventSchema,
   LanguageBasedInteractionEventSchema,
-  PatchInteractionEventSchema,
+  StateMutationInteractionEventSchema,
   AnalysisPerformedEventSchema,
   YieldEventSchema,
   ErrorEventSchema,
@@ -34,9 +34,22 @@ import {
   BoundsSchema,
   LatLngSchema,
   UrlRealEstateQuerySchema,
-  PaginationSchema
+  PaginationSchema,
+  AppStateSchema,
+  AppStateSlicesSchema,
+  StateMutationSchema
 } from "@rems/schemas";
-import { LocationSourceSchema } from "@rems/schemas/user-mutable-state";
+import {
+  BudgetAndAvailabilityRequirementsSchema,
+  IndoorFeatureRequirementsSchema,
+  LocationSourceSchema,
+  LotFeatureRequirementsSchema,
+  OutdoorFeatureRequirementsSchema,
+  PropertyTypeRequirementsSchema,
+  RealEstateIndexPageAndSortSchema,
+  SpaceRequirementsSchema,
+  ViewTypeRequirementsSchema
+} from "@rems/schemas/user-mutable-state";
 import { ZodType, z } from "zod";
 
 export type Z<T extends ZodType<any, any, any>> = z.infer<T>;
@@ -117,6 +130,24 @@ export type ContactFormData = Z<typeof ContactFormSchema>;
 
 export type RealEstateQuery = Z<typeof RealEstateQuerySchema>;
 export type UrlRealEstateQuery = Z<typeof UrlRealEstateQuerySchema>;
+
+export type BudgetAndAvailabilityRequirements = Z<
+  typeof BudgetAndAvailabilityRequirementsSchema
+>;
+export type LocationSource = Z<typeof LocationSourceSchema>;
+export type RealEstateIndexPageAndSort = Z<
+  typeof RealEstateIndexPageAndSortSchema
+>;
+export type SpaceRequirements = Z<typeof SpaceRequirementsSchema>;
+export type IndoorFeatureRequirements = Z<
+  typeof IndoorFeatureRequirementsSchema
+>;
+export type LotFeatureRequirements = Z<typeof LotFeatureRequirementsSchema>;
+export type OutdoorFeatureRequirements = Z<
+  typeof OutdoorFeatureRequirementsSchema
+>;
+export type PropertyTypeRequirements = Z<typeof PropertyTypeRequirementsSchema>;
+export type ViewTypeRequirements = Z<typeof ViewTypeRequirementsSchema>;
 
 export type QuickFilterQueryKey = keyof Pick<
   RealEstateQuery,
@@ -263,7 +294,9 @@ export type Event = Z<typeof EventSchema>;
 export type LanguageBasedInteractionEvent = Z<
   typeof LanguageBasedInteractionEventSchema
 >;
-export type PatchInteractionEvent = Z<typeof PatchInteractionEventSchema>;
+export type StateMutationInteractionEvent = Z<
+  typeof StateMutationInteractionEventSchema
+>;
 export type AnalysisPerformedEvent = Z<typeof AnalysisPerformedEventSchema>;
 export type YieldEvent = Z<typeof YieldEventSchema>;
 export type ErrorEvent = Z<typeof ErrorEventSchema>;
@@ -271,6 +304,10 @@ export type IntentResolutionErrorEvent = Z<
   typeof IntentResolutionErrorEventSchema
 >;
 export type TimelineEvent = Z<typeof TimelineEventSchema>;
+export type StateMutation = Z<typeof StateMutationSchema>;
+
+export type AppState = Z<typeof AppStateSchema>;
+export type AppStateSlices = Z<typeof AppStateSlicesSchema>;
 
 export type Analysis = Z<typeof AnalysisSchema>;
 
@@ -287,7 +324,6 @@ export type MakeNonNullable<T, K extends keyof T> = Omit<T, K> & {
   [P in K]: NonNullable<T[P]>;
 };
 
-export type LocationSource = Z<typeof LocationSourceSchema>;
 export type LatLngLocationSource = Extract<LocationSource, { type: "LL" }>;
 export type NlLocationSource = Extract<LocationSource, { type: "NL" }>;
 export type LocationResolution = Z<typeof LocationResolutionSchema>;

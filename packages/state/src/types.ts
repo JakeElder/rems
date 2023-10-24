@@ -48,23 +48,23 @@ export type RemoveScalarDiff = Z<typeof RemoveScalarDiffSchema>;
 export type ChangeScalarDiff = Z<typeof ChangeScalarDiffSchema>;
 export type ScalarDiff = Z<typeof ScalarDiffSchema>;
 
-export const AddArrayDiffSchema = z.object({
-  type: z.literal("ADD_ARRAY"),
+export const AddFromArrayDiffSchema = z.object({
+  type: z.literal("ADD_FROM_ARRAY"),
   value: IdentifiableSchema
 });
 
-export const RemoveArrayDiffSchema = z.object({
-  type: z.literal("REMOVE_ARRAY"),
+export const RemoveFromArrayDiffSchema = z.object({
+  type: z.literal("REMOVE_FROM_ARRAY"),
   value: IdentifiableSchema
 });
 
 export const ArrayDiffSchema = z.discriminatedUnion("type", [
-  AddArrayDiffSchema,
-  RemoveArrayDiffSchema
+  AddFromArrayDiffSchema,
+  RemoveFromArrayDiffSchema
 ]);
 
-export type AddArrayDiff = Z<typeof AddArrayDiffSchema>;
-export type RemoveArrayDiff = Z<typeof RemoveArrayDiffSchema>;
+export type AddArrayDiff = Z<typeof AddFromArrayDiffSchema>;
+export type RemoveArrayDiff = Z<typeof RemoveFromArrayDiffSchema>;
 export type ArrayDiff = Z<typeof ArrayDiffSchema>;
 
 export const ScalarPatchSchema = z.object({
@@ -81,7 +81,7 @@ export const ArrayPatchSchema = z.object({
   type: z.literal("ARRAY"),
   group: z.string(),
   prop: z.string(),
-  value: z.array(IdentifiableSchema.shape["id"]),
+  value: z.array(IdentifiableSchema),
   diff: z.array(ArrayDiffSchema)
 });
 
@@ -91,6 +91,8 @@ export const PatchSchema = z.discriminatedUnion("type", [
 ]);
 
 export type Patch = Z<typeof PatchSchema>;
+export type ScalarPatch = Z<typeof ScalarPatchSchema>;
+export type ArrayPatch = Z<typeof ArrayPatchSchema>;
 
 export type Group<
   Id extends string = string,

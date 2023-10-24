@@ -6,23 +6,23 @@ import {
 } from "./event";
 
 export const UserTimelineEventSchema = z.object({
+  role: z.literal("USER"),
   id: z.string(),
   date: z.number(),
-  role: z.literal("USER"),
   event: UserEventSchema
 });
 
 export const AssistantTimelineEventSchema = z.object({
+  role: z.literal("ASSISTANT"),
   id: z.string(),
   date: z.number(),
-  role: z.literal("ASSISTANT"),
   event: AssistantEventSchema
 });
 
 export const SystemTimelineEventSchema = z.object({
+  role: z.literal("SYSTEM"),
   id: z.string(),
   date: z.number(),
-  role: z.literal("SYSTEM"),
   event: SystemEventSchema
 });
 

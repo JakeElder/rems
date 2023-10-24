@@ -1,23 +1,113 @@
-import { realEstateQueryStore } from "../src/stores";
+import { DeepPartial } from "@reduxjs/toolkit";
+import * as app from "../src/slices/app";
+import extend from "deep-extend";
+import { AppState } from "@rems/types";
 
-test("req", () => {
-  const { initial, update } = realEstateQueryStore({
-    lotFeatures: [{ id: 1, name: "1", slug: "1" }],
-    pageAndSort: { page: 3 },
-    locationSource: { description: "Not Bangkok" }
-  });
+test("budget", () => {
+  const initial = extend<{}, AppState, DeepPartial<AppState>>(
+    {},
+    app.defaults,
+    {
+      slices: {
+        realEstateQuery: {
+          budgetAndAvailability: { maxPrice: 5 }
+        }
+      }
+    }
+  );
 
-  // const one = update("lotFeatures", []);
+  const { store, actions } = app.slice(initial);
 
-  // console.dir(one, { depth: null, colors: true });
+  store.subscribe(() =>
+    console.dir(store.getState(), { depth: null, colors: true })
+  );
 
-  // const two = update("propertyTypes", [{ id: 2, name: "2", slug: "2" }]);
+  store.dispatch(
+    actions.setBudgetAndAvailability({
+      role: "ASSISTANT",
+      data: { type: "RENT", maxPrice: 10 }
+    })
+  );
+});
 
-  // console.dir(two, { depth: null, colors: true });
+test("locationSource", () => {
+  const initial = extend<{}, AppState>({}, app.defaults);
 
-  const three = update("locationSource", {
-    description: "Somewhere else"
-  });
+  const { store, actions } = app.slice(initial);
 
-  console.dir(three, { depth: null, colors: true });
+  store.subscribe(() =>
+    console.dir(store.getState(), { depth: null, colors: true })
+  );
+
+  store.dispatch(
+    actions.setLocationSource({
+      role: "ASSISTANT",
+      data: {
+        type: "NL",
+        radius: null,
+        description: "Chiang Mai",
+        geospatialOperator: "near"
+      }
+    })
+  );
+});
+
+test("pageAndSort", () => {
+  const initial = extend<{}, AppState>({}, app.defaults);
+  const { store, actions } = app.slice(initial);
+
+  store.subscribe(() =>
+    console.dir(store.getState(), { depth: null, colors: true })
+  );
+
+  store.dispatch(
+    actions.setPageAndSort({
+      role: "ASSISTANT",
+      data: { page: 4 }
+    })
+  );
+});
+
+test("space", () => {
+  const initial = extend<{}, AppState>({}, app.defaults);
+  const { store, actions } = app.slice(initial);
+
+  store.subscribe(() =>
+    console.dir(store.getState(), { depth: null, colors: true })
+  );
+
+  store.dispatch(
+    actions.setSpace({
+      role: "ASSISTANT",
+      data: { maxBedrooms: 4 }
+    })
+  );
+});
+
+test("array", () => {
+  const initial = extend<{}, AppState, DeepPartial<AppState>>(
+    {},
+    app.defaults,
+    {
+      slices: {
+        realEstateQuery: {
+          viewTypes: [{ id: 2, name: "Two" }]
+        }
+      }
+    }
+  );
+  const { store, actions } = app.slice(initial);
+
+  store.subscribe(() =>
+    console.dir(store.getState(), { depth: null, colors: true })
+  );
+
+  store.dispatch(
+    actions.setArray({
+      role: "ASSISTANT",
+      prop: "viewTypes",
+      group: "View Types",
+      data: [{ id: 1, name: "One" }]
+    })
+  );
 });

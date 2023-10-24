@@ -64,14 +64,6 @@ const stream: Stream = (args) => async (c) => {
       throw new Error();
     }
 
-    const map: Partial<Record<IntentCode, CapabilityCode>> = {
-      NEW_QUERY: "NEW_QUERY",
-      REFINE_QUERY: "REFINE_QUERY",
-      CLEAR_QUERY: "CLEAR_QUERY",
-      OBTAIN_GENERAL_INFORMATION: "RESPOND_GENERAL_QUERY",
-      UNKNOWN: "INFORM_MORE_INFO_NEEDED"
-    };
-
     const capability = map[primary];
 
     if (!capability) {

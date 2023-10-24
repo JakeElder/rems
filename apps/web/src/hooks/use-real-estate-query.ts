@@ -202,11 +202,4 @@ const useRealEstateQuery = (): UseRealEstateQueryReturn => {
   };
 };
 
-// const expires = new Date();
-// expires.setSeconds(expires.getSeconds() + 60 * 5);
-// setCookie("referer", qs ? `/real-estate${qs}` : "", {
-//   expires,
-//   path: "/"
-// });
-
 export default useRealEstateQuery;
