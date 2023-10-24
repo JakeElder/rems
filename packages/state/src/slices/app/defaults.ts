@@ -1,3 +1,4 @@
+import { nanoid } from "@reduxjs/toolkit";
 import { AppState } from "@rems/types";
 
 const defaults: AppState = {
@@ -32,6 +33,15 @@ const defaults: AppState = {
       indoorFeatures: [],
       outdoorFeatures: [],
       propertyTypes: []
+    },
+    assistant: {
+      mode: "SLEEPING",
+      placement: "MINIMISED",
+      sessions: [{ id: nanoid(), value: "", state: "INACTIVE" }]
+    },
+    keyboard: {
+      enterDown: false,
+      spaceDown: false
     }
   },
   timeline: []

@@ -4,8 +4,8 @@ import {
   MAX_LOT_SIZES,
   MIN_LIVING_AREA_SIZES,
   MIN_LOT_SIZES
-} from "../constants";
-import { txt } from "../utils";
+} from "./constants";
+import { txt } from "./utils";
 
 export const SpaceRequirementsSchema = z.object({
   minBedrooms: z.number(),
@@ -56,5 +56,3 @@ export const SpaceRequirementsSchema = z.object({
       )
     )
 });
-
-export default SpaceRequirementsSchema;

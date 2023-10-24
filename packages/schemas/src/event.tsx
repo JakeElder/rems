@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { AnalysisSchema } from "./analysis";
 import { IntentCodeSchema } from "./intent";
 import { LocationSchema } from "./location";
 import { StateMutationSchema } from "./state-mutation";
@@ -14,13 +13,14 @@ export const StateMutationInteractionEventSchema = z.object({
   mutation: StateMutationSchema
 });
 
-export const AnalysisPerformedEventSchema = z.object({
-  type: z.literal("ANALYSIS_PERFORMED"),
-  analysis: AnalysisSchema
+export const ResolvingIntentsEventSchema = z.object({
+  type: z.literal("RESOLVING_INTENTS"),
+  intents: z.array(IntentCodeSchema)
 });
 
 export const YieldEventSchema = z.object({
-  type: z.literal("YIELD")
+  type: z.literal("YIELD"),
+  message: z.string()
 });
 
 export const ErrorEventSchema = z.object({
@@ -43,19 +43,20 @@ export const UpdateLocationEventSchema = z.object({
 export const SystemEventSchema = z.discriminatedUnion("type", [
   ErrorEventSchema,
   IntentResolutionErrorEventSchema,
-  AnalysisPerformedEventSchema,
-  YieldEventSchema
+  ResolvingIntentsEventSchema
 ]);
 
 export const UserEventSchema = z.discriminatedUnion("type", [
   LanguageBasedInteractionEventSchema,
-  StateMutationInteractionEventSchema
+  StateMutationInteractionEventSchema,
+  YieldEventSchema
 ]);
 
 export const AssistantEventSchema = z.discriminatedUnion("type", [
   LanguageBasedInteractionEventSchema,
   StateMutationInteractionEventSchema,
-  UpdateLocationEventSchema
+  UpdateLocationEventSchema,
+  YieldEventSchema
 ]);
 
 export const EventSchema = z.discriminatedUnion("type", [
@@ -63,7 +64,7 @@ export const EventSchema = z.discriminatedUnion("type", [
   IntentResolutionErrorEventSchema,
   LanguageBasedInteractionEventSchema,
   StateMutationInteractionEventSchema,
-  AnalysisPerformedEventSchema,
+  IntentResolutionErrorEventSchema,
   YieldEventSchema,
   UpdateLocationEventSchema
 ]);

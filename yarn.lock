@@ -4871,9 +4871,11 @@ __metadata:
     "@rems/types": "*"
     "@types/deep-extend": ^0.6.1
     "@types/jest": ^29.5.6
+    "@types/json-diff": ^1.0.1
     babel-jest: ^29.7.0
     deep-extend: ^0.6.0
     jest: ^29.7.0
+    json-diff: ^1.0.6
     qs: ^6.11.2
     remeda: ^1.27.1
     typescript: ^5.2.2
@@ -8108,7 +8110,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-diff@npm:^1.0.0":
+"@types/json-diff@npm:^1.0.0, @types/json-diff@npm:^1.0.1":
   version: 1.0.1
   resolution: "@types/json-diff@npm:1.0.1"
   checksum: dea2b46241f4c303eef986e1938d47cb9930b2a20e69adf9dec4f753ca7f08e634502081a453d70724b6a75d1805d6c0bb8c2c781741c75db5c8229b6c71819d

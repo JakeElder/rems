@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const RealEstateIndexPageAndSortSchema = z.object({
+export const RealEstateIndexPageAndSortSchema = z.object({
   sort: z.enum([
     "NEWEST_FIRST",
     "LOWEST_PRICE_FIRST",
@@ -10,5 +10,3 @@ const RealEstateIndexPageAndSortSchema = z.object({
   ]),
   page: z.number()
 });
-
-export default RealEstateIndexPageAndSortSchema;

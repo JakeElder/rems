@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { LatLngSchema } from "../lat-lng";
+import { LatLngSchema } from "./lat-lng";
 
 export const LatLngLocationSourceSchema = z.object({
   type: z.literal("LL"),
@@ -15,9 +15,7 @@ export const NlLocationSourceSchema = z.object({
   radius: z.number().nullable()
 });
 
-const LocationSourceSchema = z.discriminatedUnion("type", [
+export const LocationSourceSchema = z.discriminatedUnion("type", [
   NlLocationSourceSchema,
   LatLngLocationSourceSchema
 ]);
-
-export default LocationSourceSchema;

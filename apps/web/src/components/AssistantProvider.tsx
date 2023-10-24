@@ -1,7 +1,6 @@
 import "regenerator-runtime";
 
 import useAssistantKeys from "@/hooks/use-assistant-keys";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { Sound } from "@/utils";
 import { observable } from "@legendapp/state";
 import {
@@ -285,7 +284,7 @@ const AssistantProvider = ({ children }: Props) => {
         id: uuid.generate(),
         date: Date.now(),
         event: {
-          type: "LANGUAGE_BASED",
+          type: "YIELD",
           message: session.value
         }
       }
@@ -298,7 +297,6 @@ const AssistantProvider = ({ children }: Props) => {
 
     req.subscribe({
       next: (c) => {
-        $timeline.set((prev) => [...prev, c]);
         const { event: e } = c;
 
         if (e.type === "ANALYSIS_PERFORMED") {
@@ -318,24 +316,7 @@ const AssistantProvider = ({ children }: Props) => {
           }
         }
 
-        if (e.type === "UPDATE_LOCATION") {
-          const location = e.next;
-          console.log(location);
-          if (location.source.type === "NL") {
-            patch({
-              "location-source": location.source.description,
-              "location-geospatial-operator": location.source.geospatialOperator
-            });
-          }
-        }
-
-        if (e.type === "PATCH") {
-          const { patch: p } = e;
-          if (p.type === "ARRAY") {
-            patch({ [p.key]: p.value });
-          } else {
-            patch(p.data);
-          }
+        if (e.type === "STATE_MUTATION") {
         }
 
         if (e.type === "LANGUAGE_BASED") {

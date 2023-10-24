@@ -6,10 +6,8 @@ import {
   AppConfigSchema,
   FilterSetSchema,
   FilterSchema,
-  CapabilitySchema,
   RealEstateQuerySchema,
   IntentSchema,
-  CapabilityCodeSchema,
   IntentCodeSchema,
   TimelineSchema,
   AssistantStateSchema,
@@ -22,14 +20,12 @@ import {
   EventSchema,
   LanguageBasedInteractionEventSchema,
   StateMutationInteractionEventSchema,
-  AnalysisPerformedEventSchema,
   YieldEventSchema,
   ErrorEventSchema,
   SystemTimelineEventSchema,
   IntentResolutionErrorEventSchema,
   SystemEventSchema,
   LocationSchema,
-  AnalysisSchema,
   LocationResolutionSchema,
   BoundsSchema,
   LatLngSchema,
@@ -37,9 +33,7 @@ import {
   PaginationSchema,
   AppStateSchema,
   AppStateSlicesSchema,
-  StateMutationSchema
-} from "@rems/schemas";
-import {
+  StateMutationSchema,
   BudgetAndAvailabilityRequirementsSchema,
   IndoorFeatureRequirementsSchema,
   LocationSourceSchema,
@@ -48,8 +42,10 @@ import {
   PropertyTypeRequirementsSchema,
   RealEstateIndexPageAndSortSchema,
   SpaceRequirementsSchema,
-  ViewTypeRequirementsSchema
-} from "@rems/schemas/user-mutable-state";
+  ViewTypeRequirementsSchema,
+  InputSessionSchema,
+  ResolvingIntentsEventSchema
+} from "@rems/schemas";
 import { ZodType, z } from "zod";
 
 export type Z<T extends ZodType<any, any, any>> = z.infer<T>;
@@ -61,8 +57,6 @@ export type ResourceId = string;
 export type File = Z<typeof FileSchema>;
 export type Image = Z<typeof ImageSchema>;
 export type FilterSet = Z<typeof FilterSetSchema>;
-export type Capability = Z<typeof CapabilitySchema>;
-export type CapabilityCode = Z<typeof CapabilityCodeSchema>;
 export type Intent = Z<typeof IntentSchema>;
 export type IntentCode = Z<typeof IntentCodeSchema>;
 
@@ -178,26 +172,13 @@ export type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
 
-type InputSessionState =
-  | "QUEUED"
-  | "INACTIVE"
-  | "INPUTTING"
-  | "LISTENING"
-  | "ANALYZING"
-  | "RESOLVING"
-  | "RESOLVED"
-  | "COMMITTED";
-
-export type InputSession = {
-  id: string;
-  value: string;
-  state: InputSessionState;
-};
+export type InputSession = Z<typeof InputSessionSchema>;
 
 export type AssistantState = Z<typeof AssistantStateSchema>;
 export type AssistantPayload = Z<typeof AssistantPayloadSchema>;
+export type AssistantPlacement = AssistantState["placement"];
 
-export type UiStateAction =
+export type AssistantPlacementAction =
   | "MINIMIZE"
   | "MAXIMIZE"
   | "CONTRACT"
@@ -297,7 +278,7 @@ export type LanguageBasedInteractionEvent = Z<
 export type StateMutationInteractionEvent = Z<
   typeof StateMutationInteractionEventSchema
 >;
-export type AnalysisPerformedEvent = Z<typeof AnalysisPerformedEventSchema>;
+export type ResolvingIntentsEvent = Z<typeof ResolvingIntentsEventSchema>;
 export type YieldEvent = Z<typeof YieldEventSchema>;
 export type ErrorEvent = Z<typeof ErrorEventSchema>;
 export type IntentResolutionErrorEvent = Z<
@@ -308,8 +289,6 @@ export type StateMutation = Z<typeof StateMutationSchema>;
 
 export type AppState = Z<typeof AppStateSchema>;
 export type AppStateSlices = Z<typeof AppStateSlicesSchema>;
-
-export type Analysis = Z<typeof AnalysisSchema>;
 
 export type Logger = (ms: number, message: AssistantTimelineEvent) => void;
 

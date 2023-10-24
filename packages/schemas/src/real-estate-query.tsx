@@ -1,16 +1,14 @@
 import z from "zod";
-import {
-  BudgetAndAvailabilityRequirementsSchema,
-  IndoorFeatureRequirementsSchema,
-  LocationSourceSchema,
-  LotFeatureRequirementsSchema,
-  OutdoorFeatureRequirementsSchema,
-  PropertyTypeRequirementsSchema,
-  RealEstateIndexPageAndSortSchema,
-  SpaceRequirementsSchema,
-  ViewTypeRequirementsSchema
-} from "./user-mutable-state";
 import { FilterSchema } from "./filter";
+import { BudgetAndAvailabilityRequirementsSchema } from "./budget-and-availability-requirements";
+import { LocationSourceSchema } from "./location-source";
+import { RealEstateIndexPageAndSortSchema } from "./real-estate-index-page-and-sort";
+import { SpaceRequirementsSchema } from "./space-requirements";
+import { IndoorFeatureRequirementsSchema } from "./indoor-feature-requirements";
+import { LotFeatureRequirementsSchema } from "./lot-feature-requirements";
+import { OutdoorFeatureRequirementsSchema } from "./outdoor-feature-requirements";
+import { PropertyTypeRequirementsSchema } from "./property-type-requirements";
+import { ViewTypeRequirementsSchema } from "./view-type-requirements";
 
 export const RealEstateQuerySchema = z.object({
   // Scalars
