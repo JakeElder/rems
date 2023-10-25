@@ -61,7 +61,7 @@ export const AssistantEventSchema = z.discriminatedUnion("type", [
 
 export const EventSchema = z.discriminatedUnion("type", [
   ErrorEventSchema,
-  IntentResolutionErrorEventSchema,
+  ResolvingIntentsEventSchema,
   LanguageBasedInteractionEventSchema,
   StateMutationInteractionEventSchema,
   IntentResolutionErrorEventSchema,

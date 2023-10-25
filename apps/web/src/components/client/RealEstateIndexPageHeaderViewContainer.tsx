@@ -1,22 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { RealEstateIndexPage as Layout } from "@rems/ui";
 import HeaderViewContainer from "@/components/client/HeaderViewContainer";
 import FilterBarViewContainer from "@/components/client/FilterBarViewContainer";
-import { FilterBarProps } from "pages/real-estate";
 import { useDomElements } from "../DomElementsProvider";
+import {
+  Area,
+  IndoorFeature,
+  LotFeature,
+  OutdoorFeature,
+  PropertyType,
+  QuickFilter,
+  ViewType
+} from "@rems/types";
 
-type Props = {
-  filterBarProps: FilterBarProps;
-};
-
-const RealEstateIndexPageHeaderViewContainer = ({ filterBarProps }: Props) => {
-  const { $header } = useDomElements();
+const RealEstateIndexPageHeaderViewContainer = () => {
+  const $header = useRef<HTMLDivElement | null>(null);
   return (
     <Layout.Header ref={$header}>
       <HeaderViewContainer full mode="standard" chat />
-      <FilterBarViewContainer {...filterBarProps} />
+      <FilterBarViewContainer />
     </Layout.Header>
   );
 };

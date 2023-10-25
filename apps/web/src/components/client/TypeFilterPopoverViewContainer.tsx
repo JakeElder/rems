@@ -2,7 +2,6 @@
 
 import React from "react";
 import { TypeFilterPopover } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import useTypeFilterProps from "@/hooks/use-type-filter-props";
 
 type Props = {

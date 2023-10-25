@@ -1,25 +1,15 @@
-import { DeepPartial } from "@reduxjs/toolkit";
 import * as app from "../src/slices/app";
-import extend from "deep-extend";
-import { AppState } from "@rems/types";
-import { diffString } from "json-diff";
-
-const initial = <T extends DeepPartial<AppState>>(
-  state: T = {} as T
-): AppState => extend<{}, AppState, T>({}, app.defaults, state);
 
 const log = (obj: any) => console.dir(obj, { depth: null, colors: true });
 
 test("budget", () => {
-  const { store, actions } = app.init(
-    initial({
-      slices: {
-        realEstateQuery: {
-          budgetAndAvailability: { maxPrice: 5 }
-        }
+  const { store, actions } = app.init({
+    slices: {
+      realEstateQuery: {
+        budgetAndAvailability: { maxPrice: 5 }
       }
-    })
-  );
+    }
+  });
 
   store.dispatch(
     actions.setBudgetAndAvailability({
@@ -32,7 +22,7 @@ test("budget", () => {
 });
 
 test("locationSource", () => {
-  const { store, actions } = app.init(initial());
+  const { store, actions } = app.init();
 
   store.dispatch(
     actions.setLocationSource({
@@ -40,6 +30,7 @@ test("locationSource", () => {
       data: {
         type: "NL",
         radius: null,
+        radiusEnabled: false,
         description: "Chiang Mai",
         geospatialOperator: "near"
       }
@@ -50,7 +41,7 @@ test("locationSource", () => {
 });
 
 test("pageAndSort", () => {
-  const { store, actions } = app.init(initial());
+  const { store, actions } = app.init();
 
   store.dispatch(
     actions.setPageAndSort({
@@ -63,7 +54,7 @@ test("pageAndSort", () => {
 });
 
 test("space", () => {
-  const { store, actions } = app.init(initial());
+  const { store, actions } = app.init();
 
   store.dispatch(
     actions.setSpace({
@@ -76,22 +67,20 @@ test("space", () => {
 });
 
 test("array", () => {
-  const { store, actions } = app.init(
-    initial({
-      slices: {
-        realEstateQuery: {
-          viewTypes: [{ id: 2, name: "Two" }]
-        }
+  const { store, actions } = app.init({
+    slices: {
+      realEstateQuery: {
+        viewTypes: [{ id: 2, name: "Two" }]
       }
-    })
-  );
+    }
+  });
 
   store.dispatch(
     actions.setArray({
       role: "ASSISTANT",
       prop: "viewTypes",
       group: "View Types",
-      data: [{ id: 1, name: "One" }]
+      data: [{ id: 1, name: "One", slug: "one" }]
     })
   );
 
@@ -99,15 +88,13 @@ test("array", () => {
 });
 
 test("emptySubmission", () => {
-  const { store, actions } = app.init(
-    initial({
-      slices: {
-        assistant: {
-          sessions: [{ id: "one", state: "INPUTTING" }]
-        }
+  const { store, actions } = app.init({
+    slices: {
+      assistant: {
+        sessions: [{ id: "one", state: "INPUTTING" }]
       }
-    })
-  );
+    }
+  });
 
   store.dispatch(actions.handleEmptySubmission());
 
@@ -118,8 +105,7 @@ test("emptySubmission", () => {
 });
 
 test("userYield", () => {
-  const i = initial();
-  const { store, actions } = app.init(i);
+  const { store, actions } = app.init();
 
   store.dispatch(actions.handleUserYield("Do stuff"));
 
@@ -131,8 +117,7 @@ test("userYield", () => {
 });
 
 test("assistantYield", () => {
-  const i = initial();
-  const { store, actions } = app.init(i);
+  const { store, actions } = app.init();
 
   store.dispatch(actions.handleAssistantYield("Sure, done"));
 
@@ -143,8 +128,7 @@ test("assistantYield", () => {
 });
 
 test("placementChangeRequest", () => {
-  const i = initial();
-  const { store, actions } = app.init(i);
+  const { store, actions } = app.init();
 
   store.dispatch(actions.handleAssistantPlacementChangeRequest("EXPAND"));
   expect(store.getState().slices.assistant.placement).toBe("DOCKED");
@@ -157,15 +141,13 @@ test("placementChangeRequest", () => {
 });
 
 test("returnControl", () => {
-  const i = initial({
+  const { store, actions } = app.init({
     slices: {
       assistant: {
         mode: "WORKING"
       }
     }
   });
-
-  const { store, actions } = app.init(i);
 
   store.dispatch(actions.returnControl());
 
@@ -177,15 +159,13 @@ test("returnControl", () => {
 });
 
 test("inputIdle", () => {
-  const i = initial({
+  const { store, actions } = app.init({
     slices: {
       assistant: {
         sessions: [{ id: "id", value: "Do stuff", state: "INPUTTING" }]
       }
     }
   });
-
-  const { store, actions } = app.init(i);
 
   store.dispatch(actions.handleInputIdle());
 

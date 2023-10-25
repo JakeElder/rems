@@ -2,7 +2,8 @@ import {
   createSlice,
   configureStore,
   PayloadAction,
-  nanoid
+  nanoid,
+  DeepPartial
 } from "@reduxjs/toolkit";
 import defaults from "./defaults";
 import * as diff from "../../diff";
@@ -13,16 +14,18 @@ import {
   AssistantPlacementAction,
   AssistantTimelineEvent,
   BudgetAndAvailabilityRequirements,
+  Filter,
   InputSession,
-  IntentCode,
   LocationSource,
   RealEstateIndexPageAndSort,
+  RealEstateQuery,
   RealEstateQueryArrayKey,
   SpaceRequirements,
   TimelineEvent,
   UserTimelineEvent
 } from "@rems/types";
-import { Identifiable } from "../..";
+import extend from "deep-extend";
+import { clone } from "remeda";
 
 type ActorTimelineEvent = UserTimelineEvent | AssistantTimelineEvent;
 
@@ -116,10 +119,10 @@ const setBudgetAndAvailability = (
   const prev: AppStateSlices = state.slices;
   const next: AppStateSlices = {
     ...prev,
-    realEstateQuery: {
-      ...prev.realEstateQuery,
+    stagedRealEstateQuery: {
+      ...prev.stagedRealEstateQuery,
       budgetAndAvailability: {
-        ...prev.realEstateQuery.budgetAndAvailability,
+        ...prev.stagedRealEstateQuery.budgetAndAvailability,
         ...action.payload.data
       }
     }
@@ -134,8 +137,8 @@ const setBudgetAndAvailability = (
       group: "Budget & Availability",
       data: action.payload.data,
       diff: diff.scalar(
-        defaults.slices.realEstateQuery.budgetAndAvailability,
-        prev.realEstateQuery.budgetAndAvailability,
+        defaults().slices.stagedRealEstateQuery.budgetAndAvailability,
+        prev.stagedRealEstateQuery.budgetAndAvailability,
         action.payload.data
       )
     }
@@ -152,8 +155,8 @@ const setLocationSource = (
   const prev: AppStateSlices = state.slices;
   const next: AppStateSlices = {
     ...prev,
-    realEstateQuery: {
-      ...prev.realEstateQuery,
+    stagedRealEstateQuery: {
+      ...prev.stagedRealEstateQuery,
       locationSource: action.payload.data
     }
   };
@@ -167,8 +170,8 @@ const setLocationSource = (
       group: "Location",
       data: action.payload.data,
       diff: diff.scalar(
-        defaults.slices.realEstateQuery.locationSource,
-        prev.realEstateQuery.locationSource,
+        defaults().slices.stagedRealEstateQuery.locationSource,
+        prev.stagedRealEstateQuery.locationSource,
         action.payload.data
       )
     }
@@ -185,10 +188,10 @@ const setPageAndSort = (
   const prev: AppStateSlices = state.slices;
   const next: AppStateSlices = {
     ...prev,
-    realEstateQuery: {
-      ...prev.realEstateQuery,
+    stagedRealEstateQuery: {
+      ...prev.stagedRealEstateQuery,
       pageAndSort: {
-        ...prev.realEstateQuery.pageAndSort,
+        ...prev.stagedRealEstateQuery.pageAndSort,
         ...action.payload.data
       }
     }
@@ -203,8 +206,8 @@ const setPageAndSort = (
       group: "Page & Sort",
       data: action.payload.data,
       diff: diff.scalar(
-        defaults.slices.realEstateQuery.pageAndSort,
-        prev.realEstateQuery.pageAndSort,
+        defaults().slices.stagedRealEstateQuery.pageAndSort,
+        prev.stagedRealEstateQuery.pageAndSort,
         action.payload.data
       )
     }
@@ -221,10 +224,10 @@ const setSpace = (
   const prev: AppStateSlices = state.slices;
   const next: AppStateSlices = {
     ...prev,
-    realEstateQuery: {
-      ...prev.realEstateQuery,
+    stagedRealEstateQuery: {
+      ...prev.stagedRealEstateQuery,
       space: {
-        ...prev.realEstateQuery.space,
+        ...prev.stagedRealEstateQuery.space,
         ...action.payload.data
       }
     }
@@ -239,8 +242,8 @@ const setSpace = (
       group: "Space Requirements",
       data: action.payload.data,
       diff: diff.scalar(
-        defaults.slices.realEstateQuery.space,
-        prev.realEstateQuery.space,
+        defaults().slices.stagedRealEstateQuery.space,
+        prev.stagedRealEstateQuery.space,
         action.payload.data
       )
     }
@@ -253,7 +256,7 @@ const setSpace = (
 const setArray = (
   state: AppState,
   action: QueryMutationAction<
-    Identifiable[],
+    Filter[],
     {
       group: string;
       prop: RealEstateQueryArrayKey;
@@ -263,8 +266,8 @@ const setArray = (
   const prev: AppStateSlices = state.slices;
   const next: AppStateSlices = {
     ...prev,
-    realEstateQuery: {
-      ...prev.realEstateQuery,
+    stagedRealEstateQuery: {
+      ...prev.stagedRealEstateQuery,
       [action.payload.prop]: action.payload.data
     }
   };
@@ -279,7 +282,7 @@ const setArray = (
       value: action.payload.data,
       prop: action.payload.prop,
       diff: diff.array(
-        prev.realEstateQuery[action.payload.prop],
+        prev.stagedRealEstateQuery[action.payload.prop],
         action.payload.data
       )
     }
@@ -411,31 +414,50 @@ const setResolvingIntents = (state: AppState) => {
   state.slices.assistant.mode = "WORKING";
 };
 
-const init = (initialState: AppState) => {
+const commitRealEstateQuery = (state: AppState) => {
+  state.slices.realEstateQuery = clone(state.slices.stagedRealEstateQuery);
+};
+
+const replaceRealEstateQuery = (
+  state: AppState,
+  action: PayloadAction<RealEstateQuery>
+) => {
+  state.slices.realEstateQuery = clone(action.payload);
+  state.slices.stagedRealEstateQuery = clone(action.payload);
+};
+
+const init = (initial: DeepPartial<AppState> = {}) => {
+  const initialState = extend<AppState, DeepPartial<AppState>>(
+    defaults(),
+    initial
+  ) as AppState;
+
   const { actions, reducer } = createSlice({
     name: "root",
     initialState,
     reducers: {
+      commitRealEstateQuery,
+      handleAssistantPlacementChangeRequest,
+      handleAssistantYield,
+      handleEmptySubmission,
+      handleEnterKeyDown,
+      handleEnterKeyUp,
+      handleInputIdle,
+      handleKeyboardInputReceived,
+      handleListeningAborted,
+      handleListeningStarted,
+      handleSpaceKeyDown,
+      handleSpaceKeyUp,
+      handleUserYield,
+      handleVoiceInputReceived,
+      replaceRealEstateQuery,
+      returnControl,
+      setArray,
       setBudgetAndAvailability,
       setLocationSource,
       setPageAndSort,
-      setSpace,
-      setArray,
-      handleEmptySubmission,
-      handleUserYield,
-      handleAssistantYield,
-      handleAssistantPlacementChangeRequest,
-      returnControl,
-      handleInputIdle,
-      handleEnterKeyDown,
-      handleEnterKeyUp,
-      handleSpaceKeyDown,
-      handleSpaceKeyUp,
-      handleKeyboardInputReceived,
-      handleListeningStarted,
-      handleListeningAborted,
-      handleVoiceInputReceived,
-      setResolvingIntents
+      setResolvingIntents,
+      setSpace
     }
   });
 

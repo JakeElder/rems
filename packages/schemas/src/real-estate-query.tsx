@@ -25,7 +25,7 @@ export const RealEstateQuerySchema = z.object({
   viewTypes: ViewTypeRequirementsSchema
 });
 
-const Array = z.array(FilterSchema.shape["slug"]);
+const Array = z.array(FilterSchema.shape["slug"]).default([]).catch([]);
 
 export const UrlRealEstateQuerySchema = z.object({
   // Arrays
@@ -62,8 +62,8 @@ export const UrlRealEstateQuerySchema = z.object({
   "location-geospatial-operator": z
     .string()
     .nullable()
-    .catch(null)
-    .default(null),
+    .catch("in")
+    .default("in"),
   radius: z.coerce
     .number()
     .min(1000)

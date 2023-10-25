@@ -13,10 +13,8 @@ import { PropertyFilters, FilterBar as Layout } from "@rems/ui";
 import TypeFiltersViewContainer from "./TypeFiltersViewContainer";
 import {
   Area,
-  BTSStation,
   IndoorFeature,
   LotFeature,
-  MRTStation,
   OutdoorFeature,
   PropertyType,
   QuickFilter,
@@ -27,8 +25,6 @@ import ViewTypeFiltersViewContainer from "./ViewTypeFiltersViewContainer";
 import IndoorFeatureFiltersViewContainer from "./IndoorFeatureFiltersViewContainer";
 import OutdoorFeatureFiltersViewContainer from "./OutdoorFeatureFiltersViewContainer";
 import LotFeatureFiltersViewContainer from "./LotFeatureFiltersViewContainer";
-import NearestMRTStationFilterViewContainer from "./NearestMRTStationFilterViewContainer";
-import NearestBTSStationFilterViewContainer from "./NearestBTSStationFilterViewContainer";
 import QuickFiltersViewContainer from "./QuickFiltersViewContainer";
 import PlacesAutocompleteViewContainer from "./PlacesAutocompleteViewContainer";
 import SearchRadiusViewContainer from "./SearchRadiusViewContainer";
@@ -41,8 +37,6 @@ type Props = {
   indoorFeatures: IndoorFeature[];
   outdoorFeatures: OutdoorFeature[];
   lotFeatures: LotFeature[];
-  mrtStations: MRTStation[];
-  btsStations: BTSStation[];
   quickFilters: QuickFilter[];
 };
 
@@ -74,8 +68,6 @@ const FilterBarViewContainer = ({
   indoorFeatures,
   outdoorFeatures,
   lotFeatures,
-  mrtStations,
-  btsStations,
   quickFilters
 }: Props) => {
   return (
@@ -119,12 +111,6 @@ const FilterBarViewContainer = ({
           <PropertyFilters.LotSize>
             <LotSizeFiltersViewContainer />
           </PropertyFilters.LotSize>
-          <PropertyFilters.NearestMRTStation>
-            <NearestMRTStationFilterViewContainer stations={mrtStations} />
-          </PropertyFilters.NearestMRTStation>
-          <PropertyFilters.NearestBTSStation>
-            <NearestBTSStationFilterViewContainer stations={btsStations} />
-          </PropertyFilters.NearestBTSStation>
         </FilterDialogViewContainer>
       </Layout.FilterDialog>
       <Layout.Separator />

@@ -15,22 +15,22 @@ export async function GET() {
     "quick-filters.indoor-feature": [
       Models.ComponentsQuickFiltersIndoorFeaturesFilterLink,
       Models.IndoorFeature,
-      "indoor-features"
+      "indoorFeatures"
     ],
     "quick-filters.outdoor-feature": [
       Models.ComponentsQuickFiltersOutdoorFeaturesFilterLink,
       Models.OutdoorFeature,
-      "outdoor-features"
+      "outdoorFeatures"
     ],
     "quick-filters.view-type": [
       Models.ComponentsQuickFiltersViewTypesFilterLink,
       Models.ViewType,
-      "view-types"
+      "viewTypes"
     ],
     "quick-filters.lot-feature": [
       Models.ComponentsQuickFiltersLotFeaturesFilterLink,
       Models.LotFeature,
-      "lot-features"
+      "lotFeatures"
     ]
   };
 

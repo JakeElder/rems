@@ -5,11 +5,9 @@ import FooterViewContainer from "@/components/client/FooterViewContainer";
 import {
   AppConfig,
   Area,
-  BTSStation,
   FilterSet,
   IndoorFeature,
   LotFeature,
-  MRTStation,
   OutdoorFeature,
   PropertyType,
   QuickFilter,
@@ -33,8 +31,6 @@ export type FilterBarProps = {
   indoorFeatures: IndoorFeature[];
   outdoorFeatures: OutdoorFeature[];
   lotFeatures: LotFeature[];
-  mrtStations: MRTStation[];
-  btsStations: BTSStation[];
   quickFilters: QuickFilter[];
 };
 

@@ -4,6 +4,7 @@ import { AssistantStateSchema } from "./assistant-state";
 
 export const AppStateSlicesSchema = z.object({
   realEstateQuery: RealEstateQuerySchema,
+  stagedRealEstateQuery: RealEstateQuerySchema,
   assistant: AssistantStateSchema,
   keyboard: z.object({
     spaceDown: z.boolean(),

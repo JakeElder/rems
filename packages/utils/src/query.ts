@@ -1,23 +1,24 @@
 import {
-  BudgetAndAvailabilityRequirementsSchema,
-  LocationSourceSchema,
-  NlLocationSourceSchema,
-  RealEstateIndexPageAndSortSchema,
-  SpaceRequirementsSchema
-} from "@rems/schemas/user-mutable-state";
-import {
   Filter,
   HasActiveManifest,
   HasGroup,
   RealEstateQuery,
   RealEstateQueryArrayKey,
+  SearchParams,
   UrlRealEstateQuery,
   Z
 } from "@rems/types";
+import {
+  BudgetAndAvailabilityRequirementsSchema,
+  LocationSourceSchema,
+  RealEstateIndexPageAndSortSchema,
+  SpaceRequirementsSchema,
+  RealEstateQuerySchema,
+  UrlRealEstateQuerySchema
+} from "@rems/schemas";
 import { ZodType } from "zod";
 import { omitBy, equals } from "remeda";
 import qs from "qs";
-import { RealEstateQuerySchema, UrlRealEstateQuerySchema } from "@rems/schemas";
 import { constantCase, paramCase } from "change-case-all";
 
 type Schema = ZodType<any>;
@@ -81,14 +82,14 @@ const adapt = {
       query: UrlRealEstateQuery
     ): RealEstateQuery["locationSource"] => {
       if (query["location-source-type"] === "nl") {
-        const defaults = NlLocationSourceSchema.parse({});
         return {
           type: "NL",
           description: query["location-source"],
           geospatialOperator: query["location-geospatial-operator"]
             ? query["location-geospatial-operator"]
-            : defaults.geospatialOperator,
-          radius: query["radius"]
+            : "in",
+          radius: query["radius"],
+          radiusEnabled: query["radius-enabled"] === "true"
         };
       }
 
@@ -136,7 +137,6 @@ const adapt = {
     sort: (source: RealEstateQuery): UrlRealEstateQuery["sort"] => {
       return paramCase(source.pageAndSort.sort) as UrlRealEstateQuery["sort"];
     },
-
     locationSource: (
       source: RealEstateQuery
     ): Pick<
@@ -184,11 +184,7 @@ export const fromUrl = (
       filters.outdoorFeatures
     ),
     viewTypes: filter.toSource(url["view-types"], filters.viewTypes),
-    propertyTypes: filter.toSource(
-      url["property-types"],
-      filters.propertyTypes
-    ),
-    limit: false
+    propertyTypes: filter.toSource(url["property-types"], filters.propertyTypes)
   };
 };
 
@@ -212,9 +208,8 @@ export const toUrl = (source: RealEstateQuery): UrlRealEstateQuery => {
     "min-lot-size": source.space.minLotSize,
     "max-lot-size": source.space.maxLotSize,
     radius: source.locationSource.radius || 10000,
-    "radius-enabled": "true",
-    ...adapt.toUrl.locationSource(source),
-    limit: source.limit ? "true" : "false"
+    "radius-enabled": source.locationSource.radiusEnabled ? "true" : "false",
+    ...adapt.toUrl.locationSource(source)
   };
 };
 
@@ -233,10 +228,29 @@ export const generateQueryString = (
 
   const string = qs.stringify(
     removeDefaults(UrlRealEstateQuerySchema, toUrl(updated)),
-    { arrayFormat: "brackets" }
+    { arrayFormat: "comma", encode: false }
   );
 
   return string ? `?${string}` : "";
+};
+
+export const fromSearchParams = (params: SearchParams, filters: Filters) => {
+  const split = (str: SearchParams[string]) => {
+    if (!str) return [];
+    return typeof str === "string" ? str.split(",") : str;
+  };
+
+  const obj = {
+    ...params,
+    "indoor-features": split(params["indoor-features"]),
+    "outdoor-features": split(params["outdoor-features"]),
+    "lot-features": split(params["lot-features"]),
+    "view-types": split(params["view-types"]),
+    "property-types": split(params["property-types"])
+  };
+
+  const url = UrlRealEstateQuerySchema.parse(obj);
+  return fromUrl(url, filters);
 };
 
 export const has = (

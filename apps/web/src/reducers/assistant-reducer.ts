@@ -3,7 +3,6 @@ import {
   AssistantState,
   CapabilityCode,
   AssistantUiState,
-  UiStateAction
 } from "@rems/types";
 import uuid from "short-uuid";
 
@@ -27,7 +26,7 @@ type ComponentAction =
   | { type: "ENTER_KEY_UP" }
   | { type: "SPACE_KEY_DOWN" }
   | { type: "SPACE_KEY_UP" }
-  | { type: "UI_STATE_CHANGE"; value: UiStateAction }
+  // | { type: "UI_STATE_CHANGE"; value: UiStateAction }
   | { type: "KEYBOARD_INPUT_RECEIVED"; value: string }
   | { type: "LISTENING_STARTED" }
   | { type: "LISTENING_ABORTED" }
@@ -151,19 +150,6 @@ const assistantReducer = (
         ]
       };
 
-    case "MIC_BUTTON_CLICKED":
-      const session = prev.sessions[prev.sessions.length - 1];
-      return {
-        ...prev,
-        sessions: [
-          ...prev.sessions.slice(0, -1),
-          {
-            ...session,
-            state: session.state === "LISTENING" ? "INACTIVE" : "LISTENING"
-          }
-        ]
-      };
-
     case "ENTER_KEY_DOWN":
       return { ...prev, enterDown: true };
 
@@ -230,7 +216,7 @@ const assistantReducer = (
     case "LISTENING_COMPLETE":
       return { ...prev }; // noop
 
-    case "ANALYSIS_COMPLETE":
+   case "ANALYSIS_COMPLETE":
       switch (action.capability) {
         case "NEW_QUERY":
         case "REFINE_QUERY":
@@ -261,6 +247,18 @@ const assistantReducer = (
           return {
             ...prev,
             state: "CLEARING_QUERY",
+            sessions: [
+              ...prev.sessions.slice(0, -1),
+              {
+                ...prev.sessions[prev.sessions.length - 1],
+                state: "RESOLVING"
+              }
+            ]
+          };
+        case "OPEN_ASSISTANT":
+          return {
+            ...prev,
+            state: "OPENING",
             sessions: [
               ...prev.sessions.slice(0, -1),
               {

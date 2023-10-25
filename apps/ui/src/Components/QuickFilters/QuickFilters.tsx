@@ -5,7 +5,7 @@ import { QuickFilter, QuickFilterQueryKey } from "@rems/types";
 type Props = {
   filters: QuickFilter[];
   isOn: (key: QuickFilterQueryKey, value: string) => boolean;
-  onChange: (key: QuickFilterQueryKey, value: string, on: boolean) => void;
+  onChange: (quickFilter: QuickFilter, on: boolean) => void;
 };
 
 const QuickFilters = ({ filters, onChange, isOn }: Props) => {
@@ -20,9 +20,7 @@ const QuickFilters = ({ filters, onChange, isOn }: Props) => {
           <Toggle
             key={`${key}.${f.filter.slug}`}
             pressed={on}
-            onPressedChange={(pressed) => {
-              onChange(key, f.filter.slug, pressed);
-            }}
+            onPressedChange={(on) => onChange(f, on)}
           >
             {f.filter.name}
           </Toggle>

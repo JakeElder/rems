@@ -5009,8 +5009,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rems/web@workspace:apps/web"
   dependencies:
-    "@legendapp/state": ^1.11.1
     "@next/bundle-analyzer": ^13.4.9
+    "@reduxjs/toolkit": ^1.9.7
     "@rems/schemas": "*"
     "@rems/state": "*"
     "@rems/tsconfig": "*"
@@ -5046,6 +5046,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-map-gl: ^7.1.6
+    react-redux: ^8.1.3
     react-speech-recognition: ^3.10.0
     remeda: ^1.27.1
     rxjs: ^7.8.1
@@ -21923,7 +21924,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:^8.0.5":
+"react-redux@npm:^8.0.5, react-redux@npm:^8.1.3":
   version: 8.1.3
   resolution: "react-redux@npm:8.1.3"
   dependencies:
