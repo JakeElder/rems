@@ -64,6 +64,11 @@ export const useActiveQuickFilters = () =>
     )
   );
 
+export const useActivePropertyTypeFilters = () =>
+  useSelector(
+    (state: AppState) => state.slices.stagedRealEstateQuery.propertyTypes
+  );
+
 export const useHasBedsFilter = () =>
   useSelector(
     createSelector(

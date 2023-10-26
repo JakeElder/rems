@@ -23,7 +23,9 @@ type Props = {};
 const FilterBarContainer = ({}: Props) => {
   return (
     <Layout.Root>
+      <Layout.Separator />
       <Layout.KeyFilters>
+        <TypeFilterPopoverContainer />
         <AvailabilityFilterPopoverViewContainer />
         <PriceFilterPopoverViewContainer />
         <BedsFilterPopoverViewContainer />
@@ -78,12 +80,5 @@ const FilterBarContainer = ({}: Props) => {
 //     </PropertyFilters.LotSize>
 //   </FilterDialogViewContainer>
 // </Layout.FilterDialog>
-// <Layout.Separator />
-// <Layout.KeyFilters>
-//   <TypeFilterPopoverContainer />
-//   <AvailabilityFilterPopoverViewContainer />
-//   <PriceFilterPopoverViewContainer />
-//   <BedsFilterPopoverViewContainer />
-// </Layout.KeyFilters>
 
 export default FilterBarContainer;

@@ -7,8 +7,8 @@ import { PropertyType } from "@rems/types";
 type Props = {
   id: string;
   types: PropertyType[];
-  onChange: (value: string, checked: boolean) => void;
-  isChecked: (value: string) => boolean;
+  onChange: (filter: PropertyType, checked: boolean) => void;
+  isChecked: (filter: PropertyType) => boolean;
 };
 
 const TypeFilters = ({ id, types, onChange, isChecked }: Props) => {
@@ -19,9 +19,9 @@ const TypeFilters = ({ id, types, onChange, isChecked }: Props) => {
           items={types.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onChange(t.slug, checked !== "indeterminate" && checked)
+                onChange(t, checked !== "indeterminate" && checked)
               }
-              checked={isChecked(t.slug)}
+              checked={isChecked(t)}
               key={t.slug}
               name="property-types[]"
               value={t.slug}

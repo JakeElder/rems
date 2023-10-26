@@ -11,24 +11,29 @@ import {
   MIN_PURCHASE_PRICE,
   MIN_RENTAL_PRICE
 } from "../constants";
+import { useCallback } from "react";
 
-const usePriceRangeProps = (): React.ComponentProps<typeof PriceRange> => {
+type ViewProps = React.ComponentProps<typeof PriceRange>;
+
+const usePriceRangeProps = (): ViewProps => {
   const stagedQuery = useStagedRealEstateQuery();
   const dispatch = useDispatch();
+
+  const onChange: ViewProps["onChange"] = useCallback((minPrice, maxPrice) => {
+    dispatch(
+      setBudgetAndAvailability({
+        role: "USER",
+        data: { minPrice, maxPrice }
+      })
+    );
+    dispatch(commitRealEstateQuery());
+  }, []);
 
   const { type, minPrice, maxPrice } = stagedQuery.budgetAndAvailability;
 
   return {
     availability: type,
-    onChange: (minPrice, maxPrice) => {
-      dispatch(
-        setBudgetAndAvailability({
-          role: "USER",
-          data: { minPrice, maxPrice }
-        })
-      );
-      dispatch(commitRealEstateQuery());
-    },
+    onChange,
     maxPrice,
     minPrice,
     minRentalPrice: MIN_RENTAL_PRICE,

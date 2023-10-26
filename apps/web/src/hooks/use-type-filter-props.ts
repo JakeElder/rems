@@ -1,15 +1,44 @@
+import {
+  commitRealEstateQuery,
+  setArray,
+  useActivePropertyTypeFilters,
+  useDispatch
+} from "@/state";
 import { TypeFilters } from "@rems/ui";
-import useRealEstateQuery from "./use-real-estate-query";
+import { useCallback } from "react";
 
-const useTypeFilterProps = (): Omit<
-  React.ComponentProps<typeof TypeFilters>,
-  "id" | "types"
-> => {
-  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
+type ViewProps = React.ComponentProps<typeof TypeFilters>;
+type Return = Pick<ViewProps, "onChange" | "isChecked">;
+
+const useTypeFilterProps = (): Return => {
+  const dispatch = useDispatch();
+  const active = useActivePropertyTypeFilters();
+
+  const isChecked: ViewProps["isChecked"] = useCallback(
+    (filter) => active.findIndex((f) => f.slug === filter.slug) > -1,
+    [active]
+  );
+
+  const onChange: ViewProps["onChange"] = useCallback(
+    (filter, on) => {
+      dispatch(
+        setArray({
+          role: "USER",
+          prop: "propertyTypes",
+          group: "Property Types",
+          data: on
+            ? [...active, filter]
+            : [...active].filter((f) => f.id !== filter.id)
+        })
+      );
+      dispatch(commitRealEstateQuery());
+    },
+    [active]
+  );
+
   return {
-    onChange: (value, checked) =>
-      onCheckedChange("property-types", value, checked),
-    isChecked: (value) => stagedQuery["property-types"].includes(value)
+    onChange,
+    isChecked
   };
 };
 
