@@ -1,4 +1,4 @@
-import { init } from "@rems/state/app";
+import * as app from "@rems/state/app";
 import { AppState } from "@rems/types";
 import {
   TypedUseSelectorHook,
@@ -7,7 +7,7 @@ import {
 } from "react-redux";
 import { createSelector } from "@reduxjs/toolkit";
 
-const { store, actions } = init();
+const { store, actions } = app.init();
 
 export const {
   commitRealEstateQuery,
@@ -64,5 +64,25 @@ export const useActiveQuickFilters = () =>
     )
   );
 
+export const useHasBedsFilter = () =>
+  useSelector(
+    createSelector(
+      [
+        (state: AppState) =>
+          state.slices.stagedRealEstateQuery.space.minBedrooms,
+        (state: AppState) =>
+          state.slices.stagedRealEstateQuery.space.maxBedrooms
+      ],
+      (min, max) => {
+        const defaults = app.defaults();
+        const { space } = defaults.slices.stagedRealEstateQuery;
+        return min !== space.minBedrooms || max !== space.maxBedrooms;
+      }
+    )
+  );
+
 export const useRealEstateQuery = () =>
   useSelector((state) => state.slices.realEstateQuery);
+
+export const useStagedRealEstateQuery = () =>
+  useSelector((state) => state.slices.stagedRealEstateQuery);

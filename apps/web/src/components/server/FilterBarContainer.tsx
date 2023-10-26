@@ -1,4 +1,3 @@
-import React from "react";
 import { PropertyFilters, FilterBar as Layout } from "@rems/ui";
 import BedsFilterPopoverViewContainer from "@/components/client/BedsFilterPopoverViewContainer";
 import PriceFilterPopoverViewContainer from "@/components/client/PriceFilterPopoverViewContainer";
@@ -16,8 +15,6 @@ import OutdoorFeatureFiltersContainer from "@/components/server/OutdoorFeatureFi
 import LotFeatureFiltersContainer from "@/components/server/LotFeatureFiltersContainer";
 import LivingAreaFiltersViewContainer from "@/components/client/LivingAreaFiltersViewContainer";
 import LotSizeFiltersViewContainer from "@/components/client/LotSizeFiltersViewContainer";
-import NearestMRTStationFilterContainer from "@/components/server/NearestMRTStationFilter";
-import NearestBTSStationFilterContainer from "@/components/server/NearestBTSStationFilter";
 import QuickFiltersContainer from "@/components/server/QuickFiltersContainer";
 import PlacesAutocompleteViewContainer from "@/components/client/PlacesAutocompleteViewContainer";
 
@@ -26,59 +23,7 @@ type Props = {};
 const FilterBarContainer = ({}: Props) => {
   return (
     <Layout.Root>
-      <Layout.FilterDialog>
-        <FilterDialogViewContainer>
-          <PropertyFilters.PropertyType>
-            <TypeFiltersContainer id="filters" />
-          </PropertyFilters.PropertyType>
-          <PropertyFilters.Location>
-            <PlacesAutocompleteViewContainer />
-          </PropertyFilters.Location>
-          <PropertyFilters.AvailabilityAndArea>
-            <PropertyFilters.Availability>
-              <AvailabilityFilterViewContainer />
-            </PropertyFilters.Availability>
-          </PropertyFilters.AvailabilityAndArea>
-          <PropertyFilters.PriceRange>
-            <PriceRangeViewContainer />
-          </PropertyFilters.PriceRange>
-          <PropertyFilters.Bedrooms>
-            <BedsFilterViewContainer />
-          </PropertyFilters.Bedrooms>
-          <PropertyFilters.Bathrooms>
-            <BathroomsFilterViewContainer />
-          </PropertyFilters.Bathrooms>
-          <PropertyFilters.View>
-            <ViewTypeFiltersContainer />
-          </PropertyFilters.View>
-          <PropertyFilters.IndoorFeatures>
-            <IndoorFeatureFiltersContainer />
-          </PropertyFilters.IndoorFeatures>
-          <PropertyFilters.OutdoorFeatures>
-            <OutdoorFeatureFiltersContainer />
-          </PropertyFilters.OutdoorFeatures>
-          <PropertyFilters.LotFeatures>
-            <LotFeatureFiltersContainer />
-          </PropertyFilters.LotFeatures>
-          <PropertyFilters.LivingArea>
-            <LivingAreaFiltersViewContainer />
-          </PropertyFilters.LivingArea>
-          <PropertyFilters.LotSize>
-            <LotSizeFiltersViewContainer />
-          </PropertyFilters.LotSize>
-          <PropertyFilters.NearestMRTStation>
-            <NearestMRTStationFilterContainer />
-          </PropertyFilters.NearestMRTStation>
-          <PropertyFilters.NearestBTSStation>
-            <NearestBTSStationFilterContainer />
-          </PropertyFilters.NearestBTSStation>
-        </FilterDialogViewContainer>
-      </Layout.FilterDialog>
-      <Layout.Separator />
       <Layout.KeyFilters>
-        <TypeFilterPopoverContainer />
-        <AvailabilityFilterPopoverViewContainer />
-        <PriceFilterPopoverViewContainer />
         <BedsFilterPopoverViewContainer />
       </Layout.KeyFilters>
       <Layout.Separator />
@@ -88,5 +33,55 @@ const FilterBarContainer = ({}: Props) => {
     </Layout.Root>
   );
 };
+
+// <Layout.FilterDialog>
+//   <FilterDialogViewContainer>
+//     <PropertyFilters.PropertyType>
+//       <TypeFiltersContainer id="filters" />
+//     </PropertyFilters.PropertyType>
+//     <PropertyFilters.Location>
+//       <PlacesAutocompleteViewContainer />
+//     </PropertyFilters.Location>
+//     <PropertyFilters.AvailabilityAndArea>
+//       <PropertyFilters.Availability>
+//         <AvailabilityFilterViewContainer />
+//       </PropertyFilters.Availability>
+//     </PropertyFilters.AvailabilityAndArea>
+//     <PropertyFilters.PriceRange>
+//       <PriceRangeViewContainer />
+//     </PropertyFilters.PriceRange>
+//     <PropertyFilters.Bedrooms>
+//       <BedsFilterViewContainer />
+//     </PropertyFilters.Bedrooms>
+//     <PropertyFilters.Bathrooms>
+//       <BathroomsFilterViewContainer />
+//     </PropertyFilters.Bathrooms>
+//     <PropertyFilters.View>
+//       <ViewTypeFiltersContainer />
+//     </PropertyFilters.View>
+//     <PropertyFilters.IndoorFeatures>
+//       <IndoorFeatureFiltersContainer />
+//     </PropertyFilters.IndoorFeatures>
+//     <PropertyFilters.OutdoorFeatures>
+//       <OutdoorFeatureFiltersContainer />
+//     </PropertyFilters.OutdoorFeatures>
+//     <PropertyFilters.LotFeatures>
+//       <LotFeatureFiltersContainer />
+//     </PropertyFilters.LotFeatures>
+//     <PropertyFilters.LivingArea>
+//       <LivingAreaFiltersViewContainer />
+//     </PropertyFilters.LivingArea>
+//     <PropertyFilters.LotSize>
+//       <LotSizeFiltersViewContainer />
+//     </PropertyFilters.LotSize>
+//   </FilterDialogViewContainer>
+// </Layout.FilterDialog>
+// <Layout.Separator />
+// <Layout.KeyFilters>
+//   <TypeFilterPopoverContainer />
+//   <AvailabilityFilterPopoverViewContainer />
+//   <PriceFilterPopoverViewContainer />
+//   <BedsFilterPopoverViewContainer />
+// </Layout.KeyFilters>
 
 export default FilterBarContainer;

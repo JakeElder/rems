@@ -1,15 +1,33 @@
-import { BedsFilter } from "@rems/ui";
-import useRealEstateQuery from "./use-real-estate-query";
+import { useStagedRealEstateQuery, setSpace } from "@/state";
+import { BedsFilterPopover } from "@rems/ui";
+import { useDispatch } from "react-redux";
 
-const useBedsFilterProps = (): React.ComponentProps<typeof BedsFilter> => {
-  const { stagedQuery, onMinBedsChange, onMaxBedsChange } =
-    useRealEstateQuery();
+type Props = React.ComponentProps<typeof BedsFilterPopover>;
+
+const useBedsFilterProps = (): Props => {
+  const stagedQuery = useStagedRealEstateQuery();
+  const dispatch = useDispatch();
 
   return {
-    maxBedrooms: stagedQuery["max-bedrooms"],
-    minBedrooms: stagedQuery["min-bedrooms"],
-    onMinChange: onMinBedsChange,
-    onMaxChange: onMaxBedsChange
+    minBedrooms: stagedQuery.space.minBedrooms,
+    maxBedrooms: stagedQuery.space.maxBedrooms,
+    onMinChange: (value) => {
+      dispatch(
+        setSpace({
+          role: "USER",
+          data: { minBedrooms: value }
+        })
+      );
+    },
+    onMaxChange: (value) => {
+      dispatch(
+        setSpace({
+          role: "USER",
+          data: { maxBedrooms: value }
+        })
+      );
+    },
+    on: true
   };
 };
 

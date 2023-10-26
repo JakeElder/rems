@@ -1,7 +1,5 @@
 import {
   Filter,
-  HasActiveManifest,
-  HasGroup,
   RealEstateQuery,
   RealEstateQueryArrayKey,
   SearchParams,
@@ -13,7 +11,6 @@ import {
   LocationSourceSchema,
   RealEstateIndexPageAndSortSchema,
   SpaceRequirementsSchema,
-  RealEstateQuerySchema,
   UrlRealEstateQuerySchema
 } from "@rems/schemas";
 import { ZodType } from "zod";
@@ -251,24 +248,4 @@ export const fromSearchParams = (params: SearchParams, filters: Filters) => {
 
   const url = UrlRealEstateQuerySchema.parse(obj);
   return fromUrl(url, filters);
-};
-
-export const has = (
-  query: RealEstateQuery,
-  group: HasGroup
-): HasActiveManifest[HasGroup] => {
-  const defaults = RealEstateQuerySchema.parse({});
-  const manifest: HasActiveManifest = {
-    PRICE:
-      query.budgetAndAvailability.minPrice !==
-        defaults.budgetAndAvailability.minPrice ||
-      query.budgetAndAvailability.maxPrice !==
-        defaults.budgetAndAvailability.maxPrice,
-    BEDROOMS:
-      query.space.minBedrooms !== defaults.space.minBedrooms ||
-      query.space.maxBedrooms !== defaults.space.maxBedrooms,
-    PROPERTY_TYPE: query.propertyTypes.length > 0
-  };
-
-  return manifest[group];
 };

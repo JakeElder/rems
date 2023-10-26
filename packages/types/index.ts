@@ -316,6 +316,3 @@ export type GetPropertiesResult = {
   location: Location;
   pagination: Pagination;
 };
-
-export type HasGroup = "PRICE" | "BEDROOMS" | "PROPERTY_TYPE";
-export type HasActiveManifest = Record<HasGroup, boolean>;

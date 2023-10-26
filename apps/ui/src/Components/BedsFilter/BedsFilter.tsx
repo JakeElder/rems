@@ -5,10 +5,10 @@ import Checkbox from "../../Elements/Checkbox";
 import { RealEstateQuery } from "@rems/types";
 
 type Props = {
-  minBedrooms: RealEstateQuery["min-bedrooms"];
-  maxBedrooms: RealEstateQuery["max-bedrooms"];
-  onMinChange: (value: RealEstateQuery["min-bedrooms"]) => void;
-  onMaxChange: (value: RealEstateQuery["max-bedrooms"]) => void;
+  minBedrooms: RealEstateQuery["space"]["minBedrooms"];
+  maxBedrooms: RealEstateQuery["space"]["maxBedrooms"];
+  onMinChange: (value: RealEstateQuery["space"]["minBedrooms"]) => void;
+  onMaxChange: (value: RealEstateQuery["space"]["maxBedrooms"]) => void;
 };
 
 const label = (n: number, exact: boolean) => (exact ? `${n}` : `${n}+`);

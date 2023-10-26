@@ -5,6 +5,7 @@ import QuickFiltersContainer from "@/components/server/QuickFiltersContainer";
 import StateProviderContainer from "@/components/server/StateProviderContainer";
 import QuerySync from "@/components/client/QuerySync";
 import { SearchParams } from "@rems/types";
+import FilterBarContainer from "@/components/server/FilterBarContainer";
 
 type Props = { searchParams?: SearchParams };
 
@@ -21,7 +22,7 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
     <StateProviderContainer searchParams={searchParams || {}}>
       <QuerySync>
         <Page.Root>
-          <QuickFiltersContainer />
+          <FilterBarContainer />
         </Page.Root>
       </QuerySync>
     </StateProviderContainer>
