@@ -1,5 +1,4 @@
 import React from "react";
-import css from "./LotSizeFilters.module.css";
 import Split from "../../Elements/Split";
 import Select from "../../Elements/Select";
 import { LotSize, RealEstateQuery } from "@rems/types";
@@ -7,10 +6,10 @@ import { LotSize, RealEstateQuery } from "@rems/types";
 type Props = {
   minLotSizes: LotSize[];
   maxLotSizes: LotSize[];
-  minLotSize: RealEstateQuery["min-lot-size"];
-  maxLotSize: RealEstateQuery["max-lot-size"];
-  onMinLotSizeChange: (value: RealEstateQuery["min-lot-size"]) => void;
-  onMaxLotSizeChange: (value: RealEstateQuery["max-lot-size"]) => void;
+  minLotSize: RealEstateQuery["space"]["minLotSize"];
+  maxLotSize: RealEstateQuery["space"]["maxLotSize"];
+  onMinLotSizeChange: (value: RealEstateQuery["space"]["minLotSize"]) => void;
+  onMaxLotSizeChange: (value: RealEstateQuery["space"]["maxLotSize"]) => void;
 };
 
 const LotSizeFilters = ({

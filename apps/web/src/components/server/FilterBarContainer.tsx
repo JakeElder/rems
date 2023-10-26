@@ -49,6 +49,15 @@ const FilterBarContainer = ({}: Props) => {
           <PropertyFilters.OutdoorFeatures>
             <OutdoorFeatureFiltersContainer />
           </PropertyFilters.OutdoorFeatures>
+          <PropertyFilters.LotFeatures>
+            <LotFeatureFiltersContainer />
+          </PropertyFilters.LotFeatures>
+          <PropertyFilters.LivingArea>
+            <LivingAreaFiltersViewContainer />
+          </PropertyFilters.LivingArea>
+          <PropertyFilters.LotSize>
+            <LotSizeFiltersViewContainer />
+          </PropertyFilters.LotSize>
         </FilterDialogViewContainer>
       </Layout.FilterDialog>
       <Layout.Separator />
@@ -66,22 +75,8 @@ const FilterBarContainer = ({}: Props) => {
   );
 };
 
-// <Layout.FilterDialog>
-//   <FilterDialogViewContainer>
-//     <PropertyFilters.Location>
-//       <PlacesAutocompleteViewContainer />
-//     </PropertyFilters.Location>
-//
-//     <PropertyFilters.LotFeatures>
-//       <LotFeatureFiltersContainer />
-//     </PropertyFilters.LotFeatures>
-//     <PropertyFilters.LivingArea>
-//       <LivingAreaFiltersViewContainer />
-//     </PropertyFilters.LivingArea>
-//     <PropertyFilters.LotSize>
-//       <LotSizeFiltersViewContainer />
-//     </PropertyFilters.LotSize>
-//   </FilterDialogViewContainer>
-// </Layout.FilterDialog>
+// <PropertyFilters.Location>
+//   <PlacesAutocompleteViewContainer />
+// </PropertyFilters.Location>
 
 export default FilterBarContainer;

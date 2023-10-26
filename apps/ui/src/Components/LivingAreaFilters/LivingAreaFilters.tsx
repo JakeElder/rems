@@ -1,5 +1,4 @@
 import React from "react";
-import css from "./LivingAreaFilters.module.css";
 import Split from "../../Elements/Split";
 import Select from "../../Elements/Select";
 import { LivingAreaSize, RealEstateQuery } from "@rems/types";
@@ -7,10 +6,14 @@ import { LivingAreaSize, RealEstateQuery } from "@rems/types";
 type Props = {
   minLivingAreaSizes: LivingAreaSize[];
   maxLivingAreaSizes: LivingAreaSize[];
-  minLivingArea: RealEstateQuery["min-living-area"];
-  maxLivingArea: RealEstateQuery["max-living-area"];
-  onMinLivingAreaChange: (value: RealEstateQuery["min-living-area"]) => void;
-  onMaxLivingAreaChange: (value: RealEstateQuery["max-living-area"]) => void;
+  minLivingArea: RealEstateQuery["space"]["minLivingArea"];
+  maxLivingArea: RealEstateQuery["space"]["maxLivingArea"];
+  onMinLivingAreaChange: (
+    value: RealEstateQuery["space"]["minLivingArea"]
+  ) => void;
+  onMaxLivingAreaChange: (
+    value: RealEstateQuery["space"]["maxLivingArea"]
+  ) => void;
 };
 
 const LivingAreaFilters = ({

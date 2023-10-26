@@ -2,20 +2,20 @@
 
 import React from "react";
 import { LotFeatureFilters } from "@rems/ui";
-import useRealEstateQuery from "../../hooks/use-real-estate-query";
+import useFilterArrayProps from "@/hooks/use-filter-array-props";
+import { useActiveLotFeatureFilters } from "@/state";
 
 type Props = Pick<React.ComponentProps<typeof LotFeatureFilters>, "features">;
 
 const LotFeatureFiltersViewContainer = ({ features }: Props) => {
-  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
+  const filters = useActiveLotFeatureFilters();
+  const { isChecked, onChange } = useFilterArrayProps("lotFeatures", filters);
 
   return (
     <LotFeatureFilters
       features={features}
-      onChange={(value, checked) =>
-        onCheckedChange("lot-features", value, checked)
-      }
-      isChecked={(value) => stagedQuery["lot-features"].includes(value)}
+      onChange={onChange}
+      isChecked={isChecked}
     />
   );
 };

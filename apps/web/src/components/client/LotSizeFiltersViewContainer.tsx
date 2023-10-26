@@ -1,22 +1,46 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { LotSizeFilters } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { MAX_LOT_SIZES, MIN_LOT_SIZES } from "../../constants";
+import {
+  commitRealEstateQuery,
+  setSpace,
+  useDispatch,
+  useStagedRealEstateQuery
+} from "@/state";
 
+type ViewProps = React.ComponentProps<typeof LotSizeFilters>;
 type Props = {};
 
 const LotSizeFiltersViewContainer = ({}: Props) => {
-  const { onValueChange, stagedQuery } = useRealEstateQuery();
+  const stagedQuery = useStagedRealEstateQuery();
+  const dispatch = useDispatch();
+
+  const onMinLotSizeChange: ViewProps["onMinLotSizeChange"] = useCallback(
+    (minLotSize) => {
+      dispatch(setSpace({ role: "USER", data: { minLotSize } }));
+      dispatch(commitRealEstateQuery());
+    },
+    []
+  );
+
+  const onMaxLotSizeChange: ViewProps["onMaxLotSizeChange"] = useCallback(
+    (maxLotSize) => {
+      dispatch(setSpace({ role: "USER", data: { maxLotSize } }));
+      dispatch(commitRealEstateQuery());
+    },
+    []
+  );
+
   return (
     <LotSizeFilters
-      minLotSize={stagedQuery["min-lot-size"]}
-      maxLotSize={stagedQuery["max-lot-size"]}
+      minLotSize={stagedQuery.space.minLotSize}
+      maxLotSize={stagedQuery.space.maxLotSize}
       minLotSizes={MIN_LOT_SIZES}
       maxLotSizes={MAX_LOT_SIZES}
-      onMinLotSizeChange={(value) => onValueChange("min-lot-size", value)}
-      onMaxLotSizeChange={(value) => onValueChange("max-lot-size", value)}
+      onMinLotSizeChange={onMinLotSizeChange}
+      onMaxLotSizeChange={onMaxLotSizeChange}
     />
   );
 };

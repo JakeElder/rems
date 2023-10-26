@@ -6,8 +6,8 @@ import { LotFeature } from "@rems/types";
 
 type Props = {
   features: LotFeature[];
-  onChange: (value: string, checked: boolean) => void;
-  isChecked: (value: string) => boolean;
+  onChange: (filter: LotFeature, checked: boolean) => void;
+  isChecked: (filter: LotFeature) => boolean;
 };
 
 const LotFeatureFilters = ({ features, onChange, isChecked }: Props) => {
@@ -18,9 +18,9 @@ const LotFeatureFilters = ({ features, onChange, isChecked }: Props) => {
           items={features.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onChange(t.slug, checked !== "indeterminate" && checked)
+                onChange(t, checked !== "indeterminate" && checked)
               }
-              checked={isChecked(t.slug)}
+              checked={isChecked(t)}
               key={t.slug}
               name="lot-features[]"
               value={t.slug}

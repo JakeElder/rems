@@ -1,23 +1,46 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { LivingAreaFilters } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
+import { useDispatch } from "react-redux";
+import {
+  commitRealEstateQuery,
+  setSpace,
+  useStagedRealEstateQuery
+} from "@/state";
 
+type ViewProps = React.ComponentProps<typeof LivingAreaFilters>;
 type Props = {};
 
 const LivingAreaFiltersViewContainer = ({}: Props) => {
-  const { onValueChange, stagedQuery } = useRealEstateQuery();
+  const stagedQuery = useStagedRealEstateQuery();
+  const dispatch = useDispatch();
+
+  const onMinLivingAreaChange: ViewProps["onMinLivingAreaChange"] = useCallback(
+    (minLivingArea) => {
+      dispatch(setSpace({ role: "USER", data: { minLivingArea } }));
+      dispatch(commitRealEstateQuery());
+    },
+    []
+  );
+
+  const onMaxLivingAreaChange: ViewProps["onMaxLivingAreaChange"] = useCallback(
+    (maxLivingArea) => {
+      dispatch(setSpace({ role: "USER", data: { maxLivingArea } }));
+      dispatch(commitRealEstateQuery());
+    },
+    []
+  );
 
   return (
     <LivingAreaFilters
-      minLivingArea={stagedQuery["min-living-area"]}
-      maxLivingArea={stagedQuery["max-living-area"]}
+      minLivingArea={stagedQuery.space.minLivingArea}
+      maxLivingArea={stagedQuery.space.maxLivingArea}
       minLivingAreaSizes={MIN_LIVING_AREA_SIZES}
       maxLivingAreaSizes={MAX_LIVING_AREA_SIZES}
-      onMinLivingAreaChange={(value) => onValueChange("min-living-area", value)}
-      onMaxLivingAreaChange={(value) => onValueChange("max-living-area", value)}
+      onMinLivingAreaChange={onMinLivingAreaChange}
+      onMaxLivingAreaChange={onMaxLivingAreaChange}
     />
   );
 };
