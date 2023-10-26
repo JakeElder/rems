@@ -2,17 +2,15 @@
 
 import React from "react";
 import { PriceFilterPopover } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import usePriceRangeProps from "@/hooks/use-price-range-props";
+import { useHasPriceFilter } from "@/state";
 
 type Props = {};
 
 const PriceFilterPopoverViewContainer = ({}: Props) => {
-  const { has } = useRealEstateQuery();
   const props = usePriceRangeProps();
-  return (
-    <PriceFilterPopover on={has("min-price") || has("max-price")} {...props} />
-  );
+  const on = useHasPriceFilter();
+  return <PriceFilterPopover on={on} {...props} />;
 };
 
 export default PriceFilterPopoverViewContainer;

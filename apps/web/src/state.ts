@@ -81,6 +81,26 @@ export const useHasBedsFilter = () =>
     )
   );
 
+export const useHasPriceFilter = () =>
+  useSelector(
+    createSelector(
+      [
+        (state: AppState) =>
+          state.slices.stagedRealEstateQuery.budgetAndAvailability.minPrice,
+        (state: AppState) =>
+          state.slices.stagedRealEstateQuery.budgetAndAvailability.maxPrice
+      ],
+      (min, max) => {
+        const defaults = app.defaults();
+        const { budgetAndAvailability } = defaults.slices.stagedRealEstateQuery;
+        return (
+          min !== budgetAndAvailability.minPrice ||
+          max !== budgetAndAvailability.maxPrice
+        );
+      }
+    )
+  );
+
 export const useRealEstateQuery = () =>
   useSelector((state) => state.slices.realEstateQuery);
 

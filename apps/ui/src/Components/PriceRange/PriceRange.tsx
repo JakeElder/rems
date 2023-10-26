@@ -6,16 +6,16 @@ import Slider from "../../Elements/Slider";
 import { RealEstateQuery } from "@rems/types";
 
 type Props = {
-  availability: RealEstateQuery["availability"];
+  availability: RealEstateQuery["budgetAndAvailability"]["type"];
   minPurchasePrice: number;
   maxPurchasePrice: number;
   minRentalPrice: number;
   maxRentalPrice: number;
-  minPrice: RealEstateQuery["min-price"];
-  maxPrice: RealEstateQuery["max-price"];
+  minPrice: RealEstateQuery["budgetAndAvailability"]["minPrice"];
+  maxPrice: RealEstateQuery["budgetAndAvailability"]["maxPrice"];
   onChange: (
-    min: RealEstateQuery["min-price"],
-    max: RealEstateQuery["max-price"]
+    min: RealEstateQuery["budgetAndAvailability"]["minPrice"],
+    max: RealEstateQuery["budgetAndAvailability"]["maxPrice"]
   ) => void;
 };
 
@@ -29,9 +29,9 @@ const PriceRange = ({
   maxPrice,
   onChange
 }: Props) => {
-  const MIN = availability === "sale" ? minPurchasePrice : minRentalPrice;
-  const MAX = availability === "sale" ? maxPurchasePrice : maxRentalPrice;
-  const STEP = availability === "sale" ? 1000 : 100;
+  const MIN = availability === "SALE" ? minPurchasePrice : minRentalPrice;
+  const MAX = availability === "SALE" ? maxPurchasePrice : maxRentalPrice;
+  const STEP = availability === "SALE" ? 1000 : 100;
 
   const [value, setValue] = useState([minPrice, maxPrice ? maxPrice : MAX]);
 

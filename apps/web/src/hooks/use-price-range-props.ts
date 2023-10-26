@@ -1,5 +1,10 @@
 import { PriceRange } from "@rems/ui";
-import useRealEstateQuery from "./use-real-estate-query";
+import {
+  commitRealEstateQuery,
+  setBudgetAndAvailability,
+  useDispatch,
+  useStagedRealEstateQuery
+} from "@/state";
 import {
   MAX_PURCHASE_PRICE,
   MAX_RENTAL_PRICE,
@@ -8,13 +13,24 @@ import {
 } from "../constants";
 
 const usePriceRangeProps = (): React.ComponentProps<typeof PriceRange> => {
-  const { stagedQuery, onPriceRangeChange } = useRealEstateQuery();
+  const stagedQuery = useStagedRealEstateQuery();
+  const dispatch = useDispatch();
+
+  const { type, minPrice, maxPrice } = stagedQuery.budgetAndAvailability;
 
   return {
-    availability: stagedQuery["availability"],
-    onChange: onPriceRangeChange,
-    maxPrice: stagedQuery["max-price"],
-    minPrice: stagedQuery["min-price"],
+    availability: type,
+    onChange: (minPrice, maxPrice) => {
+      dispatch(
+        setBudgetAndAvailability({
+          role: "USER",
+          data: { minPrice, maxPrice }
+        })
+      );
+      dispatch(commitRealEstateQuery());
+    },
+    maxPrice,
+    minPrice,
     minRentalPrice: MIN_RENTAL_PRICE,
     maxRentalPrice: MAX_RENTAL_PRICE,
     minPurchasePrice: MIN_PURCHASE_PRICE,

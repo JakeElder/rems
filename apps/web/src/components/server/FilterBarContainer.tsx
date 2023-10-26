@@ -24,6 +24,7 @@ const FilterBarContainer = ({}: Props) => {
   return (
     <Layout.Root>
       <Layout.KeyFilters>
+        <PriceFilterPopoverViewContainer />
         <BedsFilterPopoverViewContainer />
       </Layout.KeyFilters>
       <Layout.Separator />
