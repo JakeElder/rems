@@ -7,8 +7,7 @@ import usePriceRangeProps from "@/hooks/use-price-range-props";
 type Props = {};
 
 const PriceRangeViewContainer = ({}: Props) => {
-  const props = usePriceRangeProps();
-  return <PriceRange {...props} />;
+  return <PriceRange {...usePriceRangeProps()} />;
 };
 
 export default PriceRangeViewContainer;

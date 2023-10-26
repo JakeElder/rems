@@ -31,6 +31,15 @@ const FilterBarContainer = ({}: Props) => {
           <PropertyFilters.Availability>
             <AvailabilityFilterViewContainer />
           </PropertyFilters.Availability>
+          <PropertyFilters.PriceRange>
+            <PriceRangeViewContainer />
+          </PropertyFilters.PriceRange>
+          <PropertyFilters.Bedrooms>
+            <BedsFilterViewContainer />
+          </PropertyFilters.Bedrooms>
+          <PropertyFilters.Bathrooms>
+            <BathroomsFilterViewContainer />
+          </PropertyFilters.Bathrooms>
         </FilterDialogViewContainer>
       </Layout.FilterDialog>
       <Layout.Separator />
@@ -53,17 +62,7 @@ const FilterBarContainer = ({}: Props) => {
 //     <PropertyFilters.Location>
 //       <PlacesAutocompleteViewContainer />
 //     </PropertyFilters.Location>
-//     <PropertyFilters.AvailabilityAndArea>
-//       <PropertyFilters.Availability>
-//         <AvailabilityFilterViewContainer />
-//       </PropertyFilters.Availability>
-//     </PropertyFilters.AvailabilityAndArea>
-//     <PropertyFilters.PriceRange>
-//       <PriceRangeViewContainer />
-//     </PropertyFilters.PriceRange>
-//     <PropertyFilters.Bedrooms>
-//       <BedsFilterViewContainer />
-//     </PropertyFilters.Bedrooms>
+//
 //     <PropertyFilters.Bathrooms>
 //       <BathroomsFilterViewContainer />
 //     </PropertyFilters.Bathrooms>
