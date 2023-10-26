@@ -426,6 +426,11 @@ const replaceRealEstateQuery = (
   state.slices.stagedRealEstateQuery = clone(action.payload);
 };
 
+const resetRealEstateQuery = (state: AppState) => {
+  state.slices.realEstateQuery = defaults().slices.realEstateQuery;
+  state.slices.stagedRealEstateQuery = defaults().slices.stagedRealEstateQuery;
+};
+
 const init = (initial: DeepPartial<AppState> = {}) => {
   const initialState = extend<AppState, DeepPartial<AppState>>(
     defaults(),
@@ -451,6 +456,7 @@ const init = (initial: DeepPartial<AppState> = {}) => {
       handleUserYield,
       handleVoiceInputReceived,
       replaceRealEstateQuery,
+      resetRealEstateQuery,
       returnControl,
       setArray,
       setBudgetAndAvailability,

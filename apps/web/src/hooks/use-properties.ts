@@ -1,9 +1,10 @@
 import useSWR from "swr";
-import qs from "qs";
 import { GetPropertiesResult, RealEstateQuery } from "@rems/types";
 import { useEffect, useState } from "react";
+import { generateQueryString } from "@rems/utils/query";
+import { useRealEstateQuery } from "@/state";
 
-type UsePropertiesHook = (query: RealEstateQuery) =>
+type UsePropertiesHook = () =>
   | {
       ready: false;
       isLoading: true;
@@ -23,13 +24,13 @@ const fetcher = async (query: string): Promise<GetPropertiesResult> => {
   return json;
 };
 
-const useProperties: UsePropertiesHook = (query) => {
-  const q = qs.stringify(query, { arrayFormat: "brackets" });
+const useProperties: UsePropertiesHook = () => {
   const [ready, setReady] = useState(false);
+  const query = generateQueryString(useRealEstateQuery());
 
   const { data, isLoading } = useSWR(
-    [q, "properties"],
-    ([q]) => fetcher(`?${q}`),
+    [query || "?", "properties"],
+    ([q]) => fetcher(q),
     { keepPreviousData: true }
   );
 

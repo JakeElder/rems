@@ -181,6 +181,7 @@ export const {
   handleUserYield,
   handleVoiceInputReceived,
   replaceRealEstateQuery,
+  resetRealEstateQuery,
   returnControl,
   setArray,
   setBudgetAndAvailability,

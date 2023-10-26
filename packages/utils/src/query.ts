@@ -211,5 +211,7 @@ export const fromSearchParams = (
   };
 
   const url = UrlRealEstateQuerySchema.parse(obj);
-  return fromUrl(url, filters);
+  const full = fromUrl(url, filters);
+
+  return full;
 };

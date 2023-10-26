@@ -3,25 +3,26 @@
 import React, { useState } from "react";
 import { FilterDialog, PropertyFilters } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
-import { useActiveFiltersCount } from "@/state";
+import { resetRealEstateQuery, useActiveFiltersCount } from "@/state";
+import { useDispatch } from "react-redux";
 
 type Props = { children: React.ReactNode };
 
 const FilterDialogViewContainer = ({ children }: Props) => {
+  const dispatch = useDispatch();
   const count = useActiveFiltersCount();
-  // const { activeFilters, reset, serverQuery } = useRealEstateQuery();
-  // const { data, isLoading } = useProperties(serverQuery);
+  const { data, isLoading } = useProperties();
 
   const [open, setOpen] = useState(false);
 
   return (
     <FilterDialog
       activeFilters={count}
-      loading={true}
+      loading={isLoading}
       onOpenChange={setOpen}
       open={open}
-      count={0}
-      onClearClick={() => {}}
+      count={data?.pagination.total}
+      onClearClick={() => dispatch(resetRealEstateQuery())}
     >
       <PropertyFilters.Root>{children}</PropertyFilters.Root>
     </FilterDialog>
