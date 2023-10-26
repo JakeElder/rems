@@ -23,6 +23,13 @@ type Props = {};
 const FilterBarContainer = ({}: Props) => {
   return (
     <Layout.Root>
+      <Layout.FilterDialog>
+        <FilterDialogViewContainer>
+          <PropertyFilters.PropertyType>
+            <TypeFiltersContainer id="filters" />
+          </PropertyFilters.PropertyType>
+        </FilterDialogViewContainer>
+      </Layout.FilterDialog>
       <Layout.Separator />
       <Layout.KeyFilters>
         <TypeFilterPopoverContainer />

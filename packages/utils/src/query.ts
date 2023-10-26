@@ -6,13 +6,7 @@ import {
   UrlRealEstateQuery,
   Z
 } from "@rems/types";
-import {
-  BudgetAndAvailabilityRequirementsSchema,
-  LocationSourceSchema,
-  RealEstateIndexPageAndSortSchema,
-  SpaceRequirementsSchema,
-  UrlRealEstateQuerySchema
-} from "@rems/schemas";
+import { UrlRealEstateQuerySchema } from "@rems/schemas";
 import { ZodType } from "zod";
 import { omitBy, equals } from "remeda";
 import qs from "qs";
@@ -20,44 +14,12 @@ import { constantCase, paramCase } from "change-case-all";
 
 type Schema = ZodType<any>;
 
-type ActiveCounts = Record<keyof Omit<RealEstateQuery, "limit">, number>;
-
 const removeDefaults = <T extends Schema>(
   schema: T,
   data: Z<T>
 ): Partial<Z<T>> => {
   const defaults = schema.parse({});
   return omitBy(data, (v, k) => equals(defaults[k], v));
-};
-
-const countScalars = <T extends Schema>(data: Z<Schema>, schema: T): number => {
-  const withoutDefaults = removeDefaults(data, schema);
-  return Object.keys(withoutDefaults).length;
-};
-
-const countArray = (arr: Filter[]) => arr.length;
-
-export const countActiveProps = (query: RealEstateQuery): number => {
-  const counts: ActiveCounts = {
-    indoorFeatures: countArray(query.indoorFeatures),
-    lotFeatures: countArray(query.lotFeatures),
-    outdoorFeatures: countArray(query.outdoorFeatures),
-    propertyTypes: countArray(query.propertyTypes),
-    viewTypes: countArray(query.viewTypes),
-    budgetAndAvailability: countScalars(
-      query.budgetAndAvailability,
-      BudgetAndAvailabilityRequirementsSchema
-    ),
-    locationSource: countScalars(query.locationSource, LocationSourceSchema),
-    pageAndSort: countScalars(
-      query.pageAndSort,
-      RealEstateIndexPageAndSortSchema
-    ),
-    space: countScalars(query.space, SpaceRequirementsSchema)
-  };
-
-  const keys = Object.keys(query) as (keyof ActiveCounts)[];
-  return keys.reduce((a, v) => a + counts[v], 0);
 };
 
 const filter = {
@@ -132,6 +94,7 @@ const adapt = {
     sort: (source: RealEstateQuery): UrlRealEstateQuery["sort"] => {
       return paramCase(source.pageAndSort.sort) as UrlRealEstateQuery["sort"];
     },
+
     locationSource: (
       source: RealEstateQuery
     ): Pick<
@@ -203,7 +166,7 @@ export const toUrl = (source: RealEstateQuery): UrlRealEstateQuery => {
     "min-lot-size": source.space.minLotSize,
     "max-lot-size": source.space.maxLotSize,
     radius: source.locationSource.radius || 10000,
-    "radius-enabled": source.locationSource.radiusEnabled ? "true" : "false",
+    "radius-enabled": source.locationSource.radius !== null ? "true" : "false",
     ...adapt.toUrl.locationSource(source)
   };
 };
