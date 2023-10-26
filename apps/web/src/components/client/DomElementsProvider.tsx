@@ -1,3 +1,5 @@
+"use client";
+
 import { MutableRefObject, createContext, useContext, useRef } from "react";
 
 type Props = {

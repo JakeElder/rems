@@ -10,7 +10,6 @@ import {
   Timeline,
   TimelineEvent,
   AssistantTimelineEvent,
-  Analysis,
   AssistantUiState,
   SystemTimelineEvent
 } from "@rems/types";
@@ -29,7 +28,7 @@ import { Observable } from "rxjs";
 import uuid from "short-uuid";
 import { useDebouncedCallback } from "use-debounce";
 import { Chat } from "@rems/ui";
-import { useDomElements } from "@/components/DomElementsProvider";
+import { useDomElements } from "@/components/client/DomElementsProvider";
 import useProperties from "@/hooks/use-properties";
 
 const NEXT_PUBLIC_REMS_API_URL = process.env.NEXT_PUBLIC_REMS_API_URL;

@@ -1,10 +1,13 @@
 import { Metadata } from "next";
-import { RealEstateIndexPage as Page } from "@rems/ui";
+import { RealEstateIndexPage as Page, ToastHub } from "@rems/ui";
 import fetch from "@/fetch";
 import StateProviderContainer from "@/components/server/StateProviderContainer";
 import { SearchParams } from "@rems/types";
 import FilterBarContainer from "@/components/server/FilterBarContainer";
 import QuerySyncContainer from "@/components/server/QuerySyncContainer";
+import RealEstateIndexPageHeaderViewContainer from "@/components/client/RealEstateIndexPageHeaderViewContainer";
+import HeaderViewContainer from "@/components/client/HeaderViewContainer";
+import DomElementsProvider from "@/components/client/DomElementsProvider";
 
 type Props = { searchParams?: SearchParams };
 
@@ -20,9 +23,16 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
   return (
     <StateProviderContainer searchParams={searchParams}>
       <QuerySyncContainer>
-        <Page.Root>
-          <FilterBarContainer />
-        </Page.Root>
+        <DomElementsProvider>
+          <Page.Root>
+            <ToastHub>
+              <RealEstateIndexPageHeaderViewContainer>
+                <HeaderViewContainer full mode="standard" />
+                <FilterBarContainer />
+              </RealEstateIndexPageHeaderViewContainer>
+            </ToastHub>
+          </Page.Root>
+        </DomElementsProvider>
       </QuerySyncContainer>
     </StateProviderContainer>
   );
