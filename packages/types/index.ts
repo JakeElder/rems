@@ -316,3 +316,5 @@ export type GetPropertiesResult = {
   location: Location;
   pagination: Pagination;
 };
+
+export type ArrayFilters = Record<RealEstateQueryArrayKey, Filter[]>;

@@ -6,8 +6,10 @@ import { RealEstateQuery } from "@rems/types";
 
 type Props = {
   type?: "toggle" | "select";
-  value: RealEstateQuery["availability"];
-  onChange: (availability: RealEstateQuery["availability"]) => void;
+  value: RealEstateQuery["budgetAndAvailability"]["type"];
+  onChange: (
+    availability: RealEstateQuery["budgetAndAvailability"]["type"]
+  ) => void;
 };
 
 const AvailabilityFilter = ({ type = "select", onChange, value }: Props) => {
@@ -18,13 +20,13 @@ const AvailabilityFilter = ({ type = "select", onChange, value }: Props) => {
           width={80}
           value={value}
           onValueChange={(val) => {
-            if (val === "sale" || val === "rent") {
+            if (val === "SALE" || val === "RENT") {
               onChange(val);
             }
           }}
           items={[
-            { value: "sale", label: "Sale" },
-            { value: "rent", label: "Rent" }
+            { value: "SALE", label: "Sale" },
+            { value: "RENT", label: "Rent" }
           ]}
         />
       </div>
@@ -37,13 +39,13 @@ const AvailabilityFilter = ({ type = "select", onChange, value }: Props) => {
         value={value}
         onChange={(e) => {
           const val = e.currentTarget.value;
-          if (val === "sale" || val === "rent") {
+          if (val === "SALE" || val === "RENT") {
             onChange(val);
           }
         }}
         options={[
-          { value: "sale", label: "Sale" },
-          { value: "rent", label: "Rent" }
+          { value: "SALE", label: "Sale" },
+          { value: "RENT", label: "Rent" }
         ]}
       />
     </div>

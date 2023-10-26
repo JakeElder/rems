@@ -1,17 +1,32 @@
 "use client";
 
 import React from "react";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { AvailabilityFilterPopover } from "@rems/ui";
+import {
+  commitRealEstateQuery,
+  setBudgetAndAvailability,
+  useDispatch,
+  useStagedRealEstateQuery
+} from "@/state";
 
 type Props = {};
 
 const AvailabilityFilterPopoverViewContainer = ({}: Props) => {
-  const { query, onAvailabilityChange } = useRealEstateQuery();
+  const stagedQuery = useStagedRealEstateQuery();
+  const dispatch = useDispatch();
+
   return (
     <AvailabilityFilterPopover
-      value={query["availability"]}
-      onChange={onAvailabilityChange}
+      value={stagedQuery.budgetAndAvailability.type}
+      onChange={(type) => {
+        dispatch(
+          setBudgetAndAvailability({
+            role: "USER",
+            data: { type }
+          })
+        );
+        dispatch(commitRealEstateQuery());
+      }}
     />
   );
 };

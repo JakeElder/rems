@@ -1,11 +1,10 @@
 import { Metadata } from "next";
 import { RealEstateIndexPage as Page } from "@rems/ui";
 import fetch from "@/fetch";
-import QuickFiltersContainer from "@/components/server/QuickFiltersContainer";
 import StateProviderContainer from "@/components/server/StateProviderContainer";
-import QuerySync from "@/components/client/QuerySync";
 import { SearchParams } from "@rems/types";
 import FilterBarContainer from "@/components/server/FilterBarContainer";
+import QuerySyncContainer from "@/components/server/QuerySyncContainer";
 
 type Props = { searchParams?: SearchParams };
 
@@ -19,12 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RealEstateIndexPage({ searchParams }: Props) {
   return (
-    <StateProviderContainer searchParams={searchParams || {}}>
-      <QuerySync>
+    <StateProviderContainer searchParams={searchParams}>
+      <QuerySyncContainer>
         <Page.Root>
           <FilterBarContainer />
         </Page.Root>
-      </QuerySync>
+      </QuerySyncContainer>
     </StateProviderContainer>
   );
 }

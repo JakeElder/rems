@@ -5,7 +5,7 @@ import fetch from "@/fetch";
 
 type Props = {
   children: React.ReactNode;
-  searchParams: SearchParams;
+  searchParams?: SearchParams;
 };
 
 const StateProviderContainer = async ({ searchParams, children }: Props) => {
@@ -23,7 +23,7 @@ const StateProviderContainer = async ({ searchParams, children }: Props) => {
     fetch("lot-features")
   ]);
 
-  const query = fromSearchParams(searchParams, {
+  const query = fromSearchParams(searchParams || {}, {
     propertyTypes,
     viewTypes,
     outdoorFeatures,

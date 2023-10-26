@@ -1,7 +1,7 @@
 import {
+  ArrayFilters,
   Filter,
   RealEstateQuery,
-  RealEstateQueryArrayKey,
   SearchParams,
   UrlRealEstateQuery,
   Z
@@ -59,8 +59,6 @@ export const countActiveProps = (query: RealEstateQuery): number => {
   const keys = Object.keys(query) as (keyof ActiveCounts)[];
   return keys.reduce((a, v) => a + counts[v], 0);
 };
-
-type Filters = Record<RealEstateQueryArrayKey, Filter[]>;
 
 const filter = {
   toSource: (slugs: Filter["slug"][], source: Filter[]): Filter[] => {
@@ -158,7 +156,7 @@ const adapt = {
 
 export const fromUrl = (
   url: UrlRealEstateQuery,
-  filters: Filters
+  filters: ArrayFilters
 ): RealEstateQuery => {
   return {
     // Scalars
@@ -231,7 +229,10 @@ export const generateQueryString = (
   return string ? `?${string}` : "";
 };
 
-export const fromSearchParams = (params: SearchParams, filters: Filters) => {
+export const fromSearchParams = (
+  params: SearchParams,
+  filters: ArrayFilters
+) => {
   const split = (str: SearchParams[string]) => {
     if (!str) return [];
     return typeof str === "string" ? str.split(",") : str;
