@@ -184,30 +184,30 @@ const radius = (query: Query) => {
 
 const bounds = async (query: Query) => {
   const location = await queryToLocation(query);
-  const { viewport } = location.resolution;
+  const { bounds } = location.resolution;
 
   return [
     {
       "location.lat": {
-        [Op.gte]: viewport.sw.lat,
-        [Op.lte]: viewport.ne.lat
+        [Op.gte]: bounds.sw.lat,
+        [Op.lte]: bounds.ne.lat
       },
       "location.lng": {
-        [Op.gte]: viewport.sw.lng,
-        [Op.lte]: viewport.ne.lng
+        [Op.gte]: bounds.sw.lng,
+        [Op.lte]: bounds.ne.lng
       }
     }
   ];
 };
 
 const limit = (query: Query) => {
-  if (query.limit) {
+  if (false) {
     return PROPERTIES_PER_PAGE;
   }
 };
 
 const offset = (query: Query) => {
-  if (query.limit) {
+  if (false) {
     return (query.pageAndSort.page - 1) * PROPERTIES_PER_PAGE;
   }
 };
@@ -333,6 +333,7 @@ export default async function resolve(
         ]
       };
     }
+
     return { ...p };
   });
 

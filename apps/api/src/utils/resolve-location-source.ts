@@ -59,7 +59,7 @@ const resolveNlLocationSource = memoize(
       id,
       lat: location.latitude,
       lng: location.longitude,
-      viewport: {
+      bounds: {
         sw: { lat: viewport.low.latitude, lng: viewport.low.longitude },
         ne: { lat: viewport.high.latitude, lng: viewport.high.longitude }
       },
