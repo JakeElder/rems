@@ -1,18 +1,16 @@
-import {
-  commitRealEstateQuery,
-  setArray,
-  useActivePropertyTypeFilters,
-  useDispatch
-} from "@/state";
+import { commitRealEstateQuery, setArray, useDispatch } from "@/state";
+import { Filter, RealEstateQueryArrayKey } from "@rems/types";
 import { TypeFilters } from "@rems/ui";
 import { useCallback } from "react";
 
 type ViewProps = React.ComponentProps<typeof TypeFilters>;
 type Return = Pick<ViewProps, "onChange" | "isChecked">;
 
-const useTypeFilterProps = (): Return => {
+const useFilterArrayProps = (
+  arr: RealEstateQueryArrayKey,
+  active: Filter[]
+): Return => {
   const dispatch = useDispatch();
-  const active = useActivePropertyTypeFilters();
 
   const isChecked: ViewProps["isChecked"] = useCallback(
     (filter) => active.findIndex((f) => f.slug === filter.slug) > -1,
@@ -24,8 +22,8 @@ const useTypeFilterProps = (): Return => {
       dispatch(
         setArray({
           role: "USER",
-          prop: "propertyTypes",
-          group: "Property Types",
+          prop: arr,
+          group: arr,
           data: on
             ? [...active, filter]
             : [...active].filter((f) => f.id !== filter.id)
@@ -42,4 +40,4 @@ const useTypeFilterProps = (): Return => {
   };
 };
 
-export default useTypeFilterProps;
+export default useFilterArrayProps;

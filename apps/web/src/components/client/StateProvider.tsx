@@ -10,7 +10,7 @@ type Props = {
   query: RealEstateQuery;
 };
 
-const StateProviderViewContainer = ({ children, query }: Props) => {
+const StateProvider = ({ children, query }: Props) => {
   const $initialised = useRef(false);
 
   if (!$initialised.current) {
@@ -21,4 +21,4 @@ const StateProviderViewContainer = ({ children, query }: Props) => {
   return <Provider store={store}>{children}</Provider>;
 };
 
-export default StateProviderViewContainer;
+export default StateProvider;

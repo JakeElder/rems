@@ -40,6 +40,9 @@ const FilterBarContainer = ({}: Props) => {
           <PropertyFilters.Bathrooms>
             <BathroomsFilterViewContainer />
           </PropertyFilters.Bathrooms>
+          <PropertyFilters.View>
+            <ViewTypeFiltersContainer />
+          </PropertyFilters.View>
         </FilterDialogViewContainer>
       </Layout.FilterDialog>
       <Layout.Separator />
@@ -63,13 +66,6 @@ const FilterBarContainer = ({}: Props) => {
 //       <PlacesAutocompleteViewContainer />
 //     </PropertyFilters.Location>
 //
-//     <PropertyFilters.Bathrooms>
-//       <BathroomsFilterViewContainer />
-//     </PropertyFilters.Bathrooms>
-//     <PropertyFilters.View>
-//       <ViewTypeFiltersContainer />
-//     </PropertyFilters.View>
-//     <PropertyFilters.IndoorFeatures>
 //       <IndoorFeatureFiltersContainer />
 //     </PropertyFilters.IndoorFeatures>
 //     <PropertyFilters.OutdoorFeatures>

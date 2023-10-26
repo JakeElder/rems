@@ -11,12 +11,27 @@ import { AppDispatch } from "@rems/state";
 /*
  * Selectors
  */
+const selectActiveIndoorFeatureFilters = (state: AppState) =>
+  state.slices.stagedRealEstateQuery.indoorFeatures;
+
+const selectActiveOutdoorFeatureFilters = (state: AppState) =>
+  state.slices.stagedRealEstateQuery.outdoorFeatures;
+
+const selectActiveLotFeatureFilters = (state: AppState) =>
+  state.slices.stagedRealEstateQuery.lotFeatures;
+
+const selectActiveViewTypeFilters = (state: AppState) =>
+  state.slices.stagedRealEstateQuery.viewTypes;
+
+const selectActivePropertyTypeFilters = (state: AppState) =>
+  state.slices.stagedRealEstateQuery.propertyTypes;
+
 const selectActiveQuickFilters = createSelector(
   [
-    (state: AppState) => state.slices.stagedRealEstateQuery.indoorFeatures,
-    (state: AppState) => state.slices.stagedRealEstateQuery.outdoorFeatures,
-    (state: AppState) => state.slices.stagedRealEstateQuery.lotFeatures,
-    (state: AppState) => state.slices.stagedRealEstateQuery.viewTypes
+    selectActiveIndoorFeatureFilters,
+    selectActiveOutdoorFeatureFilters,
+    selectActiveLotFeatureFilters,
+    selectActiveViewTypeFilters
   ],
   (indoorFeatures, outdoorFeatures, lotFeatures, viewTypes) => ({
     indoorFeatures,
@@ -25,9 +40,6 @@ const selectActiveQuickFilters = createSelector(
     viewTypes
   })
 );
-
-const selectActivePropertyTypeFilters = (state: AppState) =>
-  state.slices.stagedRealEstateQuery.propertyTypes;
 
 const selectHasBedsFilter = createSelector(
   [
@@ -128,6 +140,19 @@ export const useHasPropertyTypesFilter = () =>
 
 export const useActiveQuickFilters = () =>
   useSelector(selectActiveQuickFilters);
+
+export const useActiveIndoorFeatureFilters = () =>
+  useSelector(selectActiveIndoorFeatureFilters);
+
+export const useActiveOutdoorFeatureFilters = () =>
+  useSelector(selectActiveOutdoorFeatureFilters);
+
+export const useActiveLotFeatureFilters = () =>
+  useSelector(selectActiveLotFeatureFilters);
+
+export const useActiveViewTypeFilters = () =>
+  useSelector(selectActiveViewTypeFilters);
+
 export const useActivePropertyTypeFilters = () =>
   useSelector(selectActivePropertyTypeFilters);
 

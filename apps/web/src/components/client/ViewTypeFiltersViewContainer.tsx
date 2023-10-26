@@ -2,21 +2,17 @@
 
 import React from "react";
 import { ViewTypeFilters } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
+import useFilterArrayProps from "@/hooks/use-filter-array-props";
+import { useActiveViewTypeFilters } from "@/state";
 
 type Props = Pick<React.ComponentProps<typeof ViewTypeFilters>, "types">;
 
 const ViewTypeFiltersViewContainer = ({ types }: Props) => {
-  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
+  const filters = useActiveViewTypeFilters();
+  const { isChecked, onChange } = useFilterArrayProps("viewTypes", filters);
 
   return (
-    <ViewTypeFilters
-      types={types}
-      onChange={(value, checked) =>
-        onCheckedChange("view-types", value, checked)
-      }
-      isChecked={(value) => stagedQuery["view-types"].includes(value)}
-    />
+    <ViewTypeFilters types={types} onChange={onChange} isChecked={isChecked} />
   );
 };
 

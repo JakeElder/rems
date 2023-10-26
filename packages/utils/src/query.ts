@@ -166,7 +166,7 @@ export const toUrl = (source: RealEstateQuery): UrlRealEstateQuery => {
     "min-lot-size": source.space.minLotSize,
     "max-lot-size": source.space.maxLotSize,
     radius: source.locationSource.radius || 10000,
-    "radius-enabled": source.locationSource.radius !== null ? "true" : "false",
+    "radius-enabled": source.locationSource.radiusEnabled ? "true" : "false",
     ...adapt.toUrl.locationSource(source)
   };
 };

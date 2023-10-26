@@ -1,5 +1,5 @@
 import { SearchParams } from "@rems/types";
-import StateProviderViewContainer from "../client/StateProviderViewContainer";
+import StateProvider from "../client/StateProvider";
 import { fromSearchParams } from "@rems/utils/query";
 import fetch from "@/fetch";
 
@@ -31,7 +31,7 @@ const StateProviderContainer = async ({ searchParams, children }: Props) => {
     lotFeatures
   });
 
-  return <StateProviderViewContainer children={children} query={query} />;
+  return <StateProvider children={children} query={query} />;
 };
 
 export default StateProviderContainer;
