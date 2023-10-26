@@ -33,31 +33,10 @@ export const SearchRadius = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const AvailabilityAndArea = ({
-  children
-}: {
-  children: React.ReactNode;
-}) => {
-  return (
-    <div className={css["section"]}>
-      <Split>{children}</Split>
-    </div>
-  );
-};
-
 export const Availability = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <div className={css["section"]}>
       <div className={css["header"]}>Availability</div>
-      <div className={css["filters"]}>{children}</div>
-    </div>
-  );
-};
-
-export const Area = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div>
-      <div className={css["header"]}>Area</div>
       <div className={css["filters"]}>{children}</div>
     </div>
   );

@@ -28,6 +28,9 @@ const FilterBarContainer = ({}: Props) => {
           <PropertyFilters.PropertyType>
             <TypeFiltersContainer id="filters" />
           </PropertyFilters.PropertyType>
+          <PropertyFilters.Availability>
+            <AvailabilityFilterViewContainer />
+          </PropertyFilters.Availability>
         </FilterDialogViewContainer>
       </Layout.FilterDialog>
       <Layout.Separator />
@@ -47,9 +50,6 @@ const FilterBarContainer = ({}: Props) => {
 
 // <Layout.FilterDialog>
 //   <FilterDialogViewContainer>
-//     <PropertyFilters.PropertyType>
-//       <TypeFiltersContainer id="filters" />
-//     </PropertyFilters.PropertyType>
 //     <PropertyFilters.Location>
 //       <PlacesAutocompleteViewContainer />
 //     </PropertyFilters.Location>

@@ -1,17 +1,20 @@
 "use client";
 
 import React from "react";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { AvailabilityFilter } from "@rems/ui";
+import { useStagedRealEstateQuery } from "@/state";
+import useAvailabilityFilterProps from "@/hooks/use-availability-filter-props";
 
 type Props = {};
 
 const AvailabilityFilterViewContainer = ({}: Props) => {
-  const { stagedQuery, onAvailabilityChange } = useRealEstateQuery();
+  const stagedQuery = useStagedRealEstateQuery();
+  const { onChange } = useAvailabilityFilterProps();
+
   return (
     <AvailabilityFilter
-      value={stagedQuery["availability"]}
-      onChange={onAvailabilityChange}
+      value={stagedQuery["budgetAndAvailability"]["type"]}
+      onChange={onChange}
     />
   );
 };
