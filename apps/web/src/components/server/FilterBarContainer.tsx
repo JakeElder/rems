@@ -43,6 +43,12 @@ const FilterBarContainer = ({}: Props) => {
           <PropertyFilters.View>
             <ViewTypeFiltersContainer />
           </PropertyFilters.View>
+          <PropertyFilters.IndoorFeatures>
+            <IndoorFeatureFiltersContainer />
+          </PropertyFilters.IndoorFeatures>
+          <PropertyFilters.OutdoorFeatures>
+            <OutdoorFeatureFiltersContainer />
+          </PropertyFilters.OutdoorFeatures>
         </FilterDialogViewContainer>
       </Layout.FilterDialog>
       <Layout.Separator />
@@ -66,11 +72,6 @@ const FilterBarContainer = ({}: Props) => {
 //       <PlacesAutocompleteViewContainer />
 //     </PropertyFilters.Location>
 //
-//       <IndoorFeatureFiltersContainer />
-//     </PropertyFilters.IndoorFeatures>
-//     <PropertyFilters.OutdoorFeatures>
-//       <OutdoorFeatureFiltersContainer />
-//     </PropertyFilters.OutdoorFeatures>
 //     <PropertyFilters.LotFeatures>
 //       <LotFeatureFiltersContainer />
 //     </PropertyFilters.LotFeatures>

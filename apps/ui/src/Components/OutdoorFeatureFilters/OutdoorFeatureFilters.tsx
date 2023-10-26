@@ -6,8 +6,8 @@ import { OutdoorFeature } from "@rems/types";
 
 type Props = {
   features: OutdoorFeature[];
-  onChange: (value: string, checked: boolean) => void;
-  isChecked: (value: string) => boolean;
+  onChange: (value: OutdoorFeature, checked: boolean) => void;
+  isChecked: (value: OutdoorFeature) => boolean;
 };
 
 const OutdoorFeatureFilters = ({ features, onChange, isChecked }: Props) => {
@@ -18,9 +18,9 @@ const OutdoorFeatureFilters = ({ features, onChange, isChecked }: Props) => {
           items={features.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onChange(t.slug, checked !== "indeterminate" && checked)
+                onChange(t, checked !== "indeterminate" && checked)
               }
-              checked={isChecked(t.slug)}
+              checked={isChecked(t)}
               key={t.slug}
               name="outdoor-features[]"
               value={t.slug}

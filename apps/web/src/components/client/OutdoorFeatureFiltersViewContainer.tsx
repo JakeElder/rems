@@ -2,7 +2,8 @@
 
 import React from "react";
 import { OutdoorFeatureFilters } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
+import { useActiveOutdoorFeatureFilters } from "@/state";
+import useFilterArrayProps from "@/hooks/use-filter-array-props";
 
 type Props = Pick<
   React.ComponentProps<typeof OutdoorFeatureFilters>,
@@ -10,15 +11,17 @@ type Props = Pick<
 >;
 
 const OutdoorFeatureFiltersViewContainer = ({ features }: Props) => {
-  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
+  const filters = useActiveOutdoorFeatureFilters();
+  const { isChecked, onChange } = useFilterArrayProps(
+    "outdoorFeatures",
+    filters
+  );
 
   return (
     <OutdoorFeatureFilters
       features={features}
-      onChange={(value, checked) =>
-        onCheckedChange("outdoor-features", value, checked)
-      }
-      isChecked={(value) => stagedQuery["outdoor-features"].includes(value)}
+      onChange={onChange}
+      isChecked={isChecked}
     />
   );
 };

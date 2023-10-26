@@ -6,8 +6,8 @@ import { IndoorFeature } from "@rems/types";
 
 type Props = {
   features: IndoorFeature[];
-  onChange: (value: string, checked: boolean) => void;
-  isChecked: (value: string) => boolean;
+  onChange: (filter: IndoorFeature, checked: boolean) => void;
+  isChecked: (filter: IndoorFeature) => boolean;
 };
 
 const IndoorFeatureFilters = ({ features, onChange, isChecked }: Props) => {
@@ -18,9 +18,9 @@ const IndoorFeatureFilters = ({ features, onChange, isChecked }: Props) => {
           items={features.map((t) => (
             <Checkbox
               onCheckedChange={(checked) =>
-                onChange(t.slug, checked !== "indeterminate" && checked)
+                onChange(t, checked !== "indeterminate" && checked)
               }
-              checked={isChecked(t.slug)}
+              checked={isChecked(t)}
               key={t.slug}
               name="indoor-features[]"
               value={t.slug}

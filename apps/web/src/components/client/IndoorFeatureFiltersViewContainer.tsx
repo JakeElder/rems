@@ -2,7 +2,8 @@
 
 import React from "react";
 import { IndoorFeatureFilters } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
+import { useActiveIndoorFeatureFilters } from "@/state";
+import useFilterArrayProps from "@/hooks/use-filter-array-props";
 
 type Props = Pick<
   React.ComponentProps<typeof IndoorFeatureFilters>,
@@ -10,15 +11,17 @@ type Props = Pick<
 >;
 
 const IndoorFeatureFiltersViewContainer = ({ features }: Props) => {
-  const { onCheckedChange, stagedQuery } = useRealEstateQuery();
+  const filters = useActiveIndoorFeatureFilters();
+  const { isChecked, onChange } = useFilterArrayProps(
+    "indoorFeatures",
+    filters
+  );
 
   return (
     <IndoorFeatureFilters
       features={features}
-      onChange={(value, checked) =>
-        onCheckedChange("indoor-features", value, checked)
-      }
-      isChecked={(value) => stagedQuery["indoor-features"].includes(value)}
+      onChange={onChange}
+      isChecked={isChecked}
     />
   );
 };
