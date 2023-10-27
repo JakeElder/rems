@@ -33,8 +33,8 @@ const CountAndSort = ({ sort, loading, listings, onChange }: Props) => {
           <Oval
             height={16}
             width={16}
-            color="#c19d54"
-            secondaryColor="#c19d54"
+            color="#8850a2"
+            secondaryColor="#8850a2"
             visible={true}
           />
         ) : (

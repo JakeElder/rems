@@ -10,11 +10,11 @@ import { useIndexConnector } from "../IndexConnector/IndexConnector";
 
 type Props = {
   property: Property;
-  type: RealEstateQuery["availability"];
+  type: RealEstateQuery["budgetAndAvailability"]["type"];
 };
 
 const Price = ({ property, type }: Props) => {
-  if (type === "sale") {
+  if (type === "SALE") {
     return (
       <div className={css["price"]}>{property.formattedPurchasePrice}</div>
     );
