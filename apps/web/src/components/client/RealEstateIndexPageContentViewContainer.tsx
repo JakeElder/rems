@@ -2,30 +2,15 @@
 
 import React from "react";
 import { RealEstateIndexPage as Layout } from "@rems/ui";
-import { useDomElements } from "@/components/DomElementsProvider";
-import PropertyGridViewContainer from "@/components/client/PropertyGridViewContainer";
-import CountAndSortViewContainer from "@/components/client/CountAndSortViewContainer";
-import PaginationViewContainer from "@/components/client/PaginationViewContainer";
-import RealEstateIndexPageTitleViewContainer from "@/components/client/RealEstateIndexPageTitleViewContainer";
+import { useDomElements } from "@/components/client/DomElementsProvider";
 
-type Props = {};
+type Props = {
+  children: React.ReactNode;
+};
 
-const RealEstateIndexPageContentViewContainer = ({}: Props) => {
+const RealEstateIndexPageContentViewContainer = ({ children }: Props) => {
   const { $listings } = useDomElements();
-  return (
-    <Layout.Content ref={$listings}>
-      <RealEstateIndexPageTitleViewContainer />
-      <Layout.CountAndSort>
-        <CountAndSortViewContainer />
-      </Layout.CountAndSort>
-      <Layout.Properties>
-        <PropertyGridViewContainer />
-      </Layout.Properties>
-      <Layout.Pagination>
-        <PaginationViewContainer />
-      </Layout.Pagination>
-    </Layout.Content>
-  );
+  return <Layout.Content ref={$listings}>{children}</Layout.Content>;
 };
 
 export default RealEstateIndexPageContentViewContainer;

@@ -9,18 +9,18 @@ import { Oval } from "react-loader-spinner";
 
 type Props = {
   loading: boolean;
-  sort: RealEstateQuery["sort"];
-  onChange: (value: RealEstateQuery["sort"]) => void;
+  sort: RealEstateQuery["pageAndSort"]["sort"];
+  onChange: (value: RealEstateQuery["pageAndSort"]["sort"]) => void;
   listings?: number;
 };
 
 const label = (sort: SortType) => {
   const map: Record<SortType, string> = {
-    "newest-first": "Newest first",
-    "lowest-price-first": "Lowest price first",
-    "highest-price-first": "Highest price first",
-    "smallest-living-area-first": "Smallest living area",
-    "largest-living-area-first": "Largest living area"
+    NEWEST_FIRST: "Newest first",
+    LOWEST_PRICE_FIRST: "Lowest price first",
+    HIGHEST_PRICE_FIRST: "Highest price first",
+    SMALLEST_LIVING_AREA_FIRST: "Smallest living area",
+    LARGEST_LIVING_AREA_FIRST: "Largest living area"
   };
   return map[sort];
 };
@@ -46,21 +46,23 @@ const CountAndSort = ({ sort, loading, listings, onChange }: Props) => {
           className={css["select"]}
           value={sort}
           onChange={(e) => {
-            onChange(e.currentTarget.value as RealEstateQuery["sort"]);
+            onChange(
+              e.currentTarget.value as RealEstateQuery["pageAndSort"]["sort"]
+            );
           }}
         >
-          <option value="newest-first">{label("newest-first")}</option>
-          <option value="lowest-price-first">
-            {label("lowest-price-first")}
+          <option value="NEWEST_FIRST">{label("NEWEST_FIRST")}</option>
+          <option value="LOWEST_PRICE_FIRST">
+            {label("LOWEST_PRICE_FIRST")}
           </option>
-          <option value="highest-price-first">
-            {label("highest-price-first")}
+          <option value="HIGHEST_PRICE_FIRST">
+            {label("HIGHEST_PRICE_FIRST")}
           </option>
-          <option value="smallest-living-area-first">
-            {label("smallest-living-area-first")}
+          <option value="SMALLEST_LIVING_AREA_FIRST">
+            {label("SMALLEST_LIVING_AREA_FIRST")}
           </option>
-          <option value="largest-living-area-first">
-            {label("largest-living-area-first")}
+          <option value="LARGEST_LIVING_AREA_FIRST">
+            {label("LARGEST_LIVING_AREA_FIRST")}
           </option>
         </select>
         <div className={css["active"]}>

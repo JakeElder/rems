@@ -9,6 +9,11 @@ import RealEstateIndexPageHeaderViewContainer from "@/components/client/RealEsta
 import HeaderViewContainer from "@/components/client/HeaderViewContainer";
 import DomElementsProvider from "@/components/client/DomElementsProvider";
 import ListingMapViewContainer from "@/components/client/ListingMapViewContainer";
+import RealEstateIndexPageContentViewContainer from "@/components/client/RealEstateIndexPageContentViewContainer";
+import CountAndSortViewContainer from "@/components/client/CountAndSortViewContainer";
+import PropertyGridViewContainer from "@/components/client/PropertyGridViewContainer";
+import PaginationViewContainer from "@/components/client/PaginationViewContainer";
+import RealEstateIndexPageTitleViewContainer from "@/components/client/RealEstateIndexPageTitleViewContainer";
 
 type Props = { searchParams?: SearchParams };
 
@@ -32,6 +37,12 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
                 <FilterBarContainer />
               </RealEstateIndexPageHeaderViewContainer>
               <Page.Main>
+                <RealEstateIndexPageContentViewContainer>
+                  <RealEstateIndexPageTitleViewContainer />
+                  <Page.CountAndSort>
+                    <CountAndSortViewContainer />
+                  </Page.CountAndSort>
+                </RealEstateIndexPageContentViewContainer>
                 <Page.Map>
                   <ListingMapViewContainer />
                 </Page.Map>
@@ -43,3 +54,10 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
     </StateProviderContainer>
   );
 }
+
+// <Page.Properties>
+//   <PropertyGridViewContainer />
+// </Page.Properties>
+// <Page.Pagination>
+//   <PaginationViewContainer />
+// </Page.Pagination>

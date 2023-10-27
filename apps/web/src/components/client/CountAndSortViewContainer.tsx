@@ -1,22 +1,34 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { CountAndSort } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import useProperties from "@/hooks/use-properties";
+import {
+  commitRealEstateQuery,
+  setPageAndSort,
+  useDispatch,
+  useStagedRealEstateQuery
+} from "@/state";
 
+type ViewProps = React.ComponentProps<typeof CountAndSort>;
 type Props = {};
 
 const CountAndSortViewContainer = ({}: Props) => {
-  const { stagedQuery, onValueChange, serverQuery } = useRealEstateQuery();
-  const { data, isLoading } = useProperties(serverQuery);
+  const stagedQuery = useStagedRealEstateQuery();
+  const dispatch = useDispatch();
+  const { data, isLoading } = useProperties();
+
+  const onChange: ViewProps["onChange"] = useCallback((sort) => {
+    dispatch(setPageAndSort({ role: "USER", data: { sort } }));
+    dispatch(commitRealEstateQuery());
+  }, []);
 
   return (
     <CountAndSort
       loading={isLoading}
-      sort={stagedQuery["sort"]}
+      sort={stagedQuery["pageAndSort"]["sort"]}
       listings={data?.pagination.total}
-      onChange={(sort) => onValueChange("sort", sort)}
+      onChange={onChange}
     />
   );
 };

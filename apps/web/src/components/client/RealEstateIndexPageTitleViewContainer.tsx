@@ -9,19 +9,14 @@ import useProperties from "@/hooks/use-properties";
 type Props = {};
 
 const RealEstateIndexPageTitleViewContainer = ({}: Props) => {
-  const { serverQuery } = useRealEstateQuery();
-  const properties = useProperties(serverQuery);
-
-  // useEffect(() => {
-  //   document.title = title;
-  // }, [title]);
+  const properties = useProperties();
 
   if (!properties.ready) {
     return (
       <RealEstateIndexPage.Title
         geospatialOperator="in"
         location="Bangkok"
-        type={serverQuery["availability"]}
+        type="sale"
       />
     );
   }
@@ -33,7 +28,7 @@ const RealEstateIndexPageTitleViewContainer = ({}: Props) => {
       <RealEstateIndexPage.Title
         geospatialOperator={source.geospatialOperator}
         location={source.description}
-        type={serverQuery["availability"]}
+        type={properties.data.query.budgetAndAvailability.type.toLowerCase()}
         resolution={resolution.displayName}
       />
     );
