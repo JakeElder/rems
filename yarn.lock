@@ -5017,6 +5017,7 @@ __metadata:
     "@rems/types": "*"
     "@rems/ui": "*"
     "@rems/utils": "*"
+    "@types/deep-extend": ^0.6.1
     "@types/node": 18.18.6
     "@types/nodemailer": ^6.4.8
     "@types/pg": ^8.10.2
@@ -5029,6 +5030,7 @@ __metadata:
     camelcase: ^7.0.1
     change-case-all: ^1.0.15
     commander: ^11.0.0
+    deep-extend: ^0.6.0
     dotenv: ^16.3.1
     env-cmd: ^10.1.0
     fast-deep-equal: ^3.1.3
@@ -9465,6 +9467,7 @@ __metadata:
     "@rems/schemas": "*"
     "@rems/tsconfig": "*"
     "@rems/types": "*"
+    "@rems/utils": "*"
     "@types/array-equal": ^1.0.0
     "@types/change-case": ^2.3.1
     "@types/json-diff": ^1.0.0

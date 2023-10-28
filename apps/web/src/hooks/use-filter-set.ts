@@ -1,38 +1,58 @@
-import { FilterSet, RealEstateQuery, ResolvingFilterSet } from "@rems/types";
-import useProperties from "@/hooks/use-properties";
-import { generateQueryString } from "./use-real-estate-query";
-import { RealEstateQuerySchema } from "@rems/schemas";
+import {
+  FilterSet,
+  GetPropertiesResult,
+  RealEstateQuery,
+  ResolvingFilterSet
+} from "@rems/types";
+import { generateApiQueryString } from "@rems/utils/query";
+import * as app from "@rems/state/app";
+import { DeepPartial } from "@reduxjs/toolkit";
+import useSWR from "swr";
+import extend from "deep-extend";
 
-const resolve: (slug: string) => Partial<RealEstateQuery> = (slug) => {
-  const sets: Record<string, Partial<RealEstateQuery>> = {
+const resolve: (slug: string) => DeepPartial<RealEstateQuery> = (slug) => {
+  const sets: Record<string, DeepPartial<RealEstateQuery>> = {
     "cozy-pads-for-young-professionals": {
-      "indoor-features": ["cozy"],
-      availability: "rent"
+      indoorFeatures: [{ id: 17, slug: "cozy" }],
+      budgetAndAvailability: { type: "RENT" }
     },
     "family-friendly-houses-with-gardens": {
-      "outdoor-features": ["garden"],
-      "lot-features": ["family-friendly"]
+      outdoorFeatures: [{ id: 3, slug: "garden" }],
+      lotFeatures: [{ id: 23, slug: "family-friendly" }]
     },
     "new-builds-ready-to-move-in-to-in-bangkok": {
-      "lot-features": ["new-built"]
+      lotFeatures: [{ id: 4, slug: "new-built" }]
     },
     "pool-villas-for-sale-in-bangkok": {
-      "property-types": ["villa"],
-      "outdoor-features": ["pool"]
+      propertyTypes: [{ id: 2, slug: "villa" }],
+      outdoorFeatures: [{ id: 1, slug: "pool" }]
     }
   };
 
   return sets[slug];
 };
 
-const useFilterSet = (set: FilterSet): ResolvingFilterSet => {
-  const query = resolve(set.slug);
+const fetcher = async (query: string): Promise<GetPropertiesResult> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_REMS_API_URL}/properties${query}`
+  );
+  const json = await res.json();
+  return json;
+};
 
-  const { data, isLoading } = useProperties(
-    RealEstateQuerySchema.Server.parse(query)
+const useFilterSet = (set: FilterSet): ResolvingFilterSet => {
+  const query = extend(
+    app.defaults().slices.realEstateQuery,
+    resolve(set.slug)
   );
 
-  const qs = generateQueryString(query);
+  const qs = generateApiQueryString({ ...query, target: "LISTINGS" });
+
+  const { data, isLoading } = useSWR(
+    [qs || "?", "properties"],
+    ([q]) => fetcher(q),
+    { keepPreviousData: true }
+  );
 
   return {
     set,

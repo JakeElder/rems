@@ -14,6 +14,7 @@ import CountAndSortViewContainer from "@/components/client/CountAndSortViewConta
 import PropertyGridViewContainer from "@/components/client/PropertyGridViewContainer";
 import PaginationViewContainer from "@/components/client/PaginationViewContainer";
 import RealEstateIndexPageTitleViewContainer from "@/components/client/RealEstateIndexPageTitleViewContainer";
+import FooterContainer from "@/components/server/FooterContainer";
 
 type Props = { searchParams?: SearchParams };
 
@@ -53,6 +54,9 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
                   <ListingMapViewContainer />
                 </Page.Map>
               </Page.Main>
+              <Page.Footer>
+                <FooterContainer full />
+              </Page.Footer>
             </ToastHub>
           </Page.Root>
         </DomElementsProvider>

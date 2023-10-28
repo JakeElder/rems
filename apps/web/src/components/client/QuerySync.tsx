@@ -21,7 +21,7 @@ const QuerySync = ({ children, filters }: Props) => {
 
   useEffect(() => {
     const qs = generateQueryString(query);
-    router.push(`/real-estate${qs}`);
+    router.push(`/real-estate${qs}`, { scroll: false });
   }, [query]);
 
   useEffect(() => {
