@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import { RealEstateIndexPage } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
 // import useSWR from "swr";
@@ -9,9 +8,9 @@ import useProperties from "@/hooks/use-properties";
 type Props = {};
 
 const RealEstateIndexPageTitleViewContainer = ({}: Props) => {
-  const properties = useProperties();
+  const properties = useProperties({ target: "LISTINGS" });
 
-  if (!properties.ready) {
+  if (!properties.data) {
     return (
       <RealEstateIndexPage.Title
         geospatialOperator="in"

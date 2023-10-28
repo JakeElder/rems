@@ -7,7 +7,7 @@ import useProperties from "@/hooks/use-properties";
 type Props = {};
 
 const PropertyGridViewContainer = ({}: Props) => {
-  const { data, isLoading } = useProperties();
+  const { data, isLoading } = useProperties({ target: "LISTINGS" });
 
   return (
     <PropertyGrid loading={isLoading}>

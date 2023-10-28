@@ -11,7 +11,7 @@ type Props = { children: React.ReactNode };
 const FilterDialogViewContainer = ({ children }: Props) => {
   const dispatch = useDispatch();
   const count = useActiveFiltersCount();
-  const { data, isLoading } = useProperties();
+  const { data, isLoading } = useProperties({ target: "LISTINGS" });
 
   const [open, setOpen] = useState(false);
 

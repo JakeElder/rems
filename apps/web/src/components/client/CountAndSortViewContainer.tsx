@@ -16,7 +16,7 @@ type Props = {};
 const CountAndSortViewContainer = ({}: Props) => {
   const stagedQuery = useStagedRealEstateQuery();
   const dispatch = useDispatch();
-  const { data, isLoading } = useProperties();
+  const { data, isLoading } = useProperties({ target: "LISTINGS" });
 
   const onChange: ViewProps["onChange"] = useCallback((sort) => {
     dispatch(setPageAndSort({ role: "USER", data: { sort } }));

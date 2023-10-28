@@ -1,20 +1,17 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { ListingMap } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
 import type { MapRef } from "react-map-gl";
-import usePrevious from "use-previous";
-import { useDebouncedCallback } from "use-debounce";
-import { useRealEstateQuery } from "@/state";
 
 type Props = {};
 
 const ListingMapViewContainer = ({}: Props) => {
   const $map = useRef<MapRef>();
-  const properties = useProperties();
+  const properties = useProperties({ target: "MAP" });
 
-  if (!properties.ready) {
+  if (!properties.data) {
     return null;
   }
 

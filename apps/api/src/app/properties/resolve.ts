@@ -1,7 +1,7 @@
 import {
   GetPropertiesResult,
   Image,
-  RealEstateQuery as Query,
+  ApiRealEstateQuery as Query,
   Location,
   Filter
 } from "@rems/types";
@@ -201,13 +201,13 @@ const bounds = async (query: Query) => {
 };
 
 const limit = (query: Query) => {
-  if (false) {
+  if (query.target === "LISTINGS") {
     return PROPERTIES_PER_PAGE;
   }
 };
 
 const offset = (query: Query) => {
-  if (false) {
+  if (query.target === "LISTINGS") {
     return (query.pageAndSort.page - 1) * PROPERTIES_PER_PAGE;
   }
 };

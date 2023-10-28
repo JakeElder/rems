@@ -10,6 +10,8 @@ import { OutdoorFeatureRequirementsSchema } from "./outdoor-feature-requirements
 import { PropertyTypeRequirementsSchema } from "./property-type-requirements";
 import { ViewTypeRequirementsSchema } from "./view-type-requirements";
 
+export const ApiRealEstateQueryTargetSchema = z.enum(["LISTINGS", "MAP"]);
+
 export const RealEstateQuerySchema = z.object({
   // Scalars
   budgetAndAvailability: BudgetAndAvailabilityRequirementsSchema,
@@ -23,6 +25,10 @@ export const RealEstateQuerySchema = z.object({
   outdoorFeatures: OutdoorFeatureRequirementsSchema,
   propertyTypes: PropertyTypeRequirementsSchema,
   viewTypes: ViewTypeRequirementsSchema
+});
+
+export const ApiRealEstateQuerySchema = RealEstateQuerySchema.extend({
+  target: ApiRealEstateQueryTargetSchema
 });
 
 const Array = z.array(FilterSchema.shape["slug"]).default([]).catch([]);
@@ -74,5 +80,5 @@ export const UrlRealEstateQuerySchema = z.object({
 });
 
 export const ApiUrlRealEstateQuerySchema = UrlRealEstateQuerySchema.extend({
-  target: z.enum(["listings", "map"])
+  target: z.enum(["LISTINGS", "MAP"])
 });

@@ -1,4 +1,6 @@
 import {
+  ApiRealEstateQuery,
+  ApiUrlRealEstateQuery,
   ArrayFilters,
   Filter,
   RealEstateQuery,
@@ -146,7 +148,7 @@ export const fromUrl = (
   };
 };
 
-export const toUrl = (source: RealEstateQuery): UrlRealEstateQuery => {
+export const toUrlBase = (source: RealEstateQuery): UrlRealEstateQuery => {
   return {
     "indoor-features": source.indoorFeatures.map((feature) => feature.slug),
     "lot-features": source.lotFeatures.map((feature) => feature.slug),
@@ -171,11 +173,35 @@ export const toUrl = (source: RealEstateQuery): UrlRealEstateQuery => {
   };
 };
 
+export const toApiUrl = (source: ApiRealEstateQuery): ApiUrlRealEstateQuery => {
+  const { target, ...rest } = source;
+  return { ...toUrlBase(rest), target };
+};
+
+export const toUrl = (source: RealEstateQuery): UrlRealEstateQuery => {
+  return toUrlBase(source);
+};
+
+export const generateApiQueryString = (query: ApiRealEstateQuery) => {
+  const string = qs.stringify(
+    removeDefaults(UrlRealEstateQuerySchema, toApiUrl(query)),
+    { arrayFormat: "comma", encode: false }
+  );
+
+  return string ? `?${string}` : "";
+};
+
+type GenerateQueryStringOptions = {
+  page?: RealEstateQuery["pageAndSort"]["page"];
+  sort?: RealEstateQuery["pageAndSort"]["sort"];
+};
+
 export const generateQueryString = (
   query: RealEstateQuery,
-  page?: RealEstateQuery["pageAndSort"]["page"],
-  sort?: RealEstateQuery["pageAndSort"]["sort"]
+  options: GenerateQueryStringOptions = {}
 ) => {
+  const { page, sort } = options;
+
   const updated: RealEstateQuery = {
     ...query,
     pageAndSort: {

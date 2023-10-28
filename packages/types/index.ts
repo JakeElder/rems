@@ -44,7 +44,10 @@ import {
   SpaceRequirementsSchema,
   ViewTypeRequirementsSchema,
   InputSessionSchema,
-  ResolvingIntentsEventSchema
+  ResolvingIntentsEventSchema,
+  ApiRealEstateQuerySchema,
+  ApiUrlRealEstateQuerySchema,
+  ApiRealEstateQueryTargetSchema
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
@@ -124,6 +127,11 @@ export type ContactFormData = Z<typeof ContactFormSchema>;
 
 export type RealEstateQuery = Z<typeof RealEstateQuerySchema>;
 export type UrlRealEstateQuery = Z<typeof UrlRealEstateQuerySchema>;
+
+export type ApiRealEstateQuery = Z<typeof ApiRealEstateQuerySchema>;
+export type ApiUrlRealEstateQuery = Z<typeof ApiUrlRealEstateQuerySchema>;
+
+export type ApiRealEstateQueryTarget = Z<typeof ApiRealEstateQueryTargetSchema>;
 
 export type BudgetAndAvailabilityRequirements = Z<
   typeof BudgetAndAvailabilityRequirementsSchema

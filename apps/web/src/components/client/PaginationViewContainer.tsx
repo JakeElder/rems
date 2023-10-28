@@ -1,23 +1,37 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { Pagination } from "@rems/ui";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
 import useProperties from "@/hooks/use-properties";
+import {
+  commitRealEstateQuery,
+  setPageAndSort,
+  useDispatch,
+  useStagedRealEstateQuery
+} from "@/state";
+import { generateQueryString } from "@rems/utils/query";
 
+type ViewProps = React.ComponentProps<typeof Pagination>;
 type Props = {};
 
 const PaginationViewContainer = ({}: Props) => {
-  const { stagedQuery, onPageChange, createLink, serverQuery } =
-    useRealEstateQuery();
-  const { data, isLoading } = useProperties(serverQuery);
+  const stagedQuery = useStagedRealEstateQuery();
+  const dispatch = useDispatch();
+  const { data, isLoading } = useProperties({ target: "LISTINGS" });
+
+  const onChange: ViewProps["onPageChange"] = useCallback((page) => {
+    dispatch(setPageAndSort({ role: "USER", data: { page } }));
+    dispatch(commitRealEstateQuery());
+  }, []);
 
   return (
     <Pagination
       loading={isLoading}
-      onPageChange={onPageChange}
-      currentPage={stagedQuery["page"]}
-      createLink={createLink}
+      onPageChange={onChange}
+      currentPage={stagedQuery["pageAndSort"]["page"]}
+      createLink={(page) => {
+        return `/real-estate${generateQueryString(stagedQuery, { page })}`;
+      }}
       total={data?.pagination.total}
       pageSize={data?.pagination.pageSize}
     />

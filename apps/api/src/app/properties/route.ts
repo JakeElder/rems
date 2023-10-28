@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import qs from "qs";
-import {
-  FilterSchema,
-  RealEstateQuerySchema,
-  UrlRealEstateQuerySchema
-} from "@rems/schemas";
+import { FilterSchema } from "@rems/schemas";
 import resolve from "./resolve";
 import { fromSearchParams } from "@rems/utils/query";
 import * as Models from "@/models";
@@ -26,7 +21,13 @@ export async function GET(req: NextRequest) {
     Models.PropertyType.findAll({ raw: true }).then(parse)
   ]);
 
-  const query = fromSearchParams(Object.fromEntries(req.nextUrl.searchParams), {
+  const { target, ...rest } = Object.fromEntries(req.nextUrl.searchParams);
+
+  if (target !== "LISTINGS" && target !== "MAP") {
+    throw new Error();
+  }
+
+  const query = fromSearchParams(rest, {
     indoorFeatures,
     lotFeatures,
     outdoorFeatures,
@@ -34,7 +35,7 @@ export async function GET(req: NextRequest) {
     propertyTypes
   });
 
-  const properties = await resolve(query);
+  const properties = await resolve({ ...query, target });
 
   return NextResponse.json(properties);
 }

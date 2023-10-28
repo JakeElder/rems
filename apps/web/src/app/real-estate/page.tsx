@@ -45,6 +45,9 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
                   <Page.Properties>
                     <PropertyGridViewContainer />
                   </Page.Properties>
+                  <Page.Pagination>
+                    <PaginationViewContainer />
+                  </Page.Pagination>
                 </RealEstateIndexPageContentViewContainer>
                 <Page.Map>
                   <ListingMapViewContainer />
@@ -57,7 +60,3 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
     </StateProviderContainer>
   );
 }
-
-// <Page.Pagination>
-//   <PaginationViewContainer />
-// </Page.Pagination>

@@ -1,20 +1,12 @@
 import useSWR from "swr";
-import { GetPropertiesResult, RealEstateQuery } from "@rems/types";
-import { useEffect, useState } from "react";
-import { generateQueryString } from "@rems/utils/query";
+import {
+  ApiRealEstateQuery,
+  ApiRealEstateQueryTarget,
+  GetPropertiesResult
+} from "@rems/types";
+import { generateApiQueryString } from "@rems/utils/query";
 import { useRealEstateQuery } from "@/state";
-
-type UsePropertiesHook = () =>
-  | {
-      ready: false;
-      isLoading: true;
-      data: undefined;
-    }
-  | {
-      ready: true;
-      isLoading: boolean;
-      data: GetPropertiesResult;
-    };
+import { clone } from "remeda";
 
 const fetcher = async (query: string): Promise<GetPropertiesResult> => {
   const res = await fetch(
@@ -24,27 +16,21 @@ const fetcher = async (query: string): Promise<GetPropertiesResult> => {
   return json;
 };
 
-const useProperties: UsePropertiesHook = () => {
-  const [ready, setReady] = useState(false);
-  const query = generateQueryString(useRealEstateQuery());
+const useProperties = ({ target }: { target: ApiRealEstateQueryTarget }) => {
+  const query: ApiRealEstateQuery = {
+    ...clone(useRealEstateQuery()),
+    target
+  };
+
+  const qs = generateApiQueryString(query);
 
   const { data, isLoading } = useSWR(
-    [query || "?", "properties"],
+    [qs || "?", "properties"],
     ([q]) => fetcher(q),
     { keepPreviousData: true }
   );
 
-  useEffect(() => {
-    if (!ready && !isLoading) {
-      setReady(true);
-    }
-  }, [isLoading]);
-
-  if (!data) {
-    return { ready: false, isLoading: true };
-  }
-
-  return { ready: true, data, isLoading };
+  return { data, isLoading };
 };
 
 export default useProperties;
