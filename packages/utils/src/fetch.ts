@@ -5,15 +5,16 @@ import {
   LotFeature,
   OutdoorFeature,
   ViewType,
-  RealEstateQuery,
   GetPropertiesResult,
   AppConfig,
   FilterSet,
   QuickFilter,
   PropertyType,
-  Area
+  Area,
+  ApiRealEstateQuery,
+  ArrayFilters
 } from "@rems/types";
-import { generateQueryString } from "./query";
+import { generateApiQueryString } from "./query";
 
 type Route<Route extends string, ReturnType, Args extends any[] = []> = {
   route: Route;
@@ -26,6 +27,7 @@ type Routes =
   | Route<"popular-searches", FilterSet[]>
   | Route<"featured-properties", Property[]>
   | Route<"quick-filters", QuickFilter[]>
+  | Route<"array-filters", ArrayFilters>
   | Route<"property", Property, [Property["id"]]>
   | Route<"property-types", PropertyType[]>
   | Route<"areas", Area[]>
@@ -33,7 +35,11 @@ type Routes =
   | Route<"indoor-features", IndoorFeature[]>
   | Route<"outdoor-features", OutdoorFeature[]>
   | Route<"lot-features", LotFeature[]>
-  | Route<"properties", GetPropertiesResult, [query?: Partial<RealEstateQuery>]>
+  | Route<
+      "properties",
+      GetPropertiesResult,
+      [query?: Partial<ApiRealEstateQuery>]
+    >
   | Route<"properties/[id]/images", Image[], [propertyId?: Property["id"]]>
   | Route<
       "properties/[id]/indoor-features",
@@ -130,9 +136,14 @@ const wrapper = async <T extends Routes["route"]>(
     return res.json();
   }
 
+  if (route === "array-filters") {
+    const res = await fetch(url(`array-filters`));
+    return res.json();
+  }
+
   if (route === "properties") {
-    const params = (args[0] || {}) as RealEstateQuery;
-    const res = await fetch(url(`properties${generateQueryString(params)}`));
+    const params = (args[0] || {}) as ApiRealEstateQuery;
+    const res = await fetch(url(`properties${generateApiQueryString(params)}`));
     return res.json();
   }
 

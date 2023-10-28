@@ -9,27 +9,8 @@ type Props = {
 };
 
 const StateProviderContainer = async ({ searchParams, children }: Props) => {
-  const [
-    propertyTypes,
-    viewTypes,
-    indoorFeatures,
-    outdoorFeatures,
-    lotFeatures
-  ] = await Promise.all([
-    fetch("property-types"),
-    fetch("view-types"),
-    fetch("indoor-features"),
-    fetch("outdoor-features"),
-    fetch("lot-features")
-  ]);
-
-  const query = fromSearchParams(searchParams || {}, {
-    propertyTypes,
-    viewTypes,
-    outdoorFeatures,
-    indoorFeatures,
-    lotFeatures
-  });
+  const filters = await fetch("array-filters");
+  const query = fromSearchParams(searchParams || {}, filters);
 
   return <StateProvider children={children} query={query} />;
 };

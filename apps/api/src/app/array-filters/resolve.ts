@@ -1,12 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { FilterSchema } from "@rems/schemas";
-import resolve from "./resolve";
-import { fromSearchParams } from "@rems/utils/query";
 import * as Models from "@/models";
+import { FilterSchema } from "@rems/schemas";
+import { ArrayFilters } from "@rems/types";
 
 const parse = (rows: any) => rows.map((r: any) => FilterSchema.parse(r));
 
-export async function GET(req: NextRequest) {
+const resolve = async (): Promise<ArrayFilters> => {
   const [
     indoorFeatures,
     lotFeatures,
@@ -21,21 +19,13 @@ export async function GET(req: NextRequest) {
     Models.PropertyType.findAll({ raw: true }).then(parse)
   ]);
 
-  const { target, ...rest } = Object.fromEntries(req.nextUrl.searchParams);
-
-  if (target !== "LISTINGS" && target !== "MAP") {
-    throw new Error("Target not specified");
-  }
-
-  const query = fromSearchParams(rest, {
+  return {
     indoorFeatures,
     lotFeatures,
     outdoorFeatures,
     viewTypes,
     propertyTypes
-  });
+  };
+};
 
-  const properties = await resolve({ ...query, target });
-
-  return NextResponse.json(properties);
-}
+export default resolve;

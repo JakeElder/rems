@@ -13,8 +13,8 @@ import RealEstateIndexPageContentViewContainer from "@/components/client/RealEst
 import CountAndSortViewContainer from "@/components/client/CountAndSortViewContainer";
 import PropertyGridViewContainer from "@/components/client/PropertyGridViewContainer";
 import PaginationViewContainer from "@/components/client/PaginationViewContainer";
-import RealEstateIndexPageTitleViewContainer from "@/components/client/RealEstateIndexPageTitleViewContainer";
 import FooterContainer from "@/components/server/FooterContainer";
+import RealEstateIndexPageTitleContainer from "@/components/server/RealEstateIndexPageTitleContainer";
 
 type Props = { searchParams?: SearchParams };
 
@@ -39,7 +39,9 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
               </RealEstateIndexPageHeaderViewContainer>
               <Page.Main>
                 <RealEstateIndexPageContentViewContainer>
-                  <RealEstateIndexPageTitleViewContainer />
+                  <RealEstateIndexPageTitleContainer
+                    searchParams={searchParams}
+                  />
                   <Page.CountAndSort>
                     <CountAndSortViewContainer />
                   </Page.CountAndSort>
