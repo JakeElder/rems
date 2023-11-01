@@ -27,11 +27,11 @@
 }
 
 .location {
-  color: rgba(4, 136, 185, 1);
+  color: rgba(0, 200, 250, 1);
   text-decoration: underline;
   text-decoration-thickness: 0.001em;
   text-underline-offset: 4px;
-  text-decoration-color: rgba(4, 136, 185, 0.5);
+  text-decoration-color: rgba(0, 200, 250, 0.5);
 }
 
 .resolution {

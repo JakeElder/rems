@@ -1,5 +1,6 @@
 import { RemiResponse } from "@/remi/types";
-import { execute, timelineToCompletionMessages, txt } from "@/remi/utils";
+import { execute, timelineToCompletionMessages } from "@/remi/utils";
+import md from "@rems/utils/md";
 import {
   $functionCall,
   $messages,
@@ -20,7 +21,7 @@ const ReturnsSchema = z
     d: z
       .string()
       .describe(
-        txt(
+        md(
           <>
             The location description. Natural language location. IE "in Phuket"
             or "near the busiest BTS station in Bangkok". Includes geospatial
@@ -28,7 +29,7 @@ const ReturnsSchema = z
           </>
         )
       ),
-    r: z.number().describe(txt(<>Radius, if specified</>))
+    r: z.number().describe(md(<>Radius, if specified</>))
   })
   .partial({ d: true, r: true })
   .transform(({ d, r }) => ({ description: d, radius: r }));

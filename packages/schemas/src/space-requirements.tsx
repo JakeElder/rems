@@ -5,7 +5,7 @@ import {
   MIN_LIVING_AREA_SIZES,
   MIN_LOT_SIZES
 } from "./constants";
-import { txt } from "./utils";
+import md from "@rems/utils/md";
 
 export const SpaceRequirementsSchema = z.object({
   minBedrooms: z.number(),
@@ -14,7 +14,7 @@ export const SpaceRequirementsSchema = z.object({
   minLivingArea: z
     .number()
     .describe(
-      txt(
+      md(
         <>
           Possible values: `{" "}
           {JSON.stringify(MIN_LIVING_AREA_SIZES.map((s) => s.value))}`
@@ -25,7 +25,7 @@ export const SpaceRequirementsSchema = z.object({
     .number()
     .nullable()
     .describe(
-      txt(
+      md(
         <>
           Possible values: `{" "}
           {JSON.stringify(MAX_LIVING_AREA_SIZES.map((s) => s.value))}`
@@ -33,7 +33,7 @@ export const SpaceRequirementsSchema = z.object({
       )
     ),
   minLotSize: z.number().describe(
-    txt(
+    md(
       <>
         The minimum lot size, specified in Meters Squared. Here are the possible
         values: `{JSON.stringify(MIN_LOT_SIZES.map((s) => s.value))}
@@ -46,7 +46,7 @@ export const SpaceRequirementsSchema = z.object({
     .number()
     .nullable()
     .describe(
-      txt(
+      md(
         <>
           The maximum lot size, specified in Meters Squared. Here are the
           possible values: `{JSON.stringify(MAX_LOT_SIZES.map((s) => s.value))}

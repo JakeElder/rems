@@ -6,9 +6,6 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 
 const nextConfig = {
-  experimental: {
-    serverActions: true
-  },
   transpilePackages: [
     "@rems/ui",
     "@rems/schema",

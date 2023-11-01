@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { txt } from "./utils";
+import md from "@rems/utils/md";
 
 export const IntentCodeSchema = z
   .enum([
@@ -21,27 +21,27 @@ export const IntentCodeSchema = z
     "REFINE_BUDGET_AVAILABILITY",
     "REFINE_MAP_STATE"
   ])
-  .describe(txt(<>A unique identifier for the intent</>));
+  .describe(md(<>A unique identifier for the intent</>));
 
 export const IntentSchema = z
   .object({
     id: z.number().min(1),
     code: IntentCodeSchema,
     primary: z.boolean(),
-    description: z.string().describe(txt(<>A description of the intent</>)),
+    description: z.string().describe(md(<>A description of the intent</>)),
     examples: z.array(
       z.object({
         input: z
           .string()
-          .describe(txt(<>An example command/enquiry issued by a user</>)),
+          .describe(md(<>An example command/enquiry issued by a user</>)),
         matches: z
           .array(z.string())
-          .describe(txt(<>An array of substrings that match this intent</>))
+          .describe(md(<>An array of substrings that match this intent</>))
       })
     )
   })
   .describe(
-    txt(
+    md(
       <>
         Remi is a virtual assistant. She analyses user intents so that we may
         provide them with good user experience and perform actions on their
