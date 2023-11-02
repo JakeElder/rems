@@ -6,12 +6,7 @@ import {
   $request,
   $systemMessage
 } from "@/remi/wrappers";
-import {
-  execute,
-  stringify,
-  timelineToCompletionMessages,
-  txt
-} from "@/remi/utils";
+import { execute, stringify, timelineToCompletionMessages } from "@/remi/utils";
 import {
   CapabilitySchema,
   RealEstateQuerySchema,
@@ -20,6 +15,7 @@ import {
 } from "@rems/schemas";
 import { Z } from "@rems/types";
 import { z } from "zod";
+import md from "@rems/utils/md";
 
 export const PropsSchema = z.object({
   query: RealEstateQuerySchema.Server,
@@ -37,7 +33,7 @@ export const ReturnsSchema = z
     r: z
       .string()
       .describe(
-        txt(
+        md(
           <>
             The natural language response to be sent to the user, sent as "Remi"
           </>

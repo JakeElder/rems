@@ -7,17 +7,18 @@ import {
   $systemMessage,
   $userMessage
 } from "@/remi/wrappers";
-import { execute, txt } from "@/remi/utils";
+import { execute } from "@/remi/utils";
 import { z } from "zod";
 import { Z } from "@rems/types";
+import md from "@rems/utils/md";
 
 const ReturnsSchema = z.object({
-  geospatialOperator: z.string().describe(txt(<>IE "in", "around", "near"</>)),
-  description: z.string().describe(txt(<>The location</>)),
+  geospatialOperator: z.string().describe(md(<>IE "in", "around", "near"</>)),
+  description: z.string().describe(md(<>The location</>)),
   ambiguous: z
     .boolean()
     .describe(
-      txt(
+      md(
         <>
           Whether or not the location is ambiguous or explicit. IE "Bangkok" is
           explicit. "A nice coffee shop in Bangkok" is ambigous.

@@ -1,10 +1,10 @@
 import { ChatCompletionRequest } from "@/remi/types";
-import { txt } from "@/remi/utils";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { FilterSchema, PropertySchema } from "@rems/schemas";
 import * as Models from "@/models";
 import * as Remi from "@/remi";
 import { Filter } from "@rems/types";
+import md from "@rems/utils/md";
 
 const parse = (rows: any) => rows.map((r: any) => FilterSchema.parse(r));
 
@@ -38,7 +38,7 @@ export const createMockProperty = async () => {
     messages: [
       {
         role: "user",
-        content: txt(
+        content: md(
           <>
             You are an assistant, responsible for inserting mock data in to a
             property website for demonstration purposes.
@@ -79,7 +79,7 @@ export const createMockProperty = async () => {
       },
       {
         role: "user",
-        content: txt(
+        content: md(
           <>
             Here are the values that can be used for certain arrays. For
             indoorFeatures, lotFeatures, outdoorFeatures and viewTypes - please

@@ -10,19 +10,19 @@ import {
   execute,
   mapFilters,
   stringify,
-  timelineToCompletionMessages,
-  txt
+  timelineToCompletionMessages
 } from "@/remi/utils";
 import { FilterSchema, TimelineSchema } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { Filter, Z } from "@rems/types";
+import md from "@rems/utils/md";
 
 export const ContextSchema = z.object({
   filters: z.array(FilterSchema.omit({ slug: true })),
   current: z
     .array(FilterSchema.omit({ slug: true }))
-    .describe(txt(<>Currently active filter id's</>))
+    .describe(md(<>Currently active filter id's</>))
 });
 
 export const PropsSchema = z.object({
@@ -34,7 +34,7 @@ export const ReturnsSchema = z
   .object({
     n: z
       .array(FilterSchema.shape["id"])
-      .describe(txt(<>An array of updated filter ids</>))
+      .describe(md(<>An array of updated filter ids</>))
   })
   .transform(({ n }) => n);
 

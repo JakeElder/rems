@@ -37,7 +37,7 @@ export const $message = (
   role: ChatCompletionRequestMessage["role"],
   content: React.ReactNode
 ): ChatCompletionRequestMessage => {
-  return { role, content: txt(content) };
+  return { role, content: md(content) };
 };
 
 export const $systemMessage = (
@@ -61,7 +61,7 @@ export const $functionCall = ({
       {
         name: "f",
         parameters: zodToJsonSchema(returnsSchema),
-        ...(description ? { description: txt(description) } : {})
+        ...(description ? { description: md(description) } : {})
       }
     ]
   };

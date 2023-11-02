@@ -6,12 +6,7 @@ import {
   $request,
   $systemMessage
 } from "@/remi/wrappers";
-import {
-  txt,
-  stringify,
-  timelineToCompletionMessages,
-  execute
-} from "@/remi/utils";
+import { stringify, timelineToCompletionMessages, execute } from "@/remi/utils";
 import { intents } from "@/remi";
 import {
   LocationSchema,
@@ -24,6 +19,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import { Z } from "@rems/types";
 import * as Models from "@/models";
 import { Model } from "sequelize";
+import md from "@rems/utils/md";
 
 export const PropsSchema = z.object({
   currentLocation: LocationSchema,
@@ -56,11 +52,11 @@ export const ContextSchema = z.object({
 
 export const ReturnsSchema = z
   .object({
-    p: TerseIntentSchema.shape["id"].describe(txt(<>The *primary* intent</>)),
+    p: TerseIntentSchema.shape["id"].describe(md(<>The *primary* intent</>)),
     s: z
       .array(TerseIntentSchema.shape["id"])
       .describe(
-        txt(
+        md(
           <>
             An array of *Secondary Intents*. An array of id's that apply to this
             request.
@@ -69,7 +65,7 @@ export const ReturnsSchema = z
       )
   })
   .describe(
-    txt(
+    md(
       <>
         An object that contains all the data necessary to further process
         natural language issued to Remi as a command or enquiry.

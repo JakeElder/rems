@@ -6,9 +6,10 @@ import {
   $request,
   $systemMessage
 } from "@/remi/wrappers";
-import { execute, timelineToCompletionMessages, txt } from "@/remi/utils";
+import { execute, timelineToCompletionMessages } from "@/remi/utils";
 import { TimelineSchema } from "@rems/schemas";
 import { z } from "zod";
+import md from "@rems/utils/md";
 
 export const PropsSchema = z.object({
   timeline: TimelineSchema
@@ -23,7 +24,7 @@ export const ReturnsSchema = z
     r: z
       .string()
       .describe(
-        txt(
+        md(
           <>
             The natural language response to be sent to the user, sent as "Remi"
           </>
