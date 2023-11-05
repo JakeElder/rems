@@ -6,32 +6,8 @@ type Props = {
 };
 
 const QuerySyncContainer = async ({ children }: Props) => {
-  const [
-    propertyTypes,
-    viewTypes,
-    indoorFeatures,
-    outdoorFeatures,
-    lotFeatures
-  ] = await Promise.all([
-    fetch("property-types"),
-    fetch("view-types"),
-    fetch("indoor-features"),
-    fetch("outdoor-features"),
-    fetch("lot-features")
-  ]);
-
-  return (
-    <QuerySync
-      children={children}
-      filters={{
-        propertyTypes,
-        viewTypes,
-        outdoorFeatures,
-        indoorFeatures,
-        lotFeatures
-      }}
-    />
-  );
+  const filters = await fetch("array-filters");
+  return <QuerySync children={children} filters={filters} />;
 };
 
 export default QuerySyncContainer;
