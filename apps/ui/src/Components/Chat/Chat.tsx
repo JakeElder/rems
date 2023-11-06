@@ -95,8 +95,7 @@ export const Header = React.memo(
   }
 );
 
-const isLanguageBasedEvent = (e: TimelineEvent) =>
-  e.event.type === "LANGUAGE_BASED";
+const isLanguageBasedEvent = (e: TimelineEvent) => e.event.type === "YIELD";
 
 const isPatchEvent = (e: TimelineEvent) => e.event.type === "STATE_MUTATION";
 
@@ -129,7 +128,6 @@ export const Input = ({ children }: { children: React.ReactNode }) => {
 
 export const Body = React.memo(
   ({ timeline }: Pick<Props, "timeline">) => {
-    return null;
     const refMap = useMemo(() => new WeakMap(), []);
 
     const events = timeline

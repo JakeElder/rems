@@ -2,7 +2,8 @@
   "name": "@rems/schemas",
   "version": "0.1.0",
   "scripts": {
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
   },
   "exports": {
     ".": "./src/index.ts"

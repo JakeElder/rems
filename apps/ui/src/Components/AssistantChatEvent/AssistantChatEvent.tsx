@@ -6,7 +6,7 @@ import { AssistantEvent } from "@rems/types";
 
 const AssistantChatEvent = forwardRef<HTMLDivElement, AssistantEvent>(
   (e, ref) => {
-    if (e.type === "LANGUAGE_BASED") {
+    if (e.type === "YIELD") {
       return (
         <div className={css["root"]} ref={ref}>
           <div className={css["message"]}>

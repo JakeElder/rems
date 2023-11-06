@@ -18,7 +18,6 @@ import {
   AssistantEventSchema,
   UserEventSchema,
   EventSchema,
-  LanguageBasedInteractionEventSchema,
   StateMutationInteractionEventSchema,
   YieldEventSchema,
   ErrorEventSchema,
@@ -278,9 +277,6 @@ export type UserEvent = Z<typeof UserEventSchema>;
 export type SystemEvent = Z<typeof SystemEventSchema>;
 export type Event = Z<typeof EventSchema>;
 
-export type LanguageBasedInteractionEvent = Z<
-  typeof LanguageBasedInteractionEventSchema
->;
 export type StateMutationInteractionEvent = Z<
   typeof StateMutationInteractionEventSchema
 >;

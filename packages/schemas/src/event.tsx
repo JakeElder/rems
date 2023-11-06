@@ -3,11 +3,6 @@ import { IntentCodeSchema } from "./intent";
 import { LocationSchema } from "./location";
 import { StateMutationSchema } from "./state-mutation";
 
-export const LanguageBasedInteractionEventSchema = z.object({
-  type: z.literal("LANGUAGE_BASED"),
-  message: z.string()
-});
-
 export const StateMutationInteractionEventSchema = z.object({
   type: z.literal("STATE_MUTATION"),
   mutation: StateMutationSchema
@@ -47,13 +42,11 @@ export const SystemEventSchema = z.discriminatedUnion("type", [
 ]);
 
 export const UserEventSchema = z.discriminatedUnion("type", [
-  LanguageBasedInteractionEventSchema,
   StateMutationInteractionEventSchema,
   YieldEventSchema
 ]);
 
 export const AssistantEventSchema = z.discriminatedUnion("type", [
-  LanguageBasedInteractionEventSchema,
   StateMutationInteractionEventSchema,
   UpdateLocationEventSchema,
   YieldEventSchema
@@ -62,7 +55,6 @@ export const AssistantEventSchema = z.discriminatedUnion("type", [
 export const EventSchema = z.discriminatedUnion("type", [
   ErrorEventSchema,
   ResolvingIntentsEventSchema,
-  LanguageBasedInteractionEventSchema,
   StateMutationInteractionEventSchema,
   IntentResolutionErrorEventSchema,
   YieldEventSchema,

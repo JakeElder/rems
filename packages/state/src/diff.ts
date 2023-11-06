@@ -68,7 +68,7 @@ export const array = (
 
   const diffs: ArrayDiff[] = [
     ...additions.map(
-      (value): AddArrayDiff => ({ type: "ADD_FROM_ARRAY", value })
+      (value): AddArrayDiff => ({ type: "ADD_TO_ARRAY", value })
     ),
     ...removals.map(
       (value): RemoveArrayDiff => ({ type: "REMOVE_FROM_ARRAY", value })

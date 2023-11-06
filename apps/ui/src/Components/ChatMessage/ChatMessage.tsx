@@ -1,5 +1,4 @@
 import React, { forwardRef } from "react";
-import css from "./ChatMessage.module.css";
 import { TimelineEvent } from "@rems/types";
 import UserChatEvent from "../UserChatEvent";
 import AssistantChatEvent from "../AssistantChatEvent/AssistantChatEvent";

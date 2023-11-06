@@ -27,7 +27,7 @@ const AddArray = (diff: AddArrayDiff) => {
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faPlus} size="sm" />
       </div>
-      <div className={css["value"]}>{diff.value.name}</div>
+      <div className={css["value"]}>{diff.value.slug as string}</div>
     </div>
   );
 };
@@ -38,7 +38,7 @@ const RemoveArray = (diff: RemoveArrayDiff) => {
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faMinus} size="sm" />
       </div>
-      <div className={css["value"]}>{diff.value.name}</div>
+      <div className={css["value"]}>{diff.value.slug as string}</div>
     </div>
   );
 };
@@ -85,7 +85,7 @@ const ChangeScalar = (diff: ChangeScalarDiff) => {
 };
 
 const LineSwitch = (diff: ScalarDiff | ArrayDiff) => {
-  if (diff.type === "ADD_FROM_ARRAY") {
+  if (diff.type === "ADD_TO_ARRAY") {
     return <AddArray {...diff} />;
   }
 
@@ -162,7 +162,9 @@ const ArrayNoop = (patch: ArrayPatch) => {
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faEquals} size="sm" />
       </div>
-      <div className={css["values"]}>{patch.value.join(", ")}</div>
+      <div className={css["values"]}>
+        {patch.value.map((p) => p.slug).join(", ")}
+      </div>
     </div>
   );
 };

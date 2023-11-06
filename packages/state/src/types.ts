@@ -6,10 +6,12 @@ export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
-const IdentifiableSchema = z.object({
-  id: z.union([z.number(), z.string()]),
-  name: z.string()
-});
+const IdentifiableSchema = z
+  .object({
+    id: z.union([z.number(), z.string()]),
+    name: z.string()
+  })
+  .passthrough();
 
 export type Identifiable = Z<typeof IdentifiableSchema>;
 
@@ -49,7 +51,7 @@ export type ChangeScalarDiff = Z<typeof ChangeScalarDiffSchema>;
 export type ScalarDiff = Z<typeof ScalarDiffSchema>;
 
 export const AddFromArrayDiffSchema = z.object({
-  type: z.literal("ADD_FROM_ARRAY"),
+  type: z.literal("ADD_TO_ARRAY"),
   value: IdentifiableSchema
 });
 

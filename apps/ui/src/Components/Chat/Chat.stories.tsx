@@ -72,7 +72,7 @@ export const Mock: FC<Props> = (props) => {
         </div>
       </div>
       {!spacing.ready ? null : (
-        <Chat.Root {...props} {...spacing}>
+        <Chat.Root {...props} {...spacing.props}>
           <Chat.Dialog>
             <Chat.Header {...props} />
             <Chat.Body timeline={t} />
