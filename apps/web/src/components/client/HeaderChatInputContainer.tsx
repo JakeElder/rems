@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { ChatInput } from "@rems/ui";
-import { useAssistant } from "@/components/AssistantProvider";
+import useAssistantState from "@/hooks/use-assistant-state";
 
 const HeaderChatInputContainer = () => {
-  const assistant = useAssistant();
+  const state = useAssistantState();
   const $input = useRef<HTMLInputElement>(null);
+
+  return null;
 
   // useEffect(() => {
   //   if (assistant.session.value) {
@@ -18,19 +20,7 @@ const HeaderChatInputContainer = () => {
   //   }
   // }, [assistant.session.value]);
 
-  return (
-    <ChatInput
-      ref={$input}
-      submittable={assistant.submittable}
-      onMicClick={assistant.onMicClick}
-      onKeyDown={assistant.onKeyDown}
-      onKeyUp={assistant.onKeyUp}
-      enterDown={assistant.enterDown}
-      sessions={assistant.sessions}
-      onChange={assistant.onChange}
-      theme="header"
-    />
-  );
+  return <ChatInput ref={$input} {...state} theme="header" />;
 };
 
 export default HeaderChatInputContainer;

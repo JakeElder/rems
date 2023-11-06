@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useRef } from "react";
 import { Chat, ChatInput } from "@rems/ui";
-import useAssistant from "@/hooks/use-assistant";
+import useAssistantState from "@/hooks/use-assistant-state";
+import useAssistantCallbacks from "@/hooks/use-assistant-callbacks";
+import useDomElements from "@/hooks/use-dom-elements";
 
 type Props = {};
 
 const ChatViewContainer = ({}: Props) => {
-  const props = useAssistant();
-  const $input = useRef<HTMLInputElement>(null);
+  const state = useAssistantState();
+  const callbacks = useAssistantCallbacks();
+  const { $chatInput } = useDomElements();
 
   // useEffect(() => {
   //   if (props.session.value) {
@@ -20,18 +22,46 @@ const ChatViewContainer = ({}: Props) => {
   //   }
   // }, [props.session.value]);
 
-  if (!props.ready) {
+  if (!state.ready) {
     return null;
   }
 
+  const {
+    lang,
+    placement,
+    mode,
+    xDivide,
+    marginTop,
+    timeline,
+    enterDown,
+    sessions,
+    submittable
+  } = state;
+
+  const { onChange, onKeyDown, onKeyUp } = callbacks;
+
   return (
-    <Chat.Root {...props}>
+    <Chat.Root
+      placement={placement}
+      mode={mode}
+      xDivide={xDivide}
+      marginTop={marginTop}
+    >
       <Chat.Dialog>
-        <Chat.Header {...props} />
-        <Chat.Body {...props} />
+        <Chat.Header mode={mode} lang={lang} />
+        <Chat.Body timeline={timeline} />
       </Chat.Dialog>
       <Chat.Input>
-        <ChatInput ref={$input} {...props} theme="chat" />
+        <ChatInput
+          ref={$chatInput}
+          theme="chat"
+          enterDown={enterDown}
+          sessions={sessions}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
+          submittable={submittable}
+        />
       </Chat.Input>
     </Chat.Root>
   );

@@ -202,7 +202,10 @@ export const Root = ({
   mode,
   xDivide,
   marginTop
-}: {} & Props) => {
+}: Pick<
+  Props,
+  "children" | "placement" | "mode" | "xDivide" | "marginTop"
+>) => {
   const {
     padding,
     borderRadius,

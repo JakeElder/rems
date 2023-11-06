@@ -16,8 +16,12 @@ import PaginationViewContainer from "@/components/client/PaginationViewContainer
 import FooterContainer from "@/components/server/FooterContainer";
 import RealEstateIndexPageTitleContainer from "@/components/server/RealEstateIndexPageTitleContainer";
 import ChatViewContainer from "@/components/client/ChatViewContainer";
+import AssistantCallbackProvider from "@/components/client/AssistantCallbackProvider";
+import KeyboardListeners from "@/components/client/KeyboardListeners";
 
-type Props = { searchParams?: SearchParams };
+type Props = {
+  searchParams?: SearchParams;
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetch("app-config");
@@ -32,37 +36,40 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
     <StateProviderContainer searchParams={searchParams}>
       <QuerySyncContainer>
         <DomElementsProvider>
-          <Page.Root>
-            <ChatViewContainer />
-            <ToastHub>
-              <RealEstateIndexPageHeaderViewContainer>
-                <HeaderViewContainer full mode="standard" />
-                <FilterBarContainer />
-              </RealEstateIndexPageHeaderViewContainer>
-              <Page.Main>
-                <RealEstateIndexPageContentViewContainer>
-                  <RealEstateIndexPageTitleContainer
-                    searchParams={searchParams}
-                  />
-                  <Page.CountAndSort>
-                    <CountAndSortViewContainer />
-                  </Page.CountAndSort>
-                  <Page.Properties>
-                    <PropertyGridViewContainer />
-                  </Page.Properties>
-                  <Page.Pagination>
-                    <PaginationViewContainer />
-                  </Page.Pagination>
-                </RealEstateIndexPageContentViewContainer>
-                <Page.Map>
-                  <ListingMapViewContainer />
-                </Page.Map>
-              </Page.Main>
-              <Page.Footer>
-                <FooterContainer full />
-              </Page.Footer>
-            </ToastHub>
-          </Page.Root>
+          <AssistantCallbackProvider>
+            <KeyboardListeners />
+            <Page.Root>
+              <ChatViewContainer />
+              <ToastHub>
+                <RealEstateIndexPageHeaderViewContainer>
+                  <HeaderViewContainer full mode="standard" chat />
+                  <FilterBarContainer />
+                </RealEstateIndexPageHeaderViewContainer>
+                <Page.Main>
+                  <RealEstateIndexPageContentViewContainer>
+                    <RealEstateIndexPageTitleContainer
+                      searchParams={searchParams}
+                    />
+                    <Page.CountAndSort>
+                      <CountAndSortViewContainer />
+                    </Page.CountAndSort>
+                    <Page.Properties>
+                      <PropertyGridViewContainer />
+                    </Page.Properties>
+                    <Page.Pagination>
+                      <PaginationViewContainer />
+                    </Page.Pagination>
+                  </RealEstateIndexPageContentViewContainer>
+                  <Page.Map>
+                    <ListingMapViewContainer />
+                  </Page.Map>
+                </Page.Main>
+                <Page.Footer>
+                  <FooterContainer full />
+                </Page.Footer>
+              </ToastHub>
+            </Page.Root>
+          </AssistantCallbackProvider>
         </DomElementsProvider>
       </QuerySyncContainer>
     </StateProviderContainer>

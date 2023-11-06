@@ -2,7 +2,7 @@
 
 import React from "react";
 import { RealEstateIndexPage as Layout } from "@rems/ui";
-import { useDomElements } from "@/components/client/DomElementsProvider";
+import useDomElements from "@/hooks/use-dom-elements";
 
 type Props = {
   children: React.ReactNode;

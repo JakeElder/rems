@@ -5,11 +5,8 @@ import useAssistantKeys from "@/hooks/use-assistant-keys";
 import { Sound } from "@/utils";
 import {
   InputSession,
-  AssistantPayload,
   Timeline,
   TimelineEvent,
-  AssistantTimelineEvent,
-  SystemTimelineEvent,
   AssistantMode,
   AssistantPlacement
 } from "@rems/types";
@@ -19,7 +16,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { useDebouncedCallback } from "use-debounce";
 import { Chat } from "@rems/ui";
-import { useDomElements } from "@/components/client/DomElementsProvider";
+import useDomElements from "@/hooks/use-dom-elements";
 import {
   handleAssistantPlacementChangeRequest,
   handleEmptySubmission,
