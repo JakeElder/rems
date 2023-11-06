@@ -1,4 +1,4 @@
-import randomInt from "random-int";
+import { randomInt } from "@rems/utils";
 import { Timeline } from "@rems/types";
 
 let dates = 0;
@@ -23,113 +23,113 @@ const timeline: Timeline = [
       message: "Sure! I can do that"
     }
   },
-  {
-    role: "ASSISTANT",
-    id: "2",
-    date: date(),
-    event: {
-      type: "PATCH",
-      patch: {
-        type: "SCALAR",
-        group: "PAGE",
-        data: { page: 2 },
-        diff: [{ type: "CHANGE_SCALAR", k: "page", value: [1, 2] }]
-      }
-    }
-  },
-  {
-    role: "ASSISTANT",
-    id: "30",
-    date: date(),
-    event: {
-      type: "PATCH",
-      patch: {
-        group: "INDOOR_FEATURES",
-        type: "ARRAY",
-        key: "indoor-features",
-        value: ["pet-friendly", "swimming-pool"],
-        diff: []
-      }
-    }
-  },
-  {
-    role: "ASSISTANT",
-    id: "3",
-    date: date(),
-    event: {
-      type: "PATCH",
-      patch: {
-        type: "ARRAY",
-        group: "INDOOR_FEATURES",
-        key: "indoor-features",
-        value: ["pet-friendly", "swimming-pool"],
-        diff: [
-          {
-            type: "REMOVE_ARRAY",
-            k: "indoor-features",
-            value: "balcony"
-          },
-          {
-            type: "ADD_ARRAY",
-            k: "indoor-features",
-            value: "swimming-pool"
-          },
-          {
-            type: "ADD_ARRAY",
-            k: "indoor-features",
-            value: "pet-friendly"
-          }
-        ]
-      }
-    }
-  },
-  {
-    role: "ASSISTANT",
-    id: "50",
-    date: date(),
-    event: {
-      type: "PATCH",
-      patch: {
-        type: "SCALAR",
-        group: "SPACE_REQUIREMENTS",
-        data: {
-          "min-bedrooms": 3,
-          "max-bedrooms": 4
-        },
-        diff: []
-      }
-    }
-  },
-  {
-    role: "ASSISTANT",
-    id: "5",
-    date: date(),
-    event: {
-      type: "PATCH",
-      patch: {
-        type: "SCALAR",
-        group: "SPACE_REQUIREMENTS",
-        data: { "min-bedrooms": 3 },
-        diff: [
-          {
-            type: "CHANGE_SCALAR",
-            k: "min-bedrooms",
-            value: [2, 3]
-          },
-          {
-            type: "REMOVE_SCALAR",
-            k: "max-bedrooms",
-            value: 3
-          },
-          {
-            type: "ADD_SCALAR",
-            k: "min-lot-size",
-            value: 100
-          }
-        ]
-      }
-    }
-  },
+  // {
+  //   role: "ASSISTANT",
+  //   id: "2",
+  //   date: date(),
+  //   event: {
+  //     type: "PATCH",
+  //     patch: {
+  //       type: "SCALAR",
+  //       group: "PAGE",
+  //       data: { page: 2 },
+  //       diff: [{ type: "CHANGE_SCALAR", k: "page", value: [1, 2] }]
+  //     }
+  //   }
+  // },
+  // {
+  //   role: "ASSISTANT",
+  //   id: "30",
+  //   date: date(),
+  //   event: {
+  //     type: "PATCH",
+  //     patch: {
+  //       group: "INDOOR_FEATURES",
+  //       type: "ARRAY",
+  //       key: "indoor-features",
+  //       value: ["pet-friendly", "swimming-pool"],
+  //       diff: []
+  //     }
+  //   }
+  // },
+  // {
+  //   role: "ASSISTANT",
+  //   id: "3",
+  //   date: date(),
+  //   event: {
+  //     type: "PATCH",
+  //     patch: {
+  //       type: "ARRAY",
+  //       group: "INDOOR_FEATURES",
+  //       key: "indoor-features",
+  //       value: ["pet-friendly", "swimming-pool"],
+  //       diff: [
+  //         {
+  //           type: "REMOVE_ARRAY",
+  //           k: "indoor-features",
+  //           value: "balcony"
+  //         },
+  //         {
+  //           type: "ADD_ARRAY",
+  //           k: "indoor-features",
+  //           value: "swimming-pool"
+  //         },
+  //         {
+  //           type: "ADD_ARRAY",
+  //           k: "indoor-features",
+  //           value: "pet-friendly"
+  //         }
+  //       ]
+  //     }
+  //   }
+  // },
+  // {
+  //   role: "ASSISTANT",
+  //   id: "50",
+  //   date: date(),
+  //   event: {
+  //     type: "PATCH",
+  //     patch: {
+  //       type: "SCALAR",
+  //       group: "SPACE_REQUIREMENTS",
+  //       data: {
+  //         "min-bedrooms": 3,
+  //         "max-bedrooms": 4
+  //       },
+  //       diff: []
+  //     }
+  //   }
+  // },
+  // {
+  //   role: "ASSISTANT",
+  //   id: "5",
+  //   date: date(),
+  //   event: {
+  //     type: "PATCH",
+  //     patch: {
+  //       type: "SCALAR",
+  //       group: "SPACE_REQUIREMENTS",
+  //       data: { "min-bedrooms": 3 },
+  //       diff: [
+  //         {
+  //           type: "CHANGE_SCALAR",
+  //           k: "min-bedrooms",
+  //           value: [2, 3]
+  //         },
+  //         {
+  //           type: "REMOVE_SCALAR",
+  //           k: "max-bedrooms",
+  //           value: 3
+  //         },
+  //         {
+  //           type: "ADD_SCALAR",
+  //           k: "min-lot-size",
+  //           value: 100
+  //         }
+  //       ]
+  //     }
+  //   }
+  // },
   {
     role: "ASSISTANT",
     id: "6",

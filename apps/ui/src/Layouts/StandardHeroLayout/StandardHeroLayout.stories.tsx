@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import type { Meta, StoryObj } from "@storybook/react";
-import StandardHeroLayout from "./StandardHeroLayout";
+import * as StandardHeroLayout from "./StandardHeroLayout";
 
 const meta: Meta<typeof StandardHeroLayout> = {
   title: "Layouts/StandardHero",

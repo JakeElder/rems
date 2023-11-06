@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Button from "./Button";
 
-const meta: Meta<typeof Button> = {
+export { Button };
+
+const meta: Meta<React.ComponentProps<typeof Button>> = {
   title: "Elements/Button",
   component: Button,
   parameters: {
@@ -16,7 +18,7 @@ const meta: Meta<typeof Button> = {
   ]
 };
 
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<React.ComponentProps<typeof Button>>;
 
 export const Default: Story = {
   args: { children: "Primary" }

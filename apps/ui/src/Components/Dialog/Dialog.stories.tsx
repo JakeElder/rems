@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import type { Meta, StoryObj } from "@storybook/react";
-import Dialog from "./Dialog";
+import * as Dialog from "./Dialog";
 
 const meta: Meta<typeof Dialog> = {
   title: "Components/Dialog",

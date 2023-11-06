@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import type { Meta, StoryObj } from "@storybook/react";
-import ContactForm from "./ContactForm";
+import * as ContactForm from "./ContactForm";
 
 const meta: Meta<typeof ContactForm> = {
   title: "Components/ContactForm",

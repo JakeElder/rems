@@ -1,4 +1,4 @@
-import { GroupedAssistantState, InputSession } from "@rems/types";
+import { AssistantState, InputSession } from "@rems/types";
 
 type ChatPalette = {
   avatarBorder: string;
@@ -25,9 +25,9 @@ type InputTheme = {
 
 type Themes = Record<"header" | "chat", InputTheme>;
 
-export const CHAT_PALETTE: Record<GroupedAssistantState, ChatPalette> = {
+export const CHAT_PALETTE: Record<AssistantState["mode"], ChatPalette> = {
   // Gray
-  IDLE: {
+  SLEEPING: {
     avatarBorder: "#d1d1d1",
     labelBg: "#F2F2F2",
     labelColor: "#555"
@@ -48,7 +48,14 @@ export const CHAT_PALETTE: Record<GroupedAssistantState, ChatPalette> = {
   },
 
   // Green
-  INTERACTING: {
+  WORKING: {
+    avatarBorder: "#439a5f",
+    labelBg: "#439a5f",
+    labelColor: "#fff"
+  },
+
+  // Green
+  CHATTING: {
     avatarBorder: "#439a5f",
     labelBg: "#439a5f",
     labelColor: "#fff"

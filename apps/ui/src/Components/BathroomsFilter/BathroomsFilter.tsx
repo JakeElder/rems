@@ -4,8 +4,8 @@ import ToggleGroup from "../ToggleGroup";
 import { RealEstateQuery } from "@rems/types";
 
 type Props = {
-  value: RealEstateQuery["min-bedrooms"];
-  onChange: (min: RealEstateQuery["min-bathrooms"]) => void;
+  value: RealEstateQuery["space"]["minBedrooms"];
+  onChange: (min: RealEstateQuery["space"]["maxBedrooms"]) => void;
 };
 
 const BathroomsFilter = ({ value, onChange }: Props) => {

@@ -2,11 +2,11 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Page from "./RealEstateIndexPage";
-import Header from "../../Components/Header";
-import FilterBar from "../../Components/FilterBar";
+import * as Header from "../../Components/Header";
+import * as FilterBar from "../../Components/FilterBar";
 import PropertyCard from "../../Components/PropertyCard";
 import Pagination from "../../Components/Pagination";
-import Footer from "../../Components/Footer";
+import * as Footer from "../../Components/Footer";
 import ListingMap from "../../Components/ListingMap";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import CountAndSort from "../../Components/CountAndSort";

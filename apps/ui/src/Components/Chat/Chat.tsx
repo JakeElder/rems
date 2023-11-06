@@ -2,12 +2,7 @@
 
 import React, { useMemo, MutableRefObject, useEffect, useState } from "react";
 import css from "./Chat.module.css";
-import {
-  AssistantState,
-  AssistantUiState,
-  Timeline,
-  TimelineEvent
-} from "@rems/types";
+import { AssistantState, Timeline, TimelineEvent } from "@rems/types";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
 import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
@@ -16,7 +11,6 @@ import equal from "fast-deep-equal";
 import { CHAT_PALETTE } from "../../colors";
 import StateLabel from "../StateLabel/StateLabel";
 import useAssistantUiLayout from "../../hooks/use-assistant-ui-layout";
-import assistantStateToGroupedAssistantState from "../../adapters/assistant-state-to-grouped-assistant-state";
 
 export type Spacing = {
   xDivide: number;
@@ -30,20 +24,18 @@ export type SpacingUtilityReturn =
 export type Props = {
   children: React.ReactNode;
   lang: "en" | "th";
-  state: AssistantState;
+  mode: AssistantState["mode"];
   timeline: Timeline;
-  uiState: AssistantUiState;
+  placement: AssistantState["placement"];
 } & Spacing;
 
 export const Header = React.memo(
-  ({ state, lang }: Pick<Props, "state" | "lang">) => {
-    const group = assistantStateToGroupedAssistantState(state);
-
-    const palette = CHAT_PALETTE[group];
+  ({ mode, lang }: Pick<Props, "mode" | "lang">) => {
+    const palette = CHAT_PALETTE[mode];
 
     const { avatarBorder } = useSpring(palette);
     const { avatarOpacity } = useSpring({
-      avatarOpacity: state === "SLEEPING" ? 0.7 : 0.8
+      avatarOpacity: mode === "SLEEPING" ? 0.7 : 0.8
     });
 
     const pulseStyle = useSpring({
@@ -55,7 +47,7 @@ export const Header = React.memo(
     });
 
     const { pulseOpacity } = useSpring({
-      pulseOpacity: state === "LISTENING" ? 1 : 0
+      pulseOpacity: mode === "LISTENING" ? 1 : 0
     });
 
     return (
@@ -88,7 +80,7 @@ export const Header = React.memo(
             </div>
           </animated.div>
           <div className={css["name"]}>Remi</div>
-          <StateLabel state={state} />
+          <StateLabel mode={mode} />
         </div>
         <div className={css["lang-manage-ui-state"]}>
           <div className={css["lang"]}>{lang}</div>
@@ -101,17 +93,20 @@ export const Header = React.memo(
 const isLanguageBasedEvent = (e: TimelineEvent) =>
   e.event.type === "LANGUAGE_BASED";
 
-const isPatchEvent = (e: TimelineEvent) => e.event.type === "PATCH";
+const isPatchEvent = (e: TimelineEvent) => e.event.type === "STATE_MUTATION";
 
 const isEmptyPatchEvent = ({ role, event: e }: TimelineEvent) => {
-  if (role === "ASSISTANT" && e.type === "PATCH") {
-    if (e.patch.type === "SCALAR" && Object.keys(e.patch.data).length === 0) {
+  if (role === "ASSISTANT" && e.type === "STATE_MUTATION") {
+    if (
+      e.mutation.patch.type === "SCALAR" &&
+      Object.keys(e.mutation.patch.data).length === 0
+    ) {
       return true;
     }
     if (
-      e.patch.type === "ARRAY" &&
-      e.patch.diff.length === 0 &&
-      e.patch.value.length === 0
+      e.mutation.patch.type === "ARRAY" &&
+      e.mutation.patch.diff.length === 0 &&
+      e.mutation.patch.value.length === 0
     ) {
       return true;
     }
@@ -129,6 +124,7 @@ export const Input = ({ children }: { children: React.ReactNode }) => {
 
 export const Body = React.memo(
   ({ timeline }: Pick<Props, "timeline">) => {
+    return null;
     const refMap = useMemo(() => new WeakMap(), []);
 
     const events = timeline
@@ -199,8 +195,8 @@ export const useAssistantSpacingUtility = ({
 
 export const Root = ({
   children,
-  uiState,
-  state,
+  placement,
+  mode,
   xDivide,
   marginTop
 }: {} & Props) => {
@@ -215,8 +211,8 @@ export const Root = ({
     right,
     bottom
   } = useAssistantUiLayout({
-    state: uiState,
-    assistantState: state,
+    placement,
+    mode,
     xDivide,
     marginTop
   });

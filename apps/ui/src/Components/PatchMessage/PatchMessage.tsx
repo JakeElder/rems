@@ -1,6 +1,6 @@
 import React from "react";
 import css from "./PatchMessage.module.css";
-import { Patch as PatchType } from "@rems/types";
+import { Patch as PatchType } from "@rems/state";
 import { titleCase } from "title-case";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";

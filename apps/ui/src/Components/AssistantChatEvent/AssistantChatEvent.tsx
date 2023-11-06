@@ -18,11 +18,11 @@ const AssistantChatEvent = forwardRef<HTMLDivElement, AssistantEvent>(
       );
     }
 
-    if (e.type === "PATCH") {
+    if (e.type === "STATE_MUTATION") {
       return (
         <div className={css["root"]} ref={ref}>
           <div className={css["message"]}>
-            <PatchMessage {...e.patch} />
+            <PatchMessage {...e.mutation.patch} />
           </div>
         </div>
       );

@@ -1,14 +1,18 @@
+import { FC } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Chat from "./Chat";
 import React, { useEffect, useRef, useState } from "react";
-import randomInt from "random-int";
 import { InputSession, Timeline } from "@rems/types";
-import mockTimeline from "../../fixtures/timeline";
 import ChatInput from "../ChatInput/ChatInput";
+// import mockTimeline from "../../fixtures/timeline";
+import { randomInt } from "@rems/utils";
+
+const mockTimeline: Timeline = [];
 
 type InputProps = React.ComponentProps<typeof ChatInput>;
 type Props = Chat.Props &
   Omit<InputProps, "state"> & { inputState: InputSession["state"] };
+
 type Story = StoryObj<Props>;
 
 const next = (source: Timeline, current: Timeline): [Timeline, boolean] => {
@@ -16,7 +20,7 @@ const next = (source: Timeline, current: Timeline): [Timeline, boolean] => {
   return [[...current, e!], source.length === 0];
 };
 
-export const Mock = (props: Props) => {
+export const Mock: FC<Props> = (props) => {
   const source = useRef([...mockTimeline]);
   const to = useRef<NodeJS.Timeout>();
   const [t, setCurrent] = useState(props.timeline);
@@ -107,8 +111,8 @@ const meta: Meta<Props> = {
 export const Default: Story = {
   args: {
     lang: "en",
-    state: "SLEEPING",
-    uiState: "MINIMISED",
+    mode: "SLEEPING",
+    placement: "MINIMISED",
     inputState: "INACTIVE",
     timeline: [],
     submittable: false,

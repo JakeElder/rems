@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import type { Meta, StoryObj } from "@storybook/react";
-import EntryCardGrid from "./EntryCardGrid";
+import * as EntryCardGrid from "./EntryCardGrid";
 
 import c1 from "../../assets/hero-pics/1.jpeg";
 import c2 from "../../assets/hero-pics/2.jpeg";

@@ -1,12 +1,11 @@
 import { useSpring } from "@react-spring/web";
-import { AssistantState, AssistantUiState } from "@rems/types";
+import { AssistantState } from "@rems/types";
 import tinycolor from "tinycolor2";
 import { CHAT_PALETTE } from "../colors";
-import assistantStateToGroupedAssistantState from "../adapters/assistant-state-to-grouped-assistant-state";
 import { scrollbarWidth } from "@xobotyi/scrollbar-width";
 
-type UiState = AssistantUiState;
-
+type Placement = AssistantState["placement"];
+type Mode = AssistantState["mode"];
 type ViewportWidth = number;
 type ViewportHeight = number;
 type XDivide = number;
@@ -18,29 +17,29 @@ const FRAME_PAD = 26;
 
 const calc = {
   left({
-    state,
+    placement,
     right,
     vw,
     xDivide
   }: {
-    state: UiState;
+    placement: Placement;
     right: number;
     vw: ViewportWidth;
     xDivide: XDivide;
   }) {
-    if (state === "MINIMISED" || state === "DOCKED") {
+    if (placement === "MINIMISED" || placement === "DOCKED") {
       return vw - (right + DEFAULT_WIDTH);
     }
 
-    if (state === "WINDOWED") {
+    if (placement === "WINDOWED") {
       return 0;
     }
 
-    if (state === "LEFT") {
+    if (placement === "LEFT") {
       return FRAME_PAD;
     }
 
-    if (state === "RIGHT") {
+    if (placement === "RIGHT") {
       const padding = FRAME_PAD * 2;
       const available = vw - xDivide - padding;
 
@@ -52,23 +51,23 @@ const calc = {
   },
 
   right({
-    state,
+    placement,
     vw,
     xDivide
   }: {
-    state: UiState;
+    placement: Placement;
     vw: ViewportWidth;
     xDivide: XDivide;
   }) {
-    if (state === "MINIMISED" || state === "DOCKED") {
+    if (placement === "MINIMISED" || placement === "DOCKED") {
       return 30;
     }
 
-    if (state === "WINDOWED") {
+    if (placement === "WINDOWED") {
       return 0;
     }
 
-    if (state === "LEFT") {
+    if (placement === "LEFT") {
       const padding = FRAME_PAD * 2;
       const available = xDivide - padding;
 
@@ -76,7 +75,7 @@ const calc = {
       return vw - (FRAME_PAD + width);
     }
 
-    if (state === "RIGHT") {
+    if (placement === "RIGHT") {
       return FRAME_PAD;
     }
 
@@ -84,116 +83,109 @@ const calc = {
   },
 
   top({
-    state,
+    placement,
     vh,
     padding,
     marginTop
   }: {
-    state: UiState;
+    placement: Placement;
     vh: ViewportHeight;
     padding: number;
     marginTop: number;
   }) {
-    if (state === "MINIMISED") {
+    if (placement === "MINIMISED") {
       return vh - (HEADER_HEIGHT + padding);
     }
 
-    if (state === "DOCKED") {
+    if (placement === "DOCKED") {
       return vh - (DEFAULT_HEIGHT + padding);
     }
 
-    if (state === "WINDOWED") {
+    if (placement === "WINDOWED") {
       return 0;
     }
 
-    if (state === "LEFT" || state === "RIGHT") {
+    if (placement === "LEFT" || placement === "RIGHT") {
       return marginTop + FRAME_PAD;
     }
 
     throw new Error();
   },
 
-  bottom({ state, padding }: { state: UiState; padding: number }) {
-    if (state === "MINIMISED") {
+  bottom({ placement, padding }: { placement: Placement; padding: number }) {
+    if (placement === "MINIMISED") {
       return -(DEFAULT_HEIGHT - (HEADER_HEIGHT + padding));
     }
 
-    if (state === "DOCKED" || state === "WINDOWED") {
+    if (placement === "DOCKED" || placement === "WINDOWED") {
       return 0;
     }
 
-    if (state === "LEFT" || state === "RIGHT") {
+    if (placement === "LEFT" || placement === "RIGHT") {
       return FRAME_PAD;
     }
 
     throw new Error();
   },
 
-  padding({ state }: { state: UiState }) {
-    return state === "WINDOWED" ? 60 : 20;
+  padding({ placement }: { placement: Placement }) {
+    return placement === "WINDOWED" ? 60 : 20;
   },
 
-  borderRadius({ state }: { state: UiState }) {
-    if (state === "DOCKED") {
+  borderRadius({ placement }: { placement: Placement }) {
+    if (placement === "DOCKED") {
       return "13px 13px 13px 13px";
     }
 
-    if (state === "WINDOWED") {
+    if (placement === "WINDOWED") {
       return "0px 0px 0px 0px";
     }
 
     return "13px 13px 13px 13px";
   },
 
-  boxShadow({ state }: { state: UiState }) {
-    return state === "MINIMISED"
+  boxShadow({ placement }: { placement: Placement }) {
+    return placement === "MINIMISED"
       ? "0 0 5px 0 rgba(0, 0, 0, 0)"
       : "0 0 5px 0 rgba(0, 0, 0, 0.4)";
   },
 
-  backdropFilter({ state }: { state: UiState }) {
-    return state === "MINIMISED" ? "blur(0px)" : "blur(4px)";
+  backdropFilter({ placement }: { placement: Placement }) {
+    return placement === "MINIMISED" ? "blur(0px)" : "blur(4px)";
   },
 
-  backgroundColor({
-    state,
-    assistantState
-  }: {
-    state: UiState;
-    assistantState: AssistantState;
-  }) {
-    const group = assistantStateToGroupedAssistantState(assistantState);
-    return tinycolor(CHAT_PALETTE[group].labelBg)
-      .setAlpha(state === "MINIMISED" ? 0 : 0.5)
+  backgroundColor({ placement, mode }: { placement: Placement; mode: Mode }) {
+    return tinycolor(CHAT_PALETTE[mode].labelBg)
+      .setAlpha(placement === "MINIMISED" ? 0 : 0.5)
       .toRgbString();
   }
 };
 
 type Props = {
-  state: UiState;
-  assistantState: AssistantState;
+  placement: Placement;
+  mode: Mode;
   xDivide: number;
   marginTop: number;
 };
 
 const useAssistantUiLayout = ({
-  state,
-  assistantState,
+  placement,
+  mode,
   xDivide,
   marginTop
 }: Props) => {
   const vw = window.innerWidth - scrollbarWidth()!;
   const vh = window.innerHeight;
 
-  const padding = calc.padding({ state });
-  const right = calc.right({ state, vw, xDivide });
-  const left = calc.left({ state, right, vw, xDivide });
-  const top = calc.top({ state, vh, padding, marginTop });
-  const bottom = calc.bottom({ state, padding });
-  const background = calc.backgroundColor({ state, assistantState });
-  const borderRadius = calc.borderRadius({ state });
-  const boxShadow = calc.boxShadow({ state });
-  const backdropFilter = calc.backdropFilter({ state });
+  const padding = calc.padding({ placement });
+  const right = calc.right({ placement, vw, xDivide });
+  const left = calc.left({ placement, right, vw, xDivide });
+  const top = calc.top({ placement, vh, padding, marginTop });
+  const bottom = calc.bottom({ placement, padding });
+  const background = calc.backgroundColor({ placement, mode });
+  const borderRadius = calc.borderRadius({ placement });
+  const boxShadow = calc.boxShadow({ placement });
+  const backdropFilter = calc.backdropFilter({ placement });
 
   const style = useSpring({
     left,

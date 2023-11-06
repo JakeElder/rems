@@ -2,7 +2,7 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Page from "./RealEstatePage";
-import Header from "../../Components/Header";
+import * as Header from "../../Components/Header";
 import SimpleImageCarousel from "../../Components/SimpleImageCarousel";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import * as ContactForm from "../../Components/ContactForm";
@@ -41,12 +41,12 @@ export const Default: Story = {
             </Page.Breadcrumbs>
             <Page.TitleAndDescription property={property} />
             <Page.Features property={property} />
-            <Page.ContactAgent>
+            <Page.Contact>
               <ContactForm.Root>
                 <ContactForm.Controls />
                 <ContactForm.Submit />
               </ContactForm.Root>
-            </Page.ContactAgent>
+            </Page.Contact>
             <Page.AskAQuestion>
               <AskAQuestionForm />
             </Page.AskAQuestion>

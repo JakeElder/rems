@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import type { Meta, StoryObj } from "@storybook/react";
-import PropertyFilters from "./PropertyFilters";
+import * as PropertyFilters from "./PropertyFilters";
 
 const meta: Meta<typeof PropertyFilters> = {
   title: "Components/PropertyFilters",

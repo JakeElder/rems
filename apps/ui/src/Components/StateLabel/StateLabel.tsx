@@ -3,43 +3,41 @@ import css from "./StateLabel.module.css";
 import { AssistantState } from "@rems/types";
 import { animated, useSpring } from "@react-spring/web";
 import { CHAT_PALETTE } from "../../colors";
-import assistantStateToGroupedAssistantState from "../../adapters/assistant-state-to-grouped-assistant-state";
 
-type Props = { state: AssistantState };
-
-type State = { label: string };
-const states: Record<Props["state"], State> = {
-  CHATTING: { label: "Chatting" },
-  SLEEPING: { label: "Sleeping" },
-  THINKING: { label: "Thinking" },
-  LISTENING: { label: "Listening" },
-  CLEARING_QUERY: { label: "Clearing Query" },
-  REFINING_QUERY: { label: "Refining Query" },
-  OPENING: { label: "Opening" }
+type Props = {
+  mode: AssistantState["mode"];
 };
 
-const StateLabel = React.memo(({ state }: Props) => {
-  const group = assistantStateToGroupedAssistantState(state);
-  const { labelBg, labelColor } = useSpring(CHAT_PALETTE[group]);
-  const keys = useRef<Props["state"][]>([
-    state,
-    ...(Object.keys(states).filter((s) => s !== state) as Props["state"][])
+const labels: Record<AssistantState["mode"], string> = {
+  CHATTING: "Chatting",
+  SLEEPING: "Sleeping",
+  THINKING: "Thinking",
+  LISTENING: "Listening",
+  WORKING: "Working"
+};
+
+const StateLabel = React.memo(({ mode }: Props) => {
+  const { labelBg, labelColor } = useSpring(CHAT_PALETTE[mode]);
+
+  const keys = useRef<Props["mode"][]>([
+    mode,
+    ...(Object.keys(labels).filter((s) => s !== mode) as Props["mode"][])
   ]);
   const firstRender = useRef(true);
 
-  const labelStyles = useSpring<Record<Props["state"], number>>(
+  const labelStyles = useSpring<Record<Props["mode"], number>>(
     keys.current.reduce((p, c) => {
-      return { ...p, [c]: state === c ? 1 : 0 };
+      return { ...p, [c]: mode === c ? 1 : 0 };
     }, {})
   );
 
-  type Elements = Partial<Record<Props["state"], HTMLSpanElement | null>>;
+  type Elements = Partial<Record<Props["mode"], HTMLSpanElement | null>>;
   const refs = useRef<Elements>({});
 
   const [{ width, opacity }, api] = useSpring(() => ({ width: 0, opacity: 1 }));
 
   useEffect(() => {
-    const el = refs.current[state];
+    const el = refs.current[mode];
 
     if (!el) {
       return;
@@ -54,9 +52,9 @@ const StateLabel = React.memo(({ state }: Props) => {
     }
 
     api.start({ width: rect.width, opacity: 1 });
-  }, [state]);
+  }, [mode]);
 
-  const palette = CHAT_PALETTE[group];
+  const palette = CHAT_PALETTE[mode];
 
   const pulseStyle = useSpring({
     from: { scaleX: 1, scaleY: 1, opacity: 1 },
@@ -67,7 +65,7 @@ const StateLabel = React.memo(({ state }: Props) => {
   });
 
   const { pulseOpacity } = useSpring({
-    pulseOpacity: state === "LISTENING" ? 1 : 0
+    pulseOpacity: mode === "LISTENING" ? 1 : 0
   });
 
   return (
@@ -92,7 +90,7 @@ const StateLabel = React.memo(({ state }: Props) => {
             style={{ opacity: labelStyles[s] }}
             key={s}
           >
-            <span ref={(e) => (refs.current[s] = e)}>{states[s].label}</span>
+            <span ref={(e) => (refs.current[s] = e)}>{labels[s]}</span>
           </animated.div>
         ))}
       </animated.div>

@@ -11,7 +11,7 @@ import {
   RemoveScalarDiff,
   ScalarDiff,
   ScalarPatch
-} from "@rems/types";
+} from "@rems/state";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRightArrowLeft,
@@ -27,7 +27,7 @@ const AddArray = (diff: AddArrayDiff) => {
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faPlus} size="sm" />
       </div>
-      <div className={css["value"]}>{diff.value}</div>
+      <div className={css["value"]}>{diff.value.name}</div>
     </div>
   );
 };
@@ -38,7 +38,7 @@ const RemoveArray = (diff: RemoveArrayDiff) => {
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faMinus} size="sm" />
       </div>
-      <div className={css["value"]}>{diff.value}</div>
+      <div className={css["value"]}>{diff.value.name}</div>
     </div>
   );
 };
@@ -49,7 +49,7 @@ const AddScalar = (diff: AddScalarDiff) => {
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faPlus} size="sm" />
       </div>
-      <div className={css["key"]}>{diff.k}</div>
+      <div className={css["key"]}>{diff.prop}</div>
       <div className={css["colon"]}>:</div>
       <div className={css["value"]}>{diff.value}</div>
     </div>
@@ -62,7 +62,7 @@ const RemoveScalar = (diff: RemoveScalarDiff) => {
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faMinus} size="sm" />
       </div>
-      <div className={css["key"]}>{diff.k}</div>
+      <div className={css["key"]}>{diff.prop}</div>
       <div className={css["colon"]}>:</div>
       <div className={css["value"]}>{diff.value}</div>
     </div>
@@ -75,7 +75,7 @@ const ChangeScalar = (diff: ChangeScalarDiff) => {
       <div className={css["icon"]}>
         <FontAwesomeIcon icon={faArrowRightArrowLeft} size="xs" />
       </div>
-      <div className={css["key"]}>{diff.k}</div>
+      <div className={css["key"]}>{diff.prop}</div>
       <div className={css["colon"]}>:</div>
       <div className={css["value"]}>{diff.value[0]}</div>
       <div className={css["direction"]}>⇒</div>
@@ -85,11 +85,11 @@ const ChangeScalar = (diff: ChangeScalarDiff) => {
 };
 
 const LineSwitch = (diff: ScalarDiff | ArrayDiff) => {
-  if (diff.type === "ADD_ARRAY") {
+  if (diff.type === "ADD_FROM_ARRAY") {
     return <AddArray {...diff} />;
   }
 
-  if (diff.type === "REMOVE_ARRAY") {
+  if (diff.type === "REMOVE_FROM_ARRAY") {
     return <RemoveArray {...diff} />;
   }
 
@@ -138,7 +138,7 @@ const List = ({ diff }: { diff: (ScalarDiff | ArrayDiff)[] }) => {
       <ul className={css["list"]}>
         {transition((style, d) => (
           <animated.div style={style}>
-            <Line {...d} key={`${d.type}.${d.k}.${d.value}`} />
+            <Line {...d} key={`${d.type}.${d.value}`} />
           </animated.div>
         ))}
       </ul>
