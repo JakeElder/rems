@@ -2,7 +2,12 @@
 
 import React, { useMemo, MutableRefObject, useEffect, useState } from "react";
 import css from "./Chat.module.css";
-import { AssistantState, Timeline, TimelineEvent } from "@rems/types";
+import {
+  AssistantMode,
+  AssistantState,
+  Timeline,
+  TimelineEvent
+} from "@rems/types";
 import avatar from "../../assets/avatar.png";
 import ror from "../../assets/ror.png";
 import { Pick, animated, useSpring, useTransition } from "@react-spring/web";
@@ -23,8 +28,8 @@ export type SpacingUtilityReturn =
 
 export type Props = {
   children: React.ReactNode;
-  lang: "en" | "th";
-  mode: AssistantState["mode"];
+  lang: "EN" | "TH";
+  mode: AssistantMode;
   timeline: Timeline;
   placement: AssistantState["placement"];
 } & Spacing;

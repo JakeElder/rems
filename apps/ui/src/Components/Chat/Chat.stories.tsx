@@ -4,16 +4,17 @@ import * as Chat from "./Chat";
 import React, { useEffect, useRef, useState } from "react";
 import { InputSession, Timeline } from "@rems/types";
 import ChatInput from "../ChatInput/ChatInput";
-// import mockTimeline from "../../fixtures/timeline";
+import mockTimeline from "../../fixtures/timeline";
 import { randomInt } from "@rems/utils";
-
-const mockTimeline: Timeline = [];
+import {
+  AssistantModeSchema,
+  AssistantPlacementSchema,
+  InputSessionState
+} from "@rems/schemas";
 
 type InputProps = React.ComponentProps<typeof ChatInput>;
 type Props = Chat.Props &
   Omit<InputProps, "state"> & { inputState: InputSession["state"] };
-
-type Story = StoryObj<Props>;
 
 const next = (source: Timeline, current: Timeline): [Timeline, boolean] => {
   const e = source.shift();
@@ -99,18 +100,34 @@ export const Mock: FC<Props> = (props) => {
   );
 };
 
-const meta: Meta<Props> = {
+const meta = {
   title: "Chat/Chat",
   component: Mock,
+  argTypes: {
+    mode: {
+      options: AssistantModeSchema.options,
+      control: { type: "radio" }
+    },
+    placement: {
+      options: AssistantPlacementSchema.options,
+      control: { type: "radio" }
+    },
+    inputState: {
+      options: InputSessionState.options,
+      control: { type: "radio" }
+    }
+  },
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" }
   }
-};
+} satisfies Meta<Props>;
+
+type Story = StoryObj<Props>;
 
 export const Default: Story = {
   args: {
-    lang: "en",
+    lang: "EN",
     mode: "SLEEPING",
     placement: "MINIMISED",
     inputState: "INACTIVE",

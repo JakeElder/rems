@@ -47,7 +47,9 @@ import {
   ResolvingIntentsEventSchema,
   ApiRealEstateQuerySchema,
   ApiUrlRealEstateQuerySchema,
-  ApiRealEstateQueryTargetSchema
+  ApiRealEstateQueryTargetSchema,
+  AssistantModeSchema,
+  AssistantPlacementSchema
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
@@ -184,7 +186,9 @@ export type InputSession = Z<typeof InputSessionSchema>;
 
 export type AssistantState = Z<typeof AssistantStateSchema>;
 export type AssistantPayload = Z<typeof AssistantPayloadSchema>;
-export type AssistantPlacement = AssistantState["placement"];
+
+export type AssistantPlacement = Z<typeof AssistantPlacementSchema>;
+export type AssistantMode = Z<typeof AssistantModeSchema>;
 
 export type AssistantPlacementAction =
   | "MINIMIZE"
@@ -193,12 +197,6 @@ export type AssistantPlacementAction =
   | "EXPAND"
   | "FRAME_LEFT"
   | "FRAME_RIGHT";
-
-export type GroupedAssistantState =
-  | "IDLE"
-  | "LISTENING"
-  | "THINKING"
-  | "INTERACTING";
 
 export type ResolvingFilterSet = {
   set: FilterSet;
