@@ -3,7 +3,7 @@
 import { PlacesAutocomplete } from "@rems/ui";
 import React, { useState } from "react";
 import useSWR from "swr";
-import useRealEstateQuery from "@/hooks/use-real-estate-query";
+// import useRealEstateQuery from "@/hooks/use-real-estate-query";
 
 type Props = {};
 

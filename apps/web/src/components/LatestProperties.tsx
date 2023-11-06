@@ -6,8 +6,10 @@ type Props = {};
 
 const LatestProperties = async ({}: Props) => {
   const { data: properties } = await fetch("properties", {
-    sort: "newest-first",
-    availability: "any"
+    pageAndSort: {
+      sort: "NEWEST_FIRST",
+      page: 1
+    }
   });
   return <PropertySlider properties={properties} />;
 };

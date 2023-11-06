@@ -5,7 +5,7 @@ import { RealEstateQuery } from "@rems/types";
 
 type Props = {
   value: RealEstateQuery["space"]["minBedrooms"];
-  onChange: (min: RealEstateQuery["space"]["maxBedrooms"]) => void;
+  onChange: (min: RealEstateQuery["space"]["minBedrooms"]) => void;
 };
 
 const BathroomsFilter = ({ value, onChange }: Props) => {

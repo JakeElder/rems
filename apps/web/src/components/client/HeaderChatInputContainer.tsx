@@ -8,15 +8,15 @@ const HeaderChatInputContainer = () => {
   const assistant = useAssistant();
   const $input = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (assistant.session.value) {
-      if (assistant.state === "LISTENING") {
-        Promise.resolve().then(() => {
-          $input.current!.scrollLeft = $input.current!.scrollWidth;
-        });
-      }
-    }
-  }, [assistant.session.value]);
+  // useEffect(() => {
+  //   if (assistant.session.value) {
+  //     if (assistant.state === "LISTENING") {
+  //       Promise.resolve().then(() => {
+  //         $input.current!.scrollLeft = $input.current!.scrollWidth;
+  //       });
+  //     }
+  //   }
+  // }, [assistant.session.value]);
 
   return (
     <ChatInput

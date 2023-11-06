@@ -124,14 +124,38 @@ export const useSelector: TypedUseSelectorHook<AppState> = originalUseSelector;
 /*
  * Selector Hooks
  */
+export const useState = () => useSelector((state) => state);
+
 export const useActiveFiltersCount = () =>
   useSelector(selectActiveFiltersCount);
 
 export const useRealEstateQuery = () =>
   useSelector((state) => state.slices.realEstateQuery);
 
+export const useSession = () =>
+  useSelector(
+    (state) =>
+      state.slices.assistant.sessions[
+        state.slices.assistant.sessions.length - 1
+      ]
+  );
+
+export const useTimeline = () => useSelector((state) => state.timeline);
+
 export const useStagedRealEstateQuery = () =>
   useSelector((state) => state.slices.stagedRealEstateQuery);
+
+export const useSessions = () =>
+  useSelector((state) => state.slices.assistant.sessions);
+
+export const useAssistantPlacement = () =>
+  useSelector((state) => state.slices.assistant.placement);
+
+export const useAssistantMode = () =>
+  useSelector((state) => state.slices.assistant.mode);
+
+export const useKeyboardState = () =>
+  useSelector((state) => state.slices.keyboard);
 
 export const useHasPriceFilter = () => useSelector(selectHasPriceFilter);
 export const useHasBedsFilter = () => useSelector(selectHasBedsFilter);

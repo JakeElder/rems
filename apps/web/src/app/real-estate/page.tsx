@@ -15,6 +15,7 @@ import PropertyGridViewContainer from "@/components/client/PropertyGridViewConta
 import PaginationViewContainer from "@/components/client/PaginationViewContainer";
 import FooterContainer from "@/components/server/FooterContainer";
 import RealEstateIndexPageTitleContainer from "@/components/server/RealEstateIndexPageTitleContainer";
+import ChatViewContainer from "@/components/client/ChatViewContainer";
 
 type Props = { searchParams?: SearchParams };
 
@@ -32,6 +33,7 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
       <QuerySyncContainer>
         <DomElementsProvider>
           <Page.Root>
+            <ChatViewContainer />
             <ToastHub>
               <RealEstateIndexPageHeaderViewContainer>
                 <HeaderViewContainer full mode="standard" />

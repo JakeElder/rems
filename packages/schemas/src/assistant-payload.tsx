@@ -1,10 +1,6 @@
 import { z } from "zod";
-import { RealEstateQuerySchema } from "./real-estate-query";
-import { TimelineSchema } from "./timeline";
-import { LocationSchema } from "./location";
+import { AppStateSchema } from "./app-state";
 
 export const AssistantPayloadSchema = z.object({
-  timeline: TimelineSchema,
-  query: RealEstateQuerySchema,
-  location: LocationSchema
+  state: AppStateSchema
 });

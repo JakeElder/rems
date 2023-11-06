@@ -51,7 +51,7 @@ export const Title = ({
   geospatialOperator,
   resolution
 }: {
-  type: RealEstateQuery["budgetAndAvailability"]["type"];
+  type: string;
   geospatialOperator: string;
   location: string;
   resolution?: string;

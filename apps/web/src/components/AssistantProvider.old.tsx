@@ -1,13 +1,15 @@
-"use client";
-
 import { useCallback } from "react";
 import "regenerator-runtime";
 
 import useAssistantKeys from "@/hooks/use-assistant-keys";
+import { Sound } from "@/utils";
 import {
   InputSession,
+  AssistantPayload,
   Timeline,
   TimelineEvent,
+  AssistantTimelineEvent,
+  SystemTimelineEvent,
   AssistantMode,
   AssistantPlacement
 } from "@rems/types";
@@ -19,11 +21,9 @@ import { useDebouncedCallback } from "use-debounce";
 import { Chat } from "@rems/ui";
 import { useDomElements } from "@/components/client/DomElementsProvider";
 import {
-  store,
   handleAssistantPlacementChangeRequest,
   handleEmptySubmission,
   handleInputIdle,
-  handleKeyboardInputReceived,
   handleListeningAborted,
   handleListeningStarted,
   handleSpaceKeyDown,
@@ -31,12 +31,7 @@ import {
   handleUserYield,
   handleVoiceInputReceived,
   useDispatch,
-  useSession,
-  useTimeline,
-  useSessions,
-  useAssistantPlacement,
-  useAssistantMode,
-  useKeyboardState
+  useState
 } from "@/state";
 import yld from "utils/yield";
 
@@ -46,6 +41,7 @@ type Props = {
 
 type FormAttributes = React.FormHTMLAttributes<HTMLFormElement>;
 type InputHTMLAttributes = React.InputHTMLAttributes<HTMLInputElement>;
+type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
 type BaseContext = {
   // Handlers
@@ -80,6 +76,8 @@ const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const dispatch = useDispatch();
 
+  const state = useState();
+
   const { $header, $listings } = useDomElements();
 
   const spacing = Chat.useAssistantSpacingUtility({
@@ -92,12 +90,8 @@ const AssistantProvider = ({ children }: Props) => {
     500
   );
 
-  const sessions = useSessions();
-  const session = useSession();
-  const timeline = useTimeline();
-  const placement = useAssistantPlacement();
-  const mode = useAssistantMode();
-  const keyboardState = useKeyboardState();
+  const session =
+    state.slices.assistant.sessions[state.slices.assistant.sessions.length - 1];
 
   useEffect(() => {
     if (listening) {
@@ -106,7 +100,7 @@ const AssistantProvider = ({ children }: Props) => {
       }, 100);
       return;
     } else if (session.value) {
-      handleYield();
+      process();
     } else {
       setTimeout(() => {
         dispatch(handleListeningAborted());
@@ -158,7 +152,7 @@ const AssistantProvider = ({ children }: Props) => {
     if (e.code === "Enter") {
       e.preventDefault();
       dispatch({ type: "ENTER_KEY_UP" });
-      handleYield();
+      process();
     }
   }, []);
 
@@ -172,7 +166,8 @@ const AssistantProvider = ({ children }: Props) => {
   }, []);
 
   const onChange: Context["onChange"] = useCallback((e) => {
-    dispatch(handleKeyboardInputReceived(e.currentTarget.value));
+    const { value } = e.currentTarget;
+    dispatch({ type: "KEYBOARD_INPUT_RECEIVED", value });
     debouncedSetInactive();
   }, []);
 
@@ -180,7 +175,7 @@ const AssistantProvider = ({ children }: Props) => {
     console.log(e);
   }, []);
 
-  const handleYield = () => {
+  const process = () => {
     debouncedSetInactive.cancel();
 
     if (session.value.length === 0) {
@@ -189,13 +184,60 @@ const AssistantProvider = ({ children }: Props) => {
     }
 
     dispatch(handleUserYield(session.value));
-    const req = yld(store.getState());
+    const req = yld(state);
+
+    let responsePromise: Promise<void> = Promise.resolve();
 
     req.subscribe({
-      next: (e) => {
-        console.log(e);
+      next: (c) => {
+        const { event: e } = c;
+
+        if (e.type === "ANALYSIS_PERFORMED") {
+          analysis = e.analysis;
+
+          dispatch({
+            type: "ANALYSIS_COMPLETE",
+            capability: analysis.capability
+          });
+
+          if (analysis.capability === "CLEAR_QUERY") {
+            reset(true);
+          }
+
+          if (analysis.capability === "NEW_QUERY") {
+            reset(false);
+          }
+        }
+
+        if (e.type === "STATE_MUTATION") {
+        }
+
+        if (e.type === "LANGUAGE_BASED") {
+          responsePromise =
+            state.uiState !== "MINIMISED"
+              ? Sound.speak(e.message)
+              : Promise.resolve();
+        }
+
+        if (e.type === "YIELD") {
+          if (
+            analysis.capability === "REFINE_QUERY" ||
+            analysis.capability === "NEW_QUERY"
+          ) {
+            commit();
+          }
+
+          responsePromise.then(() => {
+            dispatch({ type: "SUCCESSFUL_ASSISTANT_REQUEST" });
+            setTimeout(() => {
+              dispatch({ type: "SESSION_COMPLETE" });
+            }, 400);
+          });
+        }
       }
     });
+
+    return req;
   };
 
   const base: BaseContext = {
@@ -207,12 +249,12 @@ const AssistantProvider = ({ children }: Props) => {
     onEventRendered,
 
     // State
-    sessions,
-    placement,
-    enterDown: keyboardState.enterDown,
-    spaceDown: keyboardState.spaceDown,
-    timeline,
-    mode,
+    sessions: state.slices.assistant.sessions,
+    placement: state.slices.assistant.placement,
+    enterDown: state.slices.keyboard.enterDown,
+    spaceDown: state.slices.keyboard.spaceDown,
+    timeline: state.timeline,
+    mode: state.slices.assistant.mode,
     lang: "EN",
 
     // Computed
@@ -222,15 +264,14 @@ const AssistantProvider = ({ children }: Props) => {
       (session.state === "INPUTTING" || session.state === "INACTIVE")
   };
 
+  const context: Context = spacing.ready
+    ? { ready: true, ...base, ...spacing.props }
+    : { ready: false, ...base };
+
   return (
-    <AssistantContext.Provider
-      value={
-        spacing.ready
-          ? { ready: true, ...base, ...spacing.props }
-          : { ready: false, ...base }
-      }
-      children={children}
-    />
+    <AssistantContext.Provider value={context}>
+      {children}
+    </AssistantContext.Provider>
   );
 };
 

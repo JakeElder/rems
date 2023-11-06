@@ -11,7 +11,7 @@ import {
   AssistantMode,
   AssistantPlacement
 } from "@rems/types";
-import { createContext, useContext, useEffect } from "react";
+import { useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -40,14 +40,10 @@ import {
 } from "@/state";
 import yld from "utils/yield";
 
-type Props = {
-  children: React.ReactNode;
-};
-
 type FormAttributes = React.FormHTMLAttributes<HTMLFormElement>;
 type InputHTMLAttributes = React.InputHTMLAttributes<HTMLInputElement>;
 
-type BaseContext = {
+type BaseReturn = {
   // Handlers
   onKeyDown: NonNullable<FormAttributes["onKeyDown"]>;
   onKeyUp: NonNullable<FormAttributes["onKeyUp"]>;
@@ -69,14 +65,11 @@ type BaseContext = {
   submittable: boolean;
 };
 
-type Context =
-  | ({ ready: false } & BaseContext)
-  | ({ ready: true } & BaseContext & Chat.Spacing);
+type Return =
+  | ({ ready: false } & BaseReturn)
+  | ({ ready: true } & BaseReturn & Chat.Spacing);
 
-const AssistantContext = createContext<Context | null>(null);
-export const useAssistant = () => useContext(AssistantContext)!;
-
-const AssistantProvider = ({ children }: Props) => {
+const useAssistant = (): Return => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const dispatch = useDispatch();
 
@@ -147,14 +140,14 @@ const AssistantProvider = ({ children }: Props) => {
     }
   });
 
-  const onKeyDown: Context["onKeyDown"] = useCallback((e) => {
+  const onKeyDown: Return["onKeyDown"] = useCallback((e) => {
     if (e.code === "Enter") {
       e.preventDefault();
       dispatch({ type: "ENTER_KEY_DOWN" });
     }
   }, []);
 
-  const onKeyUp: Context["onKeyUp"] = useCallback((e) => {
+  const onKeyUp: Return["onKeyUp"] = useCallback((e) => {
     if (e.code === "Enter") {
       e.preventDefault();
       dispatch({ type: "ENTER_KEY_UP" });
@@ -162,7 +155,7 @@ const AssistantProvider = ({ children }: Props) => {
     }
   }, []);
 
-  const onMicClick: Context["onMicClick"] = useCallback(() => {
+  const onMicClick: Return["onMicClick"] = useCallback(() => {
     if (session.state === "LISTENING") {
       SpeechRecognition.stopListening();
     } else {
@@ -171,12 +164,12 @@ const AssistantProvider = ({ children }: Props) => {
     }
   }, []);
 
-  const onChange: Context["onChange"] = useCallback((e) => {
+  const onChange: Return["onChange"] = useCallback((e) => {
     dispatch(handleKeyboardInputReceived(e.currentTarget.value));
     debouncedSetInactive();
   }, []);
 
-  const onEventRendered: Context["onEventRendered"] = useCallback((e) => {
+  const onEventRendered: Return["onEventRendered"] = useCallback((e) => {
     console.log(e);
   }, []);
 
@@ -198,7 +191,7 @@ const AssistantProvider = ({ children }: Props) => {
     });
   };
 
-  const base: BaseContext = {
+  const base: BaseReturn = {
     // Handlers
     onKeyDown,
     onKeyUp,
@@ -222,16 +215,9 @@ const AssistantProvider = ({ children }: Props) => {
       (session.state === "INPUTTING" || session.state === "INACTIVE")
   };
 
-  return (
-    <AssistantContext.Provider
-      value={
-        spacing.ready
-          ? { ready: true, ...base, ...spacing.props }
-          : { ready: false, ...base }
-      }
-      children={children}
-    />
-  );
+  return spacing.ready
+    ? { ready: true, ...base, ...spacing.props }
+    : { ready: false, ...base };
 };
 
-export default AssistantProvider;
+export default useAssistant;

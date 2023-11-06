@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Chat, ChatInput } from "@rems/ui";
-import { useAssistant } from "@/components/AssistantProvider";
+import useAssistant from "@/hooks/use-assistant";
 
 type Props = {};
 
@@ -10,15 +10,15 @@ const ChatViewContainer = ({}: Props) => {
   const props = useAssistant();
   const $input = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (props.session.value) {
-      if (props.session.state === "LISTENING") {
-        Promise.resolve().then(() => {
-          $input.current!.scrollLeft = $input.current!.scrollWidth;
-        });
-      }
-    }
-  }, [props.session.value]);
+  // useEffect(() => {
+  //   if (props.session.value) {
+  //     if (props.session.state === "LISTENING") {
+  //       Promise.resolve().then(() => {
+  //         $input.current!.scrollLeft = $input.current!.scrollWidth;
+  //       });
+  //     }
+  //   }
+  // }, [props.session.value]);
 
   if (!props.ready) {
     return null;
