@@ -1,7 +1,6 @@
 "use client";
 
 import useAssistantKeys from "@/hooks/use-assistant-keys";
-import useDomElements from "@/hooks/use-dom-elements";
 import {
   handleAssistantPlacementChangeRequest,
   handleSpaceKeyDown,
@@ -14,10 +13,9 @@ import SpeechRecognition, {
 
 type Props = {};
 
-const KeyboardListeners = ({}: Props) => {
+const KeyboardEventListeners = ({}: Props) => {
   const dispatch = useDispatch();
   const { resetTranscript } = useSpeechRecognition();
-  const { $chatInput } = useDomElements();
 
   useAssistantKeys({
     spaceDown: () => {
@@ -49,4 +47,4 @@ const KeyboardListeners = ({}: Props) => {
   return null;
 };
 
-export default KeyboardListeners;
+export default KeyboardEventListeners;

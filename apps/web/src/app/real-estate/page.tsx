@@ -17,7 +17,8 @@ import FooterContainer from "@/components/server/FooterContainer";
 import RealEstateIndexPageTitleContainer from "@/components/server/RealEstateIndexPageTitleContainer";
 import ChatViewContainer from "@/components/client/ChatViewContainer";
 import AssistantCallbackProvider from "@/components/client/AssistantCallbackProvider";
-import KeyboardListeners from "@/components/client/KeyboardListeners";
+import KeyboardEventListeners from "@/components/client/KeyboardEventListeners";
+import VoiceEventListeners from "@/components/client/VoiceEventListeners";
 
 type Props = {
   searchParams?: SearchParams;
@@ -37,7 +38,8 @@ export default async function RealEstateIndexPage({ searchParams }: Props) {
       <QuerySyncContainer>
         <DomElementsProvider>
           <AssistantCallbackProvider>
-            <KeyboardListeners />
+            <KeyboardEventListeners />
+            <VoiceEventListeners />
             <Page.Root>
               <ChatViewContainer />
               <ToastHub>

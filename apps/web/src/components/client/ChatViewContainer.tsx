@@ -4,41 +4,40 @@ import { Chat, ChatInput } from "@rems/ui";
 import useAssistantState from "@/hooks/use-assistant-state";
 import useAssistantCallbacks from "@/hooks/use-assistant-callbacks";
 import useDomElements from "@/hooks/use-dom-elements";
+import { useEffect } from "react";
+import useAssistantSpacing from "@/hooks/use-assistant-spacing";
 
 type Props = {};
 
 const ChatViewContainer = ({}: Props) => {
-  const state = useAssistantState();
-  const callbacks = useAssistantCallbacks();
+  const spacing = useAssistantSpacing();
+  const { onChange, onKeyDown, onKeyUp, onMicClick } = useAssistantCallbacks();
   const { $chatInput } = useDomElements();
-
-  // useEffect(() => {
-  //   if (props.session.value) {
-  //     if (props.session.state === "LISTENING") {
-  //       Promise.resolve().then(() => {
-  //         $input.current!.scrollLeft = $input.current!.scrollWidth;
-  //       });
-  //     }
-  //   }
-  // }, [props.session.value]);
-
-  if (!state.ready) {
-    return null;
-  }
-
   const {
     lang,
     placement,
     mode,
-    xDivide,
-    marginTop,
     timeline,
     enterDown,
     sessions,
-    submittable
-  } = state;
+    submittable,
+    session
+  } = useAssistantState();
 
-  const { onChange, onKeyDown, onKeyUp } = callbacks;
+  useEffect(() => {
+    if (session.value) {
+      if (mode === "LISTENING") {
+        Promise.resolve().then(() => {
+          $chatInput.current!.scrollLeft = $chatInput.current!.scrollWidth;
+        });
+      }
+    }
+  }, [session.value]);
+
+  if (!spacing.ready) {
+    return null;
+  }
+  const { xDivide, marginTop } = spacing;
 
   return (
     <Chat.Root
@@ -57,6 +56,7 @@ const ChatViewContainer = ({}: Props) => {
           theme="chat"
           enterDown={enterDown}
           sessions={sessions}
+          onMicClick={onMicClick}
           onChange={onChange}
           onKeyDown={onKeyDown}
           onKeyUp={onKeyUp}
