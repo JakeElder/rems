@@ -1,9 +1,23 @@
+import { diffString } from "json-diff";
 import * as app from "../src/slices/app";
+import {
+  handleAssistantPlacementChangeRequest,
+  handleAssistantYield,
+  handleEmptySubmission,
+  handleInputIdle,
+  handleUserYield,
+  returnControl,
+  setArray,
+  setBudgetAndAvailability,
+  setLocationSource,
+  setPageAndSort,
+  setSpaceRequirements
+} from "../src/slices/app/actions";
 
-const log = (obj: any) => console.dir(obj, { depth: null, colors: true });
+// const log = (obj: any) => console.dir(obj, { depth: null, colors: true });
 
 test("budget", () => {
-  const { store, actions } = app.init({
+  const store = app.init({
     slices: {
       realEstateQuery: {
         budgetAndAvailability: { maxPrice: 5 }
@@ -12,7 +26,7 @@ test("budget", () => {
   });
 
   store.dispatch(
-    actions.setBudgetAndAvailability({
+    setBudgetAndAvailability({
       role: "ASSISTANT",
       data: { type: "RENT", maxPrice: 10 }
     })
@@ -22,10 +36,10 @@ test("budget", () => {
 });
 
 test("locationSource", () => {
-  const { store, actions } = app.init();
+  const store = app.init();
 
   store.dispatch(
-    actions.setLocationSource({
+    setLocationSource({
       role: "ASSISTANT",
       data: {
         type: "NL",
@@ -41,10 +55,10 @@ test("locationSource", () => {
 });
 
 test("pageAndSort", () => {
-  const { store, actions } = app.init();
+  const store = app.init();
 
   store.dispatch(
-    actions.setPageAndSort({
+    setPageAndSort({
       role: "ASSISTANT",
       data: { page: 4 }
     })
@@ -54,10 +68,10 @@ test("pageAndSort", () => {
 });
 
 test("space", () => {
-  const { store, actions } = app.init();
+  const store = app.init();
 
   store.dispatch(
-    actions.setSpace({
+    setSpaceRequirements({
       role: "ASSISTANT",
       data: { maxBedrooms: 4 }
     })
@@ -67,7 +81,7 @@ test("space", () => {
 });
 
 test("array", () => {
-  const { store, actions } = app.init({
+  const store = app.init({
     slices: {
       realEstateQuery: {
         viewTypes: [{ id: 2, name: "Two" }]
@@ -76,7 +90,7 @@ test("array", () => {
   });
 
   store.dispatch(
-    actions.setArray({
+    setArray({
       role: "ASSISTANT",
       prop: "viewTypes",
       group: "View Types",
@@ -88,7 +102,7 @@ test("array", () => {
 });
 
 test("emptySubmission", () => {
-  const { store, actions } = app.init({
+  const store = app.init({
     slices: {
       assistant: {
         sessions: [{ id: "one", state: "INPUTTING" }]
@@ -96,7 +110,7 @@ test("emptySubmission", () => {
     }
   });
 
-  store.dispatch(actions.handleEmptySubmission());
+  store.dispatch(handleEmptySubmission());
 
   const state = store.getState();
 
@@ -105,9 +119,9 @@ test("emptySubmission", () => {
 });
 
 test("userYield", () => {
-  const { store, actions } = app.init();
+  const store = app.init();
 
-  store.dispatch(actions.handleUserYield("Do stuff"));
+  store.dispatch(handleUserYield("Do stuff"));
 
   const state = store.getState();
 
@@ -117,9 +131,9 @@ test("userYield", () => {
 });
 
 test("assistantYield", () => {
-  const { store, actions } = app.init();
+  const store = app.init();
 
-  store.dispatch(actions.handleAssistantYield("Sure, done"));
+  store.dispatch(handleAssistantYield("Sure, done"));
 
   const state = store.getState();
 
@@ -128,20 +142,20 @@ test("assistantYield", () => {
 });
 
 test("placementChangeRequest", () => {
-  const { store, actions } = app.init();
+  const store = app.init();
 
-  store.dispatch(actions.handleAssistantPlacementChangeRequest("EXPAND"));
+  store.dispatch(handleAssistantPlacementChangeRequest("EXPAND"));
   expect(store.getState().slices.assistant.placement).toBe("DOCKED");
 
-  store.dispatch(actions.handleAssistantPlacementChangeRequest("EXPAND"));
+  store.dispatch(handleAssistantPlacementChangeRequest("EXPAND"));
   expect(store.getState().slices.assistant.placement).toBe("WINDOWED");
 
-  store.dispatch(actions.handleAssistantPlacementChangeRequest("FRAME_LEFT"));
+  store.dispatch(handleAssistantPlacementChangeRequest("FRAME_LEFT"));
   expect(store.getState().slices.assistant.placement).toBe("LEFT");
 });
 
 test("returnControl", () => {
-  const { store, actions } = app.init({
+  const store = app.init({
     slices: {
       assistant: {
         mode: "WORKING"
@@ -149,7 +163,7 @@ test("returnControl", () => {
     }
   });
 
-  store.dispatch(actions.returnControl());
+  store.dispatch(returnControl());
 
   const state = store.getState();
   const { sessions } = state.slices.assistant;
@@ -159,7 +173,7 @@ test("returnControl", () => {
 });
 
 test("inputIdle", () => {
-  const { store, actions } = app.init({
+  const store = app.init({
     slices: {
       assistant: {
         sessions: [{ id: "id", value: "Do stuff", state: "INPUTTING" }]
@@ -167,7 +181,7 @@ test("inputIdle", () => {
     }
   });
 
-  store.dispatch(actions.handleInputIdle());
+  store.dispatch(handleInputIdle());
 
   const state = store.getState();
   const { sessions } = state.slices.assistant;

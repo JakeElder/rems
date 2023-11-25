@@ -1,9 +1,8 @@
+import { useActivePropertyTypeFilters, useDispatch } from "@/state";
 import {
   commitRealEstateQuery,
-  setBudgetAndAvailability,
-  useActivePropertyTypeFilters,
-  useDispatch
-} from "@/state";
+  setBudgetAndAvailability
+} from "@rems/state/app/actions";
 import { AvailabilityFilter } from "@rems/ui";
 import { useCallback } from "react";
 

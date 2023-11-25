@@ -3,13 +3,9 @@
 import React, { useCallback } from "react";
 import { Pagination } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
-import {
-  commitRealEstateQuery,
-  setPageAndSort,
-  useDispatch,
-  useStagedRealEstateQuery
-} from "@/state";
+import { useDispatch, useStagedRealEstateQuery } from "@/state";
 import { generateQueryString } from "@rems/utils/query";
+import { commitRealEstateQuery, setPageAndSort } from "@rems/state/app/actions";
 
 type ViewProps = React.ComponentProps<typeof Pagination>;
 type Props = {};

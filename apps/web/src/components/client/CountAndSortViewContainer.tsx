@@ -3,12 +3,8 @@
 import React, { useCallback } from "react";
 import { CountAndSort } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
-import {
-  commitRealEstateQuery,
-  setPageAndSort,
-  useDispatch,
-  useStagedRealEstateQuery
-} from "@/state";
+import { useDispatch, useStagedRealEstateQuery } from "@/state";
+import { commitRealEstateQuery, setPageAndSort } from "@rems/state/app/actions";
 
 type ViewProps = React.ComponentProps<typeof CountAndSort>;
 type Props = {};

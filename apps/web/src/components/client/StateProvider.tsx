@@ -1,9 +1,10 @@
 "use client";
 
 import { Provider } from "react-redux";
-import { store, replaceRealEstateQuery } from "@/state";
+import { store } from "@/state";
 import { RealEstateQuery } from "@rems/types";
 import { useRef } from "react";
+import { replaceRealEstateQuery } from "@rems/state/app/actions";
 
 type Props = {
   children: React.ReactNode;

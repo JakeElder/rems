@@ -1,28 +1,33 @@
 import { NextRequest } from "next/server";
 import { AssistantPayload } from "@rems/types";
 import { AssistantPayloadSchema } from "@rems/schemas";
-import { AppAction } from "@rems/state";
-import * as app from "@rems/state/app";
+import {
+  AppAction,
+  returnControl,
+  setSpaceRequirements
+} from "@rems/state/app/actions";
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
 const encoder = new TextEncoder();
 
 const stream: Stream = (args) => async (c) => {
-  // const {}
   const { state } = args;
   console.dir(state, { colors: true });
 
   const send = (e: AppAction) => {
     const chunk = encoder.encode(`${JSON.stringify(e)}\n`);
     c.enqueue(chunk);
-
-    // if (outputToLog && (e.role === "ASSISTANT" || e.role === "SYSTEM")) {
-    //   log(e.event);
-    // }
   };
 
-  send(setSpace);
+  send(
+    setSpaceRequirements({
+      role: "ASSISTANT",
+      data: { minLotSize: 1000 }
+    })
+  );
+
+  send(returnControl());
 
   c.close();
 };

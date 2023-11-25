@@ -1,8 +1,8 @@
+import { useStagedRealEstateQuery } from "@/state";
 import {
-  useStagedRealEstateQuery,
-  setSpace,
-  commitRealEstateQuery
-} from "@/state";
+  commitRealEstateQuery,
+  setSpaceRequirements
+} from "@rems/state/app/actions";
 import { BedsFilter } from "@rems/ui";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
@@ -15,7 +15,7 @@ const useBedsFilterProps = (): Props => {
 
   const onMinChange: Props["onMinChange"] = useCallback((value) => {
     dispatch(
-      setSpace({
+      setSpaceRequirements({
         role: "USER",
         data: { minBedrooms: value }
       })
@@ -25,7 +25,7 @@ const useBedsFilterProps = (): Props => {
 
   const onMaxChange: Props["onMaxChange"] = useCallback((value) => {
     dispatch(
-      setSpace({
+      setSpaceRequirements({
         role: "USER",
         data: { maxBedrooms: value }
       })

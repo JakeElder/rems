@@ -3,12 +3,11 @@
 import React, { useCallback } from "react";
 import { LotSizeFilters } from "@rems/ui";
 import { MAX_LOT_SIZES, MIN_LOT_SIZES } from "../../constants";
+import { useDispatch, useStagedRealEstateQuery } from "@/state";
 import {
   commitRealEstateQuery,
-  setSpace,
-  useDispatch,
-  useStagedRealEstateQuery
-} from "@/state";
+  setSpaceRequirements
+} from "@rems/state/app/actions";
 
 type ViewProps = React.ComponentProps<typeof LotSizeFilters>;
 type Props = {};
@@ -19,7 +18,7 @@ const LotSizeFiltersViewContainer = ({}: Props) => {
 
   const onMinLotSizeChange: ViewProps["onMinLotSizeChange"] = useCallback(
     (minLotSize) => {
-      dispatch(setSpace({ role: "USER", data: { minLotSize } }));
+      dispatch(setSpaceRequirements({ role: "USER", data: { minLotSize } }));
       dispatch(commitRealEstateQuery());
     },
     []
@@ -27,7 +26,7 @@ const LotSizeFiltersViewContainer = ({}: Props) => {
 
   const onMaxLotSizeChange: ViewProps["onMaxLotSizeChange"] = useCallback(
     (maxLotSize) => {
-      dispatch(setSpace({ role: "USER", data: { maxLotSize } }));
+      dispatch(setSpaceRequirements({ role: "USER", data: { maxLotSize } }));
       dispatch(commitRealEstateQuery());
     },
     []

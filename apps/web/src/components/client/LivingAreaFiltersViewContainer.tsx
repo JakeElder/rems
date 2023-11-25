@@ -4,11 +4,11 @@ import React, { useCallback } from "react";
 import { LivingAreaFilters } from "@rems/ui";
 import { MAX_LIVING_AREA_SIZES, MIN_LIVING_AREA_SIZES } from "../../constants";
 import { useDispatch } from "react-redux";
+import { useStagedRealEstateQuery } from "@/state";
 import {
   commitRealEstateQuery,
-  setSpace,
-  useStagedRealEstateQuery
-} from "@/state";
+  setSpaceRequirements
+} from "@rems/state/app/actions";
 
 type ViewProps = React.ComponentProps<typeof LivingAreaFilters>;
 type Props = {};
@@ -19,7 +19,7 @@ const LivingAreaFiltersViewContainer = ({}: Props) => {
 
   const onMinLivingAreaChange: ViewProps["onMinLivingAreaChange"] = useCallback(
     (minLivingArea) => {
-      dispatch(setSpace({ role: "USER", data: { minLivingArea } }));
+      dispatch(setSpaceRequirements({ role: "USER", data: { minLivingArea } }));
       dispatch(commitRealEstateQuery());
     },
     []
@@ -27,7 +27,7 @@ const LivingAreaFiltersViewContainer = ({}: Props) => {
 
   const onMaxLivingAreaChange: ViewProps["onMaxLivingAreaChange"] = useCallback(
     (maxLivingArea) => {
-      dispatch(setSpace({ role: "USER", data: { maxLivingArea } }));
+      dispatch(setSpaceRequirements({ role: "USER", data: { maxLivingArea } }));
       dispatch(commitRealEstateQuery());
     },
     []

@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  commitRealEstateQuery,
-  setArray,
-  useActiveQuickFilters,
-  useDispatch
-} from "@/state";
+import { useActiveQuickFilters, useDispatch } from "@/state";
+import { commitRealEstateQuery, setArray } from "@rems/state/app/actions";
 import { QuickFilters } from "@rems/ui";
 import { useCallback } from "react";
 

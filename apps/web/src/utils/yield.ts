@@ -1,4 +1,4 @@
-import { AppAction } from "@rems/state";
+import { AppAction } from "@rems/state/app/actions";
 import { AppState, AssistantPayload } from "@rems/types";
 import { Observable, Subscriber } from "rxjs";
 

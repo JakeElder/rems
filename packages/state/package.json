@@ -8,7 +8,11 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./app": "./src/slices/app/index.ts"
+    "./app": "./src/slices/app/index.ts",
+    "./app/actions": "./src/slices/app/actions.ts"
+  },
+  "types": {
+    "./app/actions": "./src/slices/app/actions.ts"
   },
   "main": "./src/index",
   "dependencies": {

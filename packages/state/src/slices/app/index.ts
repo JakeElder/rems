@@ -1,17 +1,17 @@
-import { DeepPartial } from "@reduxjs/toolkit";
-import { AppStateSlices } from "@rems/types";
+import { DeepPartial, configureStore } from "@reduxjs/toolkit";
+import { AppState } from "@rems/types";
 import extend from "deep-extend";
 
-import { default as init } from "./slice";
 import { default as defaults } from "./defaults";
+import { default as reducer } from "./reducer";
 
-export { init, defaults };
-
-export const factory = (
-  initial: DeepPartial<AppStateSlices>
-): AppStateSlices => {
-  return extend<AppStateSlices, DeepPartial<AppStateSlices>>(
-    defaults().slices,
-    initial
+const init = (initialState: DeepPartial<AppState> = {}) => {
+  const preloadedState = extend<AppState, DeepPartial<AppState>>(
+    defaults(),
+    initialState
   );
+
+  return configureStore({ reducer, preloadedState });
 };
+
+export { defaults, init };

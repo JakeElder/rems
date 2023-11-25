@@ -1,4 +1,5 @@
-import { commitRealEstateQuery, setArray, useDispatch } from "@/state";
+import { useDispatch } from "@/state";
+import { commitRealEstateQuery, setArray } from "@rems/state/app/actions";
 import { Filter, RealEstateQueryArrayKey } from "@rems/types";
 import { TypeFilters } from "@rems/ui";
 import { useCallback } from "react";

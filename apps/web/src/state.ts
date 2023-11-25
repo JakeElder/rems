@@ -183,34 +183,4 @@ export const useActivePropertyTypeFilters = () =>
 /*
  * Store
  */
-const { store, actions } = app.init();
-export { store };
-
-/*
- * Actions
- */
-export const {
-  commitRealEstateQuery,
-  handleAssistantPlacementChangeRequest,
-  handleAssistantYield,
-  handleEmptySubmission,
-  handleEnterKeyDown,
-  handleEnterKeyUp,
-  handleInputIdle,
-  handleKeyboardInputReceived,
-  handleListeningAborted,
-  handleListeningStarted,
-  handleSpaceKeyDown,
-  handleSpaceKeyUp,
-  handleUserYield,
-  handleVoiceInputReceived,
-  replaceRealEstateQuery,
-  resetRealEstateQuery,
-  returnControl,
-  setArray,
-  setBudgetAndAvailability,
-  setLocationSource,
-  setPageAndSort,
-  setResolvingIntents,
-  setSpace
-} = actions;
+export const store = app.init();

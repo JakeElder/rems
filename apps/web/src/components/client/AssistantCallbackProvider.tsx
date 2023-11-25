@@ -9,15 +9,13 @@ import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
 import { useDebouncedCallback } from "use-debounce";
+import { store, useDispatch, useSession } from "@/state";
 import {
-  store,
   handleEmptySubmission,
   handleInputIdle,
   handleKeyboardInputReceived,
-  handleUserYield,
-  useDispatch,
-  useSession
-} from "@/state";
+  handleUserYield
+} from "@rems/state/app/actions";
 import yld from "utils/yield";
 
 type Props = {
@@ -67,8 +65,8 @@ const AssistantCallbackProvider = ({ children }: Props) => {
     const req = yld(store.getState());
 
     req.subscribe({
-      next: (e) => {
-        console.log(e);
+      next: (action) => {
+        dispatch(action);
       },
       complete: () => {}
     });

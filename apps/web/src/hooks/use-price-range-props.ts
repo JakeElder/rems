@@ -1,10 +1,5 @@
 import { PriceRange } from "@rems/ui";
-import {
-  commitRealEstateQuery,
-  setBudgetAndAvailability,
-  useDispatch,
-  useStagedRealEstateQuery
-} from "@/state";
+import { useDispatch, useStagedRealEstateQuery } from "@/state";
 import {
   MAX_PURCHASE_PRICE,
   MAX_RENTAL_PRICE,
@@ -12,6 +7,10 @@ import {
   MIN_RENTAL_PRICE
 } from "../constants";
 import { useCallback } from "react";
+import {
+  commitRealEstateQuery,
+  setBudgetAndAvailability
+} from "@rems/state/app/actions";
 
 type ViewProps = React.ComponentProps<typeof PriceRange>;
 

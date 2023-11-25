@@ -1,12 +1,12 @@
 "use client";
 
 import useAssistantKeys from "@/hooks/use-assistant-keys";
+import { useDispatch } from "@/state";
 import {
   handleAssistantPlacementChangeRequest,
   handleSpaceKeyDown,
-  handleSpaceKeyUp,
-  useDispatch
-} from "@/state";
+  handleSpaceKeyUp
+} from "@rems/state/app/actions";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";

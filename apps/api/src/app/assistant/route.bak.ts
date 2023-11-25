@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { RemiFn } from "@/remi/types";
 import * as utils from "@/remi/utils";
 import * as fn from "@/remi/fn";

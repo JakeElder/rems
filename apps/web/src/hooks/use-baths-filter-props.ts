@@ -1,8 +1,8 @@
+import { useStagedRealEstateQuery } from "@/state";
 import {
-  useStagedRealEstateQuery,
-  setSpace,
-  commitRealEstateQuery
-} from "@/state";
+  commitRealEstateQuery,
+  setSpaceRequirements
+} from "@rems/state/app/actions";
 import { BathroomsFilter } from "@rems/ui";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
@@ -15,7 +15,7 @@ const useBathsFilterProps = (): Props => {
 
   const onChange: Props["onChange"] = useCallback((value) => {
     dispatch(
-      setSpace({
+      setSpaceRequirements({
         role: "USER",
         data: { minBathrooms: value }
       })

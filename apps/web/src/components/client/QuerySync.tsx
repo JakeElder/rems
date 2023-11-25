@@ -2,11 +2,12 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { replaceRealEstateQuery, useRealEstateQuery } from "@/state";
+import { useRealEstateQuery } from "@/state";
 import { fromSearchParams, generateQueryString } from "@rems/utils/query";
 import { ArrayFilters } from "@rems/types";
 import equal from "fast-deep-equal";
 import { useDispatch } from "react-redux";
+import { replaceRealEstateQuery } from "@rems/state/app/actions";
 
 type Props = {
   children: React.ReactNode;

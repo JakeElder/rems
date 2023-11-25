@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import { FilterDialog, PropertyFilters } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
-import { resetRealEstateQuery, useActiveFiltersCount } from "@/state";
+import { useActiveFiltersCount } from "@/state";
 import { useDispatch } from "react-redux";
+import { resetRealEstateQuery } from "@rems/state/app/actions";
 
 type Props = { children: React.ReactNode };
 
