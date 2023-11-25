@@ -47,14 +47,6 @@ const [LotFeature, PropertiesLotFeaturesLink] = filter(
   "LotFeature",
   "PropertiesLotFeaturesLink"
 );
-const [MrtStation, PropertiesNearestMrtStationLink] = filter(
-  "MrtStation",
-  "PropertiesNearestMRTStationLink"
-);
-const [BtsStation, PropertiesNearestBtsStationLink] = filter(
-  "BtsStation",
-  "PropertiesNearestBtsStationLink"
-);
 const [Area, PropertiesAreaLink] = filter("Area", "PropertiesAreaLink");
 
 const ComponentsQuickFiltersIndoorFeaturesFilterLink = componentFilterLink(
@@ -132,16 +124,12 @@ export {
   IndoorFeature,
   LotFeature,
   OutdoorFeature,
-  MrtStation,
-  BtsStation,
   PropertiesAreaLink,
   PropertiesIndoorFeaturesLink,
   PropertiesLotFeaturesLink,
   PropertiesOutdoorFeaturesLink,
   PropertiesPropertyTypeLink,
   PropertiesViewTypesLink,
-  PropertiesNearestMrtStationLink,
-  PropertiesNearestBtsStationLink,
   Property,
   PropertyType,
   ViewType,

@@ -55,13 +55,35 @@ const AssistantCallbackProvider = ({ children }: Props) => {
     }
   }, []);
 
-  const onKeyUp: Context["onKeyUp"] = useCallback((e) => {
-    if (e.code === "Enter") {
-      e.preventDefault();
-      dispatch({ type: "ENTER_KEY_UP" });
-      handleYield();
+  const handleYield = useCallback(() => {
+    debouncedSetInactive.cancel();
+
+    if (session.value.length === 0) {
+      dispatch(handleEmptySubmission());
+      throw new Error();
     }
-  }, []);
+
+    dispatch(handleUserYield(session.value));
+    const req = yld(store.getState());
+
+    req.subscribe({
+      next: (e) => {
+        console.log(e);
+      },
+      complete: () => {}
+    });
+  }, [session]);
+
+  const onKeyUp: Context["onKeyUp"] = useCallback(
+    (e) => {
+      if (e.code === "Enter") {
+        e.preventDefault();
+        dispatch({ type: "ENTER_KEY_UP" });
+        handleYield();
+      }
+    },
+    [handleYield]
+  );
 
   const onMicClick: Context["onMicClick"] = useCallback(() => {
     if (session.state === "LISTENING") {
@@ -80,24 +102,6 @@ const AssistantCallbackProvider = ({ children }: Props) => {
   const onEventRendered: Context["onEventRendered"] = useCallback((e) => {
     console.log(e);
   }, []);
-
-  const handleYield = () => {
-    debouncedSetInactive.cancel();
-
-    if (session.value.length === 0) {
-      dispatch(handleEmptySubmission());
-      throw new Error();
-    }
-
-    dispatch(handleUserYield(session.value));
-    const req = yld(store.getState());
-
-    req.subscribe({
-      next: (e) => {
-        console.log(e);
-      }
-    });
-  };
 
   return (
     <AssistantCallbackContext.Provider

@@ -98,16 +98,6 @@
       "type": "text",
       "required": true
     },
-    "nearest_bts_station": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::bts-station.bts-station"
-    },
-    "nearest_mrt_station": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::mrt-station.mrt-station"
-    },
     "lotSize": {
       "type": "integer"
     },
