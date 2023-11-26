@@ -19,7 +19,7 @@
     "pretty-format": "^29.7.0",
     "qs": "^6.11.2",
     "react-test-renderer": "^18.2.0",
-    "remeda": "^1.28.0",
+    "remeda": "^1.29.0",
     "typescript": "^5.2.2",
     "zod": "^3.22.4"
   },
