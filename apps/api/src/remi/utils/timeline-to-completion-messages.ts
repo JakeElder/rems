@@ -1,11 +1,11 @@
 import { Timeline } from "@rems/types";
-import { ChatCompletionRequestMessage } from "openai";
+import OpenAI from "openai";
 
 const timelineToCompletionMessages = (
   timeline: Timeline
-): ChatCompletionRequestMessage[] => {
+): OpenAI.Chat.CreateChatCompletionRequestMessage[] => {
   return timeline
-    .map<ChatCompletionRequestMessage | null>((e) => {
+    .map<OpenAI.Chat.CreateChatCompletionRequestMessage | null>((e) => {
       if (e.event.type === "YIELD") {
         return {
           role: "system",
@@ -62,7 +62,7 @@ const timelineToCompletionMessages = (
 
       return null;
     })
-    .filter((i): i is ChatCompletionRequestMessage => !!i);
+    .filter((i): i is OpenAI.Chat.CreateChatCompletionRequestMessage => !!i);
 };
 
 export default timelineToCompletionMessages;

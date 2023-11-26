@@ -7,8 +7,8 @@ const fn = async <Returns>(
   Schema: ZodType<any, ZodTypeDef, any>
 ): Promise<RemiResponse<Returns>> => {
   try {
-    const res = await openai.createChatCompletion(request, { timeout: 14000 });
-    const message = res.data.choices[0].message!;
+    const res = await openai.chat.completions.create(request, { timeout: 14000 });
+    const message = res.choices[0].message!;
 
     try {
       const json = JSON.parse(message.function_call!.arguments!);
@@ -37,8 +37,8 @@ const chat = async (
   request: ChatCompletionRequest
 ): Promise<RemiResponse<string>> => {
   try {
-    const res = await openai.createChatCompletion(request, { timeout: 8000 });
-    const message = res.data.choices[0].message!;
+    const res = await openai.chat.completions.create(request, { timeout: 8000 });
+    const message = res.choices[0].message!;
 
     if (!message.content) {
       return {

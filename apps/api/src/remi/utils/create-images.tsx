@@ -1,7 +1,7 @@
 import { openai } from "@/remi";
 
 export const createImages = async (prompt: string, n: number) => {
-  const image = await openai.createImage({
+  const image = await openai.images.generate({
     size: "1024x1024",
     prompt,
     response_format: "b64_json",

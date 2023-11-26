@@ -1,5 +1,5 @@
 import { Filter, OpenAIModel } from "@rems/types";
-import { CreateChatCompletionRequest as OriginalRequest } from "openai";
+import OpenAI from "openai";
 
 export type RemiResponse<T = any> =
   | { ok: true; data: T }

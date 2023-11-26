@@ -1,4 +1,4 @@
-import { ChatCompletionRequestMessage } from "openai";
+import OpenAI from "openai";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { txt } from "@/remi/utils";
 import { ZodType, ZodTypeDef } from "zod";
@@ -34,19 +34,19 @@ export const $messages = (
 };
 
 export const $message = (
-  role: ChatCompletionRequestMessage["role"],
+  role: OpenAI.Chat.CreateChatCompletionRequestMessage["role"],
   content: React.ReactNode
-): ChatCompletionRequestMessage => {
+): OpenAI.Chat.CreateChatCompletionRequestMessage => {
   return { role, content: md(content) };
 };
 
 export const $systemMessage = (
   content: React.ReactNode
-): ChatCompletionRequestMessage => $message("system", content);
+): OpenAI.Chat.CreateChatCompletionRequestMessage => $message("system", content);
 
 export const $userMessage = (
   content: React.ReactNode
-): ChatCompletionRequestMessage => $message("user", content);
+): OpenAI.Chat.CreateChatCompletionRequestMessage => $message("user", content);
 
 export const $functionCall = ({
   description,
