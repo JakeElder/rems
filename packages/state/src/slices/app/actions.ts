@@ -10,7 +10,8 @@ import {
   RealEstateQueryArrayKey,
   BudgetAndAvailabilityRequirements,
   UserTimelineEvent,
-  AssistantTimelineEvent
+  AssistantTimelineEvent,
+  AppStateSlices
 } from "@rems/types";
 
 type ActorTimelineEvent = UserTimelineEvent | AssistantTimelineEvent;
@@ -27,7 +28,10 @@ export const handleAssistantPlacementChangeRequest = createAction<
 >("HANDLE_ASSISTANT_PLACEMENT_CHANGE_REQUEST");
 
 export const handleAssistantYield = createAction<
-  InputSession["value"],
+  {
+    state: AppStateSlices;
+    message: InputSession["value"];
+  },
   "HANDLE_ASSISTANT_YIELD"
 >("HANDLE_ASSISTANT_YIELD");
 
@@ -53,7 +57,10 @@ export const handleSpaceKeyDown = createAction("HANDLE_SPACE_KEY_DOWN");
 export const handleSpaceKeyUp = createAction("HANDLE_SPACE_KEY_UP");
 
 export const handleUserYield = createAction<
-  InputSession["value"],
+  {
+    state: AppStateSlices;
+    message: InputSession["value"];
+  },
   "HANDLE_USER_YIELD"
 >("HANDLE_USER_YIELD");
 

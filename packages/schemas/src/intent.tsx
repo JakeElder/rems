@@ -3,23 +3,21 @@ import md from "@rems/utils/md";
 
 export const IntentCodeSchema = z
   .enum([
-    "NEW_QUERY",
-    "REFINE_QUERY",
-    "CLEAR_QUERY",
-    "OBTAIN_GENERAL_INFORMATION",
-    "UNKNOWN",
+    "REFINE_LOCATION"
+    // "CLEAR_QUERY",
+    // "OBTAIN_GENERAL_INFORMATION",
+    // "UNKNOWN",
 
-    "REFINE_INDOOR_FEATURES",
-    "REFINE_OUTDOOR_FEATURES",
-    "REFINE_LOT_FEATURES",
-    "REFINE_VIEW_TYPES",
-    "REFINE_PROPERTY_TYPES",
-    "REFINE_LOCATION",
-    "REFINE_PAGE",
-    "REFINE_SORT",
-    "REFINE_SPACE_REQUIREMENTS",
-    "REFINE_BUDGET_AVAILABILITY",
-    "REFINE_MAP_STATE"
+    // "REFINE_INDOOR_FEATURES",
+    // "REFINE_OUTDOOR_FEATURES",
+    // "REFINE_LOT_FEATURES",
+    // "REFINE_VIEW_TYPES",
+    // "REFINE_PROPERTY_TYPES",
+    // "REFINE_PAGE",
+    // "REFINE_SORT",
+    // "REFINE_SPACE_REQUIREMENTS",
+    // "REFINE_BUDGET_AVAILABILITY",
+    // "REFINE_MAP_STATE"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 
@@ -27,7 +25,6 @@ export const IntentSchema = z
   .object({
     id: z.number().min(1),
     code: IntentCodeSchema,
-    primary: z.boolean(),
     description: z.string().describe(md(<>A description of the intent</>)),
     examples: z.array(
       z.object({

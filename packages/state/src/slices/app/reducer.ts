@@ -131,7 +131,8 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
       date: Date.now(),
       event: {
         type: "YIELD",
-        message: action.payload
+        message: action.payload.message,
+        state: action.payload.state
       }
     });
 
@@ -201,7 +202,8 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
       date: Date.now(),
       event: {
         type: "YIELD",
-        message: action.payload
+        message: action.payload.message,
+        state: action.payload.state
       }
     });
 

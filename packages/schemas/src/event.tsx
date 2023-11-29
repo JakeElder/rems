@@ -2,6 +2,7 @@ import { z } from "zod";
 import { IntentCodeSchema } from "./intent";
 import { LocationSchema } from "./location";
 import { StateMutationSchema } from "./state-mutation";
+import { AppStateSlicesSchema } from "./app-state-slices";
 
 export const StateMutationInteractionEventSchema = z.object({
   type: z.literal("STATE_MUTATION"),
@@ -15,7 +16,8 @@ export const ResolvingIntentsEventSchema = z.object({
 
 export const YieldEventSchema = z.object({
   type: z.literal("YIELD"),
-  message: z.string()
+  message: z.string(),
+  state: AppStateSlicesSchema
 });
 
 export const ErrorEventSchema = z.object({
