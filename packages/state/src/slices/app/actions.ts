@@ -29,14 +29,6 @@ export const handleAssistantPlacementChangeRequest = createAction<
   "HANDLE_ASSISTANT_PLACEMENT_CHANGE_REQUEST"
 >("HANDLE_ASSISTANT_PLACEMENT_CHANGE_REQUEST");
 
-export const handleAssistantYield = createAction<
-  {
-    state: AppStateSlices;
-    message: InputSession["value"];
-  },
-  "HANDLE_ASSISTANT_YIELD"
->("HANDLE_ASSISTANT_YIELD");
-
 export const handleEmptySubmission = createAction("HANDLE_EMPTY_SUBMISSION");
 
 export const handleEnterKeyDown = createAction("HANDLE_ENTER_KEY_DOWN");
@@ -58,14 +50,6 @@ export const handleSpaceKeyDown = createAction("HANDLE_SPACE_KEY_DOWN");
 
 export const handleSpaceKeyUp = createAction("HANDLE_SPACE_KEY_UP");
 
-export const handleUserYield = createAction<
-  {
-    state: AppStateSlices;
-    message: InputSession["value"];
-  },
-  "HANDLE_USER_YIELD"
->("HANDLE_USER_YIELD");
-
 export const handleVoiceInputReceived = createAction<
   InputSession["value"],
   "HANDLE_VOICE_INPUT_RECEIVED"
@@ -73,9 +57,14 @@ export const handleVoiceInputReceived = createAction<
 
 export const noop = createAction("NOOP");
 
-export const registerAnalysis = createAction<Analysis>("REGISTER_ANALYSIS");
-export const registerIntentResolutionError =
-  createAction<IntentResolutionError>("REGISTER_INTENT_RESOLUTION");
+export const registerAnalysis = createAction<Analysis, "REGISTER_ANALYSIS">(
+  "REGISTER_ANALYSIS"
+);
+
+export const registerIntentResolutionError = createAction<
+  IntentResolutionError,
+  "REGISTER_INTENT_RESOLUTION"
+>("REGISTER_INTENT_RESOLUTION");
 
 export const replaceRealEstateQuery = createAction<
   RealEstateQuery,
@@ -116,12 +105,20 @@ export const setSpaceRequirements = createAction<
   "SET_SPACE_REQUIREMENTS"
 >("SET_SPACE_REQUIREMENTS");
 
+export const yld = createAction<
+  {
+    role: ActorTimelineEvent["role"];
+    message: string;
+    state: AppStateSlices;
+  },
+  "YIELD"
+>("YIELD");
+
 // Action Type
 type CommitRealEstateQueryAction = ReturnType<typeof commitRealEstateQuery>;
 type HandleAssistantPlacementChangeRequestAction = ReturnType<
   typeof handleAssistantPlacementChangeRequest
 >;
-type HandleAssistantYieldAction = ReturnType<typeof handleAssistantYield>;
 type HandleEmptySubmissionAction = ReturnType<typeof handleEmptySubmission>;
 type HandleEnterKeyDownAction = ReturnType<typeof handleEnterKeyDown>;
 type HandleEnterKeyUpAction = ReturnType<typeof handleEnterKeyUp>;
@@ -133,7 +130,6 @@ type HandleListeningAbortedAction = ReturnType<typeof handleListeningAborted>;
 type HandleListeningStartedAction = ReturnType<typeof handleListeningStarted>;
 type HandleSpaceKeyDownAction = ReturnType<typeof handleSpaceKeyDown>;
 type HandleSpaceKeyUpAction = ReturnType<typeof handleSpaceKeyUp>;
-type HandleUserYieldAction = ReturnType<typeof handleUserYield>;
 type HandleVoiceInputReceivedAction = ReturnType<
   typeof handleVoiceInputReceived
 >;
@@ -153,11 +149,11 @@ type SetLocationSourceAction = ReturnType<typeof setLocationSource>;
 type SetPageAndSortAction = ReturnType<typeof setPageAndSort>;
 type SetResolvingIntentsAction = ReturnType<typeof setResolvingIntents>;
 type SetSpaceRequirementsAction = ReturnType<typeof setSpaceRequirements>;
+type YieldAction = ReturnType<typeof yld>;
 
 export type AppAction =
   | CommitRealEstateQueryAction
   | HandleAssistantPlacementChangeRequestAction
-  | HandleAssistantYieldAction
   | HandleEmptySubmissionAction
   | HandleEnterKeyDownAction
   | HandleEnterKeyUpAction
@@ -167,7 +163,6 @@ export type AppAction =
   | HandleListeningStartedAction
   | HandleSpaceKeyDownAction
   | HandleSpaceKeyUpAction
-  | HandleUserYieldAction
   | HandleVoiceInputReceivedAction
   | NoopAction
   | RegisterAnalysisAction
@@ -180,4 +175,5 @@ export type AppAction =
   | SetLocationSourceAction
   | SetPageAndSortAction
   | SetResolvingIntentsAction
-  | SetSpaceRequirementsAction;
+  | SetSpaceRequirementsAction
+  | YieldAction;

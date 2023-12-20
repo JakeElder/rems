@@ -11,8 +11,7 @@ const defaultRealEstateQuery = (): RealEstateQuery => ({
     type: "NL",
     description: "Bangkok",
     geospatialOperator: "in",
-    radius: 10000,
-    radiusEnabled: false
+    radius: 10000
   },
   pageAndSort: {
     page: 1,

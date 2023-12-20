@@ -7,8 +7,8 @@ import {
   handleInputIdle,
   handleListeningAborted,
   handleListeningStarted,
-  handleUserYield,
-  handleVoiceInputReceived
+  handleVoiceInputReceived,
+  yld
 } from "@rems/state/app/actions";
 import { useEffect } from "react";
 import { useSpeechRecognition } from "react-speech-recognition";
@@ -56,19 +56,14 @@ const VoiceEventListeners = ({}: Props) => {
     }
 
     dispatch(
-      handleUserYield({
+      yld({
+        role: "USER",
         message: session.value,
         state: store.getState().slices
       })
     );
 
-    const req = handover(store.getState());
-
-    req.subscribe({
-      next: (action) => {
-        dispatch(action);
-      }
-    });
+    handover(store.getState(), dispatch);
   };
 
   return null;

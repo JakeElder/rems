@@ -10,7 +10,6 @@ import {
 import {
   commitRealEstateQuery,
   handleAssistantPlacementChangeRequest,
-  handleAssistantYield,
   handleEmptySubmission,
   handleEnterKeyDown,
   handleEnterKeyUp,
@@ -20,7 +19,6 @@ import {
   handleListeningStarted,
   handleSpaceKeyDown,
   handleSpaceKeyUp,
-  handleUserYield,
   handleVoiceInputReceived,
   noop,
   registerAnalysis,
@@ -32,7 +30,8 @@ import {
   setLocationSource,
   setPageAndSort,
   setResolvingIntents,
-  setSpaceRequirements
+  setSpaceRequirements,
+  yld
 } from "./actions";
 import { clone } from "remeda";
 import * as diff from "../../diff";
@@ -127,23 +126,6 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     );
   });
 
-  // HANDLE_ASSISTANT_YIELD
-  builder.addCase(handleAssistantYield, (state, action) => {
-    state.timeline.push({
-      role: "ASSISTANT",
-      id: nanoid(),
-      date: Date.now(),
-      event: {
-        type: "YIELD",
-        message: action.payload.message,
-        state: action.payload.state
-      }
-    });
-
-    const { sessions } = state.slices.assistant;
-    sessions[sessions.length - 1].state = "RESOLVED";
-  });
-
   // HANDLE_EMPTY_SUBMISSION
   builder.addCase(handleEmptySubmission, (state) => {
     state.slices.assistant.sessions[
@@ -198,10 +180,10 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     state.slices.keyboard.spaceDown = false;
   });
 
-  // HANDLE_USER_YIELD
-  builder.addCase(handleUserYield, (state, action) => {
+  // YIELD
+  builder.addCase(yld, (state, action) => {
     state.timeline.push({
-      role: "USER",
+      role: action.payload.role,
       id: nanoid(),
       date: Date.now(),
       event: {
@@ -211,11 +193,17 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
       }
     });
 
-    state.slices.keyboard.enterDown = false;
-    state.slices.assistant.mode = "THINKING";
-
     const { sessions } = state.slices.assistant;
-    sessions[sessions.length - 1].state = "ANALYZING";
+
+    if (action.payload.role === "ASSISTANT") {
+      sessions[sessions.length - 1].state = "RESOLVED";
+    }
+
+    if (action.payload.role === "USER") {
+      state.slices.keyboard.enterDown = false;
+      state.slices.assistant.mode = "THINKING";
+      sessions[sessions.length - 1].state = "ANALYZING";
+    }
   });
 
   // HANDLE_VOICE_INPUT_RECEIVED

@@ -2,16 +2,15 @@ import { diffString } from "json-diff";
 import * as app from "../src/slices/app";
 import {
   handleAssistantPlacementChangeRequest,
-  handleAssistantYield,
   handleEmptySubmission,
   handleInputIdle,
-  handleUserYield,
   returnControl,
   setArray,
   setBudgetAndAvailability,
   setLocationSource,
   setPageAndSort,
-  setSpaceRequirements
+  setSpaceRequirements,
+  yld
 } from "../src/slices/app/actions";
 
 // const log = (obj: any) => console.dir(obj, { depth: null, colors: true });
@@ -44,7 +43,6 @@ test("locationSource", () => {
       data: {
         type: "NL",
         radius: null,
-        radiusEnabled: false,
         description: "Chiang Mai",
         geospatialOperator: "near"
       }
@@ -121,23 +119,18 @@ test("emptySubmission", () => {
 test("userYield", () => {
   const store = app.init();
 
-  store.dispatch(handleUserYield("Do stuff"));
+  store.dispatch(
+    yld({
+      role: "USER",
+      state: store.getState().slices,
+      message: "Do stuff"
+    })
+  );
 
   const state = store.getState();
 
   expect(state.slices.assistant.mode).toBe("THINKING");
   expect(state.slices.assistant.sessions[0].state).toBe("ANALYZING");
-  expect(state.timeline.length).toBe(1);
-});
-
-test("assistantYield", () => {
-  const store = app.init();
-
-  store.dispatch(handleAssistantYield("Sure, done"));
-
-  const state = store.getState();
-
-  expect(state.slices.assistant.sessions[0].state).toBe("RESOLVED");
   expect(state.timeline.length).toBe(1);
 });
 

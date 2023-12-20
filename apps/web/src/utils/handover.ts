@@ -1,17 +1,33 @@
-import { AppAction } from "@rems/state/app/actions";
+import { AppDispatch } from "@rems/state";
+import { AppAction, returnControl } from "@rems/state/app/actions";
 import { AppState, AssistantPayload } from "@rems/types";
 import { Observable, Subscriber } from "rxjs";
 
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
-const handover = (state: AppState) => {
-  return new Observable<AppAction>((sub) => {
+const handover = (state: AppState, dispatch: AppDispatch) => {
+  const req = new Observable<AppAction>((sub) => {
     const payload: AssistantPayload = { state };
     fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
       method: "POST",
       body: JSON.stringify(payload)
     }).then((res) => handle(sub, res));
   });
+
+  req.subscribe({
+    next: (action) => {
+      console.log(action);
+      dispatch(action);
+
+      if (action.type === "YIELD") {
+        setTimeout(() => {
+          // dispatch(returnControl());
+        }, 2000);
+      }
+    }
+  });
+
+  return req;
 };
 
 const handle = (sub: Subscriber<AppAction>, res: Response) => {

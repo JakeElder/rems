@@ -18,7 +18,8 @@ import {
   registerAnalysis,
   registerIntentResolutionError,
   returnControl,
-  setLocationSource
+  setLocationSource,
+  yld
 } from "@rems/state/app/actions";
 import resolveLocationSource, {
   resolveLocationSourceOrFail
@@ -353,7 +354,13 @@ const stream: Stream = (args) => async (c) => {
   await analyze();
 
   act(commitRealEstateQuery());
-  act(returnControl());
+  act(
+    yld({
+      role: "ASSISTANT",
+      state: state.slices,
+      message: "Ok"
+    })
+  );
 
   c.close();
 };

@@ -14,7 +14,7 @@ import {
   handleEmptySubmission,
   handleInputIdle,
   handleKeyboardInputReceived,
-  handleUserYield
+  yld
 } from "@rems/state/app/actions";
 import { handover } from "@/utils";
 
@@ -64,20 +64,14 @@ const AssistantCallbackProvider = ({ children }: Props) => {
     const state = store.getState();
 
     dispatch(
-      handleUserYield({
+      yld({
+        role: "USER",
         state: state.slices,
         message: session.value
       })
     );
 
-    const req = handover(state);
-
-    req.subscribe({
-      next: (action) => {
-        console.log(action);
-        dispatch(action);
-      }
-    });
+    handover(state, dispatch);
   }, [session]);
 
   const onKeyUp: Context["onKeyUp"] = useCallback(
