@@ -7,8 +7,8 @@ export type RemiResponse<T = any> =
 
 export type RemiFn = (...args: any) => Promise<RemiResponse>;
 
-export type ChatCompletionRequest = Omit<
-  OpenAI.Chat.CreateChatCompletionRequestMessage,
+export type ChatCompletionCreateParams = Omit<
+  OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
   "model"
 > & {
   model: OpenAIModel;

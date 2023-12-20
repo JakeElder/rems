@@ -29,7 +29,8 @@
       "@/remi/types": [
         "./src/remi/types"
       ]
-    }
+    },
+    "module": "esnext"
   },
   "include": [
     "next-env.d.ts",

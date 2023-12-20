@@ -1,4 +1,4 @@
-import { ChatCompletionRequest } from "@/remi/types";
+import { ChatCompletionCreateParams } from "@/remi/types";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { FilterSchema, PropertySchema } from "@rems/schemas";
 import * as Models from "@/models";
@@ -32,7 +32,7 @@ export const createMockProperty = async () => {
     });
   };
 
-  const request: ChatCompletionRequest = {
+  const request: ChatCompletionCreateParams = {
     model: "gpt-3.5-turbo-16k-0613",
     temperature: 1.6,
     messages: [
@@ -118,7 +118,7 @@ export const createMockProperty = async () => {
     ]
   };
 
-  const res = await Remi.openai.createChatCompletion(request);
-  const function_call = res.data.choices[0].message!.function_call;
+  const res = await Remi.openai.chat.completions.create(request);
+  const function_call = res.choices[0].message!.function_call;
   return JSON.parse(function_call!.arguments!);
 };

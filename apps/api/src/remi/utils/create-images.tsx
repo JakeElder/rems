@@ -9,5 +9,5 @@ export const createImages = async (prompt: string, n: number) => {
   });
 
   const isString = (s: any): s is string => !!s;
-  return image.data.data.map((i) => i.b64_json).filter(isString);
+  return image.data.map((i) => i.b64_json).filter(isString);
 };

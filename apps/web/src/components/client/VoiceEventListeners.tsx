@@ -1,7 +1,7 @@
 "use client";
 
 import { store, useDispatch, useSession } from "@/state";
-import { yld } from "@/utils";
+import { handover } from "@/utils";
 import {
   handleEmptySubmission,
   handleInputIdle,
@@ -55,12 +55,18 @@ const VoiceEventListeners = ({}: Props) => {
       throw new Error();
     }
 
-    dispatch(handleUserYield(session.value));
-    const req = yld(store.getState());
+    dispatch(
+      handleUserYield({
+        message: session.value,
+        state: store.getState().slices
+      })
+    );
+
+    const req = handover(store.getState());
 
     req.subscribe({
-      next: (e) => {
-        console.log(e);
+      next: (action) => {
+        dispatch(action);
       }
     });
   };

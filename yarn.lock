@@ -9545,6 +9545,7 @@ __metadata:
     pluralize: ^8.0.0
     pretty-ms: ^8.0.0
     prettyjson: ^1.2.5
+    qs: ^6.11.2
     query-string: ^8.1.0
     react: 18.2.0
     react-dom: 18.2.0

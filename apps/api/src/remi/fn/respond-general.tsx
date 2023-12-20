@@ -7,25 +7,18 @@ import {
   $systemMessage
 } from "@/remi/wrappers";
 import { execute, stringify, timelineToCompletionMessages } from "@/remi/utils";
-import {
-  CapabilitySchema,
-  RealEstateQuerySchema,
-  TerseCapabilitySchema,
-  TimelineSchema
-} from "@rems/schemas";
+import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
 import { Z } from "@rems/types";
 import { z } from "zod";
 import md from "@rems/utils/md";
 
 export const PropsSchema = z.object({
-  query: RealEstateQuerySchema.Server,
-  capabilities: z.array(CapabilitySchema),
+  query: RealEstateQuerySchema,
   timeline: TimelineSchema
 });
 
 export const ContextSchema = z.object({
-  query: RealEstateQuerySchema.Server,
-  capabilities: z.array(TerseCapabilitySchema)
+  query: RealEstateQuerySchema
 });
 
 export const ReturnsSchema = z
@@ -47,9 +40,8 @@ type Context = Z<typeof ContextSchema>;
 type Returns = Z<typeof ReturnsSchema>;
 type Fn = (args: Props) => Promise<RemiResponse<Returns>>;
 
-const analyze: Fn = async ({ timeline, capabilities, query }) => {
+const analyze: Fn = async ({ timeline, query }) => {
   const context = stringify<Context>({
-    capabilities: capabilities.map(({ id, code }) => ({ id, code })),
     query
   });
 

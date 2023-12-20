@@ -7,12 +7,15 @@ import {
   $systemMessage
 } from "@/remi/wrappers";
 import { execute, stringify, timelineToCompletionMessages } from "@/remi/utils";
-import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
+import {
+  RealEstateIndexPageAndSortSchema,
+  TimelineSchema
+} from "@rems/schemas";
 import { Z } from "@rems/types";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-const { Page } = RealEstateQuerySchema;
+const Page = RealEstateIndexPageAndSortSchema.shape["page"];
 
 export const ContextSchema = z.object({
   current: Page
@@ -40,7 +43,7 @@ const page = async ({
   const schema = stringify(zodToJsonSchema(ContextSchema));
 
   const request = $request({
-    ...$model("gpt-4-0613"),
+    ...$model(),
     ...$messages(
       $systemMessage(
         <>

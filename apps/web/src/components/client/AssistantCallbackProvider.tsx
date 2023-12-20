@@ -16,7 +16,7 @@ import {
   handleKeyboardInputReceived,
   handleUserYield
 } from "@rems/state/app/actions";
-import yld from "utils/yield";
+import { handover } from "@/utils";
 
 type Props = {
   children: React.ReactNode;
@@ -61,14 +61,22 @@ const AssistantCallbackProvider = ({ children }: Props) => {
       throw new Error();
     }
 
-    dispatch(handleUserYield(session.value));
-    const req = yld(store.getState());
+    const state = store.getState();
+
+    dispatch(
+      handleUserYield({
+        state: state.slices,
+        message: session.value
+      })
+    );
+
+    const req = handover(state);
 
     req.subscribe({
       next: (action) => {
+        console.log(action);
         dispatch(action);
-      },
-      complete: () => {}
+      }
     });
   }, [session]);
 

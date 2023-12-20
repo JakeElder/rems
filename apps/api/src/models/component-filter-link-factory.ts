@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
-import camelCase from "camelcase";
+import { camelCase } from "change-case";
 import property from "./Property";
 
 export default (sequelize: Sequelize) => {

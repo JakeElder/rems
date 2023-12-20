@@ -9,31 +9,32 @@ import {
 import { execute, stringify, timelineToCompletionMessages } from "@/remi/utils";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
+import {
+  BudgetAndAvailabilityRequirementsSchema,
+  TimelineSchema
+} from "@rems/schemas";
 import { Z } from "@rems/types";
-
-const { BudgetAndAvailability } = RealEstateQuerySchema;
 
 const PropsSchema = z.object({
   timeline: TimelineSchema,
-  current: BudgetAndAvailability
+  current: BudgetAndAvailabilityRequirementsSchema
 });
 
 const ContextSchema = z.object({
-  current: BudgetAndAvailability
+  current: BudgetAndAvailabilityRequirementsSchema
 });
 
 const ReturnsSchema = z
   .object({
-    mn: BudgetAndAvailability.shape["min-price"],
-    mx: BudgetAndAvailability.shape["max-price"],
-    a: BudgetAndAvailability.shape["availability"]
+    mn: z.number(),
+    mx: z.number(),
+    t: z.enum(["SALE", "RENT"])
   })
   .partial()
-  .transform(({ mn, mx, a }) => ({
+  .transform(({ mn, mx, t }) => ({
     "min-price": mn,
     "max-price": mx,
-    availability: a
+    type: t
   }));
 
 type Props = Z<typeof PropsSchema>;

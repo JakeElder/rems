@@ -11,7 +11,9 @@ import {
   BudgetAndAvailabilityRequirements,
   UserTimelineEvent,
   AssistantTimelineEvent,
-  AppStateSlices
+  AppStateSlices,
+  Analysis,
+  IntentResolutionError
 } from "@rems/types";
 
 type ActorTimelineEvent = UserTimelineEvent | AssistantTimelineEvent;
@@ -68,6 +70,12 @@ export const handleVoiceInputReceived = createAction<
   InputSession["value"],
   "HANDLE_VOICE_INPUT_RECEIVED"
 >("HANDLE_VOICE_INPUT_RECEIVED");
+
+export const noop = createAction("NOOP");
+
+export const registerAnalysis = createAction<Analysis>("REGISTER_ANALYSIS");
+export const registerIntentResolutionError =
+  createAction<IntentResolutionError>("REGISTER_INTENT_RESOLUTION");
 
 export const replaceRealEstateQuery = createAction<
   RealEstateQuery,
@@ -129,6 +137,11 @@ type HandleUserYieldAction = ReturnType<typeof handleUserYield>;
 type HandleVoiceInputReceivedAction = ReturnType<
   typeof handleVoiceInputReceived
 >;
+type NoopAction = ReturnType<typeof noop>;
+type RegisterAnalysisAction = ReturnType<typeof registerAnalysis>;
+type RegisterIntentResolutionErrorAction = ReturnType<
+  typeof registerIntentResolutionError
+>;
 type ReplaceRealEstateQueryAction = ReturnType<typeof replaceRealEstateQuery>;
 type ResetRealEstateQueryAction = ReturnType<typeof resetRealEstateQuery>;
 type ReturnControlAction = ReturnType<typeof returnControl>;
@@ -156,6 +169,9 @@ export type AppAction =
   | HandleSpaceKeyUpAction
   | HandleUserYieldAction
   | HandleVoiceInputReceivedAction
+  | NoopAction
+  | RegisterAnalysisAction
+  | RegisterIntentResolutionErrorAction
   | ReplaceRealEstateQueryAction
   | ResetRealEstateQueryAction
   | ReturnControlAction

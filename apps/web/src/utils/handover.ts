@@ -4,7 +4,7 @@ import { Observable, Subscriber } from "rxjs";
 
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
-const yld = (state: AppState) => {
+const handover = (state: AppState) => {
   return new Observable<AppAction>((sub) => {
     const payload: AssistantPayload = { state };
     fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
@@ -42,4 +42,4 @@ const handle = (sub: Subscriber<AppAction>, res: Response) => {
   reader.read().then(pump);
 };
 
-export default yld;
+export default handover;

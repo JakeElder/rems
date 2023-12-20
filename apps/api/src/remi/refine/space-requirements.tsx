@@ -7,30 +7,28 @@ import {
   $systemMessage
 } from "@/remi/wrappers";
 import { execute, stringify, timelineToCompletionMessages } from "@/remi/utils";
-import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
+import { SpaceRequirementsSchema, TimelineSchema } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-const { SpaceRequirements } = RealEstateQuerySchema;
-
 export const ContextSchema = z.object({
-  current: SpaceRequirements
+  current: SpaceRequirementsSchema
 });
 
 export const ArgsSchema = z.object({
   timeline: TimelineSchema,
-  current: SpaceRequirements
+  current: SpaceRequirementsSchema
 });
 
 export const ReturnsSchema = z
   .object({
-    mnbd: SpaceRequirements.shape["min-bedrooms"],
-    mxbd: SpaceRequirements.shape["max-bedrooms"],
-    mnbt: SpaceRequirements.shape["min-bathrooms"],
-    mnlva: SpaceRequirements.shape["min-living-area"],
-    mxlva: SpaceRequirements.shape["max-living-area"],
-    mnls: SpaceRequirements.shape["min-lot-size"],
-    mxls: SpaceRequirements.shape["max-lot-size"]
+    mnbd: SpaceRequirementsSchema.shape["minBedrooms"],
+    mxbd: SpaceRequirementsSchema.shape["maxBedrooms"],
+    mnbt: SpaceRequirementsSchema.shape["minBathrooms"],
+    mnlva: SpaceRequirementsSchema.shape["minLivingArea"],
+    mxlva: SpaceRequirementsSchema.shape["maxLivingArea"],
+    mnls: SpaceRequirementsSchema.shape["minLotSize"],
+    mxls: SpaceRequirementsSchema.shape["maxLotSize"]
   })
   .partial()
   .transform(({ mnbd, mnbt, mnls, mxbd, mxls, mnlva, mxlva }) => ({

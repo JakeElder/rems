@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import * as Models from "@/models";
 import { NextResponse } from "next/server";
 import { Filter, QuickFilter } from "@rems/types";

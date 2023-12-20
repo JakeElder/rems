@@ -9,6 +9,7 @@ import {
 import { stringify, timelineToCompletionMessages, execute } from "@/remi/utils";
 import { intents } from "@/remi";
 import {
+  IntentSchema,
   LocationSchema,
   RealEstateQuerySchema,
   TerseIntentSchema,
@@ -24,55 +25,33 @@ import md from "@rems/utils/md";
 export const PropsSchema = z.object({
   currentLocation: LocationSchema,
   timeline: TimelineSchema,
-  query: RealEstateQuerySchema.Server
+  currentQuery: RealEstateQuerySchema
 });
 
 export const ContextSchema = z.object({
-  primaryIntents: z.lazy(() => z.array(TerseIntentSchema)),
-  secondaryIntents: z.lazy(() => z.array(TerseIntentSchema)),
-  indoorFeatures: z.array(z.string()),
-  outdoorFeatures: z.array(z.string()),
-  lotFeatures: z.array(z.string()),
-  viewTypes: z.array(z.string()),
-  propertyTypes: z.array(z.string()),
+  intents: z.array(IntentSchema),
+  definitions: z
+    .object({
+      indoorFeatures: z.array(z.string()),
+      outdoorFeatures: z.array(z.string()),
+      lotFeatures: z.array(z.string()),
+      viewTypes: z.array(z.string()),
+      propertyTypes: z.array(z.string())
+    })
+    .describe(md(<>Possible values</>)),
   currentLocation: LocationSchema,
-  currentQuery: z.object({
-    MAP_STATE: RealEstateQuerySchema.MapState,
-    PAGE: RealEstateQuerySchema.Page,
-    SORT: RealEstateQuerySchema.Sort,
-    SPACE_REQUIREMENTS: RealEstateQuerySchema.SpaceRequirements,
-    BUDGET_AND_AVAILABILITY: RealEstateQuerySchema.BudgetAndAvailability,
-    INDOOR_FEATURES: RealEstateQuerySchema.Arrays.shape["indoor-features"],
-    LOT_FEATURES: RealEstateQuerySchema.Arrays.shape["lot-features"],
-    OUTDOOR_FEATURES: RealEstateQuerySchema.Arrays.shape["outdoor-features"],
-    PROPERTY_TYPES: RealEstateQuerySchema.Arrays.shape["property-types"],
-    VIEW_TYPES: RealEstateQuerySchema.Arrays.shape["view-types"]
-  })
+  currentQuery: RealEstateQuerySchema
 });
 
 export const ReturnsSchema = z
   .object({
-    p: TerseIntentSchema.shape["id"].describe(md(<>The *primary* intent</>)),
-    s: z
-      .array(TerseIntentSchema.shape["id"])
-      .describe(
-        md(
-          <>
-            An array of *Secondary Intents*. An array of id's that apply to this
-            request.
-          </>
-        )
+    i: z.array(
+      TerseIntentSchema.shape["id"].describe(
+        md(<>The array of user intents we need to resolve</>)
       )
-  })
-  .describe(
-    md(
-      <>
-        An object that contains all the data necessary to further process
-        natural language issued to Remi as a command or enquiry.
-      </>
     )
-  )
-  .transform(({ p, s }) => ({ primary: p, secondary: s }));
+  })
+  .transform(({ i }) => i);
 
 type Props = Z<typeof PropsSchema>;
 type Context = Z<typeof ContextSchema>;
@@ -80,7 +59,7 @@ type Returns = Z<typeof ReturnsSchema>;
 
 const identifyIntents = async ({
   timeline,
-  query,
+  currentQuery,
   currentLocation
 }: Props): Promise<RemiResponse<Returns>> => {
   const parse = (r: Model<any, any>[]) => r.map((m: any) => m.slug);
@@ -98,33 +77,16 @@ const identifyIntents = async ({
     Models.PropertyType.findAll({ raw: true }).then(parse)
   ]);
 
-  const currentQuery: z.infer<(typeof ContextSchema.shape)["currentQuery"]> = {
-    VIEW_TYPES: query["view-types"],
-    PROPERTY_TYPES: query["property-types"],
-    LOT_FEATURES: query["lot-features"],
-    OUTDOOR_FEATURES: query["outdoor-features"],
-    INDOOR_FEATURES: query["indoor-features"],
-    BUDGET_AND_AVAILABILITY:
-      RealEstateQuerySchema.BudgetAndAvailability.parse(query),
-    MAP_STATE: RealEstateQuerySchema.MapState.parse(query),
-    SPACE_REQUIREMENTS: RealEstateQuerySchema.SpaceRequirements.parse(query),
-    SORT: query["sort"],
-    PAGE: query["page"]
-  };
-
   const context = stringify<Context>({
-    indoorFeatures,
-    outdoorFeatures,
-    lotFeatures,
-    viewTypes,
-    propertyTypes,
+    definitions: {
+      indoorFeatures,
+      outdoorFeatures,
+      lotFeatures,
+      viewTypes,
+      propertyTypes
+    },
     currentLocation,
-    primaryIntents: intents
-      .filter((i) => i.primary)
-      .map((i) => TerseIntentSchema.parse(i)),
-    secondaryIntents: intents
-      .filter((i) => !i.primary)
-      .map((i) => TerseIntentSchema.parse(i)),
+    intents,
     currentQuery
   });
 
@@ -140,8 +102,7 @@ const identifyIntents = async ({
           <p>
             You are Remi, an assistant responsible for helping the user of a
             real estate website. Process their input and analyze it for their
-            intent. Select one primary intent, and as many secondary as
-            required. Context will follow.
+            intent. Context will follow.
           </p>
         </>
       ),

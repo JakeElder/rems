@@ -3,29 +3,22 @@ import OpenAI from "openai";
 
 const timelineToCompletionMessages = (
   timeline: Timeline
-): OpenAI.Chat.CreateChatCompletionRequestMessage[] => {
+): OpenAI.Chat.ChatCompletionMessageParam[] => {
   return timeline
-    .map<OpenAI.Chat.CreateChatCompletionRequestMessage | null>((e) => {
+    .map<OpenAI.Chat.ChatCompletionMessageParam | null>((e) => {
       if (e.event.type === "YIELD") {
-        return {
-          role: "system",
-          content: "YIELD (control returned to user)"
-        };
-      }
-
-      if (e.event.type === "ANALYSIS_PERFORMED") {
-        return {
-          role: "system",
-          content: `Analysis Performed: ${JSON.stringify(e.event.analysis)}`
-        };
-      }
-
-      if (e.event.type === "LANGUAGE_BASED") {
         return {
           role: e.role === "USER" ? "user" : "assistant",
           content: e.event.message
         };
       }
+
+      // if (e.event.type === "ANALYSIS_PERFORMED") {
+      //   return {
+      //     role: "system",
+      //     content: `Analysis Performed: ${JSON.stringify(e.event.analysis)}`
+      //   };
+      // }
 
       if (e.event.type === "UPDATE_LOCATION") {
         return {
@@ -38,13 +31,13 @@ const timelineToCompletionMessages = (
         };
       }
 
-      if (e.event.type === "PATCH") {
+      if (e.event.type === "STATE_MUTATION") {
         return {
           role: "function",
           name: "patchQuery",
           content: JSON.stringify({
-            group: e.event.patch.group,
-            diff: e.event.patch.diff
+            group: e.event.mutation.patch.group,
+            diff: e.event.mutation.patch.diff
           })
         };
       }
@@ -54,7 +47,7 @@ const timelineToCompletionMessages = (
           role: "function",
           name: "logIntentResolutionError",
           content: JSON.stringify({
-            intent: e.event.intent,
+            intent: e.event.error.intent,
             error: e.event.error
           })
         };
@@ -62,7 +55,7 @@ const timelineToCompletionMessages = (
 
       return null;
     })
-    .filter((i): i is OpenAI.Chat.CreateChatCompletionRequestMessage => !!i);
+    .filter((i): i is OpenAI.Chat.ChatCompletionMessageParam => !!i);
 };
 
 export default timelineToCompletionMessages;

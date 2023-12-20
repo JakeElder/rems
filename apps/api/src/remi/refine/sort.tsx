@@ -7,12 +7,15 @@ import {
   $systemMessage
 } from "@/remi/wrappers";
 import { execute, stringify, timelineToCompletionMessages } from "@/remi/utils";
-import { RealEstateQuerySchema, TimelineSchema } from "@rems/schemas";
+import {
+  RealEstateIndexPageAndSortSchema,
+  TimelineSchema
+} from "@rems/schemas";
 import { Z } from "@rems/types";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-const { Sort } = RealEstateQuerySchema;
+const Sort = RealEstateIndexPageAndSortSchema.shape["sort"];
 
 export const ContextSchema = z.object({
   current: Sort

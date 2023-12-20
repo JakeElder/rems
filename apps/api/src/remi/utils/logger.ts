@@ -1,15 +1,11 @@
-import {
-  ArrayPatch,
-  AssistantEvent,
-  Patch,
-  ScalarPatch,
-  SystemEvent,
-  Timeline
-} from "@rems/types";
+// @ts-nocheck
+
+import { AssistantEvent, SystemEvent, Timeline } from "@rems/types";
+import { ArrayPatch, Patch, ScalarPatch } from "@rems/state";
 import { TableUserConfig, table } from "table";
 import ms from "pretty-ms";
 import chalk from "chalk";
-import timelineToInput from "../utils/timeline-to-input";
+// import timelineToInput from "../utils/timeline-to-input";
 
 const now = (start: number) => chalk.gray(ms(Date.now() - start));
 const heading = (s: string) =>
@@ -58,13 +54,16 @@ export const init = (timeline: Timeline) => {
       );
     }
 
-    if (e.type === "PATCH") {
+    if (e.type === "STATE_MUTATION") {
       console.log(
-        table([[now(t), heading(e.patch.group), diff(e.patch)]], tableConfig)
+        table(
+          [[now(t), heading(e.mutation.patch.group), diff(e.mutation.patch)]],
+          tableConfig
+        )
       );
     }
 
-    if (e.type === "LANGUAGE_BASED") {
+    if (e.type === "YIELD") {
       console.log(
         table([[now(t), heading("Message"), e.message]], tableConfig)
       );
@@ -92,11 +91,11 @@ const arrayDiff = (patch: ArrayPatch) => {
 
   return patch.diff
     .map((p) => {
-      if (p.type === "ADD_ARRAY") {
+      if (p.type === "ADD_TO_ARRAY") {
         return chalk.green(`+ ${p.value}`);
       }
 
-      if (p.type === "REMOVE_ARRAY") {
+      if (p.type === "REMOVE_FROM_ARRAY") {
         return chalk.red(`- ${p.value}`);
       }
     })
@@ -111,15 +110,15 @@ const scalarDiff = (patch: ScalarPatch) => {
   return patch.diff
     .map((p) => {
       if (p.type === "ADD_SCALAR") {
-        return chalk.green(`+ ${p.k}: ${p.value}`);
+        return chalk.green(`+ ${p.prop}: ${p.value}`);
       }
 
       if (p.type === "REMOVE_SCALAR") {
-        return chalk.red(`- ${p.k}: ${p.value}`);
+        return chalk.red(`- ${p.prop}: ${p.value}`);
       }
 
       if (p.type === "CHANGE_SCALAR") {
-        return chalk.yellow(`⇄ ${p.k}: ${p.value[0]} => ${p.value[1]}`);
+        return chalk.yellow(`⇄ ${p.prop}: ${p.value[0]} => ${p.value[1]}`);
       }
     })
     .join("\n");

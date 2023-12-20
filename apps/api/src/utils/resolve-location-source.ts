@@ -83,6 +83,18 @@ const resolveLocationSource = async (
   return { ok: false };
 };
 
+export const resolveLocationSourceOrFail = async (
+  ls: LocationSource
+): Promise<LocationResolution> => {
+  if (ls.type === "NL") {
+    const res = await resolveNlLocationSource(ls);
+    if (res.ok) {
+      return res.resolution;
+    }
+  }
+  throw new Error();
+};
+
 // const r = await client.textSearch({
 //   params: { query: location, key }
 // });

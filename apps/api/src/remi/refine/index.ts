@@ -21,7 +21,6 @@ export const lotFeatures = filterArray(Models.LotFeature);
 export const viewTypes = filterArray(Models.ViewType);
 
 export { default as location } from "./location";
-export { default as mapState } from "./map-state";
 export { default as page } from "./page";
 export { default as sort } from "./sort";
 export { default as spaceRequirements } from "./space-requirements";

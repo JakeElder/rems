@@ -47,8 +47,7 @@ const adapt = {
           geospatialOperator: query["location-geospatial-operator"]
             ? query["location-geospatial-operator"]
             : "in",
-          radius: query["radius"],
-          radiusEnabled: query["radius-enabled"] === "true"
+          radius: query["radius"]
         };
       }
 
@@ -168,7 +167,6 @@ export const toUrlBase = (source: RealEstateQuery): UrlRealEstateQuery => {
     "min-lot-size": source.space.minLotSize,
     "max-lot-size": source.space.maxLotSize,
     radius: source.locationSource.radius || 10000,
-    "radius-enabled": source.locationSource.radiusEnabled ? "true" : "false",
     ...adapt.toUrl.locationSource(source)
   };
 };

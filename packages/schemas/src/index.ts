@@ -1,3 +1,4 @@
+export * from "./analysis";
 export * from "./app-config";
 export * from "./app-state";
 export * from "./app-state-slices";
@@ -14,6 +15,7 @@ export * from "./image";
 export * from "./indoor-feature-requirements";
 export * from "./input-session";
 export * from "./intent";
+export * from "./intent-resolution-error";
 export * from "./lat-lng";
 export * from "./location";
 export * from "./location-resolution";

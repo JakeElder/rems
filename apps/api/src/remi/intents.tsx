@@ -10,17 +10,31 @@ const intents: Intent[] = [
   // },
 
   {
-    id: 10,
+    id: 20,
+    code: "CHAT",
+    description: md(<>The user just wants to chat</>),
+    examples: []
+  },
+
+  {
+    id: 50,
     code: "REFINE_LOCATION",
     description: md(
       <>The user wants to specify the search origin for their search</>
     ),
-    examples: [
-      {
-        input: "I'm looking for a 3 bedroom condo or apartment",
-        matches: ["condo or apartment"]
-      }
-    ]
+    examples: []
+  },
+
+  {
+    id: 500,
+    code: "UNKNOWN",
+    description: md(
+      <>
+        It is unclear that the user's intent falls within one of our defined
+        intents
+      </>
+    ),
+    examples: []
   }
 
   // {

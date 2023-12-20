@@ -43,17 +43,19 @@ import {
   SpaceRequirementsSchema,
   ViewTypeRequirementsSchema,
   InputSessionSchema,
-  ResolvingIntentsEventSchema,
   ApiRealEstateQuerySchema,
   ApiUrlRealEstateQuerySchema,
   ApiRealEstateQueryTargetSchema,
   AssistantModeSchema,
-  AssistantPlacementSchema
+  AssistantPlacementSchema,
+  AnalysisSchema,
+  IntentResolutionErrorSchema
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
 export type Z<T extends ZodType<any, any, any>> = z.infer<T>;
 
+export type Analysis = Z<typeof AnalysisSchema>;
 export type Pagination = Z<typeof PaginationSchema>;
 
 export type ResourceId = string;
@@ -290,9 +292,9 @@ export type Event = Z<typeof EventSchema>;
 export type StateMutationInteractionEvent = Z<
   typeof StateMutationInteractionEventSchema
 >;
-export type ResolvingIntentsEvent = Z<typeof ResolvingIntentsEventSchema>;
 export type YieldEvent = Z<typeof YieldEventSchema>;
 export type ErrorEvent = Z<typeof ErrorEventSchema>;
+export type IntentResolutionError = Z<typeof IntentResolutionErrorSchema>;
 export type IntentResolutionErrorEvent = Z<
   typeof IntentResolutionErrorEventSchema
 >;

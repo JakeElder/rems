@@ -22,10 +22,14 @@ import {
   handleSpaceKeyUp,
   handleUserYield,
   handleVoiceInputReceived,
+  noop,
+  registerAnalysis,
+  registerIntentResolutionError,
   replaceRealEstateQuery,
   returnControl,
   setArray,
   setBudgetAndAvailability,
+  setLocationSource,
   setPageAndSort,
   setResolvingIntents,
   setSpaceRequirements
@@ -50,18 +54,18 @@ const $event = ({
   patch
 }: Pick<AppStateMutationTimelineEvent, "role"> &
   AppStateMutation["mutation"]): AppStateMutationTimelineEvent => ({
-  id: nanoid(),
-  date: Date.now(),
-  role,
-  event: {
-    type: "STATE_MUTATION",
-    mutation: {
-      next,
-      prev,
-      patch
+    id: nanoid(),
+    date: Date.now(),
+    role,
+    event: {
+      type: "STATE_MUTATION",
+      mutation: {
+        next,
+        prev,
+        patch
+      }
     }
-  }
-});
+  });
 
 const EXPANSION_STATES: AssistantPlacement[] = [
   "MINIMISED",
@@ -220,6 +224,35 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     sessions[sessions.length - 1].value = action.payload;
   });
 
+  // REGISTER_ANALYSIS
+  builder.addCase(registerAnalysis, (state, action) => {
+    state.timeline.push({
+      role: "SYSTEM",
+      id: nanoid(),
+      date: Date.now(),
+      event: {
+        type: "ANALYSIS_PERFORMED",
+        analysis: action.payload
+      }
+    });
+  });
+
+  // REGISTER_INTENT_RESOLUTION_ERROR
+  builder.addCase(registerIntentResolutionError, (state, action) => {
+    state.timeline.push({
+      role: "SYSTEM",
+      id: nanoid(),
+      date: Date.now(),
+      event: {
+        type: "INTENT_RESOLUTION_ERROR",
+        error: action.payload
+      }
+    });
+  });
+
+  // NOOP
+  builder.addCase(noop, () => { });
+
   // REPLACE_REAL_ESTATE_QUERY
   builder.addCase(replaceRealEstateQuery, (state, action) => {
     state.slices.realEstateQuery = clone(action.payload);
@@ -252,7 +285,7 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     };
 
     const event = $event({
-      role: "ASSISTANT",
+      role: action.payload.role,
       prev,
       next,
       patch: {
@@ -286,7 +319,7 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     };
 
     const event = $event({
-      role: "ASSISTANT",
+      role: action.payload.role,
       prev,
       next,
       patch: {
@@ -296,6 +329,40 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
         diff: diff.scalar(
           defaults().slices.stagedRealEstateQuery.budgetAndAvailability,
           prev.stagedRealEstateQuery.budgetAndAvailability,
+          action.payload.data
+        )
+      }
+    });
+
+    state.timeline.push(event);
+    state.slices = next;
+  });
+
+  // SET_LOCATION_SOURCE
+  builder.addCase(setLocationSource, (state, action) => {
+    const prev: AppStateSlices = state.slices;
+    const next: AppStateSlices = {
+      ...prev,
+      stagedRealEstateQuery: {
+        ...prev.stagedRealEstateQuery,
+        locationSource: {
+          ...prev.stagedRealEstateQuery.locationSource,
+          ...action.payload.data
+        }
+      }
+    };
+
+    const event = $event({
+      role: action.payload.role,
+      prev,
+      next,
+      patch: {
+        type: "SCALAR",
+        group: "Location",
+        data: action.payload.data,
+        diff: diff.scalar(
+          defaults().slices.stagedRealEstateQuery.locationSource,
+          prev.stagedRealEstateQuery.locationSource,
           action.payload.data
         )
       }
@@ -320,7 +387,7 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     };
 
     const event = $event({
-      role: "ASSISTANT",
+      role: action.payload.role,
       prev,
       next,
       patch: {
@@ -359,7 +426,7 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     };
 
     const event = $event({
-      role: "ASSISTANT",
+      role: action.payload.role,
       prev,
       next,
       patch: {

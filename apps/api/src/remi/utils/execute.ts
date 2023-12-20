@@ -1,13 +1,15 @@
 import { openai } from "@/remi";
-import { ChatCompletionRequest, RemiResponse } from "@/remi/types";
+import { ChatCompletionCreateParams, RemiResponse } from "@/remi/types";
 import { ZodType, ZodTypeDef } from "zod";
 
 const fn = async <Returns>(
-  request: ChatCompletionRequest,
-  Schema: ZodType<any, ZodTypeDef, any>
+  params: ChatCompletionCreateParams,
+  Schema: ZodType<Returns, ZodTypeDef, any>
 ): Promise<RemiResponse<Returns>> => {
   try {
-    const res = await openai.chat.completions.create(request, { timeout: 14000 });
+    const res = await openai.chat.completions.create(params, {
+      timeout: 14000
+    });
     const message = res.choices[0].message!;
 
     try {
@@ -34,10 +36,12 @@ const fn = async <Returns>(
 };
 
 const chat = async (
-  request: ChatCompletionRequest
+  request: ChatCompletionCreateParams
 ): Promise<RemiResponse<string>> => {
   try {
-    const res = await openai.chat.completions.create(request, { timeout: 8000 });
+    const res = await openai.chat.completions.create(request, {
+      timeout: 8000
+    });
     const message = res.choices[0].message!;
 
     if (!message.content) {

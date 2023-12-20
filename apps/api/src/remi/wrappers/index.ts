@@ -1,10 +1,10 @@
 import OpenAI from "openai";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { txt } from "@/remi/utils";
 import { ZodType, ZodTypeDef } from "zod";
-import { ChatCompletionRequest } from "../types";
+import { ChatCompletionCreateParams } from "../types";
 import { OpenAIModel, TimelineEvent } from "@rems/types";
 import uuid from "short-uuid";
+import md from "@rems/utils/md";
 
 export const $event = <T extends TimelineEvent["role"]>(
   role: T,
@@ -25,28 +25,27 @@ export const $model = (
   return { model: type };
 };
 
-export const $request = (props: ChatCompletionRequest) => props;
+export const $request = (props: ChatCompletionCreateParams) => props;
 
 export const $messages = (
-  ...messages: ChatCompletionRequest["messages"]
-): Pick<ChatCompletionRequest, "messages"> => {
+  ...messages: ChatCompletionCreateParams["messages"]
+): Pick<ChatCompletionCreateParams, "messages"> => {
   return { messages };
-};
-
-export const $message = (
-  role: OpenAI.Chat.CreateChatCompletionRequestMessage["role"],
-  content: React.ReactNode
-): OpenAI.Chat.CreateChatCompletionRequestMessage => {
-  return { role, content: md(content) };
 };
 
 export const $systemMessage = (
   content: React.ReactNode
-): OpenAI.Chat.CreateChatCompletionRequestMessage => $message("system", content);
+): OpenAI.Chat.Completions.ChatCompletionSystemMessageParam => ({
+  role: "system",
+  content: md(content)
+});
 
 export const $userMessage = (
   content: React.ReactNode
-): OpenAI.Chat.CreateChatCompletionRequestMessage => $message("user", content);
+): OpenAI.Chat.Completions.ChatCompletionUserMessageParam => ({
+  role: "user",
+  content: md(content)
+});
 
 export const $functionCall = ({
   description,
@@ -54,7 +53,7 @@ export const $functionCall = ({
 }: {
   description?: React.ReactNode;
   returnsSchema: ZodType<any, ZodTypeDef, any>;
-}): Pick<ChatCompletionRequest, "function_call" | "functions"> => {
+}): Pick<ChatCompletionCreateParams, "function_call" | "functions"> => {
   return {
     function_call: { name: "f" },
     functions: [

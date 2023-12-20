@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import qs from "query-string";
+import qs from "qs";
 
 export async function GET(
   _req: Request,

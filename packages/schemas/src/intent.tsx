@@ -3,7 +3,11 @@ import md from "@rems/utils/md";
 
 export const IntentCodeSchema = z
   .enum([
-    "REFINE_LOCATION"
+    "CHAT",
+
+    "REFINE_LOCATION",
+
+    "UNKNOWN"
     // "CLEAR_QUERY",
     // "OBTAIN_GENERAL_INFORMATION",
     // "UNKNOWN",
