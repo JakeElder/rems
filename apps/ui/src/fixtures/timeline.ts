@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { randomInt } from "@rems/utils";
 import { Timeline } from "@rems/types";
 
