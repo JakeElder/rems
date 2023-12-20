@@ -3,7 +3,7 @@ import {
   AssistantPlacementAction,
   RealEstateQuery,
   InputSession,
-  LocationSource,
+  Location,
   RealEstateIndexPageAndSort,
   SpaceRequirements,
   Filter,
@@ -78,7 +78,10 @@ export const returnControl = createAction("RETURN_CONTROL");
 export const setArray = createAction<
   QueryMutationAction<
     Filter[],
-    { group: string; prop: RealEstateQueryArrayKey }
+    {
+      group: string;
+      prop: RealEstateQueryArrayKey;
+    }
   >,
   "SET_ARRAY"
 >("SET_ARRAY");
@@ -88,10 +91,10 @@ export const setBudgetAndAvailability = createAction<
   "SET_BUDGET_AND_AVAILABILITY"
 >("SET_BUDGET_AND_AVAILABILITY");
 
-export const setLocationSource = createAction<
-  QueryMutationAction<LocationSource>,
-  "SET_LOCATION_SOURCE"
->("SET_LOCATION_SOURCE");
+export const setLocation = createAction<
+  QueryMutationAction<{ prev: Location; next: Location }>,
+  "SET_LOCATION"
+>("SET_LOCATION");
 
 export const setPageAndSort = createAction<
   QueryMutationAction<Partial<RealEstateIndexPageAndSort>>,
@@ -145,7 +148,7 @@ type SetArrayAction = ReturnType<typeof setArray>;
 type SetBudgetAndAvailabilityAction = ReturnType<
   typeof setBudgetAndAvailability
 >;
-type SetLocationSourceAction = ReturnType<typeof setLocationSource>;
+type SetLocationAction = ReturnType<typeof setLocation>;
 type SetPageAndSortAction = ReturnType<typeof setPageAndSort>;
 type SetResolvingIntentsAction = ReturnType<typeof setResolvingIntents>;
 type SetSpaceRequirementsAction = ReturnType<typeof setSpaceRequirements>;
@@ -172,7 +175,7 @@ export type AppAction =
   | ReturnControlAction
   | SetArrayAction
   | SetBudgetAndAvailabilityAction
-  | SetLocationSourceAction
+  | SetLocationAction
   | SetPageAndSortAction
   | SetResolvingIntentsAction
   | SetSpaceRequirementsAction

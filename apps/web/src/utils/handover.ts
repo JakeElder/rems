@@ -20,9 +20,7 @@ const handover = (state: AppState, dispatch: AppDispatch) => {
       dispatch(action);
 
       if (action.type === "YIELD") {
-        setTimeout(() => {
-          // dispatch(returnControl());
-        }, 2000);
+        dispatch(returnControl());
       }
     }
   });

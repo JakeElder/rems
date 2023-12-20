@@ -27,7 +27,7 @@ import {
   returnControl,
   setArray,
   setBudgetAndAvailability,
-  setLocationSource,
+  setLocation,
   setPageAndSort,
   setResolvingIntents,
   setSpaceRequirements,
@@ -327,7 +327,7 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
   });
 
   // SET_LOCATION_SOURCE
-  builder.addCase(setLocationSource, (state, action) => {
+  builder.addCase(setLocation, (state, action) => {
     const prev: AppStateSlices = state.slices;
     const next: AppStateSlices = {
       ...prev,
@@ -340,23 +340,17 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
       }
     };
 
-    const event = $event({
-      role: action.payload.role,
-      prev,
-      next,
-      patch: {
-        type: "SCALAR",
-        group: "Location",
-        data: action.payload.data,
-        diff: diff.scalar(
-          defaults().slices.stagedRealEstateQuery.locationSource,
-          prev.stagedRealEstateQuery.locationSource,
-          action.payload.data
-        )
+    state.timeline.push({
+      role: "ASSISTANT",
+      id: nanoid(),
+      date: Date.now(),
+      event: {
+        type: "UPDATE_LOCATION",
+        prev: action.payload.data.prev,
+        next: action.payload.data.next
       }
     });
 
-    state.timeline.push(event);
     state.slices = next;
   });
 

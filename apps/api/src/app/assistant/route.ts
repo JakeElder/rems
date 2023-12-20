@@ -17,8 +17,7 @@ import {
   noop,
   registerAnalysis,
   registerIntentResolutionError,
-  returnControl,
-  setLocationSource,
+  setLocation,
   yld
 } from "@rems/state/app/actions";
 import resolveLocationSource, {
@@ -33,7 +32,7 @@ type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 const encoder = new TextEncoder();
 
 const stream: Stream = (args) => async (c) => {
-  const { state } = args;
+  const { state: yieldedState } = args;
 
   const act = (e: AppAction) => {
     const chunk = encoder.encode(`${JSON.stringify(e)}\n`);
@@ -41,15 +40,15 @@ const stream: Stream = (args) => async (c) => {
     return e;
   };
 
-  const { locationSource } = state.slices.realEstateQuery;
+  const { locationSource } = yieldedState.slices.realEstateQuery;
   const locationResolution = await resolveLocationSourceOrFail(locationSource);
 
   const analyze = memoize(async () => {
     const res = await fn.identifyIntents({
-      timeline: state.timeline,
-      currentQuery: state.slices.realEstateQuery,
+      timeline: yieldedState.timeline,
+      currentQuery: yieldedState.slices.realEstateQuery,
       currentLocation: {
-        source: state.slices.realEstateQuery.locationSource,
+        source: yieldedState.slices.realEstateQuery.locationSource,
         resolution: locationResolution
       }
     });
@@ -110,7 +109,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_LOCATION",
-      () => refine.location({ timeline: state.timeline }),
+      () => refine.location({ timeline: yieldedState.timeline }),
       async ({ description, radius }) => {
         if (!description)
           return registerIntentResolutionError({
@@ -132,18 +131,32 @@ const stream: Stream = (args) => async (c) => {
           geospatialOperator: parsed.data.geospatialOperator
         };
 
-        const resolutionRes = await resolveLocationSource(source);
+        const resolutions = await Promise.all([
+          resolveLocationSource(
+            yieldedState.slices.realEstateQuery.locationSource
+          ),
+          resolveLocationSource(source)
+        ]);
 
-        if (!resolutionRes.ok) {
+        if (!resolutions[0].ok || !resolutions[1].ok) {
           return registerIntentResolutionError({
             intent: "REFINE_LOCATION",
             error: "Couldn't resolve location"
           });
         }
 
-        return setLocationSource({
+        return setLocation({
           role: "ASSISTANT",
-          data: source
+          data: {
+            prev: {
+              source: yieldedState.slices.realEstateQuery.locationSource,
+              resolution: resolutions[0].resolution
+            },
+            next: {
+              source,
+              resolution: resolutions[1].resolution
+            }
+          }
         });
       }
     )
@@ -357,7 +370,7 @@ const stream: Stream = (args) => async (c) => {
   act(
     yld({
       role: "ASSISTANT",
-      state: state.slices,
+      state: yieldedState.slices,
       message: "Ok"
     })
   );
