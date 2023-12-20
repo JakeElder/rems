@@ -17,8 +17,17 @@ const intents: Intent[] = [
   },
 
   {
-    id: 50,
+    id: 30,
     code: "REFINE_LOCATION",
+    description: md(
+      <>The user wants to specify the search origin for their search</>
+    ),
+    examples: []
+  },
+
+  {
+    id: 40,
+    code: "OBTAIN_GENERAL_INFORMATION",
     description: md(
       <>The user wants to specify the search origin for their search</>
     ),

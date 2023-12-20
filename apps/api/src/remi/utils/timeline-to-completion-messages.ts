@@ -9,25 +9,21 @@ const timelineToCompletionMessages = (
       if (e.event.type === "YIELD") {
         return {
           role: e.role === "USER" ? "user" : "assistant",
-          content: e.event.message
+          content: `ACTION: ${JSON.stringify(e.event)}`
         };
       }
 
-      // if (e.event.type === "ANALYSIS_PERFORMED") {
-      //   return {
-      //     role: "system",
-      //     content: `Analysis Performed: ${JSON.stringify(e.event.analysis)}`
-      //   };
-      // }
+      if (e.event.type === "ANALYSIS_PERFORMED") {
+        return {
+          role: "system",
+          content: `ACTION: ${JSON.stringify(e.event)}`
+        };
+      }
 
       if (e.event.type === "UPDATE_LOCATION") {
         return {
-          role: "function",
-          name: "updateLocation",
-          content: JSON.stringify({
-            from: e.event.prev,
-            to: e.event.next
-          })
+          role: "system",
+          content: `ACTION: ${JSON.stringify(e.event)}`
         };
       }
 

@@ -14,34 +14,26 @@ export const SpaceRequirementsSchema = z.object({
   minLivingArea: z
     .number()
     .describe(
-      md(
-        <>
-          Possible values: `{" "}
-          {JSON.stringify(MIN_LIVING_AREA_SIZES.map((s) => s.value))}`
-        </>
-      )
+      md(<>Possible values: {MIN_LIVING_AREA_SIZES.map((s) => s.value)}</>)
     ),
   maxLivingArea: z
     .number()
     .nullable()
     .describe(
+      md(<>Possible values: {MAX_LIVING_AREA_SIZES.map((s) => s.value)}</>)
+    ),
+  minLotSize: z
+    .number()
+    .describe(
       md(
         <>
-          Possible values: `{" "}
-          {JSON.stringify(MAX_LIVING_AREA_SIZES.map((s) => s.value))}`
+          The minimum lot size, specified in Meters Squared. Here are the
+          possible values: {MIN_LOT_SIZES.map((s) => s.value)}. The user may
+          *only select one of these values*. When the user specifies a value
+          other than these, the closest match should be used.
         </>
       )
     ),
-  minLotSize: z.number().describe(
-    md(
-      <>
-        The minimum lot size, specified in Meters Squared. Here are the possible
-        values: `{JSON.stringify(MIN_LOT_SIZES.map((s) => s.value))}
-        `. The user may *only select one of these values*. When the user
-        specifies a value other than these, the closest match should be used.
-      </>
-    )
-  ),
   maxLotSize: z
     .number()
     .nullable()
@@ -49,9 +41,9 @@ export const SpaceRequirementsSchema = z.object({
       md(
         <>
           The maximum lot size, specified in Meters Squared. Here are the
-          possible values: `{JSON.stringify(MAX_LOT_SIZES.map((s) => s.value))}
-          `. The user may *only select one of these values*. When the user
-          specifies a value other than these, the closest match should be used.
+          possible values: {MAX_LOT_SIZES.map((s) => s.value)}. The user may
+          *only select one of these values*. When the user specifies a value
+          other than these, the closest match should be used.
         </>
       )
     )

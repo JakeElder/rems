@@ -1,4 +1,5 @@
 import { RemiFn } from "@/remi/types";
+import * as app from "@rems/state/app";
 import * as utils from "@/remi/utils";
 import * as fn from "@/remi/fn";
 import * as refine from "@/remi/refine";
@@ -34,10 +35,13 @@ const encoder = new TextEncoder();
 const stream: Stream = (args) => async (c) => {
   const { state: yieldedState } = args;
 
-  const act = (e: AppAction) => {
-    const chunk = encoder.encode(`${JSON.stringify(e)}\n`);
+  const store = app.init(yieldedState);
+
+  const act = (action: AppAction) => {
+    const chunk = encoder.encode(`${JSON.stringify(action)}\n`);
     c.enqueue(chunk);
-    return e;
+    store.dispatch(action);
+    return action;
   };
 
   const { locationSource } = yieldedState.slices.realEstateQuery;
@@ -111,10 +115,12 @@ const stream: Stream = (args) => async (c) => {
       "REFINE_LOCATION",
       () => refine.location({ timeline: yieldedState.timeline }),
       async ({ description, radius }) => {
-        if (!description)
+        console.log(description);
+        if (!description) {
           return registerIntentResolutionError({
             intent: "REFINE_LOCATION"
           });
+        }
 
         const parsed = await fn.parseLocationDescription(description);
         if (!parsed.ok) {
@@ -367,11 +373,20 @@ const stream: Stream = (args) => async (c) => {
   await analyze();
 
   act(commitRealEstateQuery());
+
+  const summary = await fn.summarize({
+    timeline: store.getState().timeline
+  });
+
+  if (!summary.ok) {
+    throw new Error();
+  }
+
   act(
     yld({
       role: "ASSISTANT",
       state: yieldedState.slices,
-      message: "Ok"
+      message: summary.data
     })
   );
 

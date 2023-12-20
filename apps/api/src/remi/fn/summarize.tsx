@@ -81,7 +81,14 @@ const summarize = async ({
             <li>
               You may inform users if there are errors with part of the reaction
             </li>
-            <li>Mention the location resolution if the name is ambiguous</li>
+            <li>
+              Mention the location resolution if the location has changed, and
+              the name is ambiguous
+            </li>
+            <li>
+              Answer general questions - don't limit yourself to real estate
+              enquiries
+            </li>
           </ul>
         </>
       ),

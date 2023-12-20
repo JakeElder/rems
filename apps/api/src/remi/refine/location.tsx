@@ -41,7 +41,7 @@ const location = async ({
   timeline
 }: Props): Promise<RemiResponse<Returns>> => {
   const request = $request({
-    ...$model("gpt-3.5-turbo"),
+    ...$model(),
     ...$messages(
       $systemMessage(
         <>

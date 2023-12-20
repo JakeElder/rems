@@ -78,21 +78,25 @@ const identifyIntents = async ({
   ]);
 
   const context = stringify<Context>({
+    intents,
+    currentLocation,
+    currentQuery,
     definitions: {
       indoorFeatures,
       outdoorFeatures,
       lotFeatures,
       viewTypes,
       propertyTypes
-    },
-    currentLocation,
-    intents,
-    currentQuery
+    }
   });
 
+  console.log(context);
+
   const schema = stringify(
-    zodToJsonSchema(ContextSchema.shape["currentQuery"])
+    zodToJsonSchema(ContextSchema.shape["currentQuery"], {})
   );
+
+  console.log(schema);
 
   const request = $request({
     ...$model(),
@@ -100,14 +104,25 @@ const identifyIntents = async ({
       $systemMessage(
         <>
           <p>
-            You are Remi, an assistant responsible for helping the user of a
-            real estate website. Process their input and analyze it for their
-            intent. Context will follow.
+            You are Remi, a Thai born, bi-lingual assistant responsible for
+            helping the user of a real estate website.
+          </p>
+          <p>The user has just yielded control to the assistant</p>
+          <p>
+            Analyze the chain of events, then identify the users intents with
+            their latest message.
+          </p>
+          <p>
+            Try to infer intents based on the timeline - IE "Go back to previous
+            location" means the user is trying to REFINE_LOCATION
           </p>
         </>
       ),
-      $systemMessage(context),
-      $systemMessage(`This is the schema for the query: ${schema}`),
+      { role: "system", content: context },
+      {
+        role: "system",
+        content: `This is the schema for the query: ${schema}`
+      },
       ...timelineToCompletionMessages(timeline)
     ),
     ...$functionCall({ returnsSchema: ReturnsSchema })
