@@ -14,7 +14,7 @@ import {
 import { createContext, useContext, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition
-} from "react-speech-recognition";
+} from "@rems/react-speech-recognition";
 import { useDebouncedCallback } from "use-debounce";
 import { Chat } from "@rems/ui";
 import useDomElements from "@/hooks/use-dom-elements";
@@ -31,7 +31,7 @@ import {
   useDispatch,
   useState
 } from "@/state";
-import yld from "utils/yield";
+import handover from "utils/yield";
 
 type Props = {
   children: React.ReactNode;
@@ -72,6 +72,7 @@ export const useAssistant = () => useContext(AssistantContext)!;
 
 const AssistantProvider = ({ children }: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
+
   const dispatch = useDispatch();
 
   const state = useState();
@@ -182,7 +183,7 @@ const AssistantProvider = ({ children }: Props) => {
     }
 
     dispatch(handleUserYield(session.value));
-    const req = yld(state);
+    const req = handover(state);
 
     let responsePromise: Promise<void> = Promise.resolve();
 

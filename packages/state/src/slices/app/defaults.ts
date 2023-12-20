@@ -39,7 +39,7 @@ const defaults = (): AppState => ({
     stagedRealEstateQuery: defaultRealEstateQuery(),
     assistant: {
       mode: "SLEEPING",
-      placement: "MINIMISED",
+      placement: "DOCKED",
       sessions: [{ id: nanoid(), value: "", state: "INACTIVE" }]
     },
     keyboard: {
