@@ -7,7 +7,6 @@ import {
   returnControl,
   setArray,
   setBudgetAndAvailability,
-  setLocationSource,
   setPageAndSort,
   setSpaceRequirements,
   yld
@@ -28,24 +27,6 @@ test("budget", () => {
     setBudgetAndAvailability({
       role: "ASSISTANT",
       data: { type: "RENT", maxPrice: 10 }
-    })
-  );
-
-  // log(store.getState());
-});
-
-test("locationSource", () => {
-  const store = app.init();
-
-  store.dispatch(
-    setLocationSource({
-      role: "ASSISTANT",
-      data: {
-        type: "NL",
-        radius: null,
-        description: "Chiang Mai",
-        geospatialOperator: "near"
-      }
     })
   );
 

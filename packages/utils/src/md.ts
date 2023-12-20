@@ -10,7 +10,9 @@ const md = (element: React.ReactNode) => {
   return td.turndown(
     format(element, {
       plugins: [ReactElement],
-      printFunctionName: false
+      printFunctionName: false,
+      escapeString: false,
+      escapeRegex: false
     })
   );
 };

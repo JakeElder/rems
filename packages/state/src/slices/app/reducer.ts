@@ -335,7 +335,7 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
         ...prev.stagedRealEstateQuery,
         locationSource: {
           ...prev.stagedRealEstateQuery.locationSource,
-          ...action.payload.data
+          ...action.payload.data.next.source
         }
       }
     };

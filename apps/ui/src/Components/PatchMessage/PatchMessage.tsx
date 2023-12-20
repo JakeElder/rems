@@ -1,7 +1,7 @@
 import React from "react";
 import css from "./PatchMessage.module.css";
 import { Patch as PatchType } from "@rems/state";
-import { titleCase } from "title-case";
+import { sentenceCase } from "change-case";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import Patch from "../Patch";
@@ -13,9 +13,7 @@ const PatchMessage = (patch: PatchType) => {
         <div className={css["icon"]}>
           <FontAwesomeIcon icon={faSliders} size="sm" />
         </div>
-        <div className={css["group"]}>
-          {titleCase(patch.group.replace(/_/g, " ").toLowerCase())}
-        </div>
+        <div className={css["group"]}>{sentenceCase(patch.group)}</div>
       </div>
       <div className={css["body"]}>
         <Patch {...patch} />
