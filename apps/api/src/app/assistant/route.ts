@@ -19,6 +19,7 @@ import {
   noop,
   registerAnalysis,
   registerIntentResolutionError,
+  setArray,
   setAssistantWorking,
   setBudgetAndAvailability,
   setLocation,
@@ -41,6 +42,7 @@ const encoder = new TextEncoder();
 const stream: Stream = (args) => async (c) => {
   const { state: yieldedState } = args;
   const { timeline } = yieldedState;
+  const query = yieldedState.slices.realEstateQuery;
 
   const store = app.init(yieldedState);
 
@@ -51,15 +53,15 @@ const stream: Stream = (args) => async (c) => {
     return action;
   };
 
-  const { locationSource } = yieldedState.slices.realEstateQuery;
+  const { locationSource } = query;
   const locationResolution = await resolveLocationSourceOrFail(locationSource);
 
   const analyze = memoize(async () => {
     const res = await fn.identifyIntents({
       timeline: yieldedState.timeline,
-      currentQuery: yieldedState.slices.realEstateQuery,
+      currentQuery: query,
       currentLocation: {
-        source: yieldedState.slices.realEstateQuery.locationSource,
+        source: query.locationSource,
         resolution: locationResolution
       }
     });
@@ -153,9 +155,7 @@ const stream: Stream = (args) => async (c) => {
         };
 
         const resolutions = await Promise.all([
-          resolveLocationSource(
-            yieldedState.slices.realEstateQuery.locationSource
-          ),
+          resolveLocationSource(query.locationSource),
           resolveLocationSource(source)
         ]);
 
@@ -170,7 +170,7 @@ const stream: Stream = (args) => async (c) => {
           role: "ASSISTANT",
           data: {
             prev: {
-              source: yieldedState.slices.realEstateQuery.locationSource,
+              source: query.locationSource,
               resolution: resolutions[0].resolution
             },
             next: {
@@ -187,11 +187,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_PAGE",
-      () =>
-        refine.page({
-          timeline,
-          current: yieldedState.slices.realEstateQuery.pageAndSort.page
-        }),
+      () => refine.page({ timeline, current: query.pageAndSort.page }),
       async (page) =>
         page
           ? setPageAndSort({
@@ -206,11 +202,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_SORT",
-      () =>
-        refine.sort({
-          timeline,
-          current: yieldedState.slices.realEstateQuery.pageAndSort.sort
-        }),
+      () => refine.sort({ timeline, current: query.pageAndSort.sort }),
       async (sort) =>
         sort
           ? setPageAndSort({
@@ -252,27 +244,29 @@ const stream: Stream = (args) => async (c) => {
           role: "ASSISTANT",
           data: defined(props)
         })
+    ),
+
+    /**
+     * Indoor Features
+     */
+    resolve(
+      "REFINE_INDOOR_FEATURES",
+      () =>
+        refine.indoorFeatures({
+          timeline,
+          current: query.indoorFeatures
+        }),
+      async (res) =>
+        setArray({
+          role: "ASSISTANT",
+          data: res,
+          prop: "indoorFeatures",
+          group: "Indoor Features"
+        })
     )
   ]);
 
   // const resolutions = await Promise.all([
-
-  //   /**
-  //    * Indoor Features
-  //    */
-  //   resolve(
-  //     "REFINE_INDOOR_FEATURES",
-  //     () =>
-  //       refine.indoorFeatures({
-  //         timeline,
-  //         current: query["indoor-features"]
-  //       }),
-  //     async (res) =>
-  //       event("ASSISTANT", {
-  //         type: "PATCH",
-  //         patch: arrayPatch("INDOOR_FEATURES", query, "indoor-features", res)
-  //       })
-  //   ),
 
   //   /**
   //    * Outdoor Features

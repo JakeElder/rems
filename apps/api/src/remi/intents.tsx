@@ -86,6 +86,24 @@ const intents: Intent[] = [
   },
 
   {
+    id: 90,
+    code: "REFINE_INDOOR_FEATURES",
+    requiresWork: true,
+    description: md(
+      <>
+        The user wants to add or remove a filter from the available set of
+        indoor features
+      </>
+    ),
+    examples: [
+      {
+        input: "I'm looking for a 3 bedroom condo with a bar",
+        matches: ["with a bar"]
+      }
+    ]
+  },
+
+  {
     id: 500,
     code: "UNKNOWN",
     requiresWork: false,
@@ -117,24 +135,6 @@ const intents: Intent[] = [
   //     </>
   //   ),
   //   examples: [{ input: "asdfas", matches: ["asdfas"] }]
-  // },
-
-  // {
-  //   id: 1,
-  //   code: "REFINE_INDOOR_FEATURES",
-  //   primary: false,
-  //   description: md(
-  //     <>
-  //       The user wants to add or remove a filter from the available set of
-  //       indoor features
-  //     </>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "I'm looking for a 3 bedroom condo with a bar",
-  //       matches: ["with a bar"]
-  //     }
-  //   ]
   // },
 
   // {

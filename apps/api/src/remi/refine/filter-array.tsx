@@ -6,12 +6,7 @@ import {
   $request,
   $systemMessage
 } from "@/remi/wrappers";
-import {
-  execute,
-  mapFilters,
-  stringify,
-  timelineToCompletionMessages
-} from "@/remi/utils";
+import { execute, stringify, timelineToCompletionMessages } from "@/remi/utils";
 import { FilterSchema, TimelineSchema } from "@rems/schemas";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -27,7 +22,7 @@ export const ContextSchema = z.object({
 
 export const PropsSchema = z.object({
   timeline: TimelineSchema,
-  current: z.array(z.string())
+  current: z.array(FilterSchema)
 });
 
 export const ReturnsSchema = z
@@ -41,17 +36,14 @@ export const ReturnsSchema = z
 type Props = Z<typeof PropsSchema>;
 type Context = Z<typeof ContextSchema>;
 
-type Fn = (props: Props) => Promise<RemiResponse<Filter["slug"][]>>;
+type Fn = (props: Props) => Promise<RemiResponse<Filter[]>>;
 
 const factory = (type: string, filtersPromise: Promise<Filter[]>): Fn => {
   return async ({ timeline, current }) => {
     const filters = await filtersPromise;
 
     const context = stringify<Context>(
-      ContextSchema.parse({
-        filters,
-        current: mapFilters.slugsToIds(filters, current)
-      })
+      ContextSchema.parse({ filters, current })
     );
 
     const schema = stringify(zodToJsonSchema(ContextSchema));
@@ -80,7 +72,7 @@ const factory = (type: string, filtersPromise: Promise<Filter[]>): Fn => {
     if (res?.ok) {
       return {
         ...res,
-        data: res.data.map((id) => filters.find((f) => f.id === id)!.slug)
+        data: res.data.map((id) => filters.find((f) => f.id === id)!)
       };
     }
 
