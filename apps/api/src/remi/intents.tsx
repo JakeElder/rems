@@ -54,6 +54,25 @@ const intents: Intent[] = [
   },
 
   {
+    id: 70,
+    code: "REFINE_SPACE_REQUIREMENTS",
+    requiresWork: true,
+    description: md(
+      <>
+        <p>The user wants to specify search criteria relating to space.</p>
+        <p>This could be</p>
+        <ul>
+          <li>Min/Max bedrooms</li>
+          <li>Min bathrooms</li>
+          <li>Min/Max living area</li>
+          <li>Min/Max lot size</li>
+        </ul>
+      </>
+    ),
+    examples: []
+  },
+
+  {
     id: 500,
     code: "UNKNOWN",
     requiresWork: false,
@@ -188,30 +207,6 @@ const intents: Intent[] = [
   //     {
   //       input: "I'm looking for a 3 bedroom condo or apartment",
   //       matches: ["condo or apartment"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 9,
-  //   code: "REFINE_SPACE_REQUIREMENTS",
-  //   primary: false,
-  //   description: md(
-  //     <>
-  //       <p>The user wants to specify search criteria relating to space.</p>
-  //       <p>This could be any of the following;</p>
-  //       <ul>
-  //         <li>Min/Max bedrooms</li>
-  //         <li>Min bathrooms</li>
-  //         <li>Min/Max living area</li>
-  //         <li>Min/Max lot size</li>
-  //       </ul>
-  //     </>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "I'm looking for a 3 bedroom, 2 bathroom condo, around 100m2",
-  //       matches: ["3 bedroom", "2 bathroom", "around 100m2"]
   //     }
   //   ]
   // },

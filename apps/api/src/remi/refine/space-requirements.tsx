@@ -32,13 +32,13 @@ export const ReturnsSchema = z
   })
   .partial()
   .transform(({ mnbd, mnbt, mnls, mxbd, mxls, mnlva, mxlva }) => ({
-    "min-bedrooms": mnbd,
-    "max-bedrooms": mxbd,
-    "min-bathrooms": mnbt,
-    "min-living-area": mnlva,
-    "max-living-area": mxlva,
-    "min-lot-size": mnls,
-    "max-lot-size": mxls
+    minBedrooms: mnbd,
+    maxBedrooms: mxbd,
+    minBathrooms: mnbt,
+    minLivingArea: mnlva,
+    maxLivingArea: mxlva,
+    minLotSize: mnls,
+    maxLotSize: mxls
   }));
 
 type Args = z.infer<typeof ArgsSchema>;

@@ -22,16 +22,18 @@ import {
   setAssistantWorking,
   setLocation,
   setPageAndSort,
+  setSpaceRequirements,
   yld
 } from "@rems/state/app/actions";
 import resolveLocationSource, {
   resolveLocationSourceOrFail
 } from "../../utils/resolve-location-source";
+import { pickBy } from "remeda";
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
-// const defined = (obj: Record<string, any>) =>
-//   pickBy(obj, (v) => typeof v !== "undefined");
+const defined = (obj: Record<string, any>) =>
+  pickBy(obj, (v) => typeof v !== "undefined");
 
 const encoder = new TextEncoder();
 
@@ -215,27 +217,27 @@ const stream: Stream = (args) => async (c) => {
               data: { sort }
             })
           : noop()
+    ),
+
+    /*
+     * Space Requirements
+     */
+    resolve(
+      "REFINE_SPACE_REQUIREMENTS",
+      () =>
+        refine.spaceRequirements({
+          timeline,
+          current: yieldedState.slices.realEstateQuery.space
+        }),
+      async (props) =>
+        setSpaceRequirements({
+          role: "ASSISTANT",
+          data: defined(props)
+        })
     )
   ]);
 
   // const resolutions = await Promise.all([
-
-  //   /*
-  //    * Space Requirements
-  //    */
-  //   resolve(
-  //     "REFINE_SPACE_REQUIREMENTS",
-  //     () =>
-  //       refine.spaceRequirements({
-  //         timeline,
-  //         current: SpaceRequirements.parse(query)
-  //       }),
-  //     async (props) =>
-  //       event("ASSISTANT", {
-  //         type: "PATCH",
-  //         patch: scalarPatch("SPACE_REQUIREMENTS", query, defined(props))
-  //       })
-  //   ),
 
   //   /*
   //    * Budget & Availability
