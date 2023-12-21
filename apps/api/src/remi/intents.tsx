@@ -38,6 +38,14 @@ const intents: Intent[] = [
   },
 
   {
+    id: 50,
+    code: "REFINE_PAGE",
+    requiresWork: true,
+    description: md(<>The user wants to change either the current page </>),
+    examples: []
+  },
+
+  {
     id: 500,
     code: "UNKNOWN",
     requiresWork: false,
@@ -172,19 +180,6 @@ const intents: Intent[] = [
   //     {
   //       input: "I'm looking for a 3 bedroom condo or apartment",
   //       matches: ["condo or apartment"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 7,
-  //   code: "REFINE_PAGE",
-  //   primary: false,
-  //   description: md(<>The user wants to change either the current page </>),
-  //   examples: [
-  //     {
-  //       input: "Go forward a page",
-  //       matches: ["Go forward a page"]
   //     }
   //   ]
   // },

@@ -21,6 +21,7 @@ import {
   registerIntentResolutionError,
   setAssistantWorking,
   setLocation,
+  setPageAndSort,
   yld
 } from "@rems/state/app/actions";
 import resolveLocationSource, {
@@ -36,6 +37,7 @@ const encoder = new TextEncoder();
 
 const stream: Stream = (args) => async (c) => {
   const { state: yieldedState } = args;
+  const { timeline } = yieldedState;
 
   const store = app.init(yieldedState);
 
@@ -124,7 +126,7 @@ const stream: Stream = (args) => async (c) => {
      */
     resolve(
       "REFINE_LOCATION",
-      () => refine.location({ timeline: yieldedState.timeline }),
+      () => refine.location({ timeline }),
       async ({ description, radius }) => {
         if (!description) {
           return registerIntentResolutionError({
@@ -175,55 +177,29 @@ const stream: Stream = (args) => async (c) => {
           }
         });
       }
+    ),
+
+    /*
+     * Page
+     */
+    resolve(
+      "REFINE_PAGE",
+      () =>
+        refine.page({
+          timeline,
+          current: yieldedState.slices.realEstateQuery.pageAndSort.page
+        }),
+      async (page) =>
+        page
+          ? setPageAndSort({
+              role: "ASSISTANT",
+              data: { page }
+            })
+          : noop()
     )
   ]);
 
   // const resolutions = await Promise.all([
-  //   /*
-  //    * Location
-  //    */
-  //   resolve(
-  //     "REFINE_LOCATION",
-  //     () => refine.location({ timeline }),
-  //     async ({ description, radius }) => {
-  //       if (!description) return null;
-
-  //       const parsed = await fn.parseLocationDescription(description);
-  //       if (!parsed.ok) {
-  //         return event("SYSTEM", {
-  //           type: "INTENT_RESOLUTION_ERROR",
-  //           intent: "REFINE_LOCATION",
-  //           error: "Couldn't resolve location"
-  //         });
-  //       }
-
-  //       const source: NlLocationSource = {
-  //         type: "NL",
-  //         description: parsed.data.description,
-  //         radius: radius || null,
-  //         geospatialOperator: parsed.data.geospatialOperator
-  //       };
-
-  //       const resolutionRes = await resolveLocationSource(source);
-
-  //       if (!resolutionRes.ok) {
-  //         return event("SYSTEM", {
-  //           type: "INTENT_RESOLUTION_ERROR",
-  //           intent: "REFINE_LOCATION",
-  //           error: "Couldn't resolve location"
-  //         });
-  //       }
-
-  //       return event("ASSISTANT", {
-  //         type: "UPDATE_LOCATION",
-  //         prev: location,
-  //         next: {
-  //           source,
-  //           resolution: resolutionRes.resolution
-  //         }
-  //       });
-  //     }
-  //   ),
 
   //   /*
   //    * Page
