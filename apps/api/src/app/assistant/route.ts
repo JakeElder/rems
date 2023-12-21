@@ -59,7 +59,6 @@ const stream: Stream = (args) => async (c) => {
   const analyze = memoize(async () => {
     const res = await fn.identifyIntents({
       timeline: yieldedState.timeline,
-      currentQuery: query,
       currentLocation: {
         source: query.locationSource,
         resolution: locationResolution
@@ -263,84 +262,54 @@ const stream: Stream = (args) => async (c) => {
           prop: "indoorFeatures",
           group: "Indoor Features"
         })
+    ),
+
+    /**
+     * Outdoor Features
+     */
+    resolve(
+      "REFINE_OUTDOOR_FEATURES",
+      () =>
+        refine.outdoorFeatures({ timeline, current: query.outdoorFeatures }),
+      async (res) =>
+        setArray({
+          role: "ASSISTANT",
+          data: res,
+          prop: "outdoorFeatures",
+          group: "Outdoor Features"
+        })
+    ),
+
+    /**
+     * Lot Features
+     */
+    resolve(
+      "REFINE_LOT_FEATURES",
+      () => refine.lotFeatures({ timeline, current: query.lotFeatures }),
+      async (res) =>
+        setArray({
+          role: "ASSISTANT",
+          data: res,
+          prop: "lotFeatures",
+          group: "Lot Features"
+        })
+    ),
+
+    /**
+     * Property Types
+     */
+    resolve(
+      "REFINE_PROPERTY_TYPES",
+      () => refine.propertyTypes({ timeline, current: query.propertyTypes }),
+      async (res) =>
+        setArray({
+          role: "ASSISTANT",
+          data: res,
+          prop: "propertyTypes",
+          group: "Property Types"
+        })
     )
   ]);
-
-  // const resolutions = await Promise.all([
-
-  //   /**
-  //    * Outdoor Features
-  //    */
-  //   resolve(
-  //     "REFINE_OUTDOOR_FEATURES",
-  //     () =>
-  //       refine.outdoorFeatures({
-  //         timeline,
-  //         current: query["outdoor-features"]
-  //       }),
-  //     async (res) =>
-  //       event("ASSISTANT", {
-  //         type: "PATCH",
-  //         patch: arrayPatch("OUTDOOR_FEATURES", query, "outdoor-features", res)
-  //       })
-  //   ),
-
-  //   /**
-  //    * Lot Features
-  //    */
-  //   resolve(
-  //     "REFINE_LOT_FEATURES",
-  //     () =>
-  //       refine.lotFeatures({
-  //         timeline,
-  //         current: query["lot-features"]
-  //       }),
-  //     async (res) =>
-  //       event("ASSISTANT", {
-  //         type: "PATCH",
-  //         patch: arrayPatch("LOT_FEATURES", query, "lot-features", res)
-  //       })
-  //   ),
-
-  //   /**
-  //    * Property Types
-  //    */
-  //   resolve(
-  //     "REFINE_PROPERTY_TYPES",
-  //     () =>
-  //       refine.propertyTypes({
-  //         timeline,
-  //         current: query["property-types"]
-  //       }),
-  //     async (res) =>
-  //       event("ASSISTANT", {
-  //         type: "PATCH",
-  //         patch: arrayPatch("PROPERTY_TYPES", query, "property-types", res)
-  //       })
-  //   ),
-
-  //   /**
-  //    * View Types
-  //    */
-  //   resolve(
-  //     "REFINE_VIEW_TYPES",
-  //     () => refine.viewTypes({ timeline, current: query["view-types"] }),
-  //     async (res) =>
-  //       event("ASSISTANT", {
-  //         type: "PATCH",
-  //         patch: arrayPatch("VIEW_TYPES", query, "view-types", res)
-  //       })
-  //   )
-  // ]);
-
-  // const analysis = await analyze();
-
-  // act(
-  //   handleAssistantYield({
-  //     state:
-  //     message: "done"
-  //   })
-  // );
 
   await analyze();
 

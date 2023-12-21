@@ -2,13 +2,6 @@ import { Intent } from "@rems/types";
 import md from "@rems/utils/md";
 
 const intents: Intent[] = [
-  // {
-  //   id: 220,
-  //   code: "CLEAR_QUERY",
-  //   description: md(<></>),
-  //   examples: []
-  // },
-
   {
     id: 20,
     code: "CHAT",
@@ -89,18 +82,40 @@ const intents: Intent[] = [
     id: 90,
     code: "REFINE_INDOOR_FEATURES",
     requiresWork: true,
-    description: md(
-      <>
-        The user wants to add or remove a filter from the available set of
-        indoor features
-      </>
-    ),
-    examples: [
-      {
-        input: "I'm looking for a 3 bedroom condo with a bar",
-        matches: ["with a bar"]
-      }
-    ]
+    description: "Refine indoor features",
+    examples: []
+  },
+
+  {
+    id: 100,
+    code: "REFINE_OUTDOOR_FEATURES",
+    requiresWork: true,
+    description: "Refine outdoor features",
+    examples: []
+  },
+
+  {
+    id: 110,
+    code: "REFINE_LOT_FEATURES",
+    requiresWork: true,
+    description: "Refine lot features",
+    examples: []
+  },
+
+  {
+    id: 120,
+    code: "REFINE_VIEW_TYPES",
+    requiresWork: true,
+    description: "Refine view types",
+    examples: []
+  },
+
+  {
+    id: 130,
+    code: "REFINE_PROPERTY_TYPES",
+    requiresWork: true,
+    description: "Refine property types",
+    examples: []
   },
 
   {
@@ -115,133 +130,6 @@ const intents: Intent[] = [
     ),
     examples: []
   }
-
-  // {
-  //   id: 230,
-  //   code: "OBTAIN_GENERAL_INFORMATION",
-  //   primary: true,
-  //   description: md(<></>),
-  //   examples: []
-  // },
-
-  // {
-  //   id: 240,
-  //   code: "UNKNOWN",
-  //   primary: true,
-  //   description: md(
-  //     <>
-  //       The user has issued a command that is either incomprehnsible, or lacks
-  //       the clarity required to properly identify an appropriate reaction.
-  //     </>
-  //   ),
-  //   examples: [{ input: "asdfas", matches: ["asdfas"] }]
-  // },
-
-  // {
-  //   id: 2,
-  //   code: "REFINE_OUTDOOR_FEATURES",
-  //   primary: false,
-  //   description: md(
-  //     <>
-  //       The user wants to add or remove a filter from the available set of
-  //       outdoor features
-  //     </>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "I'm looking for a 3 bedroom condo with a garden",
-  //       matches: ["with a garden"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 3,
-  //   code: "REFINE_LOT_FEATURES",
-  //   primary: false,
-  //   description: md(
-  //     <>
-  //       The user wants to add or remove a filter from the available set of lot
-  //       features
-  //     </>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "I'm looking for a high altitude 3 bedroom condo",
-  //       matches: ["high altitude"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 4,
-  //   code: "REFINE_VIEW_TYPES",
-  //   primary: false,
-  //   description: md(
-  //     <>
-  //       The user wants to add or remove a filter from the available set of view
-  //       types
-  //     </>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "I'm looking for a 3 bedroom condo with a city view",
-  //       matches: ["with a city view"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 5,
-  //   code: "REFINE_PROPERTY_TYPES",
-  //   primary: false,
-  //   description: md(
-  //     <>
-  //       The user wants to add or remove a filter from the available set of
-  //       property types
-  //     </>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "I'm looking for a 3 bedroom condo or apartment",
-  //       matches: ["condo or apartment"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 6,
-  //   code: "REFINE_LOCATION",
-  //   primary: false,
-  //   description: md(
-  //     <>The user wants to specify the search origin for their search</>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "I'm looking for a 3 bedroom condo or apartment",
-  //       matches: ["condo or apartment"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 11,
-  //   code: "REFINE_MAP_STATE",
-  //   primary: false,
-  //   description: md(
-  //     <>The user wants to modify the state of the listings map</>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "Shift north a bit",
-  //       matches: ["Shift north a bit"]
-  //     },
-  //     {
-  //       input: "Enable the zoom radius",
-  //       matches: ["Enable the zoom radius"]
-  //     }
-  //   ]
-  // }
 ];
 
 export default intents;

@@ -11,13 +11,11 @@ export const IntentCodeSchema = z
     "REFINE_SORT",
     "REFINE_SPACE_REQUIREMENTS",
     "REFINE_BUDGET_AVAILABILITY",
-    "REFINE_INDOOR_FEATURES"
-
-    // "REFINE_OUTDOOR_FEATURES",
-    // "REFINE_LOT_FEATURES",
-    // "REFINE_VIEW_TYPES",
-    // "REFINE_PROPERTY_TYPES",
-    // "REFINE_MAP_STATE"
+    "REFINE_INDOOR_FEATURES",
+    "REFINE_OUTDOOR_FEATURES",
+    "REFINE_LOT_FEATURES",
+    "REFINE_VIEW_TYPES",
+    "REFINE_PROPERTY_TYPES"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 

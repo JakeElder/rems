@@ -6,17 +6,15 @@ import {
   $request,
   $systemMessage
 } from "@/remi/wrappers";
-import { stringify, timelineToCompletionMessages, execute } from "@/remi/utils";
+import { timelineToCompletionMessages, execute, stringify } from "@/remi/utils";
 import { intents } from "@/remi";
 import {
   IntentSchema,
   LocationSchema,
-  RealEstateQuerySchema,
   TerseIntentSchema,
   TimelineSchema
 } from "@rems/schemas";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 import { Z } from "@rems/types";
 import * as Models from "@/models";
 import { Model } from "sequelize";
@@ -24,8 +22,7 @@ import md from "@rems/utils/md";
 
 export const PropsSchema = z.object({
   currentLocation: LocationSchema,
-  timeline: TimelineSchema,
-  currentQuery: RealEstateQuerySchema
+  timeline: TimelineSchema
 });
 
 const ContextIntentSchema = IntentSchema.pick({
@@ -36,17 +33,7 @@ const ContextIntentSchema = IntentSchema.pick({
 
 export const ContextSchema = z.object({
   intents: z.array(ContextIntentSchema),
-  definitions: z
-    .object({
-      indoorFeatures: z.array(z.string()),
-      outdoorFeatures: z.array(z.string()),
-      lotFeatures: z.array(z.string()),
-      viewTypes: z.array(z.string()),
-      propertyTypes: z.array(z.string())
-    })
-    .describe(md(<>Possible values</>)),
-  currentLocation: LocationSchema,
-  currentQuery: RealEstateQuerySchema
+  currentLocation: LocationSchema
 });
 
 export const ReturnsSchema = z
@@ -65,7 +52,6 @@ type Returns = Z<typeof ReturnsSchema>;
 
 const identifyIntents = async ({
   timeline,
-  currentQuery,
   currentLocation
 }: Props): Promise<RemiResponse<Returns>> => {
   const parse = (r: Model<any, any>[]) => r.map((m: any) => m.slug);
@@ -83,22 +69,18 @@ const identifyIntents = async ({
     Models.PropertyType.findAll({ raw: true }).then(parse)
   ]);
 
+  const filters = {
+    INDOOR_FEATURES: indoorFeatures,
+    OUTDOOR_FEATURES: outdoorFeatures,
+    LOT_FEATURES: lotFeatures,
+    VIEW_TYPES: viewTypes,
+    PROPERTY_TYPES: propertyTypes
+  };
+
   const context = stringify<Context>({
     intents: intents.map((i) => ContextIntentSchema.parse(i)),
-    currentLocation,
-    currentQuery,
-    definitions: {
-      indoorFeatures,
-      outdoorFeatures,
-      lotFeatures,
-      viewTypes,
-      propertyTypes
-    }
+    currentLocation
   });
-
-  const schema = stringify(
-    zodToJsonSchema(ContextSchema.shape["currentQuery"], {})
-  );
 
   const request = $request({
     ...$model(),
@@ -114,16 +96,17 @@ const identifyIntents = async ({
             Analyze the chain of events, then identify the users intents with
             their latest message.
           </p>
-          <p>
-            Try to infer intents based on the timeline - IE "Go back to previous
-            location" means the user is trying to REFINE_LOCATION
-          </p>
         </>
       ),
-      { role: "system", content: context },
       {
         role: "system",
-        content: `This is the schema for the query: ${schema}`
+        content: `Here is context ${JSON.stringify(context)}`
+      },
+      {
+        role: "system",
+        content: `These are the possible filters. Pay attention to which type of filters there are ${JSON.stringify(
+          filters
+        )}`
       },
       ...timelineToCompletionMessages(timeline)
     ),
