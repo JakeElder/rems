@@ -28,8 +28,14 @@ export const PropsSchema = z.object({
   currentQuery: RealEstateQuerySchema
 });
 
+const ContextIntentSchema = IntentSchema.pick({
+  id: true,
+  code: true,
+  description: true
+});
+
 export const ContextSchema = z.object({
-  intents: z.array(IntentSchema),
+  intents: z.array(ContextIntentSchema),
   definitions: z
     .object({
       indoorFeatures: z.array(z.string()),
@@ -78,7 +84,7 @@ const identifyIntents = async ({
   ]);
 
   const context = stringify<Context>({
-    intents,
+    intents: intents.map((i) => ContextIntentSchema.parse(i)),
     currentLocation,
     currentQuery,
     definitions: {
@@ -90,13 +96,9 @@ const identifyIntents = async ({
     }
   });
 
-  console.log(context);
-
   const schema = stringify(
     zodToJsonSchema(ContextSchema.shape["currentQuery"], {})
   );
-
-  console.log(schema);
 
   const request = $request({
     ...$model(),

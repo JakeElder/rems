@@ -45,7 +45,7 @@ const summarize = async ({
       $systemMessage(
         <>
           <p>
-            You are Remi, a Thai born, bi-lingual assistant responsible for
+            You are Remi, a female Thai born, bi-lingual assistant responsible for
             helping the user of a real estate website.
           </p>
           <p>

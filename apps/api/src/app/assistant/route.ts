@@ -1,4 +1,5 @@
 import { RemiFn } from "@/remi/types";
+import * as remi from "@/remi";
 import * as app from "@rems/state/app";
 import * as utils from "@/remi/utils";
 import * as fn from "@/remi/fn";
@@ -18,6 +19,7 @@ import {
   noop,
   registerAnalysis,
   registerIntentResolutionError,
+  setAssistantWorking,
   setLocation,
   yld
 } from "@rems/state/app/actions";
@@ -67,6 +69,15 @@ const stream: Stream = (args) => async (c) => {
 
     act(registerAnalysis(analysis));
 
+    const requiresWork = intents.some((i) => {
+      const intent = remi.intents.find((si) => si.code === i)!;
+      return intent.requiresWork;
+    });
+
+    if (requiresWork) {
+      act(setAssistantWorking());
+    }
+
     return analysis;
   });
 
@@ -115,7 +126,6 @@ const stream: Stream = (args) => async (c) => {
       "REFINE_LOCATION",
       () => refine.location({ timeline: yieldedState.timeline }),
       async ({ description, radius }) => {
-        console.log(description);
         if (!description) {
           return registerIntentResolutionError({
             intent: "REFINE_LOCATION"

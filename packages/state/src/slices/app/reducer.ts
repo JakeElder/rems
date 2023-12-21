@@ -26,6 +26,8 @@ import {
   replaceRealEstateQuery,
   returnControl,
   setArray,
+  setAssistantChatting,
+  setAssistantWorking,
   setBudgetAndAvailability,
   setLocation,
   setPageAndSort,
@@ -53,18 +55,18 @@ const $event = ({
   patch
 }: Pick<AppStateMutationTimelineEvent, "role"> &
   AppStateMutation["mutation"]): AppStateMutationTimelineEvent => ({
-    id: nanoid(),
-    date: Date.now(),
-    role,
-    event: {
-      type: "STATE_MUTATION",
-      mutation: {
-        next,
-        prev,
-        patch
-      }
+  id: nanoid(),
+  date: Date.now(),
+  role,
+  event: {
+    type: "STATE_MUTATION",
+    mutation: {
+      next,
+      prev,
+      patch
     }
-  });
+  }
+});
 
 const EXPANSION_STATES: AssistantPlacement[] = [
   "MINIMISED",
@@ -239,7 +241,7 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
   });
 
   // NOOP
-  builder.addCase(noop, () => { });
+  builder.addCase(noop, () => {});
 
   // REPLACE_REAL_ESTATE_QUERY
   builder.addCase(replaceRealEstateQuery, (state, action) => {
@@ -290,6 +292,19 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
 
     state.timeline.push(event);
     state.slices = next;
+  });
+
+  // SET_ASSISTANT_CHATTING
+  builder.addCase(setAssistantChatting, (state) => {
+    state.slices.assistant.mode = "CHATTING";
+  });
+
+  // SET_ASSISTANT_WORKING
+  builder.addCase(setAssistantWorking, (state) => {
+    state.slices.assistant.mode = "WORKING";
+    state.slices.assistant.sessions[
+      state.slices.assistant.sessions.length - 1
+    ].state = "RESOLVING";
   });
 
   // SET_BUDGET_AND_AVAILABILITY

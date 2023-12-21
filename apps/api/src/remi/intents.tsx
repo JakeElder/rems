@@ -13,6 +13,7 @@ const intents: Intent[] = [
     id: 20,
     code: "CHAT",
     description: md(<>The user just wants to chat</>),
+    requiresWork: false,
     examples: []
   },
 
@@ -22,12 +23,14 @@ const intents: Intent[] = [
     description: md(
       <>The user wants to specify the search origin for their search</>
     ),
+    requiresWork: true,
     examples: []
   },
 
   {
     id: 40,
     code: "OBTAIN_GENERAL_INFORMATION",
+    requiresWork: false,
     description: md(
       <>The user wants to specify the search origin for their search</>
     ),
@@ -37,6 +40,7 @@ const intents: Intent[] = [
   {
     id: 500,
     code: "UNKNOWN",
+    requiresWork: false,
     description: md(
       <>
         It is unclear that the user's intent falls within one of our defined

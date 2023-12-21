@@ -27,6 +27,7 @@ export const IntentSchema = z
   .object({
     id: z.number().min(1),
     code: IntentCodeSchema,
+    requiresWork: z.boolean(),
     description: z.string().describe(md(<>A description of the intent</>)),
     examples: z.array(
       z.object({

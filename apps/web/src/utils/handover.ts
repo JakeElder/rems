@@ -1,7 +1,12 @@
 import { AppDispatch } from "@rems/state";
-import { AppAction, returnControl } from "@rems/state/app/actions";
+import {
+  AppAction,
+  returnControl,
+  setAssistantChatting
+} from "@rems/state/app/actions";
 import { AppState, AssistantPayload } from "@rems/types";
 import { Observable, Subscriber } from "rxjs";
+import { Sound } from "@/utils";
 
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
@@ -20,7 +25,10 @@ const handover = (state: AppState, dispatch: AppDispatch) => {
       dispatch(action);
 
       if (action.type === "YIELD") {
-        dispatch(returnControl());
+        dispatch(setAssistantChatting());
+        Sound.speak(action.payload.message).then(() => {
+          dispatch(returnControl());
+        });
       }
     }
   });

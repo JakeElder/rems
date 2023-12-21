@@ -86,6 +86,9 @@ export const setArray = createAction<
   "SET_ARRAY"
 >("SET_ARRAY");
 
+export const setAssistantChatting = createAction("SET_ASSISTANT_CHATTING");
+export const setAssistantWorking = createAction("SET_ASSISTANT_WORKING");
+
 export const setBudgetAndAvailability = createAction<
   QueryMutationAction<Partial<BudgetAndAvailabilityRequirements>>,
   "SET_BUDGET_AND_AVAILABILITY"
@@ -145,6 +148,8 @@ type ReplaceRealEstateQueryAction = ReturnType<typeof replaceRealEstateQuery>;
 type ResetRealEstateQueryAction = ReturnType<typeof resetRealEstateQuery>;
 type ReturnControlAction = ReturnType<typeof returnControl>;
 type SetArrayAction = ReturnType<typeof setArray>;
+type SetAssistantChattingAction = ReturnType<typeof setAssistantChatting>;
+type SetAssistantWorkingAction = ReturnType<typeof setAssistantWorking>;
 type SetBudgetAndAvailabilityAction = ReturnType<
   typeof setBudgetAndAvailability
 >;
@@ -174,6 +179,8 @@ export type AppAction =
   | ResetRealEstateQueryAction
   | ReturnControlAction
   | SetArrayAction
+  | SetAssistantChattingAction
+  | SetAssistantWorkingAction
   | SetBudgetAndAvailabilityAction
   | SetLocationAction
   | SetPageAndSortAction
