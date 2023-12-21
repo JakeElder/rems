@@ -196,40 +196,29 @@ const stream: Stream = (args) => async (c) => {
               data: { page }
             })
           : noop()
+    ),
+
+    /*
+     * Sort
+     */
+    resolve(
+      "REFINE_SORT",
+      () =>
+        refine.sort({
+          timeline,
+          current: yieldedState.slices.realEstateQuery.pageAndSort.sort
+        }),
+      async (sort) =>
+        sort
+          ? setPageAndSort({
+              role: "ASSISTANT",
+              data: { sort }
+            })
+          : noop()
     )
   ]);
 
   // const resolutions = await Promise.all([
-
-  //   /*
-  //    * Page
-  //    */
-  //   resolve(
-  //     "REFINE_PAGE",
-  //     () => refine.page({ timeline, current: query.pageAndSort.page }),
-  //     async (page) =>
-  //       page
-  //         ? event("ASSISTANT", {
-  //             type: "PATCH",
-  //             patch: scalarPatch("PAGE", query, { page })
-  //           })
-  //         : null
-  //   ),
-
-  //   /*
-  //    * Sort
-  //    */
-  //   resolve(
-  //     "REFINE_SORT",
-  //     () => refine.sort({ timeline, current: query["sort"] }),
-  //     async (sort) =>
-  //       sort
-  //         ? event("ASSISTANT", {
-  //             type: "PATCH",
-  //             patch: scalarPatch("PAGE", query, { sort })
-  //           })
-  //         : null
-  //   ),
 
   //   /*
   //    * Space Requirements

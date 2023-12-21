@@ -46,6 +46,14 @@ const intents: Intent[] = [
   },
 
   {
+    id: 60,
+    code: "REFINE_SORT",
+    requiresWork: true,
+    description: md(<>The user wants to change the sort order</>),
+    examples: []
+  },
+
+  {
     id: 500,
     code: "UNKNOWN",
     requiresWork: false,
@@ -180,19 +188,6 @@ const intents: Intent[] = [
   //     {
   //       input: "I'm looking for a 3 bedroom condo or apartment",
   //       matches: ["condo or apartment"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 8,
-  //   code: "REFINE_SORT",
-  //   primary: false,
-  //   description: md(<>The user wants to change the sort order</>),
-  //   examples: [
-  //     {
-  //       input: "Sort by lot size",
-  //       matches: ["Sort by lot size"]
   //     }
   //   ]
   // },

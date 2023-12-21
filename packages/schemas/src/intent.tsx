@@ -7,7 +7,8 @@ export const IntentCodeSchema = z
     "REFINE_LOCATION",
     "UNKNOWN",
     "OBTAIN_GENERAL_INFORMATION",
-    "REFINE_PAGE"
+    "REFINE_PAGE",
+    "REFINE_SORT",
     // "CLEAR_QUERY",
     // "UNKNOWN",
 
@@ -16,7 +17,6 @@ export const IntentCodeSchema = z
     // "REFINE_LOT_FEATURES",
     // "REFINE_VIEW_TYPES",
     // "REFINE_PROPERTY_TYPES",
-    // "REFINE_SORT",
     // "REFINE_SPACE_REQUIREMENTS",
     // "REFINE_BUDGET_AVAILABILITY",
     // "REFINE_MAP_STATE"
