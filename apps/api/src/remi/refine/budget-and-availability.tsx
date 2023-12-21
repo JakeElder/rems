@@ -32,8 +32,8 @@ const ReturnsSchema = z
   })
   .partial()
   .transform(({ mn, mx, t }) => ({
-    "min-price": mn,
-    "max-price": mx,
+    minPrice: mn,
+    maxPrice: mx,
     type: t
   }));
 

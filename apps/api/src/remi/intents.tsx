@@ -73,6 +73,19 @@ const intents: Intent[] = [
   },
 
   {
+    id: 80,
+    code: "REFINE_BUDGET_AVAILABILITY",
+    requiresWork: true,
+    description: md(
+      <>
+        The user wants to set their budget/whether they are looking to rent or
+        buy
+      </>
+    ),
+    examples: []
+  },
+
+  {
     id: 500,
     code: "UNKNOWN",
     requiresWork: false,
@@ -207,24 +220,6 @@ const intents: Intent[] = [
   //     {
   //       input: "I'm looking for a 3 bedroom condo or apartment",
   //       matches: ["condo or apartment"]
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 10,
-  //   code: "REFINE_BUDGET_AVAILABILITY",
-  //   primary: false,
-  //   description: md(
-  //     <>
-  //       The user wants to set their budget/whether they are looking to rent or
-  //       buy
-  //     </>
-  //   ),
-  //   examples: [
-  //     {
-  //       input: "3 bedroom condos around 20k per month",
-  //       matches: ["around 20k per month"]
   //     }
   //   ]
   // },

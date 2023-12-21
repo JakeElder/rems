@@ -20,6 +20,7 @@ import {
   registerAnalysis,
   registerIntentResolutionError,
   setAssistantWorking,
+  setBudgetAndAvailability,
   setLocation,
   setPageAndSort,
   setSpaceRequirements,
@@ -234,27 +235,27 @@ const stream: Stream = (args) => async (c) => {
           role: "ASSISTANT",
           data: defined(props)
         })
+    ),
+
+    /*
+     * Budget & Availability
+     */
+    resolve(
+      "REFINE_BUDGET_AVAILABILITY",
+      () =>
+        refine.budgetAndAvailability({
+          timeline,
+          current: yieldedState.slices.realEstateQuery.budgetAndAvailability
+        }),
+      async (props) =>
+        setBudgetAndAvailability({
+          role: "ASSISTANT",
+          data: defined(props)
+        })
     )
   ]);
 
   // const resolutions = await Promise.all([
-
-  //   /*
-  //    * Budget & Availability
-  //    */
-  //   resolve(
-  //     "REFINE_BUDGET_AVAILABILITY",
-  //     () =>
-  //       refine.budgetAndAvailability({
-  //         timeline,
-  //         current: BudgetAndAvailability.parse(query)
-  //       }),
-  //     async (props) =>
-  //       event("ASSISTANT", {
-  //         type: "PATCH",
-  //         patch: scalarPatch("BUDGET_AND_AVAILABILITY", query, defined(props))
-  //       })
-  //   ),
 
   //   /**
   //    * Indoor Features
