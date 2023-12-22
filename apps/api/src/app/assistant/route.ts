@@ -18,6 +18,7 @@ import {
   noop,
   registerAnalysis,
   registerIntentResolutionError,
+  replaceRealEstateQuery,
   setArray,
   setAssistantPlacement,
   setAssistantWorking,
@@ -82,6 +83,13 @@ const stream: Stream = (args) => async (c) => {
       yieldedState.slices.assistant.placement === "MINIMISED"
     ) {
       act(setAssistantPlacement("DOCKED"));
+    }
+
+    if (
+      intents.includes("START_NEW_QUERY") ||
+      intents.includes("CLEAR_QUERY_COMPLETELY")
+    ) {
+      act(replaceRealEstateQuery(app.defaults().slices.realEstateQuery));
     }
 
     return analysis;

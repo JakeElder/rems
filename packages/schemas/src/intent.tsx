@@ -19,7 +19,10 @@ export const IntentCodeSchema = z
     "REFINE_VIEW_TYPES",
     "REFINE_PROPERTY_TYPES",
     "REQUEST_CLARIFICATION",
-    "END_ASSISTANT_SESSION"
+    "END_ASSISTANT_SESSION",
+    "START_NEW_QUERY",
+    "CLEAR_QUERY_COMPLETELY",
+    "CLEAR_QUERY_PARTIALLY"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 

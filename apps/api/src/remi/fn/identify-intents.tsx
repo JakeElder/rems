@@ -84,6 +84,10 @@ const identifyIntents = async ({
           </p>
           <p>The user has just yielded control to the assistant</p>
           <p>Choose functions that should be called to assist</p>
+          <p>
+            Be aware of partial query refinements. IE - REFINE_INDOOR_FEATURES
+            should be set if the user asks to modify indoor features.
+          </p>
         </>
       ),
       {

@@ -124,6 +124,38 @@ const intents: Intent[] = [
     code: "END_ASSISTANT_SESSION",
     description: md(<>Resets the app and minimises the assistant</>),
     examples: ["Ok that's it for today"]
+  },
+
+  {
+    id: 170,
+    code: "START_NEW_QUERY",
+    description: md(
+      <>
+        This function is called when the user issues a query that should
+        overwrite the current. It is called in addition to other functions, ie
+        REFINE_LOCATION - and whatever is necessary to build the new query.
+      </>
+    ),
+    examples: ["Actually, show me condos in Chiang Mai"]
+  },
+
+  {
+    id: 170,
+    code: "CLEAR_QUERY_COMPLETELY",
+    description: md(<>Sets the query to default</>),
+    examples: ["Reset the query"]
+  },
+
+  {
+    id: 180,
+    code: "CLEAR_QUERY_PARTIALLY",
+    description: md(
+      <>
+        Clears parts of the query. This will be called in conjuction with other
+        refinements, IE "REFINE_INDOOR_FEATURES"
+      </>
+    ),
+    examples: ["Clear everything except the garage filter"]
   }
 ];
 
