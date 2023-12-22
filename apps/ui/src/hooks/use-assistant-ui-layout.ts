@@ -198,9 +198,9 @@ const useAssistantUiLayout = ({
     backdropFilter,
     background,
     config: {
-      tension: 180,
-      friction: 23,
-      mass: 1.1
+      tension: 280,
+      friction: 16,
+      mass: 0.9
     }
   });
 
