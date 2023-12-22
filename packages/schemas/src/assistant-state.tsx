@@ -17,8 +17,11 @@ export const AssistantPlacementSchema = z.enum([
   "RIGHT"
 ]);
 
+export const AssistantLanguageSchema = z.enum(["EN", "TH"]);
+
 export const AssistantStateSchema = z.object({
   sessions: z.array(InputSessionSchema),
   mode: AssistantModeSchema,
-  placement: AssistantPlacementSchema
+  placement: AssistantPlacementSchema,
+  language: AssistantLanguageSchema
 });

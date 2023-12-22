@@ -92,6 +92,11 @@ const identifyIntents = async ({
             The user may want to move the position of the assistant, in this
             case CHANGE_ASSISTANT_POSITION should be chosen
           </p>
+          <p>
+            Only perform an action when the user has requested you do so. IE -
+            if the user asks 'can you speak Thai' - just say yes, but don't
+            switch the language yet.
+          </p>
         </>
       ),
       {

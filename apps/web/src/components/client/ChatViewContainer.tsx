@@ -37,6 +37,7 @@ const ChatViewContainer = ({}: Props) => {
   if (!spacing.ready) {
     return null;
   }
+
   const { xDivide, marginTop } = spacing;
 
   return (

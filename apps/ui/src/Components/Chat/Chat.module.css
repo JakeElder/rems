@@ -65,7 +65,16 @@
 .lang {
   color: #333;
   text-transform: uppercase;
+  height: 14px;
   font-size: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.lang .en,
+.lang .th {
+  height: 14px;
+  line-height: 14px;
 }
 
 .body .shadow {

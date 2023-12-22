@@ -15,7 +15,8 @@ import {
   Analysis,
   IntentResolutionError,
   Property,
-  AssistantPlacement
+  AssistantPlacement,
+  AssistantLanguage
 } from "@rems/types";
 
 type ActorTimelineEvent = UserTimelineEvent | AssistantTimelineEvent;
@@ -97,6 +98,10 @@ export const setArray = createAction<
 >("SET_ARRAY");
 
 export const setAssistantChatting = createAction("SET_ASSISTANT_CHATTING");
+export const setAssistantLanguage = createAction<
+  AssistantLanguage,
+  "SET_ASSISTANT_LANGUAGE"
+>("SET_ASSISTANT_LANGUAGE");
 export const setAssistantPlacement = createAction<
   AssistantPlacement,
   "SET_ASSISTANT_PLACEMENT"
@@ -174,6 +179,7 @@ type ResetRealEstateQueryAction = ReturnType<typeof resetRealEstateQuery>;
 type ReturnControlAction = ReturnType<typeof returnControl>;
 type SetArrayAction = ReturnType<typeof setArray>;
 type SetAssistantChattingAction = ReturnType<typeof setAssistantChatting>;
+type SetAssistantLanguageAction = ReturnType<typeof setAssistantLanguage>;
 type SetAssistantPlacementAction = ReturnType<typeof setAssistantPlacement>;
 type SetAssistantWorkingAction = ReturnType<typeof setAssistantWorking>;
 type SetBudgetAndAvailabilityAction = ReturnType<
@@ -208,6 +214,7 @@ export type AppAction =
   | ReturnControlAction
   | SetArrayAction
   | SetAssistantChattingAction
+  | SetAssistantLanguageAction
   | SetAssistantPlacementAction
   | SetAssistantWorkingAction
   | SetBudgetAndAvailabilityAction

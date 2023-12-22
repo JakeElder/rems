@@ -49,7 +49,8 @@ import {
   AssistantModeSchema,
   AssistantPlacementSchema,
   AnalysisSchema,
-  IntentResolutionErrorSchema
+  IntentResolutionErrorSchema,
+  AssistantLanguageSchema
 } from "@rems/schemas";
 import { ZodType, z } from "zod";
 
@@ -190,6 +191,7 @@ export type AssistantPayload = Z<typeof AssistantPayloadSchema>;
 
 export type AssistantPlacement = Z<typeof AssistantPlacementSchema>;
 export type AssistantMode = Z<typeof AssistantModeSchema>;
+export type AssistantLanguage = Z<typeof AssistantLanguageSchema>;
 
 export type AssistantPlacementAction =
   | "MINIMIZE"

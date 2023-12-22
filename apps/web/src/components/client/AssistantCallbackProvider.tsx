@@ -9,7 +9,7 @@ import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
 import { useDebouncedCallback } from "use-debounce";
-import { store, useDispatch, useSession } from "@/state";
+import { store, useAssistantLanguage, useDispatch, useSession } from "@/state";
 import {
   handleEmptySubmission,
   handleInputIdle,
@@ -45,6 +45,7 @@ const AssistantCallbackProvider = ({ children }: Props) => {
   );
 
   const session = useSession();
+  const language = useAssistantLanguage();
 
   const onKeyDown: Context["onKeyDown"] = useCallback((e) => {
     if (e.code === "Enter") {
@@ -88,7 +89,9 @@ const AssistantCallbackProvider = ({ children }: Props) => {
       SpeechRecognition.stopListening();
     } else {
       resetTranscript();
-      SpeechRecognition.startListening();
+      SpeechRecognition.startListening({
+        language: language === "EN" ? "en-GB" : "th-TH"
+      });
     }
   }, []);
 

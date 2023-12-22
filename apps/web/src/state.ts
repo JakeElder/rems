@@ -157,6 +157,9 @@ export const useAssistantPlacement = () =>
 export const useAssistantMode = () =>
   useSelector((state) => state.slices.assistant.mode);
 
+export const useAssistantLanguage = () =>
+  useSelector((state) => state.slices.assistant.language);
+
 export const useKeyboardState = () =>
   useSelector((state) => state.slices.keyboard);
 

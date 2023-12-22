@@ -28,6 +28,7 @@ import {
   returnControl,
   setArray,
   setAssistantChatting,
+  setAssistantLanguage,
   setAssistantPlacement,
   setAssistantWorking,
   setBudgetAndAvailability,
@@ -313,6 +314,11 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
   // SET_ASSISTANT_CHATTING
   builder.addCase(setAssistantChatting, (state) => {
     state.slices.assistant.mode = "CHATTING";
+  });
+
+  // SET_ASSISTANT_LANGUAGE
+  builder.addCase(setAssistantLanguage, (state, action) => {
+    state.slices.assistant.language = action.payload;
   });
 
   // SET_ASSISTANT_PLACEMENT

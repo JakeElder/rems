@@ -116,7 +116,13 @@ test("userYield", () => {
 });
 
 test("placementChangeRequest", () => {
-  const store = app.init();
+  const store = app.init({
+    slices: {
+      assistant: {
+        placement: "MINIMISED"
+      }
+    }
+  });
 
   store.dispatch(handleAssistantPlacementChangeRequest("EXPAND"));
   expect(store.getState().slices.assistant.placement).toBe("DOCKED");

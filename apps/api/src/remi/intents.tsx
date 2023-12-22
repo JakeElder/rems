@@ -3,7 +3,7 @@ import md from "@rems/utils/md";
 
 const intents: Intent[] = [
   {
-    id: 130,
+    id: 220,
     code: "CHOOSE_ONE_PROPERTY",
     description: md(
       <>Reduce the list of properties to one based on criteria</>
@@ -15,7 +15,7 @@ const intents: Intent[] = [
   },
 
   {
-    id: 130,
+    id: 210,
     code: "QUERY_SELECTED_PROPERTY",
     description: md(
       <>
@@ -169,6 +169,13 @@ const intents: Intent[] = [
       </>
     ),
     examples: ["Move to the right"]
+  },
+
+  {
+    id: 200,
+    code: "CHANGE_ASSISTANT_LANGUAGE",
+    description: "Change from Thai/English",
+    examples: ["Switch to Thai"]
   }
 ];
 

@@ -20,6 +20,7 @@ import {
   registerIntentResolutionError,
   replaceRealEstateQuery,
   setArray,
+  setAssistantLanguage,
   setAssistantPlacement,
   setAssistantWorking,
   setBudgetAndAvailability,
@@ -325,6 +326,15 @@ const stream: Stream = (args) => async (c) => {
       "CHANGE_ASSISTANT_POSITION",
       () => refine.assistantPosition({ timeline }),
       async (res) => setAssistantPlacement(res)
+    ),
+
+    /**
+     * Assistant Language
+     */
+    resolve(
+      "CHANGE_ASSISTANT_LANGUAGE",
+      () => refine.assistantLanguage({ timeline }),
+      async (res) => setAssistantLanguage(res)
     )
   ]);
 

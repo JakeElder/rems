@@ -40,7 +40,8 @@ const defaults = (): AppState => ({
     assistant: {
       mode: "SLEEPING",
       placement: "DOCKED",
-      sessions: [{ id: nanoid(), value: "", state: "INACTIVE" }]
+      sessions: [{ id: nanoid(), value: "", state: "INACTIVE" }],
+      language: "EN"
     },
     keyboard: {
       enterDown: false,

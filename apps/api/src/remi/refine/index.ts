@@ -20,6 +20,7 @@ export const propertyTypes = filterArray(Models.PropertyType);
 export const lotFeatures = filterArray(Models.LotFeature);
 export const viewTypes = filterArray(Models.ViewType);
 
+export { default as assistantLanguage } from "./assistant-language";
 export { default as assistantPosition } from "./assistant-position";
 export { default as location } from "./location";
 export { default as page } from "./page";

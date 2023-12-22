@@ -1,6 +1,6 @@
 "use client";
 
-import { store, useDispatch, useSession } from "@/state";
+import { store, useAssistantLanguage, useDispatch, useSession } from "@/state";
 import { handover } from "@/utils";
 import {
   handleAssistantPlacementChangeRequest,
@@ -23,10 +23,11 @@ type Props = {};
 
 const isHTMLElement = (el: any): el is HTMLElement => el instanceof HTMLElement;
 
-const InputEventListeners = ({ }: Props) => {
+const InputEventListeners = ({}: Props) => {
   const dispatch = useDispatch();
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const session = useSession();
+  const language = useAssistantLanguage();
 
   useEffect(() => {
     if (listening) {
@@ -89,7 +90,10 @@ const InputEventListeners = ({ }: Props) => {
         }
         dispatch(handleSpaceKeyDown());
         resetTranscript();
-        SpeechRecognition.startListening({ continuous: true });
+        SpeechRecognition.startListening({
+          continuous: true,
+          language: language === "EN" ? "en-GB" : "th-TH"
+        });
       }
     };
 
@@ -135,7 +139,7 @@ const InputEventListeners = ({ }: Props) => {
       window.removeEventListener("keyup", onKeyUp);
       window.removeEventListener("keypress", onKeyPress);
     };
-  }, [resetTranscript]);
+  }, [resetTranscript, language]);
 
   return null;
 };

@@ -55,6 +55,12 @@ export const Header = React.memo(
       pulseOpacity: mode === "LISTENING" ? 1 : 0
     });
 
+    const langStyle = useSpring({
+      y: lang === "EN" ? 0 : -14,
+      enOpacity: lang === "EN" ? 1 : 0,
+      thOpacity: lang === "TH" ? 1 : 0
+    });
+
     return (
       <div className={css["header"]}>
         <div className={css["avatar-name-state"]}>
@@ -88,7 +94,20 @@ export const Header = React.memo(
           <StateLabel mode={mode} />
         </div>
         <div className={css["lang-manage-ui-state"]}>
-          <div className={css["lang"]}>{lang}</div>
+          <div className={css["lang"]}>
+            <animated.span
+              className={css["en"]}
+              style={{ y: langStyle.y, opacity: langStyle.enOpacity }}
+            >
+              EN
+            </animated.span>
+            <animated.span
+              className={css["th"]}
+              style={{ y: langStyle.y, opacity: langStyle.thOpacity }}
+            >
+              TH
+            </animated.span>
+          </div>
         </div>
       </div>
     );

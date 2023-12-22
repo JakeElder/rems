@@ -13,7 +13,8 @@ import {
   useSessions,
   useAssistantPlacement,
   useAssistantMode,
-  useKeyboardState
+  useKeyboardState,
+  useAssistantLanguage
 } from "@/state";
 
 type Return = {
@@ -35,6 +36,7 @@ const useAssistantState = (): Return => {
   const placement = useAssistantPlacement();
   const mode = useAssistantMode();
   const keyboardState = useKeyboardState();
+  const lang = useAssistantLanguage();
 
   return {
     sessions,
@@ -43,7 +45,7 @@ const useAssistantState = (): Return => {
     spaceDown: keyboardState.spaceDown,
     timeline,
     mode,
-    lang: "EN",
+    lang,
     session,
     submittable:
       !!session.value &&
