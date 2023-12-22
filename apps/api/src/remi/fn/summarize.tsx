@@ -89,6 +89,10 @@ const summarize = async ({
               Answer general questions - don't limit yourself to real estate
               enquiries
             </li>
+            <li>
+              Only say things that you can directly infer from events and state
+              changes. Don't assume that you have performed actions.
+            </li>
           </ul>
         </>
       ),

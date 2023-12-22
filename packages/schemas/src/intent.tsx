@@ -22,7 +22,8 @@ export const IntentCodeSchema = z
     "END_ASSISTANT_SESSION",
     "START_NEW_QUERY",
     "CLEAR_QUERY_COMPLETELY",
-    "CLEAR_QUERY_PARTIALLY"
+    "CLEAR_QUERY_PARTIALLY",
+    "CHANGE_ASSISTANT_POSITION"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 

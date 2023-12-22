@@ -156,6 +156,19 @@ const intents: Intent[] = [
       </>
     ),
     examples: ["Clear everything except the garage filter"]
+  },
+
+  {
+    id: 190,
+    code: "CHANGE_ASSISTANT_POSITION",
+    description: md(
+      <>
+        The assistant can be minimised, docked, left, right or windowed. This
+        function moves the assistant. For context, the map is on the right and
+        the property listings are on the left.
+      </>
+    ),
+    examples: ["Move to the right"]
   }
 ];
 

@@ -88,6 +88,10 @@ const identifyIntents = async ({
             Be aware of partial query refinements. IE - REFINE_INDOOR_FEATURES
             should be set if the user asks to modify indoor features.
           </p>
+          <p>
+            The user may want to move the position of the assistant, in this
+            case CHANGE_ASSISTANT_POSITION should be chosen
+          </p>
         </>
       ),
       {
