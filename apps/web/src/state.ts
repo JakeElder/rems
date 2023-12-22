@@ -115,6 +115,9 @@ const selectActiveFiltersCount = createSelector(
   (...counts) => counts.reduce((a, v) => a + v, 0)
 );
 
+const selectSelectedProperty = (state: AppState) =>
+  state.slices.selectedProperty;
+
 /*
  * Typed Hooks
  */
@@ -136,7 +139,7 @@ export const useSession = () =>
   useSelector(
     (state) =>
       state.slices.assistant.sessions[
-        state.slices.assistant.sessions.length - 1
+      state.slices.assistant.sessions.length - 1
       ]
   );
 
@@ -179,6 +182,8 @@ export const useActiveViewTypeFilters = () =>
 
 export const useActivePropertyTypeFilters = () =>
   useSelector(selectActivePropertyTypeFilters);
+
+export const useSelectedProperty = () => useSelector(selectSelectedProperty);
 
 /*
  * Store

@@ -32,6 +32,7 @@ import {
   setLocation,
   setPageAndSort,
   setResolvingIntents,
+  setSelectedProperty,
   setSpaceRequirements,
   yld
 } from "./actions";
@@ -406,6 +407,11 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
   // SET_RESOLVING_INTENTS
   builder.addCase(setResolvingIntents, (state) => {
     state.slices.assistant.mode = "WORKING";
+  });
+
+  // SET_SELECTED_PROPERTY
+  builder.addCase(setSelectedProperty, (state, action) => {
+    state.slices.selectedProperty = action.payload.property;
   });
 
   // SET_SPACE_REQUIREMENTS

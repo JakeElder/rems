@@ -45,7 +45,8 @@ const defaults = (): AppState => ({
     keyboard: {
       enterDown: false,
       spaceDown: false
-    }
+    },
+    selectedProperty: null
   },
   timeline: []
 });

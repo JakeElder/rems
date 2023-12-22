@@ -3,11 +3,7 @@
   font-family: var(--font-inter);
   display: flex;
   overflow: hidden;
-}
-
-.active {
-  border-color: #9c54bd;
-  background: #fef7ff;
+  cursor: default;
 }
 
 .images {
@@ -37,19 +33,9 @@
   font-weight: 300;
 }
 
-.active .title {
-  color: #9c54bd;
-}
-
 .hr {
   height: 1px;
-  background: #f5f5f5;
   margin-bottom: 8px;
-}
-
-.active .hr {
-  background: #9c54bd;
-  opacity: 0.3;
 }
 
 .spec-and-price {
@@ -69,11 +55,6 @@
   font-size: 16px;
   font-weight: 260;
   margin-right: 40px;
-  color: #bbb;
-}
-
-.active .description {
-  color: #777;
 }
 
 .price,

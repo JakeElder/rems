@@ -13,7 +13,8 @@ import {
   AssistantTimelineEvent,
   AppStateSlices,
   Analysis,
-  IntentResolutionError
+  IntentResolutionError,
+  Property
 } from "@rems/types";
 
 type ActorTimelineEvent = UserTimelineEvent | AssistantTimelineEvent;
@@ -106,6 +107,14 @@ export const setPageAndSort = createAction<
 
 export const setResolvingIntents = createAction("SET_RESOLVING_INTENTS");
 
+export const setSelectedProperty = createAction<
+  {
+    role: ActorTimelineEvent["role"];
+    property: Property["id"] | null;
+  },
+  "SET_SELECTED_PROPERTY"
+>("SET_SELECTED_PROPERTY");
+
 export const setSpaceRequirements = createAction<
   QueryMutationAction<Partial<SpaceRequirements>>,
   "SET_SPACE_REQUIREMENTS"
@@ -156,6 +165,7 @@ type SetBudgetAndAvailabilityAction = ReturnType<
 type SetLocationAction = ReturnType<typeof setLocation>;
 type SetPageAndSortAction = ReturnType<typeof setPageAndSort>;
 type SetResolvingIntentsAction = ReturnType<typeof setResolvingIntents>;
+type SetSelectedPropertyAction = ReturnType<typeof setSelectedProperty>;
 type SetSpaceRequirementsAction = ReturnType<typeof setSpaceRequirements>;
 type YieldAction = ReturnType<typeof yld>;
 
@@ -185,5 +195,6 @@ export type AppAction =
   | SetLocationAction
   | SetPageAndSortAction
   | SetResolvingIntentsAction
+  | SetSelectedPropertyAction
   | SetSpaceRequirementsAction
   | YieldAction;
