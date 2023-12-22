@@ -1,5 +1,4 @@
 import { RemiFn } from "@/remi/types";
-import * as remi from "@/remi";
 import * as app from "@rems/state/app";
 import * as utils from "@/remi/utils";
 import * as fn from "@/remi/fn";
@@ -20,6 +19,7 @@ import {
   registerAnalysis,
   registerIntentResolutionError,
   setArray,
+  setAssistantPlacement,
   setAssistantWorking,
   setBudgetAndAvailability,
   setLocation,
@@ -75,13 +75,12 @@ const stream: Stream = (args) => async (c) => {
 
     act(registerAnalysis(analysis));
 
-    const requiresWork = intents.some((i) => {
-      const intent = remi.intents.find((si) => si.code === i)!;
-      return intent.requiresWork;
-    });
+    act(setAssistantWorking());
 
-    if (requiresWork) {
-      act(setAssistantWorking());
+    if (intents.includes("GET_ASSISTANTS_ATTENTION")) {
+      if (yieldedState.slices.assistant.placement === "MINIMISED") {
+        act(setAssistantPlacement("DOCKED"));
+      }
     }
 
     return analysis;

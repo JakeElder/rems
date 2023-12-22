@@ -3,6 +3,7 @@ import md from "@rems/utils/md";
 
 export const IntentCodeSchema = z
   .enum([
+    "GET_ASSISTANTS_ATTENTION",
     "QUERY_SELECTED_PROPERTY",
     "CHOOSE_ONE_PROPERTY",
     "CHAT",
@@ -25,7 +26,6 @@ export const IntentSchema = z
   .object({
     id: z.number().min(1),
     code: IntentCodeSchema,
-    requiresWork: z.boolean(),
     description: z.string().describe(md(<>A description of the intent</>)),
     examples: z.array(z.string())
   })

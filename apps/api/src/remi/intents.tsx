@@ -5,7 +5,6 @@ const intents: Intent[] = [
   {
     id: 130,
     code: "CHOOSE_ONE_PROPERTY",
-    requiresWork: false,
     description: md(
       <>Reduce the list of properties to one based on criteria</>
     ),
@@ -18,7 +17,6 @@ const intents: Intent[] = [
   {
     id: 130,
     code: "QUERY_SELECTED_PROPERTY",
-    requiresWork: false,
     description: md(
       <>
         Used when the user asks a specific question about the selected property
@@ -34,14 +32,12 @@ const intents: Intent[] = [
     id: 30,
     code: "REFINE_LOCATION",
     description: md(<>Sets a new search location</>),
-    requiresWork: true,
     examples: []
   },
 
   {
     id: 50,
     code: "REFINE_PAGE",
-    requiresWork: true,
     description: md(<>Changes the search result page</>),
     examples: []
   },
@@ -49,7 +45,6 @@ const intents: Intent[] = [
   {
     id: 60,
     code: "REFINE_SORT",
-    requiresWork: true,
     description: md(<>Changes the sort order</>),
     examples: []
   },
@@ -57,7 +52,6 @@ const intents: Intent[] = [
   {
     id: 70,
     code: "REFINE_SPACE_REQUIREMENTS",
-    requiresWork: true,
     description: md(<>Updates min/max bathrooms, living area and lot size</>),
     examples: []
   },
@@ -65,7 +59,6 @@ const intents: Intent[] = [
   {
     id: 80,
     code: "REFINE_BUDGET_AVAILABILITY",
-    requiresWork: true,
     description: md(
       <>Sets the users budget and whether they are interested in sale or rent</>
     ),
@@ -75,7 +68,6 @@ const intents: Intent[] = [
   {
     id: 90,
     code: "REFINE_INDOOR_FEATURES",
-    requiresWork: true,
     description: md(<>Updates the *indoor feature* filters</>),
     examples: []
   },
@@ -83,7 +75,6 @@ const intents: Intent[] = [
   {
     id: 100,
     code: "REFINE_OUTDOOR_FEATURES",
-    requiresWork: true,
     description: md(<>Updates the *outdoor feature* filters</>),
     examples: []
   },
@@ -91,7 +82,6 @@ const intents: Intent[] = [
   {
     id: 110,
     code: "REFINE_LOT_FEATURES",
-    requiresWork: true,
     description: md(<>Updates the *lot feature* filters</>),
     examples: []
   },
@@ -99,7 +89,6 @@ const intents: Intent[] = [
   {
     id: 120,
     code: "REFINE_VIEW_TYPES",
-    requiresWork: true,
     description: md(<>Updates the *view type* filters</>),
     examples: []
   },
@@ -107,7 +96,6 @@ const intents: Intent[] = [
   {
     id: 130,
     code: "REFINE_PROPERTY_TYPES",
-    requiresWork: true,
     description: md(<>Updates the *property type* filters</>),
     examples: []
   },
@@ -115,7 +103,6 @@ const intents: Intent[] = [
   {
     id: 140,
     code: "REQUEST_CLARIFICATION",
-    requiresWork: true,
     description: md(
       <>
         Prompts the user for clarification as it is unclear what functions
@@ -123,6 +110,13 @@ const intents: Intent[] = [
       </>
     ),
     examples: []
+  },
+
+  {
+    id: 150,
+    code: "GET_ASSISTANTS_ATTENTION",
+    description: md(<>Prepares the assistant for further input</>),
+    examples: ["Hey, Remi"]
   }
 ];
 
