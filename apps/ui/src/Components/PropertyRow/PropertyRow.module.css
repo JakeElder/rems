@@ -1,0 +1,113 @@
+.root {
+  border: 1px solid #d6d6d6;
+  font-family: var(--font-inter);
+  display: flex;
+  overflow: hidden;
+}
+
+.active {
+  border-color: #9c54bd;
+  background: #fef7ff;
+}
+
+.images {
+  flex: 0 0 285px;
+  background: #f5f5f5;
+}
+
+.link {
+  flex: 1;
+}
+
+.arrow-nav {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.title {
+  font-size: 20px;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 300;
+}
+
+.active .title {
+  color: #9c54bd;
+}
+
+.hr {
+  height: 1px;
+  background: #f5f5f5;
+  margin-bottom: 8px;
+}
+
+.active .hr {
+  background: #9c54bd;
+  opacity: 0.3;
+}
+
+.spec-and-price {
+  display: flex;
+  justify-content: space-between;
+}
+
+.details {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  height: 160px;
+}
+
+.description {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 260;
+  margin-right: 40px;
+  color: #bbb;
+}
+
+.active .description {
+  color: #777;
+}
+
+.price,
+.rental-price-and-pm {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.rental-price-and-pm {
+  display: flex;
+  align-items: center;
+}
+
+.rental-price {
+  margin-right: 5px;
+}
+
+.pm {
+  font-size: 13px;
+  font-weight: 300;
+  color: #999;
+}
+
+.beds-baths-area {
+  font-size: 15px;
+  margin-bottom: 4px;
+  color: #151515;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.separator {
+  color: #555;
+  font-size: 8px;
+}
