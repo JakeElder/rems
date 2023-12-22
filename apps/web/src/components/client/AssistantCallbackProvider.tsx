@@ -61,17 +61,15 @@ const AssistantCallbackProvider = ({ children }: Props) => {
       throw new Error();
     }
 
-    const state = store.getState();
-
     dispatch(
       yld({
         role: "USER",
-        state: state.slices,
+        state: store.getState().slices,
         message: session.value
       })
     );
 
-    handover(state, dispatch);
+    handover(store.getState(), dispatch);
   }, [session]);
 
   const onKeyUp: Context["onKeyUp"] = useCallback(

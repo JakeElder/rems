@@ -75,8 +75,8 @@ const timelineToCompletionMessages = (
 
       return null;
     })
-    .filter((i): i is OpenAI.Chat.ChatCompletionMessageParam[] => !!i)
-    .flat();
+    .flat()
+    .filter((i): i is OpenAI.Chat.ChatCompletionMessageParam => !!i);
 };
 
 export default timelineToCompletionMessages;

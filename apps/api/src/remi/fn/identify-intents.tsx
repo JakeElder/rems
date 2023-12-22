@@ -9,7 +9,6 @@ import {
 import { timelineToCompletionMessages, execute, stringify } from "@/remi/utils";
 import { intents } from "@/remi";
 import {
-  IntentSchema,
   LocationSchema,
   TerseIntentSchema,
   TimelineSchema
@@ -25,14 +24,7 @@ export const PropsSchema = z.object({
   timeline: TimelineSchema
 });
 
-const ContextIntentSchema = IntentSchema.pick({
-  id: true,
-  code: true,
-  description: true
-});
-
 export const ContextSchema = z.object({
-  intents: z.array(ContextIntentSchema),
   currentLocation: LocationSchema
 });
 
@@ -40,7 +32,7 @@ export const ReturnsSchema = z
   .object({
     i: z.array(
       TerseIntentSchema.shape["id"].describe(
-        md(<>The array of user intents we need to resolve</>)
+        md(<>The array of functions to call</>)
       )
     )
   })
@@ -78,7 +70,6 @@ const identifyIntents = async ({
   };
 
   const context = stringify<Context>({
-    intents: intents.map((i) => ContextIntentSchema.parse(i)),
     currentLocation
   });
 
@@ -92,21 +83,20 @@ const identifyIntents = async ({
             helping the user of a real estate website.
           </p>
           <p>The user has just yielded control to the assistant</p>
-          <p>
-            What does the user want to do? Pick their intent(s) from our list.
-            Be cautious - it is better to omit an intent that you are unsure
-            about that include it.
-          </p>
-          <p>
-            Use their latest message as the primary factor in identifying
-            intents. That is - previous events should be used as context.
-          </p>
-          <p>
-            The intents provided are ordered by priority. You can select
-            multiple, but be sparing. "ONLY CHOOSE INTENTS YOU ARE SURE OF"
-          </p>
+          <p>Choose functions that should be called to assist</p>
         </>
       ),
+      {
+        role: "system",
+        content: `Available functions: ${JSON.stringify(
+          intents.map((i) => ({
+            id: i.id,
+            name: i.code,
+            description: i.description,
+            examples: i.examples
+          }))
+        )}`
+      },
       {
         role: "system",
         content: `Here is context ${JSON.stringify(context)}`

@@ -4,39 +4,37 @@ import md from "@rems/utils/md";
 const intents: Intent[] = [
   {
     id: 130,
-    code: "QUERY_SELECTED_PROPERTY",
+    code: "CHOOSE_ONE_PROPERTY",
     requiresWork: false,
     description: md(
-      <>The user wants information about the selected property </>
+      <>Reduce the list of properties to one based on criteria</>
     ),
-    examples: []
+    examples: [
+      "Which one of these is the most expensive?",
+      "Which has the most indoor features."
+    ]
   },
 
   {
-    id: 20,
-    code: "CHAT",
-    description: md(<>The user just wants to chat</>),
+    id: 130,
+    code: "QUERY_SELECTED_PROPERTY",
     requiresWork: false,
-    examples: []
+    description: md(
+      <>
+        Used when the user asks a specific question about the selected property
+      </>
+    ),
+    examples: [
+      "How big is this property",
+      "What is the price of this property."
+    ]
   },
 
   {
     id: 30,
     code: "REFINE_LOCATION",
-    description: md(
-      <>The user wants to specify the search origin for their search</>
-    ),
+    description: md(<>Sets a new search location</>),
     requiresWork: true,
-    examples: []
-  },
-
-  {
-    id: 40,
-    code: "OBTAIN_GENERAL_INFORMATION",
-    requiresWork: false,
-    description: md(
-      <>The user wants to specify the search origin for their search</>
-    ),
     examples: []
   },
 
@@ -44,7 +42,7 @@ const intents: Intent[] = [
     id: 50,
     code: "REFINE_PAGE",
     requiresWork: true,
-    description: md(<>The user wants to change either the current page </>),
+    description: md(<>Changes the search result page</>),
     examples: []
   },
 
@@ -52,7 +50,7 @@ const intents: Intent[] = [
     id: 60,
     code: "REFINE_SORT",
     requiresWork: true,
-    description: md(<>The user wants to change the sort order</>),
+    description: md(<>Changes the sort order</>),
     examples: []
   },
 
@@ -60,18 +58,7 @@ const intents: Intent[] = [
     id: 70,
     code: "REFINE_SPACE_REQUIREMENTS",
     requiresWork: true,
-    description: md(
-      <>
-        <p>The user wants to specify search criteria relating to space.</p>
-        <p>This could be</p>
-        <ul>
-          <li>Min/Max bedrooms</li>
-          <li>Min bathrooms</li>
-          <li>Min/Max living area</li>
-          <li>Min/Max lot size</li>
-        </ul>
-      </>
-    ),
+    description: md(<>Updates min/max bathrooms, living area and lot size</>),
     examples: []
   },
 
@@ -80,10 +67,7 @@ const intents: Intent[] = [
     code: "REFINE_BUDGET_AVAILABILITY",
     requiresWork: true,
     description: md(
-      <>
-        The user wants to set their budget/whether they are looking to rent or
-        buy
-      </>
+      <>Sets the users budget and whether they are interested in sale or rent</>
     ),
     examples: []
   },
@@ -92,7 +76,7 @@ const intents: Intent[] = [
     id: 90,
     code: "REFINE_INDOOR_FEATURES",
     requiresWork: true,
-    description: "Refine indoor features",
+    description: md(<>Updates the *indoor feature* filters</>),
     examples: []
   },
 
@@ -100,7 +84,7 @@ const intents: Intent[] = [
     id: 100,
     code: "REFINE_OUTDOOR_FEATURES",
     requiresWork: true,
-    description: "Refine outdoor features",
+    description: md(<>Updates the *outdoor feature* filters</>),
     examples: []
   },
 
@@ -108,7 +92,7 @@ const intents: Intent[] = [
     id: 110,
     code: "REFINE_LOT_FEATURES",
     requiresWork: true,
-    description: "Refine lot features",
+    description: md(<>Updates the *lot feature* filters</>),
     examples: []
   },
 
@@ -116,7 +100,7 @@ const intents: Intent[] = [
     id: 120,
     code: "REFINE_VIEW_TYPES",
     requiresWork: true,
-    description: "Refine view types",
+    description: md(<>Updates the *view type* filters</>),
     examples: []
   },
 
@@ -124,18 +108,18 @@ const intents: Intent[] = [
     id: 130,
     code: "REFINE_PROPERTY_TYPES",
     requiresWork: true,
-    description: "Refine property types",
+    description: md(<>Updates the *property type* filters</>),
     examples: []
   },
 
   {
-    id: 500,
-    code: "UNKNOWN",
-    requiresWork: false,
+    id: 140,
+    code: "REQUEST_CLARIFICATION",
+    requiresWork: true,
     description: md(
       <>
-        It is unclear that the user's intent falls within one of our defined
-        options
+        Prompts the user for clarification as it is unclear what functions
+        should be called
       </>
     ),
     examples: []

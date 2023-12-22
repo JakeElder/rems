@@ -4,9 +4,9 @@ import md from "@rems/utils/md";
 export const IntentCodeSchema = z
   .enum([
     "QUERY_SELECTED_PROPERTY",
+    "CHOOSE_ONE_PROPERTY",
     "CHAT",
     "REFINE_LOCATION",
-    "UNKNOWN",
     "OBTAIN_GENERAL_INFORMATION",
     "REFINE_PAGE",
     "REFINE_SORT",
@@ -16,7 +16,8 @@ export const IntentCodeSchema = z
     "REFINE_OUTDOOR_FEATURES",
     "REFINE_LOT_FEATURES",
     "REFINE_VIEW_TYPES",
-    "REFINE_PROPERTY_TYPES"
+    "REFINE_PROPERTY_TYPES",
+    "REQUEST_CLARIFICATION"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 
@@ -26,16 +27,7 @@ export const IntentSchema = z
     code: IntentCodeSchema,
     requiresWork: z.boolean(),
     description: z.string().describe(md(<>A description of the intent</>)),
-    examples: z.array(
-      z.object({
-        input: z
-          .string()
-          .describe(md(<>An example command/enquiry issued by a user</>)),
-        matches: z
-          .array(z.string())
-          .describe(md(<>An array of substrings that match this intent</>))
-      })
-    )
+    examples: z.array(z.string())
   })
   .describe(
     md(
