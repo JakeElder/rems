@@ -3,6 +3,7 @@ import md from "@rems/utils/md";
 
 export const IntentCodeSchema = z
   .enum([
+    "QUERY_SELECTED_PROPERTY",
     "CHAT",
     "REFINE_LOCATION",
     "UNKNOWN",
@@ -15,8 +16,7 @@ export const IntentCodeSchema = z
     "REFINE_OUTDOOR_FEATURES",
     "REFINE_LOT_FEATURES",
     "REFINE_VIEW_TYPES",
-    "REFINE_PROPERTY_TYPES",
-    "OBTAIN_SELECTED_PROPERTY_INFO"
+    "REFINE_PROPERTY_TYPES"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 

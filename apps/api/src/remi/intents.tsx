@@ -3,6 +3,16 @@ import md from "@rems/utils/md";
 
 const intents: Intent[] = [
   {
+    id: 130,
+    code: "QUERY_SELECTED_PROPERTY",
+    requiresWork: false,
+    description: md(
+      <>The user wants information about the selected property </>
+    ),
+    examples: []
+  },
+
+  {
     id: 20,
     code: "CHAT",
     description: md(<>The user just wants to chat</>),
@@ -115,19 +125,6 @@ const intents: Intent[] = [
     code: "REFINE_PROPERTY_TYPES",
     requiresWork: true,
     description: "Refine property types",
-    examples: []
-  },
-
-  {
-    id: 130,
-    code: "OBTAIN_SELECTED_PROPERTY_INFO",
-    requiresWork: false,
-    description: md(
-      <>
-        The user wants the assistant to summarise the currently selected
-        property in some way
-      </>
-    ),
     examples: []
   },
 

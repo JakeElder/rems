@@ -93,8 +93,17 @@ const identifyIntents = async ({
           </p>
           <p>The user has just yielded control to the assistant</p>
           <p>
-            Analyze the chain of events, then identify the users intents with
-            their latest message.
+            What does the user want to do? Pick their intent(s) from our list.
+            Be cautious - it is better to omit an intent that you are unsure
+            about that include it.
+          </p>
+          <p>
+            Use their latest message as the primary factor in identifying
+            intents. That is - previous events should be used as context.
+          </p>
+          <p>
+            The intents provided are ordered by priority. You can select
+            multiple, but be sparing. "ONLY CHOOSE INTENTS YOU ARE SURE OF"
           </p>
         </>
       ),

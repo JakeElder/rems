@@ -46,7 +46,7 @@ const defaults = (): AppState => ({
       enterDown: false,
       spaceDown: false
     },
-    selectedProperty: null
+    selectedPropertyId: null
   },
   timeline: []
 });

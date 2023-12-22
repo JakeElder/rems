@@ -5,60 +5,78 @@ const timelineToCompletionMessages = (
   timeline: Timeline
 ): OpenAI.Chat.ChatCompletionMessageParam[] => {
   return timeline
-    .map<OpenAI.Chat.ChatCompletionMessageParam | null>((e) => {
+    .map<OpenAI.Chat.ChatCompletionMessageParam[] | null>((e) => {
       if (e.event.type === "YIELD") {
-        return {
-          role: e.role === "USER" ? "user" : "assistant",
-          content: `ACTION: ${JSON.stringify(e.event)}`
-        };
+        const { state } = e.event;
+        return [
+          {
+            role: e.role === "USER" ? "user" : "assistant",
+            content: `ACTION: ${JSON.stringify({ state })}`
+          },
+          {
+            role: e.role === "USER" ? "user" : "assistant",
+            content: e.event.message
+          }
+        ];
       }
 
       if (e.event.type === "PROPERTY_SELECTED") {
-        return {
-          role: e.role === "USER" ? "user" : "assistant",
-          content: `ACTION: ${JSON.stringify(e.event)}`
-        };
+        return [
+          {
+            role: e.role === "USER" ? "user" : "assistant",
+            content: `ACTION: ${JSON.stringify(e.event)}`
+          }
+        ];
       }
 
       if (e.event.type === "ANALYSIS_PERFORMED") {
-        return {
-          role: "system",
-          content: `ACTION: ${JSON.stringify(e.event)}`
-        };
+        return [
+          {
+            role: "system",
+            content: `ACTION: ${JSON.stringify(e.event)}`
+          }
+        ];
       }
 
       if (e.event.type === "UPDATE_LOCATION") {
-        return {
-          role: "system",
-          content: `ACTION: ${JSON.stringify(e.event)}`
-        };
+        return [
+          {
+            role: "system",
+            content: `ACTION: ${JSON.stringify(e.event)}`
+          }
+        ];
       }
 
       if (e.event.type === "STATE_MUTATION") {
-        return {
-          role: "function",
-          name: "patchQuery",
-          content: JSON.stringify({
-            group: e.event.mutation.patch.group,
-            diff: e.event.mutation.patch.diff
-          })
-        };
+        return [
+          {
+            role: "function",
+            name: "patchQuery",
+            content: JSON.stringify({
+              group: e.event.mutation.patch.group,
+              diff: e.event.mutation.patch.diff
+            })
+          }
+        ];
       }
 
       if (e.event.type === "INTENT_RESOLUTION_ERROR") {
-        return {
-          role: "function",
-          name: "logIntentResolutionError",
-          content: JSON.stringify({
-            intent: e.event.error.intent,
-            error: e.event.error
-          })
-        };
+        return [
+          {
+            role: "function",
+            name: "logIntentResolutionError",
+            content: JSON.stringify({
+              intent: e.event.error.intent,
+              error: e.event.error
+            })
+          }
+        ];
       }
 
       return null;
     })
-    .filter((i): i is OpenAI.Chat.ChatCompletionMessageParam => !!i);
+    .filter((i): i is OpenAI.Chat.ChatCompletionMessageParam[] => !!i)
+    .flat();
 };
 
 export default timelineToCompletionMessages;

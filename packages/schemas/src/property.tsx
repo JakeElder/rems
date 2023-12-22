@@ -142,9 +142,9 @@ export const PropertySchema = z
     formattedPurchasePrice: z.string().nullable(),
     formattedRentalPrice: z.string().nullable(),
     images: z.array(ImageSchema).nullable().default(null),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    publishedAt: z.coerce.date()
+    createdAt: z.coerce.string(),
+    updatedAt: z.coerce.string(),
+    publishedAt: z.coerce.string()
   })
   .describe(
     txt(
