@@ -77,10 +77,11 @@ const stream: Stream = (args) => async (c) => {
 
     act(setAssistantWorking());
 
-    if (intents.includes("GET_ASSISTANTS_ATTENTION")) {
-      if (yieldedState.slices.assistant.placement === "MINIMISED") {
-        act(setAssistantPlacement("DOCKED"));
-      }
+    if (
+      intents.includes("GET_ASSISTANTS_ATTENTION") &&
+      yieldedState.slices.assistant.placement === "MINIMISED"
+    ) {
+      act(setAssistantPlacement("DOCKED"));
     }
 
     return analysis;

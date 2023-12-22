@@ -2,9 +2,10 @@ import { AppDispatch } from "@rems/state";
 import {
   AppAction,
   returnControl,
-  setAssistantChatting
+  setAssistantChatting,
+  setAssistantPlacement
 } from "@rems/state/app/actions";
-import { AppState, AssistantPayload } from "@rems/types";
+import { Analysis, AppState, AssistantPayload } from "@rems/types";
 import { Observable, Subscriber } from "rxjs";
 import { Sound } from "@/utils";
 
@@ -19,15 +20,25 @@ const handover = (state: AppState, dispatch: AppDispatch) => {
     }).then((res) => handle(sub, res));
   });
 
+  let analysis: Analysis;
+
   req.subscribe({
     next: (action) => {
       console.log(action);
       dispatch(action);
 
+      if (action.type === "REGISTER_ANALYSIS") {
+        analysis = action.payload;
+      }
+
       if (action.type === "YIELD") {
         dispatch(setAssistantChatting());
         Sound.speak(action.payload.message).then(() => {
           dispatch(returnControl());
+
+          if (analysis.intents.includes("END_ASSISTANT_SESSION")) {
+            dispatch(setAssistantPlacement("MINIMISED"));
+          }
         });
       }
     }

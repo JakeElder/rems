@@ -18,7 +18,8 @@ export const IntentCodeSchema = z
     "REFINE_LOT_FEATURES",
     "REFINE_VIEW_TYPES",
     "REFINE_PROPERTY_TYPES",
-    "REQUEST_CLARIFICATION"
+    "REQUEST_CLARIFICATION",
+    "END_ASSISTANT_SESSION"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 

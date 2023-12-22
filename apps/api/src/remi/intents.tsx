@@ -117,6 +117,13 @@ const intents: Intent[] = [
     code: "GET_ASSISTANTS_ATTENTION",
     description: md(<>Prepares the assistant for further input</>),
     examples: ["Hey, Remi"]
+  },
+
+  {
+    id: 160,
+    code: "END_ASSISTANT_SESSION",
+    description: md(<>Resets the app and minimises the assistant</>),
+    examples: ["Ok that's it for today"]
   }
 ];
 
