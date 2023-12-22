@@ -67,6 +67,14 @@ export const registerIntentResolutionError = createAction<
   "REGISTER_INTENT_RESOLUTION"
 >("REGISTER_INTENT_RESOLUTION");
 
+export const registerSelectedProperty = createAction<
+  {
+    role: ActorTimelineEvent["role"];
+    property: Property | null;
+  },
+  "REGISTER_SELECTED_PROPERTY"
+>("REGISTER_SELECTED_PROPERTY");
+
 export const replaceRealEstateQuery = createAction<
   RealEstateQuery,
   "REPLACE_REAL_ESTATE_QUERY"
@@ -107,13 +115,13 @@ export const setPageAndSort = createAction<
 
 export const setResolvingIntents = createAction("SET_RESOLVING_INTENTS");
 
-export const setSelectedProperty = createAction<
+export const setSelectedPropertyId = createAction<
   {
     role: ActorTimelineEvent["role"];
-    property: Property["id"] | null;
+    id: Property["id"] | null;
   },
-  "SET_SELECTED_PROPERTY"
->("SET_SELECTED_PROPERTY");
+  "SET_SELECTED_PROPERTY_ID"
+>("SET_SELECTED_PROPERTY_ID");
 
 export const setSpaceRequirements = createAction<
   QueryMutationAction<Partial<SpaceRequirements>>,
@@ -153,6 +161,9 @@ type RegisterAnalysisAction = ReturnType<typeof registerAnalysis>;
 type RegisterIntentResolutionErrorAction = ReturnType<
   typeof registerIntentResolutionError
 >;
+type RegisterSelectedPropertyAction = ReturnType<
+  typeof registerSelectedProperty
+>;
 type ReplaceRealEstateQueryAction = ReturnType<typeof replaceRealEstateQuery>;
 type ResetRealEstateQueryAction = ReturnType<typeof resetRealEstateQuery>;
 type ReturnControlAction = ReturnType<typeof returnControl>;
@@ -165,7 +176,7 @@ type SetBudgetAndAvailabilityAction = ReturnType<
 type SetLocationAction = ReturnType<typeof setLocation>;
 type SetPageAndSortAction = ReturnType<typeof setPageAndSort>;
 type SetResolvingIntentsAction = ReturnType<typeof setResolvingIntents>;
-type SetSelectedPropertyAction = ReturnType<typeof setSelectedProperty>;
+type SetSelectedPropertyAction = ReturnType<typeof setSelectedPropertyId>;
 type SetSpaceRequirementsAction = ReturnType<typeof setSpaceRequirements>;
 type YieldAction = ReturnType<typeof yld>;
 
@@ -185,6 +196,7 @@ export type AppAction =
   | NoopAction
   | RegisterAnalysisAction
   | RegisterIntentResolutionErrorAction
+  | RegisterSelectedPropertyAction
   | ReplaceRealEstateQueryAction
   | ResetRealEstateQueryAction
   | ReturnControlAction

@@ -23,6 +23,7 @@ import {
   noop,
   registerAnalysis,
   registerIntentResolutionError,
+  registerSelectedProperty,
   replaceRealEstateQuery,
   returnControl,
   setArray,
@@ -32,7 +33,7 @@ import {
   setLocation,
   setPageAndSort,
   setResolvingIntents,
-  setSelectedProperty,
+  setSelectedPropertyId,
   setSpaceRequirements,
   yld
 } from "./actions";
@@ -241,6 +242,19 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     });
   });
 
+  // REGISTER_SELECTED_PROPERTY
+  builder.addCase(registerSelectedProperty, (state, action) => {
+    state.timeline.push({
+      id: nanoid(),
+      role: action.payload.role,
+      date: Date.now(),
+      event: {
+        type: "PROPERTY_SELECTED",
+        property: action.payload.property
+      }
+    });
+  });
+
   // NOOP
   builder.addCase(noop, () => {});
 
@@ -409,9 +423,9 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     state.slices.assistant.mode = "WORKING";
   });
 
-  // SET_SELECTED_PROPERTY
-  builder.addCase(setSelectedProperty, (state, action) => {
-    state.slices.selectedProperty = action.payload.property;
+  // SET_SELECTED_PROPERTY_ID
+  builder.addCase(setSelectedPropertyId, (state, action) => {
+    state.slices.selectedPropertyId = action.payload.id;
   });
 
   // SET_SPACE_REQUIREMENTS

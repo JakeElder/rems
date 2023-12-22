@@ -4,6 +4,7 @@ import { StateMutationSchema } from "./state-mutation";
 import { AppStateSlicesSchema } from "./app-state-slices";
 import { AnalysisSchema } from ".";
 import IntentResolutionErrorSchema from "./intent-resolution-error";
+import { PropertySchema } from "./property";
 
 export const StateMutationInteractionEventSchema = z.object({
   type: z.literal("STATE_MUTATION"),
@@ -19,6 +20,11 @@ export const YieldEventSchema = z.object({
   type: z.literal("YIELD"),
   message: z.string(),
   state: AppStateSlicesSchema
+});
+
+export const PropertySelectedEventSchema = z.object({
+  type: z.literal("PROPERTY_SELECTED"),
+  property: PropertySchema.nullable()
 });
 
 export const ErrorEventSchema = z.object({
@@ -45,13 +51,15 @@ export const SystemEventSchema = z.discriminatedUnion("type", [
 
 export const UserEventSchema = z.discriminatedUnion("type", [
   StateMutationInteractionEventSchema,
-  YieldEventSchema
+  YieldEventSchema,
+  PropertySelectedEventSchema
 ]);
 
 export const AssistantEventSchema = z.discriminatedUnion("type", [
   StateMutationInteractionEventSchema,
   UpdateLocationEventSchema,
-  YieldEventSchema
+  YieldEventSchema,
+  PropertySelectedEventSchema
 ]);
 
 export const EventSchema = z.discriminatedUnion("type", [

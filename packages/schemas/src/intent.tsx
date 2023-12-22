@@ -15,7 +15,8 @@ export const IntentCodeSchema = z
     "REFINE_OUTDOOR_FEATURES",
     "REFINE_LOT_FEATURES",
     "REFINE_VIEW_TYPES",
-    "REFINE_PROPERTY_TYPES"
+    "REFINE_PROPERTY_TYPES",
+    "OBTAIN_SELECTED_PROPERTY_INFO"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 

@@ -12,7 +12,7 @@ export const AppStateSlicesSchema = z.object({
     spaceDown: z.boolean(),
     enterDown: z.boolean()
   }),
-  selectedProperty: PropertySchema.shape["id"]
+  selectedPropertyId: PropertySchema.shape["id"]
     .nullable()
     .describe(
       md(

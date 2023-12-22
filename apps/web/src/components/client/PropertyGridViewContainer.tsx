@@ -3,15 +3,19 @@
 import React from "react";
 import { PropertyRow, PropertyRowContainer } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
-import { useDispatch, useSelectedProperty } from "@/state";
-import { setSelectedProperty } from "@rems/state/app/actions";
+import { useDispatch, useSelectedPropertyId } from "@/state";
+import {
+  registerSelectedProperty,
+  setSelectedPropertyId
+} from "@rems/state/app/actions";
+import fetch from "@/fetch";
 
 type Props = {};
 
 const PropertyGridViewContainer = ({ }: Props) => {
   const { data, isLoading } = useProperties({ target: "LISTINGS" });
   const dispatch = useDispatch();
-  const selectedProperty = useSelectedProperty();
+  const selectedPropertyId = useSelectedPropertyId();
 
   return (
     <PropertyRowContainer loading={isLoading}>
@@ -20,13 +24,21 @@ const PropertyGridViewContainer = ({ }: Props) => {
           key={p.id}
           type={data!.query.budgetAndAvailability.type}
           property={p}
-          active={selectedProperty === p.id}
+          active={selectedPropertyId === p.id}
           onClick={(e) => {
             e.preventDefault();
+            fetch("property", p.id).then((p) => {
+              dispatch(
+                registerSelectedProperty({
+                  role: "USER",
+                  property: p
+                })
+              );
+            });
             dispatch(
-              setSelectedProperty({
+              setSelectedPropertyId({
                 role: "USER",
-                property: selectedProperty === p.id ? null : p.id
+                id: selectedPropertyId === p.id ? null : p.id
               })
             );
           }}

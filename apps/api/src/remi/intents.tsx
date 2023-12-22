@@ -119,13 +119,26 @@ const intents: Intent[] = [
   },
 
   {
+    id: 130,
+    code: "OBTAIN_SELECTED_PROPERTY_INFO",
+    requiresWork: false,
+    description: md(
+      <>
+        The user wants the assistant to summarise the currently selected
+        property in some way
+      </>
+    ),
+    examples: []
+  },
+
+  {
     id: 500,
     code: "UNKNOWN",
     requiresWork: false,
     description: md(
       <>
         It is unclear that the user's intent falls within one of our defined
-        intents
+        options
       </>
     ),
     examples: []

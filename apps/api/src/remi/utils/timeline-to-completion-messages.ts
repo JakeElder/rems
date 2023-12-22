@@ -13,6 +13,13 @@ const timelineToCompletionMessages = (
         };
       }
 
+      if (e.event.type === "PROPERTY_SELECTED") {
+        return {
+          role: e.role === "USER" ? "user" : "assistant",
+          content: `ACTION: ${JSON.stringify(e.event)}`
+        };
+      }
+
       if (e.event.type === "ANALYSIS_PERFORMED") {
         return {
           role: "system",
