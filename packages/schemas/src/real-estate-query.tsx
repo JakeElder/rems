@@ -63,7 +63,7 @@ export const UrlRealEstateQuerySchema = z.object({
   "max-living-area": z.coerce.number().nullable().default(null).catch(null),
   "min-lot-size": z.coerce.number().default(0).catch(0),
   "max-lot-size": z.coerce.number().nullable().default(null).catch(null),
-  "location-source": z.string().catch("Bangkok").default("Bangkok"),
+  "location-source": z.string().catch("Chiang Mai").default("Chiang Mai"),
   "location-source-type": z.enum(["nl", "ll"]).catch("nl").default("nl"),
   "location-geospatial-operator": z
     .string()

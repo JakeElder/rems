@@ -9,7 +9,7 @@ const defaultRealEstateQuery = (): RealEstateQuery => ({
   },
   locationSource: {
     type: "NL",
-    description: "Bangkok",
+    description: "Chiang Mai",
     geospatialOperator: "in",
     radius: 10000
   },
