@@ -35,7 +35,7 @@ import {
   setLocation,
   setPageAndSort,
   setResolvingIntents,
-  setSelectedPropertyId,
+  setSelectedProperty,
   setSpaceRequirements,
   yld
 } from "./actions";
@@ -252,7 +252,8 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
       date: Date.now(),
       event: {
         type: "PROPERTY_SELECTED",
-        property: action.payload.property
+        property: action.payload.property,
+        reason: action.payload.reason
       }
     });
   });
@@ -435,9 +436,12 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     state.slices.assistant.mode = "WORKING";
   });
 
-  // SET_SELECTED_PROPERTY_ID
-  builder.addCase(setSelectedPropertyId, (state, action) => {
-    state.slices.selectedPropertyId = action.payload.id;
+  // SET_SELECTED_PROPERTY
+  builder.addCase(setSelectedProperty, (state, action) => {
+    const idx = state.slices.selectedProperties.findIndex(
+      (i) => i.role === action.payload.role
+    );
+    state.slices.selectedProperties[idx].id = action.payload.id;
   });
 
   // SET_SPACE_REQUIREMENTS

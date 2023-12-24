@@ -27,8 +27,7 @@ export const PropsSchema = z.object({
 });
 
 export const ContextSchema = z.object({
-  currentLocation: LocationSchema,
-  currentPropertiesOnPage: z.array(PropertySchema)
+  currentLocation: LocationSchema
 });
 
 export const ReturnsSchema = z
@@ -87,19 +86,32 @@ const identifyIntents = async ({
           </p>
           <p>The user has just yielded control to the assistant</p>
           <p>Choose functions that should be called to assist</p>
-          <p>
-            Be aware of partial query refinements. IE - REFINE_INDOOR_FEATURES
-            should be set if the user asks to modify indoor features.
-          </p>
-          <p>
-            The user may want to move the position of the assistant, in this
-            case CHANGE_ASSISTANT_POSITION should be chosen
-          </p>
-          <p>
-            Only perform an action when the user has requested you do so. IE -
-            if the user asks 'can you speak Thai' - just say yes, but don't
-            switch the language yet.
-          </p>
+          <p>Some points to consider;</p>
+          <ul>
+            <li>
+              You can and often should choose multiple functions, but only when
+              sure.
+            </li>
+            <li>
+              When CLEAR_QUERY_PARTIALLY is set include refinements too. IE, it
+              should only be used in conjunction with other refinements. IE if
+              the user wants to clear "High Altitude". Then
+              "REFINE_LOT_FEATURES" should be set also.
+            </li>
+            <li>
+              The user may want to move the position of the assistant, in this
+              case CHANGE_ASSISTANT_POSITION should be chosen
+            </li>
+            <li>
+              Only perform an action when the user has requested you do so. IE -
+              if the user asks 'can you speak Thai' - just say yes, but don't
+              switch the language yet.
+            </li>
+            <li>
+              Make sure END_ASSISTANT_SESSION is used when it sounds as though
+              the user has come to a resting point
+            </li>
+          </ul>
         </>
       ),
       {

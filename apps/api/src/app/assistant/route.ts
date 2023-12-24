@@ -18,6 +18,7 @@ import {
   noop,
   registerAnalysis,
   registerIntentResolutionError,
+  registerSelectedProperty,
   replaceRealEstateQuery,
   setArray,
   setAssistantLanguage,
@@ -26,6 +27,7 @@ import {
   setBudgetAndAvailability,
   setLocation,
   setPageAndSort,
+  setSelectedProperty,
   setSpaceRequirements,
   yld
 } from "@rems/state/app/actions";
@@ -49,11 +51,16 @@ const stream: Stream = (payload) => async (c) => {
 
   const store = app.init(yieldedState);
 
-  const act = (action: AppAction) => {
-    const chunk = encoder.encode(`${JSON.stringify(action)}\n`);
-    c.enqueue(chunk);
-    store.dispatch(action);
-    return action;
+  const act = (param: AppAction | AppAction[]) => {
+    const actions = Array.isArray(param) ? param : [param];
+
+    actions.forEach((action) => {
+      const chunk = encoder.encode(`${JSON.stringify(action)}\n`);
+      c.enqueue(chunk);
+      store.dispatch(action);
+    });
+
+    return param;
   };
 
   const { locationSource } = query;
@@ -90,10 +97,7 @@ const stream: Stream = (payload) => async (c) => {
       act(setAssistantPlacement("DOCKED"));
     }
 
-    if (
-      intents.includes("START_NEW_QUERY") ||
-      intents.includes("CLEAR_QUERY_COMPLETELY")
-    ) {
+    if (intents.includes("CLEAR_QUERY_COMPLETELY")) {
       act(replaceRealEstateQuery(app.defaults().slices.realEstateQuery));
     }
 
@@ -107,8 +111,8 @@ const stream: Stream = (payload) => async (c) => {
     fn: T,
     process: (
       res: Extract<Awaited<ReturnType<T>>, { ok: true }>["data"]
-    ) => Promise<AppAction>
-  ): Promise<AppAction> => {
+    ) => Promise<AppAction | AppAction[]>
+  ): Promise<AppAction | AppAction[]> => {
     const { intents } = await analyze();
     if (!intents.includes(intent)) {
       return act(noop());
@@ -357,12 +361,25 @@ const stream: Stream = (payload) => async (c) => {
     ),
 
     /**
-     * Chose One Property
+     * Choose One Property
      */
     resolve(
       "CHOOSE_ONE_PROPERTY",
       () => fn.chooseOneProperty({ timeline, properties }),
-      async (res) => noop()
+      async (res) => {
+        if (res.id) {
+          const property = await resolvePropertyOrFail(res.id);
+          return [
+            setSelectedProperty({ role: "ASSISTANT", id: res.id }),
+            registerSelectedProperty({
+              role: "ASSISTANT",
+              property,
+              reason: res.justification
+            })
+          ];
+        }
+        return noop();
+      }
     )
   ]);
 

@@ -32,7 +32,9 @@ const assistantPosition = async ({
         <>
           <p>
             You an assistant responsible for helping the user of a real estate
-            website. Process their input and change the assistant UI position
+            website. Process their input and change the assistant UI position.
+            For context, the map is on the right and the property listings are
+            on the left. To get out of the way of the map - go to the left.
           </p>
         </>
       ),

@@ -24,7 +24,8 @@ export const YieldEventSchema = z.object({
 
 export const PropertySelectedEventSchema = z.object({
   type: z.literal("PROPERTY_SELECTED"),
-  property: PropertySchema.nullable()
+  property: PropertySchema.nullable(),
+  reason: z.string().optional()
 });
 
 export const ErrorEventSchema = z.object({

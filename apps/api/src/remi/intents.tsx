@@ -14,19 +14,19 @@ const intents: Intent[] = [
     ]
   },
 
-  {
-    id: 210,
-    code: "QUERY_SELECTED_PROPERTY",
-    description: md(
-      <>
-        Used when the user asks a specific question about the selected property
-      </>
-    ),
-    examples: [
-      "How big is this property",
-      "What is the price of this property."
-    ]
-  },
+  // {
+  //   id: 210,
+  //   code: "QUERY_SELECTED_PROPERTY",
+  //   description: md(
+  //     <>
+  //       Used when the user asks a specific question about the selected property
+  //     </>
+  //   ),
+  //   examples: [
+  //     "How big is this property",
+  //     "What is the price of this property."
+  //   ]
+  // },
 
   {
     id: 30,
@@ -123,21 +123,25 @@ const intents: Intent[] = [
     id: 160,
     code: "END_ASSISTANT_SESSION",
     description: md(<>Resets the app and minimises the assistant</>),
-    examples: ["Ok that's it for today"]
+    examples: [
+      "Ok that's it for today",
+      "We're done for the day",
+      "Ok - see you"
+    ]
   },
 
-  {
-    id: 170,
-    code: "START_NEW_QUERY",
-    description: md(
-      <>
-        This function is called when the user issues a query that should
-        overwrite the current. It is called in addition to other functions, ie
-        REFINE_LOCATION - and whatever is necessary to build the new query.
-      </>
-    ),
-    examples: ["Actually, show me condos in Chiang Mai"]
-  },
+  // {
+  //   id: 170,
+  //   code: "START_NEW_QUERY",
+  //   description: md(
+  //     <>
+  //       This function is called when the user issues a query that should
+  //       overwrite the current. It is called in addition to other functions, ie
+  //       REFINE_LOCATION - and whatever is necessary to build the new query.
+  //     </>
+  //   ),
+  //   examples: ["Actually, show me condos in Chiang Mai"]
+  // },
 
   {
     id: 170,
@@ -164,8 +168,7 @@ const intents: Intent[] = [
     description: md(
       <>
         The assistant can be minimised, docked, left, right or windowed. This
-        function moves the assistant. For context, the map is on the right and
-        the property listings are on the left.
+        function moves the assistant.
       </>
     ),
     examples: ["Move to the right"]
@@ -176,6 +179,18 @@ const intents: Intent[] = [
     code: "CHANGE_ASSISTANT_LANGUAGE",
     description: "Change from Thai/English",
     examples: ["Switch to Thai"]
+  },
+
+  {
+    id: 210,
+    code: "QUERY_SELECTED_PROPERTIES",
+    description: "Provides insights about a selected property or properties",
+    examples: [
+      "How big is this property",
+      "What is the price of this property.",
+      "Which one of these is bigger",
+      "How do these properties compare"
+    ]
   }
 ];
 

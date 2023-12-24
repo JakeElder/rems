@@ -1,21 +1,36 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { PropertyRow, PropertyRowContainer } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
-import { useDispatch, useSelectedPropertyId } from "@/state";
+import {
+  useAssistantSelectedProperty,
+  useDispatch,
+  useUserSelectedProperty
+} from "@/state";
 import {
   registerSelectedProperty,
-  setSelectedPropertyId
+  setSelectedProperty
 } from "@rems/state/app/actions";
 import fetch from "@/fetch";
+import { Property } from "@rems/types";
 
 type Props = {};
 
 const PropertyGridViewContainer = ({}: Props) => {
   const { data, isLoading } = useProperties({ target: "LISTINGS" });
   const dispatch = useDispatch();
-  const selectedPropertyId = useSelectedPropertyId();
+  const userSelectedPropertyId = useUserSelectedProperty();
+  const assistantSelectedPropertyId = useAssistantSelectedProperty();
+
+  const getSelection = useCallback(
+    (id: Property["id"]) => {
+      if (userSelectedPropertyId === id) return "USER";
+      if (assistantSelectedPropertyId === id) return "ASSISTANT";
+      return null;
+    },
+    [userSelectedPropertyId, assistantSelectedPropertyId]
+  );
 
   return (
     <PropertyRowContainer loading={isLoading}>
@@ -24,7 +39,7 @@ const PropertyGridViewContainer = ({}: Props) => {
           key={p.id}
           type={data!.query.budgetAndAvailability.type}
           property={p}
-          active={selectedPropertyId === p.id}
+          selection={getSelection(p.id)}
           onClick={(e) => {
             e.preventDefault();
             fetch("property", p.id).then((p) => {
@@ -36,9 +51,9 @@ const PropertyGridViewContainer = ({}: Props) => {
               );
             });
             dispatch(
-              setSelectedPropertyId({
+              setSelectedProperty({
                 role: "USER",
-                id: selectedPropertyId === p.id ? null : p.id
+                id: userSelectedPropertyId === p.id ? null : p.id
               })
             );
           }}

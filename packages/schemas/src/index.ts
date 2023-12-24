@@ -28,6 +28,7 @@ export * from "./property-type-requirements";
 export * from "./radius";
 export * from "./real-estate-index-page-and-sort";
 export * from "./real-estate-query";
+export * from "./selected-properties-manifest";
 export * from "./space-requirements";
 export * from "./state-mutation";
 export * from "./timeline";

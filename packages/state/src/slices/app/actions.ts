@@ -73,6 +73,7 @@ export const registerSelectedProperty = createAction<
   {
     role: ActorTimelineEvent["role"];
     property: Property | null;
+    reason?: string;
   },
   "REGISTER_SELECTED_PROPERTY"
 >("REGISTER_SELECTED_PROPERTY");
@@ -125,13 +126,13 @@ export const setPageAndSort = createAction<
 
 export const setResolvingIntents = createAction("SET_RESOLVING_INTENTS");
 
-export const setSelectedPropertyId = createAction<
+export const setSelectedProperty = createAction<
   {
     role: ActorTimelineEvent["role"];
     id: Property["id"] | null;
   },
-  "SET_SELECTED_PROPERTY_ID"
->("SET_SELECTED_PROPERTY_ID");
+  "SET_SELECTED_PROPERTY"
+>("SET_SELECTED_PROPERTY");
 
 export const setSpaceRequirements = createAction<
   QueryMutationAction<Partial<SpaceRequirements>>,
@@ -188,7 +189,7 @@ type SetBudgetAndAvailabilityAction = ReturnType<
 type SetLocationAction = ReturnType<typeof setLocation>;
 type SetPageAndSortAction = ReturnType<typeof setPageAndSort>;
 type SetResolvingIntentsAction = ReturnType<typeof setResolvingIntents>;
-type SetSelectedPropertyAction = ReturnType<typeof setSelectedPropertyId>;
+type SetSelectedPropertyAction = ReturnType<typeof setSelectedProperty>;
 type SetSpaceRequirementsAction = ReturnType<typeof setSpaceRequirements>;
 type YieldAction = ReturnType<typeof yld>;
 
