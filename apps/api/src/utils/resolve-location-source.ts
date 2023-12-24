@@ -1,5 +1,6 @@
-import { Client } from "@googlemaps/google-maps-services-js";
+// import { Client } from "@googlemaps/google-maps-services-js";
 import {
+  Bounds,
   LocationResolution,
   LocationSource,
   NlLocationSource
@@ -7,7 +8,7 @@ import {
 import { google } from "googleapis";
 import memoize from "memoizee";
 
-const client = new Client();
+// const client = new Client();
 const key = process.env.PLACES_API_KEY;
 
 const { places } = google.places({
@@ -22,6 +23,51 @@ if (!key) {
 type ResolveLocationSourceReturn =
   | { ok: true; resolution: LocationResolution }
   | { ok: false };
+
+const adjustBoundsToMinimumArea = (
+  viewport: Bounds,
+  minAreaKm2: number = 40
+) => {
+  const EARTH_CIRCUMFERENCE = 40075;
+  const KM_PER_DEGREE_LAT = EARTH_CIRCUMFERENCE / 360;
+
+  const low = viewport.sw;
+  const high = viewport.ne;
+
+  const latDiff = high.lat - low.lat;
+  const avgLat = (high.lat + low.lat) / 2;
+  const lngDiff = high.lng - low.lng;
+  const area =
+    latDiff *
+    lngDiff *
+    KM_PER_DEGREE_LAT *
+    KM_PER_DEGREE_LAT *
+    Math.cos((avgLat * Math.PI) / 180);
+
+  if (area < minAreaKm2) {
+    const requiredLatDiff = Math.sqrt(
+      minAreaKm2 /
+        (KM_PER_DEGREE_LAT *
+          KM_PER_DEGREE_LAT *
+          Math.cos((avgLat * Math.PI) / 180))
+    );
+    const requiredLngDiff =
+      requiredLatDiff / Math.cos((avgLat * Math.PI) / 180);
+
+    return {
+      sw: {
+        lat: avgLat - requiredLatDiff / 2,
+        lng: (high.lng + low.lng) / 2 - requiredLngDiff / 2
+      },
+      ne: {
+        lat: avgLat + requiredLatDiff / 2,
+        lng: (high.lng + low.lng) / 2 + requiredLngDiff / 2
+      }
+    };
+  }
+
+  return viewport;
+};
 
 const resolveNlLocationSource = memoize(
   async (source: NlLocationSource): Promise<ResolveLocationSourceReturn> => {
@@ -55,14 +101,18 @@ const resolveNlLocationSource = memoize(
       return { ok: false };
     }
 
+    const bounds: Bounds = {
+      sw: { lat: viewport.low.latitude, lng: viewport.low.longitude },
+      ne: { lat: viewport.high.latitude, lng: viewport.high.longitude }
+    };
+
+    const adjusted = adjustBoundsToMinimumArea(bounds);
+
     const resolution: LocationResolution = {
       id,
       lat: location.latitude,
       lng: location.longitude,
-      bounds: {
-        sw: { lat: viewport.low.latitude, lng: viewport.low.longitude },
-        ne: { lat: viewport.high.latitude, lng: viewport.high.longitude }
-      },
+      bounds: adjusted,
       ...(displayName?.text ? { displayName: displayName.text } : {}),
       ...(editorialSummary?.text
         ? { editorialSummary: editorialSummary?.text }
