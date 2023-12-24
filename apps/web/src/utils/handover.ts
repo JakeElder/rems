@@ -5,15 +5,14 @@ import {
   setAssistantChatting,
   setAssistantPlacement
 } from "@rems/state/app/actions";
-import { Analysis, AppState, AssistantPayload } from "@rems/types";
+import { Analysis, AssistantPayload } from "@rems/types";
 import { Observable, Subscriber } from "rxjs";
 import { Sound } from "@/utils";
 
 type Pump = (params: ReadableStreamReadResult<Uint8Array>) => void;
 
-const handover = (state: AppState, dispatch: AppDispatch) => {
+const handover = (payload: AssistantPayload, dispatch: AppDispatch) => {
   const req = new Observable<AppAction>((sub) => {
-    const payload: AssistantPayload = { state };
     fetch(`${process.env.NEXT_PUBLIC_REMS_API_URL}/assistant`, {
       method: "POST",
       body: JSON.stringify(payload)

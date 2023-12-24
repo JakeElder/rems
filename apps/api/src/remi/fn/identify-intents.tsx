@@ -10,6 +10,7 @@ import { timelineToCompletionMessages, execute, stringify } from "@/remi/utils";
 import { intents } from "@/remi";
 import {
   LocationSchema,
+  PropertySchema,
   TerseIntentSchema,
   TimelineSchema
 } from "@rems/schemas";
@@ -21,11 +22,13 @@ import md from "@rems/utils/md";
 
 export const PropsSchema = z.object({
   currentLocation: LocationSchema,
+  currentPropertiesOnPage: z.array(PropertySchema),
   timeline: TimelineSchema
 });
 
 export const ContextSchema = z.object({
-  currentLocation: LocationSchema
+  currentLocation: LocationSchema,
+  currentPropertiesOnPage: z.array(PropertySchema)
 });
 
 export const ReturnsSchema = z

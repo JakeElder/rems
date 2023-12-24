@@ -12,7 +12,7 @@ import fetch from "@/fetch";
 
 type Props = {};
 
-const PropertyGridViewContainer = ({ }: Props) => {
+const PropertyGridViewContainer = ({}: Props) => {
   const { data, isLoading } = useProperties({ target: "LISTINGS" });
   const dispatch = useDispatch();
   const selectedPropertyId = useSelectedPropertyId();

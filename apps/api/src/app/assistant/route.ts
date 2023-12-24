@@ -33,6 +33,7 @@ import resolveLocationSource, {
   resolveLocationSourceOrFail
 } from "../../utils/resolve-location-source";
 import { pickBy } from "remeda";
+import { resolvePropertyOrFail } from "../properties/[id]/resolve";
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
@@ -41,8 +42,8 @@ const defined = (obj: Record<string, any>) =>
 
 const encoder = new TextEncoder();
 
-const stream: Stream = (args) => async (c) => {
-  const { state: yieldedState } = args;
+const stream: Stream = (payload) => async (c) => {
+  const { state: yieldedState, properties: propertyIds } = payload;
   const { timeline } = yieldedState;
   const query = yieldedState.slices.realEstateQuery;
 
@@ -58,13 +59,16 @@ const stream: Stream = (args) => async (c) => {
   const { locationSource } = query;
   const locationResolution = await resolveLocationSourceOrFail(locationSource);
 
+  const properties = await Promise.all(propertyIds.map(resolvePropertyOrFail));
+
   const analyze = memoize(async () => {
     const res = await fn.identifyIntents({
       timeline: yieldedState.timeline,
       currentLocation: {
         source: query.locationSource,
         resolution: locationResolution
-      }
+      },
+      currentPropertiesOnPage: properties
     });
 
     if (!res.ok) {
@@ -320,6 +324,21 @@ const stream: Stream = (args) => async (c) => {
     ),
 
     /**
+     * View Types
+     */
+    resolve(
+      "REFINE_VIEW_TYPES",
+      () => refine.viewTypes({ timeline, current: query.viewTypes }),
+      async (res) =>
+        setArray({
+          role: "ASSISTANT",
+          data: res,
+          prop: "viewTypes",
+          group: "View Types"
+        })
+    ),
+
+    /**
      * Assistant Position
      */
     resolve(
@@ -335,6 +354,15 @@ const stream: Stream = (args) => async (c) => {
       "CHANGE_ASSISTANT_LANGUAGE",
       () => refine.assistantLanguage({ timeline }),
       async (res) => setAssistantLanguage(res)
+    ),
+
+    /**
+     * Chose One Property
+     */
+    resolve(
+      "CHOOSE_ONE_PROPERTY",
+      () => fn.chooseOneProperty({ timeline, properties }),
+      async (res) => noop()
     )
   ]);
 
@@ -362,9 +390,9 @@ const stream: Stream = (args) => async (c) => {
 };
 
 export async function POST(req: NextRequest) {
-  const { state } = AssistantPayloadSchema.parse(await req.json());
+  const payload = AssistantPayloadSchema.parse(await req.json());
 
-  return new Response(new ReadableStream({ start: stream({ state }) }), {
+  return new Response(new ReadableStream({ start: stream(payload) }), {
     headers: { "Content-Type": "application/json; charset=utf-8" }
   });
 }

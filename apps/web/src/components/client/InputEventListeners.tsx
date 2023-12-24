@@ -1,5 +1,6 @@
 "use client";
 
+import useProperties from "@/hooks/use-properties";
 import { store, useAssistantLanguage, useDispatch, useSession } from "@/state";
 import { handover } from "@/utils";
 import {
@@ -13,7 +14,7 @@ import {
   handleVoiceInputReceived,
   yld
 } from "@rems/state/app/actions";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition
 } from "react-speech-recognition";
@@ -28,6 +29,8 @@ const InputEventListeners = ({}: Props) => {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const session = useSession();
   const language = useAssistantLanguage();
+  const { data, isLoading } = useProperties({ target: "LISTINGS" });
+  const [yielding, setYielding] = useState(false);
 
   useEffect(() => {
     if (listening) {
@@ -54,6 +57,14 @@ const InputEventListeners = ({}: Props) => {
     }
   }, [listening, transcript]);
 
+  useEffect(() => {
+    if (yielding && !isLoading && data) {
+      const ids = data.data.map((p) => p.id);
+      handover({ state: store.getState(), properties: ids }, dispatch);
+      setYielding(false);
+    }
+  }, [yielding, isLoading]);
+
   const debouncedSetInactive = useDebouncedCallback(
     () => dispatch(handleInputIdle()),
     500
@@ -75,7 +86,7 @@ const InputEventListeners = ({}: Props) => {
       })
     );
 
-    handover(store.getState(), dispatch);
+    setYielding(true);
   };
 
   useEffect(() => {
