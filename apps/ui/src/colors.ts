@@ -152,13 +152,6 @@ const CHAT_INPUT_THEME: InputTheme = {
       color: "#8850a2"
     },
 
-
-    // RESOLVING: {
-    //   borderColor: "#439a5f",
-    //   backgroundColor: "#f5f5f5",
-    //   color: "#accbb6"
-    // },
-
     RESOLVED: {
       borderColor: "#439a5f",
       backgroundColor: "#f5f5f5",
