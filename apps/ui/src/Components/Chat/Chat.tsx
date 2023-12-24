@@ -34,6 +34,34 @@ export type Props = {
   placement: AssistantState["placement"];
 } & Spacing;
 
+type PulseAnimationState = {
+  transform: string;
+  opacity: number;
+};
+
+type PulseAnimation = {
+  from: PulseAnimationState;
+  to: PulseAnimationState;
+};
+
+const LISTENING_ANIMATION: PulseAnimation = {
+  from: { transform: "scale(1.3)", opacity: 0 },
+  to: { transform: "scale(1)", opacity: 0.5 }
+};
+
+const WORKING_ANIMATION: PulseAnimation = {
+  from: { transform: "scale(1)", opacity: 1 },
+  to: { transform: "scale(1.2)", opacity: 0 }
+};
+
+const DEFAULT_ANIMATION = LISTENING_ANIMATION;
+
+const pulseAnimation = (mode: Props["mode"]) => {
+  if (mode === "LISTENING") return LISTENING_ANIMATION;
+  if (mode === "WORKING") return WORKING_ANIMATION;
+  return DEFAULT_ANIMATION;
+};
+
 export const Header = React.memo(
   ({ mode, lang }: Pick<Props, "mode" | "lang">) => {
     const palette = CHAT_PALETTE[mode];
@@ -44,15 +72,14 @@ export const Header = React.memo(
     });
 
     const pulseStyle = useSpring({
-      from: { transform: "scale(1)", opacity: 1 },
-      to: { transform: "scale(1.2)", opacity: 0 },
+      ...pulseAnimation(mode),
       reset: true,
       loop: true,
       config: { tension: 170, friction: 50 }
     });
 
     const { pulseOpacity } = useSpring({
-      pulseOpacity: mode === "LISTENING" ? 1 : 0
+      pulseOpacity: mode === "LISTENING" || mode === "WORKING" ? 1 : 0
     });
 
     const langStyle = useSpring({

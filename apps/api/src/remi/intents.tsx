@@ -184,7 +184,8 @@ const intents: Intent[] = [
   {
     id: 210,
     code: "QUERY_SELECTED_PROPERTIES",
-    description: "Provides insights about a selected property or properties",
+    description:
+      "Provides insights about a selected property or properties. **Only available when there are properties selected.**",
     examples: [
       "How big is this property",
       "What is the price of this property.",

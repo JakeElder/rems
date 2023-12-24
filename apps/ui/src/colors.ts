@@ -33,10 +33,10 @@ export const CHAT_PALETTE: Record<AssistantState["mode"], ChatPalette> = {
     labelColor: "#555"
   },
 
-  // Purple
+  // Blue
   LISTENING: {
-    avatarBorder: "#8850a2",
-    labelBg: "#8850a2",
+    avatarBorder: "#00acd6",
+    labelBg: "#00b8e5",
     labelColor: "#fff"
   },
 
@@ -47,10 +47,10 @@ export const CHAT_PALETTE: Record<AssistantState["mode"], ChatPalette> = {
     labelColor: "#fff"
   },
 
-  // Green
+  // Purple
   WORKING: {
-    avatarBorder: "#439a5f",
-    labelBg: "#439a5f",
+    avatarBorder: "#8850a2",
+    labelBg: "#8850a2",
     labelColor: "#fff"
   },
 
@@ -63,9 +63,9 @@ export const CHAT_PALETTE: Record<AssistantState["mode"], ChatPalette> = {
 };
 
 const CHAT_INPUT_INPUTTING: InputPalette = {
-  borderColor: "#8850a2",
+  borderColor: "#00acd6",
   backgroundColor: "#fff",
-  color: "#8850a2"
+  color: "#00a3cc"
 };
 
 const CHAT_INPUT_NEUTRAL: InputPalette = {
@@ -100,9 +100,9 @@ const HEADER_INPUT_THEME: InputTheme = {
     },
 
     RESOLVING: {
-      borderColor: "#439a5f",
+      borderColor: "#8850a2",
       backgroundColor: "#fff",
-      color: "#0e7730"
+      color: "#8850a2"
     },
 
     RESOLVED: {
@@ -147,10 +147,17 @@ const CHAT_INPUT_THEME: InputTheme = {
     },
 
     RESOLVING: {
-      borderColor: "#439a5f",
-      backgroundColor: "#f5f5f5",
-      color: "#accbb6"
+      borderColor: "#8850a2",
+      backgroundColor: "#fff",
+      color: "#8850a2"
     },
+
+
+    // RESOLVING: {
+    //   borderColor: "#439a5f",
+    //   backgroundColor: "#f5f5f5",
+    //   color: "#accbb6"
+    // },
 
     RESOLVED: {
       borderColor: "#439a5f",

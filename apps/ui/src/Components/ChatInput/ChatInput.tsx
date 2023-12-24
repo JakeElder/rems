@@ -98,7 +98,7 @@ const Status = ({
               <LineWave
                 height={34}
                 width={34}
-                color="#ad3dbf"
+                color="#00a3cc"
                 ariaLabel="line-wave"
                 wrapperStyle={{}}
                 wrapperClass=""

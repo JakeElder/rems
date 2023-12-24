@@ -16,6 +16,35 @@ const labels: Record<AssistantState["mode"], string> = {
   WORKING: "Working"
 };
 
+type PulseAnimationState = {
+  scaleX: number;
+  scaleY: number;
+  opacity: number;
+};
+
+type PulseAnimation = {
+  from: PulseAnimationState;
+  to: PulseAnimationState;
+};
+
+const LISTENING_ANIMATION: PulseAnimation = {
+  from: { scaleX: 1.18, scaleY: 1.6, opacity: 0 },
+  to: { scaleX: 1, scaleY: 1, opacity: 0.8 }
+};
+
+const WORKING_ANIMATION: PulseAnimation = {
+  from: { scaleX: 1, scaleY: 1, opacity: 1 },
+  to: { scaleX: 1.1, scaleY: 1.4, opacity: 0 }
+};
+
+const DEFAULT_ANIMATION = LISTENING_ANIMATION;
+
+const pulseAnimation = (mode: Props["mode"]) => {
+  if (mode === "LISTENING") return LISTENING_ANIMATION;
+  if (mode === "WORKING") return WORKING_ANIMATION;
+  return DEFAULT_ANIMATION;
+};
+
 const StateLabel = React.memo(({ mode }: Props) => {
   const { labelBg, labelColor } = useSpring(CHAT_PALETTE[mode]);
 
@@ -57,15 +86,14 @@ const StateLabel = React.memo(({ mode }: Props) => {
   const palette = CHAT_PALETTE[mode];
 
   const pulseStyle = useSpring({
-    from: { scaleX: 1, scaleY: 1, opacity: 1 },
-    to: { scaleX: 1.1, scaleY: 1.4, opacity: 0 },
+    ...pulseAnimation(mode),
     reset: true,
     loop: true,
     config: { tension: 170, friction: 50 }
   });
 
   const { pulseOpacity } = useSpring({
-    pulseOpacity: mode === "LISTENING" ? 1 : 0
+    pulseOpacity: mode === "LISTENING" || mode === "WORKING" ? 1 : 0
   });
 
   return (

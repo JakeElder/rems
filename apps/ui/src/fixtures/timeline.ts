@@ -1,9 +1,15 @@
-// @ts-nocheck
-
 import { randomInt } from "@rems/utils";
-import { Timeline } from "@rems/types";
+import { AppState, AppStateSlices, Timeline } from "@rems/types";
+import { defaults } from "@rems/state/app";
+import extend from "deep-extend";
+import { DeepPartial } from "@rems/state";
 
-import { factory } from "@rems/state/app";
+const factory = (initial: DeepPartial<AppStateSlices> = {}) => {
+  return extend<AppStateSlices, DeepPartial<AppStateSlices>>(
+    defaults().slices,
+    initial
+  );
+};
 
 let dates = 0;
 const date = () => Date.now() + ++dates * randomInt(400, 1200);
@@ -15,16 +21,8 @@ const timeline: Timeline = [
     date: date(),
     event: {
       type: "YIELD",
-      message: "Show me 3 bedroom properties"
-    }
-  },
-  {
-    role: "ASSISTANT",
-    id: "12",
-    date: date(),
-    event: {
-      type: "LANGUAGE_BASED",
-      message: "Sure! I can do that"
+      message: "Show me 3 bedroom properties",
+      state: factory()
     }
   },
   {
@@ -249,7 +247,8 @@ const timeline: Timeline = [
     event: {
       type: "YIELD",
       message:
-        "Ok, I’ve set the min bedrooms to 3. Is there anything else you’d like me to do?"
+        "Ok, I’ve set the min bedrooms to 3. Is there anything else you’d like me to do?",
+      state: factory()
     }
   }
 ];
