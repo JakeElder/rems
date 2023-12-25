@@ -1,15 +1,6 @@
 import { randomInt } from "@rems/utils";
-import { AppState, AppStateSlices, Timeline } from "@rems/types";
-import { defaults } from "@rems/state/app";
-import extend from "deep-extend";
-import { DeepPartial } from "@rems/state";
-
-const factory = (initial: DeepPartial<AppStateSlices> = {}) => {
-  return extend<AppStateSlices, DeepPartial<AppStateSlices>>(
-    defaults().slices,
-    initial
-  );
-};
+import { Timeline } from "@rems/types";
+import { factory } from "@rems/state/app";
 
 let dates = 0;
 const date = () => Date.now() + ++dates * randomInt(400, 1200);
