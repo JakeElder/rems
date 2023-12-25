@@ -4735,7 +4735,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-spring/animated@npm:~9.7.3":
+"@react-spring/animated@npm:~9.7.1, @react-spring/animated@npm:~9.7.3":
   version: 9.7.3
   resolution: "@react-spring/animated@npm:9.7.3"
   dependencies:
@@ -4747,7 +4747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-spring/core@npm:~9.7.3":
+"@react-spring/core@npm:~9.7.1, @react-spring/core@npm:~9.7.3":
   version: 9.7.3
   resolution: "@react-spring/core@npm:9.7.3"
   dependencies:
@@ -4760,7 +4760,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-spring/shared@npm:~9.7.3":
+"@react-spring/shared@npm:~9.7.1, @react-spring/shared@npm:~9.7.3":
   version: 9.7.3
   resolution: "@react-spring/shared@npm:9.7.3"
   dependencies:
@@ -4771,10 +4771,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-spring/types@npm:~9.7.3":
+"@react-spring/types@npm:~9.7.1, @react-spring/types@npm:~9.7.3":
   version: 9.7.3
   resolution: "@react-spring/types@npm:9.7.3"
   checksum: f47b81fe556464aa54a78603311cb584d6a0f03088522229afb058265bbe2ade2095a55ec7f4e960c3b9cceaa5d47865bc41fc6643c0f5f4bd3d8650203d8389
+  languageName: node
+  linkType: hard
+
+"@react-spring/web@npm:9.7.1":
+  version: 9.7.1
+  resolution: "@react-spring/web@npm:9.7.1"
+  dependencies:
+    "@react-spring/animated": ~9.7.1
+    "@react-spring/core": ~9.7.1
+    "@react-spring/shared": ~9.7.1
+    "@react-spring/types": ~9.7.1
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 47887e44e640b15ae65ddea4aef042046b461f32f40529e4640437f8693a542d1fba64d7b7a6f64fb13b3a63fcf05aeaf0982861feb18c91bdf83c710e76bd26
   languageName: node
   linkType: hard
 
@@ -4911,7 +4926,7 @@ __metadata:
     "@radix-ui/react-toggle": 1.0.3
     "@radix-ui/react-toggle-group": ^1.0.4
     "@radix-ui/react-visually-hidden": ^1.0.3
-    "@react-spring/web": ^9.7.1
+    "@react-spring/web": 9.7.1
     "@rems/state": "*"
     "@rems/tsconfig": "*"
     "@rems/types": "*"
@@ -4957,7 +4972,6 @@ __metadata:
     react-paginate: ^8.2.0
     react-remove-scroll: ^2.5.7
     react-speech-recognition: ^3.10.0
-    react-spring-scroll-to-hook: ^1.0.3
     react-use-draggable-scroll: ^0.4.7
     react-use-scroll-direction: ^0.1.0
     remeda: ^1.29.0
@@ -5006,6 +5020,7 @@ __metadata:
   resolution: "@rems/web@workspace:apps/web"
   dependencies:
     "@next/bundle-analyzer": ^13.4.9
+    "@react-spring/web": ^9.7.1
     "@reduxjs/toolkit": ^1.9.7
     "@rems/schemas": "*"
     "@rems/state": "*"
@@ -5046,6 +5061,7 @@ __metadata:
     react-map-gl: ^7.1.6
     react-redux: ^8.1.3
     react-speech-recognition: ^3.10.0
+    react-spring-scroll-to-hook: ^1.0.3
     remeda: ^1.29.0
     rxjs: ^7.8.1
     sequelize: ^6.32.1

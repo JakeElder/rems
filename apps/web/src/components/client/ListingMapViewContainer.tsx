@@ -8,7 +8,7 @@ import type { MapRef } from "react-map-gl";
 type Props = {};
 
 const ListingMapViewContainer = ({}: Props) => {
-  const $map = useRef<MapRef>();
+  const $map = useRef<MapRef>(null);
   const properties = useProperties({ target: "MAP" });
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const ListingMapViewContainer = ({}: Props) => {
 
   return (
     <ListingMap
-      ref={$map as any}
+      ref={$map}
       properties={properties.data.data}
       lat={properties.data.location.resolution.lat}
       lng={properties.data.location.resolution.lng}

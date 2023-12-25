@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { PropertyRow, PropertyRowContainer } from "@rems/ui";
 import useProperties from "@/hooks/use-properties";
 import {
@@ -14,6 +14,7 @@ import {
 } from "@rems/state/app/actions";
 import fetch from "@/fetch";
 import { Property } from "@rems/types";
+import { Controller } from "@react-spring/web";
 
 type Props = {};
 
@@ -22,6 +23,32 @@ const PropertyGridViewContainer = ({}: Props) => {
   const dispatch = useDispatch();
   const userSelectedPropertyId = useUserSelectedProperty();
   const assistantSelectedPropertyId = useAssistantSelectedProperty();
+  const $rows = useRef<Map<Property["id"], HTMLDivElement | null>>(new Map());
+  const $container = useRef<HTMLDivElement>(null);
+  const $controller = useRef(
+    new Controller({
+      scroll: 0,
+      onChange: ({ value }) => {
+        requestAnimationFrame(() => {
+          window.scroll({ top: value.scroll });
+        });
+      }
+    })
+  );
+
+  useEffect(() => {
+    if (!$container.current || !$rows.current || !assistantSelectedPropertyId) {
+      return;
+    }
+
+    const containerBb = $container.current.getBoundingClientRect();
+    const top = window.scrollY + containerBb.top;
+    const $row = $rows.current.get(assistantSelectedPropertyId);
+    const rowBb = $row!.getBoundingClientRect();
+    const target = rowBb.top + window.scrollY;
+
+    $controller.current.start({ scroll: target - top });
+  }, [assistantSelectedPropertyId]);
 
   const getSelection = useCallback(
     (id: Property["id"]) => {
@@ -33,9 +60,10 @@ const PropertyGridViewContainer = ({}: Props) => {
   );
 
   return (
-    <PropertyRowContainer loading={isLoading}>
+    <PropertyRowContainer loading={isLoading} ref={$container}>
       {(data?.data || []).map((p) => (
         <PropertyRow
+          ref={($el) => $rows.current.set(p.id, $el)}
           key={p.id}
           type={data!.query.budgetAndAvailability.type}
           property={p}

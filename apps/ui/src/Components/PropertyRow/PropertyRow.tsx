@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import css from "./PropertyRow.module.css";
 import { Property, RealEstateQuery } from "@rems/types";
 import SimpleImageCarousel from "../SimpleImageCarousel";
@@ -75,76 +75,81 @@ const colors = (selection: Props["selection"]) => {
   return DEFAULT_COLORS;
 };
 
-const PropertyRow = ({ property, type, selection, onClick }: Props) => {
-  const [image, setImage] = useState(0);
+const PropertyRow = forwardRef<HTMLDivElement, Props>(
+  ({ property, type, selection, onClick }, ref) => {
+    const [image, setImage] = useState(0);
 
-  const style = useSpring({ ...colors(selection), config: config.stiff });
+    const style = useSpring({ ...colors(selection), config: config.stiff });
 
-  const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
+    const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
 
-  return (
-    <animated.div
-      className={css["root"]}
-      style={{
-        borderColor: style.borderColor,
-        background: style.background
-      }}
-      onMouseEnter={() => setMouseOver(property.id)}
-      onMouseLeave={() => setMouseOut()}
-      onClick={onClick}
-    >
-      <div className={css["images"]}>
-        <SimpleImageCarousel
-          images={property.images!}
-          index={image}
-          onIndexChange={setImage}
-        >
-          <div className={css["arrow-nav"]}>
-            <ArrowNav
-              show={activeProperty === property.id}
-              hasNext={image !== property.images!.length - 1}
-              hasPrev={image !== 0}
-              onNext={() => setImage(image + 1)}
-              onPrev={() => setImage(image - 1)}
-            />
-          </div>
-        </SimpleImageCarousel>
-      </div>
-      <div className={css["link"]}>
-        <div className={css["details"]}>
-          <animated.div
-            className={css["title"]}
-            style={{ color: style.titleColor }}
+    return (
+      <animated.div
+        ref={ref}
+        className={css["root"]}
+        style={{
+          borderColor: style.borderColor,
+          background: style.background
+        }}
+        onMouseEnter={() => setMouseOver(property.id)}
+        onMouseLeave={() => setMouseOut()}
+        onClick={onClick}
+      >
+        <div className={css["images"]}>
+          <SimpleImageCarousel
+            images={property.images!}
+            index={image}
+            onIndexChange={setImage}
           >
-            {property.title}
-          </animated.div>
-          <animated.div
-            className={css["hr"]}
-            style={{
-              background: style.hrColor,
-              opacity: style.hrOpacity
-            }}
-          />
-          <animated.div
-            className={css["description"]}
-            style={{ color: style.descriptionColor }}
-          >
-            <Dotdotdot clamp={3}>{property.description}</Dotdotdot>
-          </animated.div>
-          <div className={css["spec-and-price"]}>
-            <div className={css["beds-baths-area"]}>
-              <span className={css["beds"]}>{property.bedrooms} beds</span>
-              <span className={css["separator"]}>&bull;</span>
-              <span className={css["baths"]}>{property.bathrooms} baths</span>
-              <span className={css["separator"]}>&bull;</span>
-              <span className={css["area"]}>{property.livingArea}m&#178;</span>
+            <div className={css["arrow-nav"]}>
+              <ArrowNav
+                show={activeProperty === property.id}
+                hasNext={image !== property.images!.length - 1}
+                hasPrev={image !== 0}
+                onNext={() => setImage(image + 1)}
+                onPrev={() => setImage(image - 1)}
+              />
             </div>
-            <Price property={property} type={type} />
+          </SimpleImageCarousel>
+        </div>
+        <div className={css["link"]}>
+          <div className={css["details"]}>
+            <animated.div
+              className={css["title"]}
+              style={{ color: style.titleColor }}
+            >
+              {property.title}
+            </animated.div>
+            <animated.div
+              className={css["hr"]}
+              style={{
+                background: style.hrColor,
+                opacity: style.hrOpacity
+              }}
+            />
+            <animated.div
+              className={css["description"]}
+              style={{ color: style.descriptionColor }}
+            >
+              <Dotdotdot clamp={3}>{property.description}</Dotdotdot>
+            </animated.div>
+            <div className={css["spec-and-price"]}>
+              <div className={css["beds-baths-area"]}>
+                <span className={css["beds"]}>{property.bedrooms} beds</span>
+                <span className={css["separator"]}>&bull;</span>
+                <span className={css["baths"]}>{property.bathrooms} baths</span>
+                <span className={css["separator"]}>&bull;</span>
+                <span className={css["area"]}>
+                  {property.livingArea}m&#178;
+                </span>
+              </div>
+              <Price property={property} type={type} />
+            </div>
           </div>
         </div>
-      </div>
-    </animated.div>
-  );
-};
+      </animated.div>
+    );
+  }
+);
 
 export default PropertyRow;
