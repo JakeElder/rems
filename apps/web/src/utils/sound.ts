@@ -1,7 +1,7 @@
 import qs from "qs";
 import { toWords } from "number-to-words";
 
-function numbersToWords(input: string): string {
+const numbersToWords = (input: string): string => {
   return input.replace(/\b\d+(,\d+)*(\.\d+)?\b/g, (match) => {
     const number = match.includes(".")
       ? parseFloat(match.replace(/,/g, ""))
@@ -21,7 +21,9 @@ function numbersToWords(input: string): string {
       return toWords(number);
     }
   });
-}
+};
+
+const tidy = (input: string): string => input.replace(/[#_\|\*]/g, "");
 
 export const speak = async (text: string): Promise<void> => {
   const key = "AIzaSyDNhScVj-L5p-BWTtp1mMtnBLLn5mN1cGw";
@@ -32,7 +34,7 @@ export const speak = async (text: string): Promise<void> => {
     method: "POST",
     body: JSON.stringify({
       audioConfig: { audioEncoding: "MP3" },
-      input: { text: numbersToWords(text) },
+      input: { text: tidy(numbersToWords(text)) },
       voice: { languageCode: "th-TH" }
     })
   });

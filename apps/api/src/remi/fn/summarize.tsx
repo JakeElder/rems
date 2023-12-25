@@ -1,25 +1,16 @@
 import { RemiResponse } from "@/remi/types";
-import {
-  $functionCall,
-  $messages,
-  $model,
-  $request,
-  $systemMessage
-} from "@/remi/wrappers";
+import { $messages, $model, $request, $systemMessage } from "@/remi/wrappers";
 import { execute, timelineToCompletionMessages } from "@/remi/utils";
-import { TimelineSchema } from "@rems/schemas";
+import { GetPropertiesResultSchema, TimelineSchema } from "@rems/schemas";
 import { z } from "zod";
 import md from "@rems/utils/md";
 
-export const PropsSchema = z.object({
-  timeline: TimelineSchema
+const PropsSchema = z.object({
+  timeline: TimelineSchema,
+  result: GetPropertiesResultSchema
 });
 
-export const ContextSchema = z.object({
-  timeline: TimelineSchema
-});
-
-export const ReturnsSchema = z
+const ReturnsSchema = z
   .object({
     r: z
       .string()
@@ -37,7 +28,8 @@ type Props = z.infer<typeof PropsSchema>;
 type Returns = z.infer<typeof ReturnsSchema>;
 
 const summarize = async ({
-  timeline
+  timeline,
+  result
 }: Props): Promise<RemiResponse<Returns>> => {
   const request = $request({
     ...$model(),
@@ -103,15 +95,18 @@ const summarize = async ({
               You can talk about property comparisons here. Look at the
               properties compared and respond to the user.
             </li>
+            <li>
+              There are {result.pagination.total} properties that match this
+              search. If this number has changed, inform the user.
+            </li>
           </ul>
         </>
       ),
       ...timelineToCompletionMessages(timeline)
-    ),
-    ...$functionCall({ returnsSchema: ReturnsSchema })
+    )
   });
 
-  return execute.fn(request, ReturnsSchema);
+  return execute.chat(request);
 };
 
 export default summarize;

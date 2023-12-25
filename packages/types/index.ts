@@ -21,6 +21,7 @@ import {
   FileSchema,
   FilterSchema,
   FilterSetSchema,
+  GetPropertiesResultSchema,
   ImageSchema,
   IndoorFeatureRequirementsSchema,
   InputSessionSchema,
@@ -327,11 +328,6 @@ export type Location = Z<typeof LocationSchema>;
 export type LatLng = Z<typeof LatLngSchema>;
 export type Bounds = Z<typeof BoundsSchema>;
 
-export type GetPropertiesResult = {
-  query: RealEstateQuery;
-  data: Property[];
-  location: Location;
-  pagination: Pagination;
-};
+export type GetPropertiesResult = Z<typeof GetPropertiesResultSchema>;
 
 export type ArrayFilters = Record<RealEstateQueryArrayKey, Filter[]>;

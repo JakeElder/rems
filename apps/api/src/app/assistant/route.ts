@@ -38,6 +38,7 @@ import resolveLocationSource, {
 import { pickBy } from "remeda";
 import { resolvePropertyOrFail } from "../properties/[id]/resolve";
 import getTravelDetails from "../../remi/utils/get-travel-details";
+import resolveProperties from "../properties/resolve";
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
@@ -444,12 +445,19 @@ const stream: Stream = (payload) => async (c) => {
     )
   ]);
 
-  await analyze();
-
   act(commitRealEstateQuery());
 
+  const [result] = await Promise.all([
+    resolveProperties({
+      ...store.getState().slices.realEstateQuery,
+      target: "LISTINGS"
+    }),
+    analyze()
+  ]);
+
   const summary = await fn.summarize({
-    timeline: store.getState().timeline
+    timeline: store.getState().timeline,
+    result
   });
 
   if (!summary.ok) {

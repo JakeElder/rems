@@ -11,6 +11,7 @@ export * from "./event";
 export * from "./file";
 export * from "./filter";
 export * from "./filter-set";
+export * from "./get-properties-result";
 export * from "./image";
 export * from "./indoor-feature-requirements";
 export * from "./input-session";
