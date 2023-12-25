@@ -1,3 +1,4 @@
+import { PlacesNearbyResponseData } from "@googlemaps/google-maps-services-js";
 import {
   AnalysisSchema,
   ApiRealEstateQuerySchema,
@@ -34,6 +35,7 @@ import {
   LocationSchema,
   LocationSourceSchema,
   LotFeatureRequirementsSchema,
+  NearbyPlacesResultSchema,
   OutdoorFeatureRequirementsSchema,
   PaginationSchema,
   PropertySchema,
@@ -61,6 +63,13 @@ export type Z<T extends ZodType<any, any, any>> = z.infer<T>;
 
 export type Analysis = Z<typeof AnalysisSchema>;
 export type Pagination = Z<typeof PaginationSchema>;
+
+export type NearbyPlacesResult = Omit<
+  Z<typeof NearbyPlacesResultSchema>,
+  "places"
+> & {
+  places: PlacesNearbyResponseData["results"];
+};
 
 export type ResourceId = string;
 

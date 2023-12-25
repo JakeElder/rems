@@ -23,6 +23,7 @@ import {
   noop,
   registerAnalysis,
   registerIntentResolutionError,
+  registerNearbyPlaces,
   registerSelectedProperty,
   registerTravelDetails,
   replaceRealEstateQuery,
@@ -255,6 +256,19 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
         type: "PROPERTY_SELECTED",
         property: action.payload.property,
         reason: action.payload.reason
+      }
+    });
+  });
+
+  // REGISTER_NEARBY_PLACES
+  builder.addCase(registerNearbyPlaces, (state, action) => {
+    state.timeline.push({
+      id: nanoid(),
+      role: "SYSTEM",
+      date: Date.now(),
+      event: {
+        type: "NEARBY_PLACES_ESTABLISHED",
+        result: action.payload
       }
     });
   });

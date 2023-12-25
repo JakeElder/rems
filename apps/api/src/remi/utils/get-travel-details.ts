@@ -12,8 +12,6 @@ if (!KEY) {
   throw new Error();
 }
 
-type T = TravelMode;
-
 const getTravelDetails = async (
   origin: DirectionsRequest["params"]["origin"],
   destination: DirectionsRequest["params"]["destination"]

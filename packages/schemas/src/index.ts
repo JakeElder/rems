@@ -22,6 +22,7 @@ export * from "./location";
 export * from "./location-resolution";
 export * from "./location-source";
 export * from "./lot-feature-requirements";
+export * from "./nearby-places-result";
 export * from "./outdoor-feature-requirements";
 export * from "./pagination";
 export * from "./property";

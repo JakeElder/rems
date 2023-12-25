@@ -38,6 +38,15 @@ const timelineToCompletionMessages = (
         ];
       }
 
+      if (e.event.type === "NEARBY_PLACES_ESTABLISHED") {
+        return [
+          {
+            role: "system",
+            content: `ACTION: ${JSON.stringify(e.event)}`
+          }
+        ];
+      }
+
       if (e.event.type === "ANALYSIS_PERFORMED") {
         return [
           {

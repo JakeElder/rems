@@ -202,6 +202,13 @@ const intents: Intent[] = [
       "What's the commute like from this property",
       "How far is it to Lumphini park from this property"
     ]
+  },
+
+  {
+    id: 240,
+    code: "GET_NEARBY_PLACES",
+    description: "Gets info about places near a search origin",
+    examples: ["What coffee shops are there near this property"]
   }
 ];
 

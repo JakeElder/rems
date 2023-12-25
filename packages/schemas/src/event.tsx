@@ -6,6 +6,7 @@ import { AnalysisSchema } from ".";
 import IntentResolutionErrorSchema from "./intent-resolution-error";
 import { PropertySchema } from "./property";
 import { TravelDetailsSchema } from "./travel-details";
+import { NearbyPlacesResultSchema } from "./nearby-places-result";
 
 export const StateMutationInteractionEventSchema = z.object({
   type: z.literal("STATE_MUTATION"),
@@ -50,11 +51,17 @@ export const TravelDetailsEstablished = z.object({
   details: TravelDetailsSchema
 });
 
+export const NearbyPlacesEstablished = z.object({
+  type: z.literal("NEARBY_PLACES_ESTABLISHED"),
+  result: NearbyPlacesResultSchema
+});
+
 export const SystemEventSchema = z.discriminatedUnion("type", [
+  AnalysisPerformedEventSchema,
   ErrorEventSchema,
   IntentResolutionErrorEventSchema,
-  AnalysisPerformedEventSchema,
-  TravelDetailsEstablished
+  TravelDetailsEstablished,
+  NearbyPlacesEstablished
 ]);
 
 export const UserEventSchema = z.discriminatedUnion("type", [

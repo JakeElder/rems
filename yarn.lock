@@ -4899,6 +4899,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rems/types@workspace:packages/types"
   dependencies:
+    "@googlemaps/google-maps-services-js": ^3.3.42
     "@rems/schemas": "*"
     "@rems/tsconfig": "*"
     react: 18.2.0

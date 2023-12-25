@@ -24,7 +24,8 @@ export const IntentCodeSchema = z
     "CHANGE_ASSISTANT_POSITION",
     "CHANGE_ASSISTANT_LANGUAGE",
     "QUERY_SELECTED_PROPERTIES",
-    "GET_TRAVEL_DETAILS"
+    "GET_TRAVEL_DETAILS",
+    "GET_NEARBY_PLACES"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 

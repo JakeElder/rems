@@ -7,7 +7,7 @@ import {
   $systemMessage
 } from "@/remi/wrappers";
 import { execute, timelineToCompletionMessages } from "@/remi/utils";
-import { TimelineSchema } from "@rems/schemas";
+import { LatLngSchema, TimelineSchema } from "@rems/schemas";
 import { z } from "zod";
 import md from "@rems/utils/md";
 
@@ -17,32 +17,26 @@ const PropsSchema = z.object({
 
 const ReturnsSchema = z
   .object({
-    o: z
+    l: LatLngSchema.describe(
+      md(<>The lat/lng location from which to get nearby places</>)
+    ),
+    k: z
       .string()
-      .describe(md(<>The origin point from which to get directions from</>))
-      .optional(),
-    oll: z
-      .object({
-        lat: z.number(),
-        lng: z.number()
-      })
-      .optional()
       .describe(
-        md(<>The lat/lng origin point from which to get directions from</>)
+        md(
+          <>
+            Keyword. Ie the type of nearby locations the user is interested in.
+            IE "coffee shops", "airports"
+          </>
+        )
       )
-      .optional(),
-    d: z.string().describe(md(<>The destination</>))
   })
-  .transform(({ o, oll, d }) => ({
-    origin: o,
-    originLngLat: oll,
-    destination: d
-  }));
+  .transform(({ l, k }) => ({ location: l, keyword: k }));
 
 type Props = z.infer<typeof PropsSchema>;
 type Returns = z.infer<typeof ReturnsSchema>;
 
-const parseDistanceDetails = async ({
+const parseNarbyPlacesDetails = async ({
   timeline
 }: Props): Promise<RemiResponse<Returns>> => {
   const request = $request({
@@ -56,9 +50,8 @@ const parseDistanceDetails = async ({
             estate website.
           </p>
           <p>
-            Your current task is to get distance details. For now, just extract
-            the starting point and destination. The starting point can be
-            lng/lat values.
+            Your current task is to extract the lng/lat details of the origin
+            from which the user would like to find nearby places
           </p>
         </>
       ),
@@ -70,4 +63,4 @@ const parseDistanceDetails = async ({
   return execute.fn(request, ReturnsSchema);
 };
 
-export default parseDistanceDetails;
+export default parseNarbyPlacesDetails;

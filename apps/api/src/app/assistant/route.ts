@@ -10,7 +10,7 @@ import {
   Analysis,
   NlLocationSource
 } from "@rems/types";
-import { AssistantPayloadSchema } from "@rems/schemas";
+import { AssistantPayloadSchema, NearbyPlacesEstablished } from "@rems/schemas";
 import memoize from "memoizee";
 import {
   AppAction,
@@ -18,6 +18,7 @@ import {
   noop,
   registerAnalysis,
   registerIntentResolutionError,
+  registerNearbyPlaces,
   registerSelectedProperty,
   registerTravelDetails,
   replaceRealEstateQuery,
@@ -38,6 +39,7 @@ import resolveLocationSource, {
 import { pickBy } from "remeda";
 import { resolvePropertyOrFail } from "../properties/[id]/resolve";
 import getTravelDetails from "../../remi/utils/get-travel-details";
+import getNearbyPlaces from "../../remi/utils/get-nearby-places";
 import resolveProperties from "../properties/resolve";
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
@@ -439,6 +441,36 @@ const stream: Stream = (payload) => async (c) => {
           return registerIntentResolutionError({
             intent: "GET_TRAVEL_DETAILS",
             error: "Couldn't get travel details"
+          });
+        }
+      }
+    ),
+
+    /**
+     * Get Nearby Places
+     */
+    resolve(
+      "GET_NEARBY_PLACES",
+      () => fn.parseNearbyPlacesDetails({ timeline }),
+      async ({ location, keyword }) => {
+        if (!location || !keyword) {
+          return registerIntentResolutionError({
+            intent: "GET_NEARBY_PLACES",
+            error: "Couldn't establish origin/target"
+          });
+        }
+
+        try {
+          const places = await getNearbyPlaces(location, keyword);
+          return registerNearbyPlaces({
+            location,
+            keyword,
+            places
+          });
+        } catch (e) {
+          return registerIntentResolutionError({
+            intent: "GET_NEARBY_PLACES",
+            error: "Couldn't get nearby places"
           });
         }
       }

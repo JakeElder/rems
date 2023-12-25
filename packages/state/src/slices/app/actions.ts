@@ -17,8 +17,8 @@ import {
   Property,
   AssistantPlacement,
   AssistantLanguage,
-  LatLng,
-  TravelDetails
+  TravelDetails,
+  NearbyPlacesResult
 } from "@rems/types";
 
 type ActorTimelineEvent = UserTimelineEvent | AssistantTimelineEvent;
@@ -70,6 +70,11 @@ export const registerIntentResolutionError = createAction<
   IntentResolutionError,
   "REGISTER_INTENT_RESOLUTION_ERROR"
 >("REGISTER_INTENT_RESOLUTION_ERROR");
+
+export const registerNearbyPlaces = createAction<
+  NearbyPlacesResult,
+  "REGISTER_NEARBY_PLACES"
+>("REGISTER_NEARBY_PLACES");
 
 export const registerSelectedProperty = createAction<
   {
@@ -179,6 +184,7 @@ type RegisterAnalysisAction = ReturnType<typeof registerAnalysis>;
 type RegisterIntentResolutionErrorAction = ReturnType<
   typeof registerIntentResolutionError
 >;
+type RegisterNearbyPlacesAction = ReturnType<typeof registerNearbyPlaces>;
 type RegisterSelectedPropertyAction = ReturnType<
   typeof registerSelectedProperty
 >;
@@ -218,6 +224,7 @@ export type AppAction =
   | RegisterAnalysisAction
   | RegisterIntentResolutionErrorAction
   | RegisterSelectedPropertyAction
+  | RegisterNearbyPlacesAction
   | RegisterTravelDetailsAction
   | ReplaceRealEstateQueryAction
   | ResetRealEstateQueryAction

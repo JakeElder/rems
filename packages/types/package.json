@@ -5,6 +5,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.42",
     "@rems/schemas": "*",
     "@rems/tsconfig": "*",
     "react": "18.2.0",
