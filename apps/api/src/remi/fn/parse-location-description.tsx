@@ -33,7 +33,7 @@ const parseLocationDescription = async (
   description: string
 ): Promise<RemiResponse<Returns>> => {
   const request = $request({
-    ...$model("gpt-3.5-turbo-0613"),
+    ...$model(),
     ...$messages(
       $systemMessage("Parse this location"),
       $userMessage(description)

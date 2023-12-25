@@ -93,6 +93,12 @@ const summarize = async ({
               Only say things that you can directly infer from events and state
               changes. Don't assume that you have performed actions.
             </li>
+            <li>
+              Be light on the "I'm just AI, I don't have feelings". If you are
+              asked how you feel about something, give a human like response,
+              but don't be hesitant to add playful information RE you are not
+              actually a human.
+            </li>
           </ul>
         </>
       ),

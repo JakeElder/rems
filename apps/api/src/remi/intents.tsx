@@ -150,17 +150,17 @@ const intents: Intent[] = [
     examples: ["Reset the query"]
   },
 
-  {
-    id: 180,
-    code: "CLEAR_QUERY_PARTIALLY",
-    description: md(
-      <>
-        Clears parts of the query. This will be called in conjuction with other
-        refinements, IE "REFINE_INDOOR_FEATURES"
-      </>
-    ),
-    examples: ["Clear everything except the garage filter"]
-  },
+  // {
+  //   id: 180,
+  //   code: "CLEAR_QUERY_PARTIALLY",
+  //   description: md(
+  //     <>
+  //       Clears parts of the query. This will be called in conjuction with other
+  //       refinements, IE "REFINE_INDOOR_FEATURES"
+  //     </>
+  //   ),
+  //   examples: ["Clear everything except the garage filter"]
+  // },
 
   {
     id: 190,

@@ -93,12 +93,6 @@ const identifyIntents = async ({
               sure.
             </li>
             <li>
-              When CLEAR_QUERY_PARTIALLY is set include refinements too. IE, it
-              should only be used in conjunction with other refinements. IE if
-              the user wants to clear "High Altitude". Then
-              "REFINE_LOT_FEATURES" should be set also.
-            </li>
-            <li>
               The user may want to move the position of the assistant, in this
               case CHANGE_ASSISTANT_POSITION should be chosen
             </li>

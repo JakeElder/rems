@@ -27,11 +27,11 @@
 }
 
 .location {
-  color: rgba(0, 200, 250, 1);
+  color: rgba(0, 203, 255, 1);
   text-decoration: underline;
   text-decoration-thickness: 0.001em;
   text-underline-offset: 4px;
-  text-decoration-color: rgba(0, 200, 250, 0.5);
+  text-decoration-color: rgba(0, 203, 255, 0.6);
 }
 
 .resolution {
@@ -44,10 +44,7 @@
 .resolution span {
   padding: 1px 7px;
   border-radius: 3px;
-  background: #9c54bd;
-  /* border: 1px solid #8850a2; */
-  /* color: #8850a2; */
-  /* border: 1px solid #555; */
+  background: rgba(140, 46, 187, 1);
   color: #fff;
 }
 

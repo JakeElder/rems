@@ -66,8 +66,8 @@ export const registerAnalysis = createAction<Analysis, "REGISTER_ANALYSIS">(
 
 export const registerIntentResolutionError = createAction<
   IntentResolutionError,
-  "REGISTER_INTENT_RESOLUTION"
->("REGISTER_INTENT_RESOLUTION");
+  "REGISTER_INTENT_RESOLUTION_ERROR"
+>("REGISTER_INTENT_RESOLUTION_ERROR");
 
 export const registerSelectedProperty = createAction<
   {

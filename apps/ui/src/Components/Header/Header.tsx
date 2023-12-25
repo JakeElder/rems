@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { getCookie } from "typescript-cookie";
 import NavIcon from "../../Elements/NavIcon";
+import { AssistantMode } from "@rems/types";
 
 const L = animated(Link);
 
@@ -111,17 +112,17 @@ export const Root = ({
   const styles = useSpring(
     style === "transparent"
       ? {
-        background: "rgba(255, 255, 255, 0)",
-        color: "rgba(255, 255, 255, 0.7)",
-        fill: "rgba(255, 255, 255, 1)",
-        borderBottomColor: "rgba(255, 255, 255, 0.2)"
-      }
+          background: "rgba(255, 255, 255, 0)",
+          color: "rgba(255, 255, 255, 0.7)",
+          fill: "rgba(255, 255, 255, 1)",
+          borderBottomColor: "rgba(255, 255, 255, 0.2)"
+        }
       : {
-        background: "rgba(255, 255, 255, 1)",
-        color: "rgba(0, 0, 0, 0.7)",
-        fill: "rgba(0, 0, 0, 1)",
-        borderBottomColor: "rgb(234, 234, 234, 1)"
-      }
+          background: "rgba(255, 255, 255, 1)",
+          color: "rgba(0, 0, 0, 0.7)",
+          fill: "rgba(0, 0, 0, 1)",
+          borderBottomColor: "rgb(234, 234, 234, 1)"
+        }
   );
 
   return (
@@ -133,11 +134,27 @@ export const Root = ({
   );
 };
 
-export const Logo = () => {
+const LOGO_COLOR_IDLE = "rgba(0, 0, 0, 1)";
+const LOGO_COLOR_LISTENING = "rgba(0, 203, 255, 1)";
+const LOGO_COLOR_THINKING = "rgba(234, 180, 71, 1)";
+const LOGO_COLOR_WORKING = "rgba(140, 46, 187, 1)";
+const LOGO_COLOR_CHATTING = "rgba(61, 142, 88, 1)";
+
+const logoColor = (mode: AssistantMode) => {
+  if (mode === "LISTENING") return LOGO_COLOR_LISTENING;
+  if (mode === "THINKING") return LOGO_COLOR_THINKING;
+  if (mode === "WORKING") return LOGO_COLOR_WORKING;
+  if (mode === "CHATTING") return LOGO_COLOR_CHATTING;
+  return LOGO_COLOR_IDLE;
+};
+
+export const Logo = ({ assistantMode }: { assistantMode: AssistantMode }) => {
   const { style } = useContext();
   const styles = useSpring({
     fill:
-      style === "transparent" ? "rgba(255, 255, 255, 1)" : "rgba(0, 0, 0, 1)"
+      style === "transparent"
+        ? "rgb(255, 255, 255, 1)"
+        : logoColor(assistantMode)
   });
   return (
     <animated.div style={styles}>

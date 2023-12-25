@@ -138,6 +138,9 @@ export const Header = React.memo(
         </div>
       </div>
     );
+  },
+  (prev, next) => {
+    return prev.mode === next.mode && prev.lang === next.lang;
   }
 );
 

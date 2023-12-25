@@ -53,9 +53,7 @@ const Status = ({
                 colors={
                   c(INPUT_THEMES[theme].input["RESOLVING"].borderColor)
                     .analogous(5)
-                    .map((c) =>
-                      c.setAlpha(theme === "header" ? 0.8 : 0.25).toString()
-                    ) as any
+                    .map((c) => c.setAlpha(0.25).toString()) as any
                 }
               />
             </animated.div>
@@ -75,9 +73,7 @@ const Status = ({
                 colors={
                   c(INPUT_THEMES[theme].input["ANALYZING"].borderColor)
                     .analogous(5)
-                    .map((c) =>
-                      c.setAlpha(theme === "header" ? 0.8 : 0.2).toString()
-                    ) as any
+                    .map((c) => c.setAlpha(0.2).toString()) as any
                 }
               />
             </animated.div>

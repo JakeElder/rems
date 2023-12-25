@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { ContactModal, Header, SlideNav } from "@rems/ui";
 import HeaderChatInputContainer from "./HeaderChatInputContainer";
 import useContactForm from "@/hooks/use-contact-form";
-import useDomElements from "@/hooks/use-dom-elements";
+import { useAssistantMode } from "@/state";
 
 type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode"> & {
   chat?: boolean;
@@ -13,6 +13,7 @@ type Props = Pick<React.ComponentProps<typeof Header.Root>, "full" | "mode"> & {
 const HeaderViewContainer = ({ chat, ...props }: Props) => {
   const [slideNavOpen, setSlideNavOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const mode = useAssistantMode();
 
   const { isSubmitting, onSubmit } = useContactForm(
     (body) => fetch("/api/contact-form", { method: "POST", body }),
@@ -40,7 +41,7 @@ const HeaderViewContainer = ({ chat, ...props }: Props) => {
       onNavIconClick={() => setSlideNavOpen(true)}
     >
       <Header.Main>
-        <Header.Logo />
+        <Header.Logo assistantMode={mode} />
         <Header.ChatInput>
           {chat ? <HeaderChatInputContainer /> : null}
         </Header.ChatInput>

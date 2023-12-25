@@ -56,8 +56,8 @@ export const CHAT_PALETTE: Record<AssistantState["mode"], ChatPalette> = {
 
   // Green
   CHATTING: {
-    avatarBorder: "#439a5f",
-    labelBg: "#439a5f",
+    avatarBorder: "#2bab54",
+    labelBg: "#2bab54",
     labelColor: "#fff"
   }
 };
@@ -95,20 +95,20 @@ const HEADER_INPUT_THEME: InputTheme = {
 
     ANALYZING: {
       borderColor: "#ecbb56",
-      backgroundColor: "#fff",
-      color: "#daa73d"
+      backgroundColor: "#fcfcfc",
+      color: "#ebdbbc"
     },
 
     RESOLVING: {
       borderColor: "#8850a2",
-      backgroundColor: "#fff",
-      color: "#8850a2"
+      backgroundColor: "#fcfcfc",
+      color: "#c6bccb"
     },
 
     RESOLVED: {
-      borderColor: "#439a5f",
-      backgroundColor: "#fff",
-      color: "#0e7730"
+      borderColor: "#2bab54",
+      backgroundColor: "#fcfcfc",
+      color: "#89bd99"
     },
 
     COMMITTED: HEADER_INPUT_NEUTRAL
@@ -148,14 +148,14 @@ const CHAT_INPUT_THEME: InputTheme = {
 
     RESOLVING: {
       borderColor: "#8850a2",
-      backgroundColor: "#fff",
-      color: "#8850a2"
+      backgroundColor: "#f5f5f5",
+      color: "#c6bccb"
     },
 
     RESOLVED: {
-      borderColor: "#439a5f",
+      borderColor: "#2bab54",
       backgroundColor: "#f5f5f5",
-      color: "#0e7730"
+      color: "#89bd99"
     },
 
     COMMITTED: CHAT_INPUT_NEUTRAL
