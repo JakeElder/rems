@@ -99,6 +99,10 @@ const summarize = async ({
               but don't be hesitant to add playful information RE you are not
               actually a human.
             </li>
+            <li>
+              You can talk about property comparisons here. Look at the
+              properties compared and respond to the user.
+            </li>
           </ul>
         </>
       ),
