@@ -138,7 +138,7 @@ const LOGO_COLOR_IDLE = "rgba(0, 0, 0, 1)";
 const LOGO_COLOR_LISTENING = "rgba(0, 203, 255, 1)";
 const LOGO_COLOR_THINKING = "rgba(234, 180, 71, 1)";
 const LOGO_COLOR_WORKING = "rgba(140, 46, 187, 1)";
-const LOGO_COLOR_CHATTING = "rgba(61, 142, 88, 1)";
+const LOGO_COLOR_CHATTING = "rgba(43, 171, 84, 1)";
 
 const logoColor = (mode: AssistantMode) => {
   if (mode === "LISTENING") return LOGO_COLOR_LISTENING;

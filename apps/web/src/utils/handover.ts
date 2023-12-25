@@ -23,7 +23,9 @@ const handover = (payload: AssistantPayload, dispatch: AppDispatch) => {
 
   req.subscribe({
     next: (action) => {
-      console.log(action);
+      if (action.type !== "NOOP") {
+        console.log(action);
+      }
       dispatch(action);
 
       if (action.type === "REGISTER_ANALYSIS") {

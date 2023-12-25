@@ -29,6 +29,15 @@ const timelineToCompletionMessages = (
         ];
       }
 
+      if (e.event.type === "TRAVEL_DETAILS_ESTABLISHED") {
+        return [
+          {
+            role: "system",
+            content: `ACTION: ${JSON.stringify(e.event)}`
+          }
+        ];
+      }
+
       if (e.event.type === "ANALYSIS_PERFORMED") {
         return [
           {

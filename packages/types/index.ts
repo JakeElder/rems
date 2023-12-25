@@ -47,6 +47,7 @@ import {
   SystemTimelineEventSchema,
   TimelineEventSchema,
   TimelineSchema,
+  TravelDetailsSchema,
   UrlRealEstateQuerySchema,
   UserEventSchema,
   UserTimelineEventSchema,
@@ -94,6 +95,8 @@ export type LivingAreaSize = {
 export type SelectedPropertiesManifest = Z<
   typeof SelectedPropertiesManifestSchema
 >;
+
+export type TravelDetails = Z<typeof TravelDetailsSchema>;
 
 export type LotSize = {
   value: number;

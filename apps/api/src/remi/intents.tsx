@@ -2,18 +2,6 @@ import { Intent } from "@rems/types";
 import md from "@rems/utils/md";
 
 const intents: Intent[] = [
-  {
-    id: 220,
-    code: "CHOOSE_ONE_PROPERTY",
-    description: md(
-      <>Reduce the list of properties to one based on criteria</>
-    ),
-    examples: [
-      "Which one of these is the most expensive?",
-      "Which has the most indoor features."
-    ]
-  },
-
   // {
   //   id: 210,
   //   code: "QUERY_SELECTED_PROPERTY",
@@ -191,6 +179,28 @@ const intents: Intent[] = [
       "What is the price of this property.",
       "Which one of these is bigger",
       "How do these properties compare"
+    ]
+  },
+
+  {
+    id: 220,
+    code: "CHOOSE_ONE_PROPERTY",
+    description: md(
+      <>Reduce the list of properties to one based on criteria</>
+    ),
+    examples: [
+      "Which one of these is the most expensive?",
+      "Which has the most indoor features."
+    ]
+  },
+
+  {
+    id: 230,
+    code: "GET_TRAVEL_DETAILS",
+    description: "Gets journey/commute details between two points",
+    examples: [
+      "What's the commute like from this property",
+      "How far is it to Lumphini park from this property"
     ]
   }
 ];

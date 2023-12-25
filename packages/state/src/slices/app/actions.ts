@@ -16,7 +16,9 @@ import {
   IntentResolutionError,
   Property,
   AssistantPlacement,
-  AssistantLanguage
+  AssistantLanguage,
+  LatLng,
+  TravelDetails
 } from "@rems/types";
 
 type ActorTimelineEvent = UserTimelineEvent | AssistantTimelineEvent;
@@ -77,6 +79,11 @@ export const registerSelectedProperty = createAction<
   },
   "REGISTER_SELECTED_PROPERTY"
 >("REGISTER_SELECTED_PROPERTY");
+
+export const registerTravelDetails = createAction<
+  TravelDetails,
+  "REGISTER_TRAVEL_DETAILS"
+>("REGISTER_TRAVEL_DETAILS");
 
 export const replaceRealEstateQuery = createAction<
   RealEstateQuery,
@@ -175,6 +182,7 @@ type RegisterIntentResolutionErrorAction = ReturnType<
 type RegisterSelectedPropertyAction = ReturnType<
   typeof registerSelectedProperty
 >;
+type RegisterTravelDetailsAction = ReturnType<typeof registerTravelDetails>;
 type ReplaceRealEstateQueryAction = ReturnType<typeof replaceRealEstateQuery>;
 type ResetRealEstateQueryAction = ReturnType<typeof resetRealEstateQuery>;
 type ReturnControlAction = ReturnType<typeof returnControl>;
@@ -210,6 +218,7 @@ export type AppAction =
   | RegisterAnalysisAction
   | RegisterIntentResolutionErrorAction
   | RegisterSelectedPropertyAction
+  | RegisterTravelDetailsAction
   | ReplaceRealEstateQueryAction
   | ResetRealEstateQueryAction
   | ReturnControlAction

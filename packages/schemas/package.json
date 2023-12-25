@@ -10,6 +10,7 @@
   },
   "main": "./src",
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.42",
     "@rems/state": "*",
     "@rems/tsconfig": "*",
     "@rems/types": "*",

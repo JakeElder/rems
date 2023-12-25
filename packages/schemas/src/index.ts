@@ -32,4 +32,5 @@ export * from "./selected-properties-manifest";
 export * from "./space-requirements";
 export * from "./state-mutation";
 export * from "./timeline";
+export * from "./travel-details";
 export * from "./view-type-requirements";

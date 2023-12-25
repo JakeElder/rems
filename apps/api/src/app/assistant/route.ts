@@ -19,6 +19,7 @@ import {
   registerAnalysis,
   registerIntentResolutionError,
   registerSelectedProperty,
+  registerTravelDetails,
   replaceRealEstateQuery,
   setArray,
   setAssistantLanguage,
@@ -36,6 +37,7 @@ import resolveLocationSource, {
 } from "../../utils/resolve-location-source";
 import { pickBy } from "remeda";
 import { resolvePropertyOrFail } from "../properties/[id]/resolve";
+import getTravelDetails from "../../remi/utils/get-travel-details";
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
 
@@ -379,6 +381,65 @@ const stream: Stream = (payload) => async (c) => {
           ];
         }
         return noop();
+      }
+    ),
+
+    /**
+     * Get Distance Details
+     */
+    resolve(
+      "GET_TRAVEL_DETAILS",
+      () => fn.parseDistanceDetails({ timeline }),
+      async (res) => {
+        const origin = res.origin || res.originLngLat;
+        const { destination } = res;
+
+        if (!origin) {
+          return registerIntentResolutionError({
+            intent: "GET_TRAVEL_DETAILS",
+            error: "Couldn't establish start point"
+          });
+        }
+
+        if (!destination) {
+          return registerIntentResolutionError({
+            intent: "GET_TRAVEL_DETAILS",
+            error: "Couldn't establish start point"
+          });
+        }
+
+        try {
+          const details = await getTravelDetails(origin, destination);
+
+          try {
+            const res = await fn.summarizeTravelDetails({
+              origin,
+              destination,
+              details
+            });
+            if (res.ok) {
+              return registerTravelDetails({
+                origin,
+                destination,
+                details: res.data
+              });
+            }
+            return registerIntentResolutionError({
+              intent: "GET_TRAVEL_DETAILS",
+              error: "Couldn't summarize details"
+            });
+          } catch (e) {
+            return registerIntentResolutionError({
+              intent: "GET_TRAVEL_DETAILS",
+              error: "Couldn't summarize details"
+            });
+          }
+        } catch (e) {
+          return registerIntentResolutionError({
+            intent: "GET_TRAVEL_DETAILS",
+            error: "Couldn't get travel details"
+          });
+        }
       }
     )
   ]);

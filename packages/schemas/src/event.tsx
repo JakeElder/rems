@@ -5,6 +5,7 @@ import { AppStateSlicesSchema } from "./app-state-slices";
 import { AnalysisSchema } from ".";
 import IntentResolutionErrorSchema from "./intent-resolution-error";
 import { PropertySchema } from "./property";
+import { TravelDetailsSchema } from "./travel-details";
 
 export const StateMutationInteractionEventSchema = z.object({
   type: z.literal("STATE_MUTATION"),
@@ -44,10 +45,16 @@ export const UpdateLocationEventSchema = z.object({
   next: LocationSchema
 });
 
+export const TravelDetailsEstablished = z.object({
+  type: z.literal("TRAVEL_DETAILS_ESTABLISHED"),
+  details: TravelDetailsSchema
+});
+
 export const SystemEventSchema = z.discriminatedUnion("type", [
   ErrorEventSchema,
   IntentResolutionErrorEventSchema,
-  AnalysisPerformedEventSchema
+  AnalysisPerformedEventSchema,
+  TravelDetailsEstablished
 ]);
 
 export const UserEventSchema = z.discriminatedUnion("type", [

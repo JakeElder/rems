@@ -1,4 +1,27 @@
 import qs from "qs";
+import { toWords } from "number-to-words";
+
+function numbersToWords(input: string): string {
+  return input.replace(/\b\d+(,\d+)*(\.\d+)?\b/g, (match) => {
+    const number = match.includes(".")
+      ? parseFloat(match.replace(/,/g, ""))
+      : parseInt(match.replace(/,/g, ""));
+
+    if (match.includes(".")) {
+      const [_, fractionalPart] = match.split(".");
+      return (
+        toWords(number) +
+        " point " +
+        fractionalPart
+          .split("")
+          .map((digit) => toWords(parseInt(digit)))
+          .join(" ")
+      );
+    } else {
+      return toWords(number);
+    }
+  });
+}
 
 export const speak = async (text: string): Promise<void> => {
   const key = "AIzaSyDNhScVj-L5p-BWTtp1mMtnBLLn5mN1cGw";
@@ -9,7 +32,7 @@ export const speak = async (text: string): Promise<void> => {
     method: "POST",
     body: JSON.stringify({
       audioConfig: { audioEncoding: "MP3" },
-      input: { text },
+      input: { text: numbersToWords(text) },
       voice: { languageCode: "th-TH" }
     })
   });

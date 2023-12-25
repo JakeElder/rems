@@ -24,6 +24,7 @@ import {
   registerAnalysis,
   registerIntentResolutionError,
   registerSelectedProperty,
+  registerTravelDetails,
   replaceRealEstateQuery,
   returnControl,
   setArray,
@@ -254,6 +255,19 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
         type: "PROPERTY_SELECTED",
         property: action.payload.property,
         reason: action.payload.reason
+      }
+    });
+  });
+
+  // REGISTER_TRAVEL_DETAILS
+  builder.addCase(registerTravelDetails, (state, action) => {
+    state.timeline.push({
+      id: nanoid(),
+      role: "SYSTEM",
+      date: Date.now(),
+      event: {
+        type: "TRAVEL_DETAILS_ESTABLISHED",
+        details: action.payload
       }
     });
   });

@@ -4,7 +4,6 @@ import md from "@rems/utils/md";
 export const IntentCodeSchema = z
   .enum([
     "GET_ASSISTANTS_ATTENTION",
-    // "QUERY_SELECTED_PROPERTY",
     "CHOOSE_ONE_PROPERTY",
     "CHAT",
     "REFINE_LOCATION",
@@ -24,7 +23,8 @@ export const IntentCodeSchema = z
     "CLEAR_QUERY_PARTIALLY",
     "CHANGE_ASSISTANT_POSITION",
     "CHANGE_ASSISTANT_LANGUAGE",
-    "QUERY_SELECTED_PROPERTIES"
+    "QUERY_SELECTED_PROPERTIES",
+    "GET_TRAVEL_DETAILS"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 
