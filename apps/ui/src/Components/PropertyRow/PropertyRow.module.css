@@ -93,3 +93,14 @@
   color: #555;
   font-size: 8px;
 }
+
+.distance-container {
+  color: #9c54bd;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.distance-container .seperator {
+  color: #9c54bd;
+}

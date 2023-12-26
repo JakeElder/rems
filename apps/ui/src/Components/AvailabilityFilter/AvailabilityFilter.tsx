@@ -25,8 +25,8 @@ const AvailabilityFilter = ({ type = "select", onChange, value }: Props) => {
             }
           }}
           items={[
-            { value: "SALE", label: "Sale" },
-            { value: "RENT", label: "Rent" }
+            { value: "RENT", label: "Rent" },
+            { value: "SALE", label: "Sale" }
           ]}
         />
       </div>

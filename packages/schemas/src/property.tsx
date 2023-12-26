@@ -137,6 +137,7 @@ export const PropertySchema = z
         .number()
         .describe(txt(<>The latitude of the properties location</>))
     }),
+    distance: z.number(),
     address: z.string(),
     url: z.string(),
     formattedPurchasePrice: z.string().nullable(),

@@ -44,7 +44,7 @@ export const UrlRealEstateQuerySchema = z.object({
   // Scalar
   "max-price": z.coerce.number().nullable().default(null).catch(null),
   "min-price": z.coerce.number().default(0).catch(0),
-  availability: z.enum(["sale", "rent"]).default("sale").catch("sale"),
+  availability: z.enum(["sale", "rent"]).default("rent").catch("rent"),
   page: z.coerce.number().default(1).catch(1),
   sort: z
     .enum([
@@ -52,7 +52,9 @@ export const UrlRealEstateQuerySchema = z.object({
       "lowest-price-first",
       "highest-price-first",
       "smallest-living-area-first",
-      "largest-living-area-first"
+      "largest-living-area-first",
+      "closest-first",
+      "furthest-first"
     ])
     .default("newest-first")
     .catch("newest-first"),

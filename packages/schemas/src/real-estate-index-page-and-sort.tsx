@@ -6,7 +6,9 @@ export const RealEstateIndexPageAndSortSchema = z.object({
     "LOWEST_PRICE_FIRST",
     "HIGHEST_PRICE_FIRST",
     "SMALLEST_LIVING_AREA_FIRST",
-    "LARGEST_LIVING_AREA_FIRST"
+    "LARGEST_LIVING_AREA_FIRST",
+    "CLOSEST_FIRST",
+    "FURTHEST_FIRST"
   ]),
   page: z.number()
 });

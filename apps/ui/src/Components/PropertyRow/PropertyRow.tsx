@@ -14,6 +14,7 @@ type Props = {
   type: RealEstateQuery["budgetAndAvailability"]["type"];
   selection: "USER" | "ASSISTANT" | null;
   onClick: React.MouseEventHandler<HTMLDivElement>;
+  showDistance: boolean;
 };
 
 const Price = ({ property, type }: Pick<Props, "property" | "type">) => {
@@ -76,10 +77,13 @@ const colors = (selection: Props["selection"]) => {
 };
 
 const PropertyRow = forwardRef<HTMLDivElement, Props>(
-  ({ property, type, selection, onClick }, ref) => {
+  ({ property, type, selection, onClick, showDistance }, ref) => {
     const [image, setImage] = useState(0);
 
-    const style = useSpring({ ...colors(selection), config: config.stiff });
+    const style = useSpring({
+      ...colors(selection),
+      config: config.stiff
+    });
 
     const { setMouseOver, setMouseOut, activeProperty } = useIndexConnector();
 
@@ -142,6 +146,15 @@ const PropertyRow = forwardRef<HTMLDivElement, Props>(
                 <span className={css["area"]}>
                   {property.livingArea}m&#178;
                 </span>
+                <div
+                  className={css["distance-container"]}
+                  style={{ opacity: showDistance ? 1 : 0 }}
+                >
+                  <span className={css["separator"]}>&bull;</span>
+                  <span className={css["distance"]}>
+                    {Math.round(property.distance)}m away
+                  </span>
+                </div>
               </div>
               <Price property={property} type={type} />
             </div>

@@ -12,7 +12,7 @@ import {
   PropertyType,
   sequelize
 } from "@/models";
-import { Op } from "sequelize";
+import { Op, literal } from "sequelize";
 import { ImageSchema, PropertySchema } from "@rems/schemas";
 import slugify from "slugify";
 import resolveLocationSource from "../../utils/resolve-location-source";
@@ -162,7 +162,9 @@ const order = (query: Query) => {
       [type === "SALE" ? "purchasePrice" : "rentalPrice", "DESC"]
     ],
     SMALLEST_LIVING_AREA_FIRST: [["livingArea", "ASC"]],
-    LARGEST_LIVING_AREA_FIRST: [["livingArea", "DESC"]]
+    LARGEST_LIVING_AREA_FIRST: [["livingArea", "DESC"]],
+    CLOSEST_FIRST: [literal("distance ASC")],
+    FURTHEST_FIRST: [literal("distance DESC")]
   };
 
   return orders[query.pageAndSort.sort];
@@ -268,6 +270,17 @@ export default async function resolve(
       ]
     },
     include: [...propertyType(query)],
+    attributes: {
+      include: [
+        [
+          literal(`ST_Distance(
+        ST_SetSRID(ST_MakePoint((location->>'lng')::double precision, (location->>'lat')::double precision), 4326)::geography,
+        ST_SetSRID(ST_MakePoint(${location.resolution.lng}, ${location.resolution.lat}), 4326)::geography
+      )`),
+          "distance"
+        ]
+      ]
+    },
     limit: limit(query),
     offset: offset(query),
     order: order(query)

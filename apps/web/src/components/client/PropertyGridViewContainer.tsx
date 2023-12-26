@@ -6,6 +6,7 @@ import useProperties from "@/hooks/use-properties";
 import {
   useAssistantSelectedProperty,
   useDispatch,
+  useSort,
   useUserSelectedProperty
 } from "@/state";
 import {
@@ -35,6 +36,7 @@ const PropertyGridViewContainer = ({}: Props) => {
       }
     })
   );
+  const sort = useSort();
 
   useEffect(() => {
     if (!$container.current || !$rows.current || !assistantSelectedPropertyId) {
@@ -63,6 +65,7 @@ const PropertyGridViewContainer = ({}: Props) => {
     <PropertyRowContainer loading={isLoading} ref={$container}>
       {(data?.data || []).map((p) => (
         <PropertyRow
+          showDistance={sort === "FURTHEST_FIRST" || sort === "CLOSEST_FIRST"}
           ref={($el) => $rows.current.set(p.id, $el)}
           key={p.id}
           type={data!.query.budgetAndAvailability.type}

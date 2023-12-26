@@ -20,7 +20,9 @@ const label = (sort: SortType) => {
     LOWEST_PRICE_FIRST: "Lowest price first",
     HIGHEST_PRICE_FIRST: "Highest price first",
     SMALLEST_LIVING_AREA_FIRST: "Smallest living area",
-    LARGEST_LIVING_AREA_FIRST: "Largest living area"
+    LARGEST_LIVING_AREA_FIRST: "Largest living area",
+    CLOSEST_FIRST: "Closest first",
+    FURTHEST_FIRST: "Furthest first"
   };
   return map[sort];
 };
@@ -64,6 +66,8 @@ const CountAndSort = ({ sort, loading, listings, onChange }: Props) => {
           <option value="LARGEST_LIVING_AREA_FIRST">
             {label("LARGEST_LIVING_AREA_FIRST")}
           </option>
+          <option value="CLOSEST_FIRST">{label("CLOSEST_FIRST")}</option>
+          <option value="FURTHEST_FIRST">{label("FURTHEST_FIRST")}</option>
         </select>
         <div className={css["active"]}>
           <span className={css["label"]}>Sort:</span>

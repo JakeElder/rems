@@ -186,6 +186,11 @@ export const useActivePropertyTypeFilters = () =>
 export const useSelectedProperties = () =>
   useSelector((state: AppState) => state.slices.selectedProperties);
 
+export const useSort = () =>
+  useSelector(
+    (state: AppState) => state.slices.stagedRealEstateQuery.pageAndSort.sort
+  );
+
 export const useUserSelectedProperty = () =>
   useSelector(
     (state: AppState) =>

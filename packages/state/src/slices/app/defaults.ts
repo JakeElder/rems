@@ -3,7 +3,7 @@ import { AppState, RealEstateQuery } from "@rems/types";
 
 const defaultRealEstateQuery = (): RealEstateQuery => ({
   budgetAndAvailability: {
-    type: "SALE",
+    type: "RENT",
     minPrice: 0,
     maxPrice: null
   },
