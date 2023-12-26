@@ -272,7 +272,7 @@ const timeline: Timeline = [
               compound_code: "PJ82+GV Bangkok",
               global_code: "7P52PJ82+GV"
             },
-            rating: 5,
+            rating: 4.5,
             reference: "ChIJR31p0hqf4jARn9EgSohNTAA",
             scope: "GOOGLE",
             types: [

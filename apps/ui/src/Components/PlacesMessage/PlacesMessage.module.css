@@ -1,19 +1,87 @@
 .root {
   display: flex;
+  gap: 8px;
   justify-content: flex-end;
 }
 
 .place {
+  width: 160px;
+}
+
+.image {
   border: 1px solid #b248e3;
   border-radius: 6px;
   padding: 3px;
+  position: relative;
+}
+
+.rating {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  padding: 2px 3px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.rating svg {
+  display: block;
+}
+
+.empty,
+.full {
+  display: flex;
+  gap: 1px;
+}
+
+.empty {
+  position: relative;
+  z-index: 1;
+  color: white;
+}
+
+.full {
+  overflow: hidden;
+  position: absolute;
+  left: 3px;
+  top: 2px;
+  height: 100%;
+  color: #ffef00;
+}
+
+.star {
+  position: relative;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.visible {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.name {
+  font-family: var(--font-inter);
+  padding-left: 2px;
+  font-size: 13px;
+  color: #7e0fb1;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .pad {
   overflow: hidden;
-  height: 100px;
   aspect-ratio: 14/9;
   position: relative;
+  border-radius: 3px;
 }
 
 .place img {

@@ -10,7 +10,7 @@ import {
   Analysis,
   NlLocationSource
 } from "@rems/types";
-import { AssistantPayloadSchema, NearbyPlacesEstablished } from "@rems/schemas";
+import { AssistantPayloadSchema } from "@rems/schemas";
 import memoize from "memoizee";
 import {
   AppAction,
@@ -212,9 +212,9 @@ const stream: Stream = (payload) => async (c) => {
       async (page) =>
         page
           ? setPageAndSort({
-              role: "ASSISTANT",
-              data: { page }
-            })
+            role: "ASSISTANT",
+            data: { page }
+          })
           : noop()
     ),
 
@@ -227,9 +227,9 @@ const stream: Stream = (payload) => async (c) => {
       async (sort) =>
         sort
           ? setPageAndSort({
-              role: "ASSISTANT",
-              data: { sort }
-            })
+            role: "ASSISTANT",
+            data: { sort }
+          })
           : noop()
     ),
 

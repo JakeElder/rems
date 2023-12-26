@@ -3,7 +3,6 @@
 import React from "react";
 import css from "./RealEstateIndexPage.module.css";
 import IndexConnector from "../../Components/IndexConnector";
-import { RealEstateQuery } from "@rems/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMap } from "@fortawesome/free-regular-svg-icons";
 
