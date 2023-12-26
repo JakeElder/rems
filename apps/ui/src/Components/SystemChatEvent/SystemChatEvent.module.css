@@ -1,0 +1,12 @@
+.root {
+  padding-left: 20px;
+  position: relative;
+  top: -20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message {
+  flex: 1;
+  max-width: 380px;
+}

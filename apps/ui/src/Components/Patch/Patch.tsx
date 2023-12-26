@@ -25,7 +25,7 @@ const AddArray = (diff: AddArrayDiff) => {
   return (
     <div className={css["add"]}>
       <div className={css["icon"]}>
-        <FontAwesomeIcon icon={faPlus} size="sm" />
+        <FontAwesomeIcon icon={faPlus} size="2xs" />
       </div>
       <div className={css["value"]}>{diff.value.slug as string}</div>
     </div>
@@ -36,7 +36,7 @@ const RemoveArray = (diff: RemoveArrayDiff) => {
   return (
     <div className={css["remove"]}>
       <div className={css["icon"]}>
-        <FontAwesomeIcon icon={faMinus} size="sm" />
+        <FontAwesomeIcon icon={faMinus} size="2xs" />
       </div>
       <div className={css["value"]}>{diff.value.slug as string}</div>
     </div>
@@ -47,7 +47,7 @@ const AddScalar = (diff: AddScalarDiff) => {
   return (
     <div className={css["add"]}>
       <div className={css["icon"]}>
-        <FontAwesomeIcon icon={faPlus} size="sm" />
+        <FontAwesomeIcon icon={faPlus} size="2xs" />
       </div>
       <div className={css["key"]}>{diff.prop}</div>
       <div className={css["colon"]}>:</div>
@@ -60,7 +60,7 @@ const RemoveScalar = (diff: RemoveScalarDiff) => {
   return (
     <div className={css["remove"]}>
       <div className={css["icon"]}>
-        <FontAwesomeIcon icon={faMinus} size="sm" />
+        <FontAwesomeIcon icon={faMinus} size="2xs" />
       </div>
       <div className={css["key"]}>{diff.prop}</div>
       <div className={css["colon"]}>:</div>
@@ -73,7 +73,7 @@ const ChangeScalar = (diff: ChangeScalarDiff) => {
   return (
     <div className={css["change"]}>
       <div className={css["icon"]}>
-        <FontAwesomeIcon icon={faArrowRightArrowLeft} size="xs" />
+        <FontAwesomeIcon icon={faArrowRightArrowLeft} size="2xs" />
       </div>
       <div className={css["key"]}>{diff.prop}</div>
       <div className={css["colon"]}>:</div>
@@ -160,7 +160,7 @@ const ArrayNoop = (patch: ArrayPatch) => {
   return (
     <div className={css["array-noop"]}>
       <div className={css["icon"]}>
-        <FontAwesomeIcon icon={faEquals} size="sm" />
+        <FontAwesomeIcon icon={faEquals} size="2xs" />
       </div>
       <div className={css["values"]}>
         {patch.value.map((p) => p.slug).join(", ")}
@@ -183,7 +183,7 @@ const ScalarNoop = (patch: ScalarPatch) => {
         <animated.div style={style}>
           <li className={css["scalar-noop"]}>
             <div className={css["icon"]}>
-              <FontAwesomeIcon icon={faEquals} size="sm" />
+              <FontAwesomeIcon icon={faEquals} size="2xs" />
             </div>
             <div className={css["key"]}>{k}</div>
             <div className={css["colon"]}>:</div>
