@@ -16,15 +16,15 @@ type InputProps = React.ComponentProps<typeof ChatInput>;
 type Props = Chat.Props &
   Omit<InputProps, "state"> & { inputState: InputSession["state"] };
 
-const next = (source: Timeline, current: Timeline): [Timeline, boolean] => {
-  const e = source.shift();
-  return [[...current, e!], source.length === 0];
-};
+// const next = (source: Timeline, current: Timeline): [Timeline, boolean] => {
+//   const e = source.shift();
+//   return [[...current, e!], source.length === 0];
+// };
 
 export const Mock: FC<Props> = (props) => {
-  const source = useRef([...mockTimeline]);
-  const to = useRef<NodeJS.Timeout>();
-  const [t, setCurrent] = useState(props.timeline);
+  // const source = useRef([...mockTimeline]);
+  // const to = useRef<NodeJS.Timeout>();
+  // const [t, setCurrent] = useState(props.timeline);
 
   const $left = useRef<HTMLDivElement | null>(null);
   const $top = useRef<HTMLDivElement | null>(null);
@@ -45,22 +45,22 @@ export const Mock: FC<Props> = (props) => {
     ]);
   }, [props.inputState]);
 
-  const push = (current: Timeline) => {
-    const [nextTimeline, complete] = next(source.current, current);
-    setCurrent(nextTimeline);
-    if (!complete) {
-      to.current = setTimeout(() => push(nextTimeline), randomInt(500, 2200));
-    }
-  };
+  // const push = (current: Timeline) => {
+  //   const [nextTimeline, complete] = next(source.current, current);
+  //   setCurrent(nextTimeline);
+  //   if (!complete) {
+  //     to.current = setTimeout(() => push(nextTimeline), randomInt(500, 2200));
+  //   }
+  // };
 
-  useEffect(() => {
-    to.current = setTimeout(() => push(t), randomInt(500, 2200));
-    () => {
-      clearTimeout(to.current);
-      source.current = [...mockTimeline];
-      setCurrent([]);
-    };
-  }, []);
+  // useEffect(() => {
+  //   to.current = setTimeout(() => push(t), randomInt(500, 2200));
+  //   () => {
+  //     clearTimeout(to.current);
+  //     source.current = [...mockTimeline];
+  //     setCurrent([]);
+  //   };
+  // }, []);
 
   return (
     <>
@@ -75,7 +75,7 @@ export const Mock: FC<Props> = (props) => {
         <Chat.Root {...props} {...spacing.props}>
           <Chat.Dialog>
             <Chat.Header {...props} />
-            <Chat.Body timeline={t} />
+            <Chat.Body timeline={props.timeline} />
           </Chat.Dialog>
           <Chat.Input>
             <ChatInput
@@ -129,9 +129,9 @@ export const Default: Story = {
   args: {
     lang: "EN",
     mode: "SLEEPING",
-    placement: "MINIMISED",
+    placement: "WINDOWED",
     inputState: "INACTIVE",
-    timeline: [],
+    timeline: mockTimeline,
     submittable: false,
     theme: "chat"
   }

@@ -148,6 +148,9 @@ const isLanguageBasedEvent = (e: TimelineEvent) => e.event.type === "YIELD";
 
 const isPatchEvent = (e: TimelineEvent) => e.event.type === "STATE_MUTATION";
 
+const isNearbyPlacesEstablishedEvent = (e: TimelineEvent) =>
+  e.event.type === "NEARBY_PLACES_ESTABLISHED";
+
 const isEmptyPatchEvent = ({ role, event: e }: TimelineEvent) => {
   if (role === "ASSISTANT" && e.type === "STATE_MUTATION") {
     if (
@@ -187,7 +190,11 @@ export const Body = React.memo(
           return false;
         }
 
-        if (isLanguageBasedEvent(e) || isPatchEvent(e)) {
+        if (
+          isLanguageBasedEvent(e) ||
+          isPatchEvent(e) ||
+          isNearbyPlacesEstablishedEvent(e)
+        ) {
           return true;
         }
 
