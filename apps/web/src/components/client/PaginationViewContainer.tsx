@@ -26,7 +26,7 @@ const PaginationViewContainer = ({}: Props) => {
       onPageChange={onChange}
       currentPage={stagedQuery["pageAndSort"]["page"]}
       createLink={(page) => {
-        return `/real-estate${generateQueryString(stagedQuery, { page })}`;
+        return `/${generateQueryString(stagedQuery, { page })}`;
       }}
       total={data?.pagination.total}
       pageSize={data?.pagination.pageSize}

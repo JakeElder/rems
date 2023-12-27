@@ -58,7 +58,7 @@ const useFilterSet = (set: FilterSet): ResolvingFilterSet => {
     set,
     data,
     isLoading,
-    url: `/real-estate${qs}`,
+    url: `/${qs}`,
     query
   };
 };
