@@ -5,7 +5,7 @@ import {
   LocationSource,
   NlLocationSource
 } from "@rems/types";
-import { google } from "googleapis";
+import { google, places_v1 } from "googleapis";
 import memoize from "memoizee";
 
 // const client = new Client();
@@ -69,11 +69,47 @@ const adjustBoundsToMinimumArea = (
   return viewport;
 };
 
+const areas = [
+  "locality",
+  "administrative_area_level_1",
+  "country",
+  "administrative_area_level_2",
+  "administrative_area_level_3",
+  "administrative_area_level_4",
+  "administrative_area_level_5",
+  "administrative_area_level_6",
+  "administrative_area_level_7",
+  "colloquial_area",
+  "continent",
+  "neighborhood",
+  "sublocality",
+  "sublocality_level_1",
+  "sublocality_level_2",
+  "sublocality_level_3",
+  "sublocality_level_4",
+  "sublocality_level_5"
+];
+
+const typesToType = (
+  types: places_v1.Schema$GoogleMapsPlacesV1Place["types"]
+): LocationResolution["type"] => {
+  if (!types) return "AREA";
+  if (types.some((t) => areas.includes(t))) return "AREA";
+  return "POINT";
+};
+
 const resolveNlLocationSource = memoize(
   async (source: NlLocationSource): Promise<ResolveLocationSourceReturn> => {
     const r = await places.searchText({
       requestBody: { textQuery: source.description },
-      fields: ["displayName", "editorialSummary", "location", "viewport", "id"]
+      fields: [
+        "displayName",
+        "editorialSummary",
+        "location",
+        "viewport",
+        "id",
+        "types"
+      ]
         .map((l) => `places.${l}`)
         .join(",")
     });
@@ -82,8 +118,8 @@ const resolveNlLocationSource = memoize(
       return { ok: false };
     }
 
-    const place = r.data.places[0];
-    const { id, location, viewport, displayName, editorialSummary } = place;
+    const { id, location, viewport, displayName, editorialSummary, types } =
+      r.data.places[0];
 
     if (
       !id ||
@@ -116,7 +152,8 @@ const resolveNlLocationSource = memoize(
       ...(displayName?.text ? { displayName: displayName.text } : {}),
       ...(editorialSummary?.text
         ? { editorialSummary: editorialSummary?.text }
-        : {})
+        : {}),
+      type: typesToType(types)
     };
 
     return { ok: true, resolution };

@@ -38,6 +38,7 @@ import {
   setPageAndSort,
   setResolvingIntents,
   setSelectedProperty,
+  setShowDistance,
   setSpaceRequirements,
   yld
 } from "./actions";
@@ -464,12 +465,17 @@ const reducer = createReducer<AppState>(defaults(), (builder) => {
     state.slices.assistant.mode = "WORKING";
   });
 
+  // SET_SHOW_DISTANCE
+  builder.addCase(setShowDistance, (state, action) => {
+    state.slices.results.showDistance = action.payload.show;
+  });
+
   // SET_SELECTED_PROPERTY
   builder.addCase(setSelectedProperty, (state, action) => {
-    const idx = state.slices.selectedProperties.findIndex(
+    const idx = state.slices.results.selectedProperties.findIndex(
       (i) => i.role === action.payload.role
     );
-    state.slices.selectedProperties[idx].id = action.payload.id;
+    state.slices.results.selectedProperties[idx].id = action.payload.id;
   });
 
   // SET_SPACE_REQUIREMENTS

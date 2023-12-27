@@ -47,10 +47,13 @@ const defaults = (): AppState => ({
       enterDown: false,
       spaceDown: false
     },
-    selectedProperties: [
-      { role: "USER", id: null },
-      { role: "ASSISTANT", id: null }
-    ]
+    results: {
+      showDistance: false,
+      selectedProperties: [
+        { role: "USER", id: null },
+        { role: "ASSISTANT", id: null }
+      ]
+    }
   },
   timeline: []
 });

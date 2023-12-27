@@ -138,6 +138,14 @@ export const setPageAndSort = createAction<
 
 export const setResolvingIntents = createAction("SET_RESOLVING_INTENTS");
 
+export const setShowDistance = createAction<
+  {
+    role: ActorTimelineEvent["role"];
+    show: boolean;
+  },
+  "SET_SHOW_DISTANCE"
+>("SET_SHOW_DISTANCE");
+
 export const setSelectedProperty = createAction<
   {
     role: ActorTimelineEvent["role"];
@@ -203,6 +211,7 @@ type SetBudgetAndAvailabilityAction = ReturnType<
 type SetLocationAction = ReturnType<typeof setLocation>;
 type SetPageAndSortAction = ReturnType<typeof setPageAndSort>;
 type SetResolvingIntentsAction = ReturnType<typeof setResolvingIntents>;
+type SetShowDistanceAction = ReturnType<typeof setShowDistance>;
 type SetSelectedPropertyAction = ReturnType<typeof setSelectedProperty>;
 type SetSpaceRequirementsAction = ReturnType<typeof setSpaceRequirements>;
 type YieldAction = ReturnType<typeof yld>;
@@ -238,6 +247,7 @@ export type AppAction =
   | SetLocationAction
   | SetPageAndSortAction
   | SetResolvingIntentsAction
+  | SetShowDistanceAction
   | SetSelectedPropertyAction
   | SetSpaceRequirementsAction
   | YieldAction;

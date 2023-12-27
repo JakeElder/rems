@@ -1,4 +1,4 @@
-import getTravelDetails from "../src/remi/utils/get-travel-details";
+import { getTravelDetails } from "../src/utils";
 
 test("getTravelDetails", async () => {
   const details = await getTravelDetails(

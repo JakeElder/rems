@@ -3,6 +3,7 @@ import { RealEstateIndexPage } from "@rems/ui";
 import { SearchParams } from "@rems/types";
 import { fromSearchParams } from "@rems/utils/query";
 import fetch from "@/fetch";
+import RealEstateIndexPageLocationResolutionViewContainer from "@/components/client/RealEstateIndexPageLocationResolutionViewContainer";
 
 type Props = {
   searchParams?: SearchParams;
@@ -17,12 +18,17 @@ const RealEstateIndexPageTitleContainer = async ({ searchParams }: Props) => {
 
   if (source.type === "NL") {
     return (
-      <RealEstateIndexPage.Title
-        geospatialOperator={source.geospatialOperator}
-        location={source.description}
-        type={res.query.budgetAndAvailability.type.toLowerCase()}
-        resolution={resolution.displayName}
-      />
+      <RealEstateIndexPage.Title>
+        <RealEstateIndexPage.LocationSource
+          geospatialOperator={source.geospatialOperator}
+          location={source.description}
+          type={res.query.budgetAndAvailability.type.toLowerCase()}
+        />
+        <RealEstateIndexPageLocationResolutionViewContainer
+          resolution={resolution.displayName}
+          distanceAvailable={resolution.type === "POINT"}
+        />
+      </RealEstateIndexPage.Title>
     );
   }
 

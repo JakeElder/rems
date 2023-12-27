@@ -11,5 +11,8 @@ export const AppStateSlicesSchema = z.object({
     spaceDown: z.boolean(),
     enterDown: z.boolean()
   }),
-  selectedProperties: SelectedPropertiesManifestSchema
+  results: z.object({
+    selectedProperties: SelectedPropertiesManifestSchema,
+    showDistance: z.boolean()
+  })
 });

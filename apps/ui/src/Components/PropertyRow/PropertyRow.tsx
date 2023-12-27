@@ -76,6 +76,28 @@ const colors = (selection: Props["selection"]) => {
   return DEFAULT_COLORS;
 };
 
+const Distance = ({
+  children: distance,
+  show
+}: {
+  show: boolean;
+  children: Property["distance"];
+}) => {
+  if (!distance) return null;
+
+  const style = useSpring({
+    y: show ? 0 : 12,
+    opacity: show ? 1 : 0
+  });
+
+  return (
+    <animated.div className={css["distance-container"]} style={style}>
+      <span className={css["separator"]}>&bull;</span>
+      <span className={css["distance"]}>{Math.round(distance)}m away</span>
+    </animated.div>
+  );
+};
+
 const PropertyRow = forwardRef<HTMLDivElement, Props>(
   ({ property, type, selection, onClick, showDistance }, ref) => {
     const [image, setImage] = useState(0);
@@ -146,15 +168,7 @@ const PropertyRow = forwardRef<HTMLDivElement, Props>(
                 <span className={css["area"]}>
                   {property.livingArea}m&#178;
                 </span>
-                <div
-                  className={css["distance-container"]}
-                  style={{ opacity: showDistance ? 1 : 0 }}
-                >
-                  <span className={css["separator"]}>&bull;</span>
-                  <span className={css["distance"]}>
-                    {Math.round(property.distance)}m away
-                  </span>
-                </div>
+                <Distance show={showDistance}>{property.distance}</Distance>
               </div>
               <Price property={property} type={type} />
             </div>

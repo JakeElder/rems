@@ -29,7 +29,10 @@ const ReturnsSchema = z
           </>
         )
       ),
-    r: z.number().describe(md(<>Radius, if specified</>))
+    r: z
+      .number()
+      .describe(md(<>Radius, if specified</>))
+      .nullable()
   })
   .partial({ d: true, r: true })
   .transform(({ d, r }) => ({ description: d, radius: r }));

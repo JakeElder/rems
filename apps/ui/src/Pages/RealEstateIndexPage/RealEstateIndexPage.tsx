@@ -5,6 +5,8 @@ import css from "./RealEstateIndexPage.module.css";
 import IndexConnector from "../../Components/IndexConnector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMap } from "@fortawesome/free-regular-svg-icons";
+import * as CB from "@radix-ui/react-checkbox";
+import { animated, useSpring } from "@react-spring/web";
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["root"]}>{children}</div>;
@@ -44,33 +46,96 @@ export const Breadcrumbs = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["breadcrumbs"]}>{children}</div>;
 };
 
-export const Title = ({
+export const LocationSource = ({
   location,
   type,
-  geospatialOperator,
-  resolution
+  geospatialOperator
 }: {
   type: string;
   geospatialOperator: string;
   location: string;
-  resolution?: string;
 }) => {
   return (
-    <h1 className={css["title"]}>
-      <div className={css["title-main"]}>
-        Homes for {type} {geospatialOperator}{" "}
-        <span className={css["location"]}>{location}</span>
-      </div>
-      {resolution && (
-        <div className={css["resolution"]}>
-          <span>
-            <FontAwesomeIcon className={css["icon"]} icon={faMap} size="xs" />
-            {resolution}
-          </span>
-        </div>
-      )}
-    </h1>
+    <div className={css["location-source"]}>
+      Homes for {type} {geospatialOperator}{" "}
+      <span className={css["location"]}>{location}</span>
+    </div>
   );
+};
+
+type OnShowDistanceChange = React.ComponentProps<
+  typeof CB.Root
+>["onCheckedChange"];
+
+const DistanceToggle = ({
+  show,
+  on,
+  onShowDistanceChange
+}: {
+  show: boolean;
+  on: boolean;
+  onShowDistanceChange: OnShowDistanceChange;
+}) => {
+  const style = useSpring({
+    x: show ? 10 : 0,
+    opacity: show ? 1 : 0
+  });
+
+  return (
+    <animated.div className={css["distance-toggle"]} style={style}>
+      <label className={css["label"]} htmlFor="distance-toggle">
+        <CB.Root
+          className={css["checkbox"]}
+          id="distance-toggle"
+          checked={on}
+          onCheckedChange={onShowDistanceChange}
+        >
+          <CB.Indicator className={css["indicator"]}>
+            <svg width={6.664} height={6.202} className={css["tick"]}>
+              <path
+                fill="none"
+                fillRule="evenodd"
+                stroke="#8C2EBB"
+                strokeLinecap="square"
+                d="m.707 4.026 1.45 1.43L5.962.703"
+              />
+            </svg>
+          </CB.Indicator>
+        </CB.Root>
+        show distance
+      </label>
+    </animated.div>
+  );
+};
+
+export const LocationResolution = ({
+  resolution,
+  distanceAvailable,
+  showDistance,
+  onShowDistanceChange
+}: {
+  resolution?: string;
+  distanceAvailable: boolean;
+  showDistance: boolean;
+  onShowDistanceChange: OnShowDistanceChange;
+}) => {
+  return (
+    <div className={css["resolution"]}>
+      <span className={css["pill"]}>
+        <FontAwesomeIcon className={css["icon"]} icon={faMap} size="xs" />
+        {resolution}
+      </span>
+      <DistanceToggle
+        show={distanceAvailable}
+        on={showDistance}
+        onShowDistanceChange={onShowDistanceChange}
+      />
+    </div>
+  );
+};
+
+export const Title = ({ children }: { children: React.ReactNode }) => {
+  return <h1 className={css["title"]}>{children}</h1>;
 };
 
 export const CountAndSort = ({ children }: { children: React.ReactNode }) => {

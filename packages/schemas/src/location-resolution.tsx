@@ -8,7 +8,8 @@ export const LocationResolutionSchema = z
     lng: z.number(),
     bounds: BoundsSchema,
     displayName: z.string(),
-    editorialSummary: z.string()
+    editorialSummary: z.string(),
+    type: z.enum(["POINT", "AREA"])
   })
   .partial({
     displayName: true,

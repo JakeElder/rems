@@ -184,7 +184,7 @@ export const useActivePropertyTypeFilters = () =>
   useSelector(selectActivePropertyTypeFilters);
 
 export const useSelectedProperties = () =>
-  useSelector((state: AppState) => state.slices.selectedProperties);
+  useSelector((state: AppState) => state.slices.results.selectedProperties);
 
 export const useSort = () =>
   useSelector(
@@ -194,14 +194,19 @@ export const useSort = () =>
 export const useUserSelectedProperty = () =>
   useSelector(
     (state: AppState) =>
-      state.slices.selectedProperties.find((i) => i.role === "USER")!.id
+      state.slices.results.selectedProperties.find((i) => i.role === "USER")!.id
   );
 
 export const useAssistantSelectedProperty = () =>
   useSelector(
     (state: AppState) =>
-      state.slices.selectedProperties.find((i) => i.role === "ASSISTANT")!.id
+      state.slices.results.selectedProperties.find(
+        (i) => i.role === "ASSISTANT"
+      )!.id
   );
+
+export const useShowDistance = () =>
+  useSelector((state: AppState) => state.slices.results.showDistance);
 
 /*
  * Store

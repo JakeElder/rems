@@ -19,7 +19,12 @@ const intents: Intent[] = [
   {
     id: 30,
     code: "REFINE_LOCATION",
-    description: md(<>Sets a new search location</>),
+    description: md(
+      <>
+        Sets a new search location. This is to be set when the user wants to
+        view properties in a certain location.
+      </>
+    ),
     examples: []
   },
 
@@ -207,7 +212,13 @@ const intents: Intent[] = [
   {
     id: 240,
     code: "GET_NEARBY_PLACES",
-    description: "Gets info about places near a search origin",
+    description: md(
+      <>
+        Gets info about places near a search origin. Only invoked when the user
+        asks a question in the format "what x are near x". Not to be used when
+        the command starts with "show me"
+      </>
+    ),
     examples: ["What coffee shops are there near this property"]
   }
 ];

@@ -33,13 +33,14 @@ import {
   setSpaceRequirements,
   yld
 } from "@rems/state/app/actions";
-import resolveLocationSource, {
-  resolveLocationSourceOrFail
-} from "../../utils/resolve-location-source";
 import { pickBy } from "remeda";
 import { resolvePropertyOrFail } from "../properties/[id]/resolve";
-import getTravelDetails from "../../remi/utils/get-travel-details";
-import getNearbyPlaces from "../../remi/utils/get-nearby-places";
+import {
+  getTravelDetails,
+  getNearbyPlaces,
+  resolveLocationSource,
+  resolveLocationSourceOrFail
+} from "../../utils";
 import resolveProperties from "../properties/resolve";
 
 type Stream = (args: AssistantPayload) => UnderlyingDefaultSource["start"];
@@ -212,9 +213,9 @@ const stream: Stream = (payload) => async (c) => {
       async (page) =>
         page
           ? setPageAndSort({
-            role: "ASSISTANT",
-            data: { page }
-          })
+              role: "ASSISTANT",
+              data: { page }
+            })
           : noop()
     ),
 
@@ -227,9 +228,9 @@ const stream: Stream = (payload) => async (c) => {
       async (sort) =>
         sort
           ? setPageAndSort({
-            role: "ASSISTANT",
-            data: { sort }
-          })
+              role: "ASSISTANT",
+              data: { sort }
+            })
           : noop()
     ),
 
