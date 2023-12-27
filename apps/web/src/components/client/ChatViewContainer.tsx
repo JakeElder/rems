@@ -64,6 +64,7 @@ const ChatViewContainer = ({}: Props) => {
           submittable={submittable}
         />
       </Chat.Input>
+      <Chat.Branding mode={mode} />
     </Chat.Root>
   );
 };

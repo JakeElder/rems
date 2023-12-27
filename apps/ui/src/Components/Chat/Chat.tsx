@@ -178,6 +178,24 @@ export const Input = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["input"]}>{children}</div>;
 };
 
+export const Branding = ({ mode }: { mode: AssistantMode }) => {
+  const style = useSpring({
+    fill: mode === "SLEEPING" ? "#000" : "#fff",
+    color: mode === "SLEEPING" ? "#444" : "#fff"
+  });
+
+  return (
+    <animated.div className={css["branding"]} style={style}>
+      <span className={css["powered-by"]}>powered by</span>
+      <div className={css["logo"]}>
+        <svg width={24.945} height={9.36}>
+          <path d="m3.3 7.695 1.125-1.47C5.31 5.04 6.09 3.945 6.09 2.73 6.09 1.065 4.95 0 3.165 0 1.98 0 .9.48.24 1.095V2.97c.615-.57 1.575-1.2 2.58-1.2.87 0 1.335.48 1.335 1.2 0 .96-.615 1.71-1.47 2.82L0 9.3v.06h6.3V7.695h-3ZM11.31 6.165c1.95 0 3.24-1.05 3.24-3C14.55 1.2 13.26.15 11.31.15H7.56v9.21h1.905V6.165h1.845Zm1.35-3c0 .795-.48 1.365-1.47 1.365H9.465V1.785h1.725c.99 0 1.47.555 1.47 1.38ZM20.43 7.38l2.625-3.96v5.94h1.89V.15H23.19L20.415 4.5 17.625.15H15.84v9.21h1.875V3.42l2.655 3.96z" />
+        </svg>
+      </div>
+    </animated.div>
+  );
+};
+
 export const Body = React.memo(
   ({ timeline }: Pick<Props, "timeline">) => {
     const refMap = useMemo(() => new WeakMap(), []);
