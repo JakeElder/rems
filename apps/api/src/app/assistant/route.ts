@@ -463,11 +463,14 @@ const stream: Stream = (payload) => async (c) => {
 
         try {
           const places = await getNearbyPlaces(location, keyword);
-          return registerNearbyPlaces({
-            location,
-            keyword,
-            places
-          });
+          return [
+            setAssistantPlacement("RIGHT"),
+            registerNearbyPlaces({
+              location,
+              keyword,
+              places
+            })
+          ];
         } catch (e) {
           return registerIntentResolutionError({
             intent: "GET_NEARBY_PLACES",
