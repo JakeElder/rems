@@ -11,8 +11,8 @@ type ViewportHeight = number;
 type XDivide = number;
 
 const HEADER_HEIGHT = 60;
-const DEFAULT_WIDTH = 580;
-const DEFAULT_HEIGHT = 670;
+const DEFAULT_WIDTH = 480;
+const DEFAULT_HEIGHT = 570;
 const FRAME_PAD = 26;
 
 const calc = {
