@@ -94,7 +94,7 @@ export const Mock: FC<Props> = (props) => {
               }}
             />
           </Chat.Input>
-          <Chat.Branding />
+          <Chat.Branding mode={props.mode} />
         </Chat.Root>
       )}
     </>

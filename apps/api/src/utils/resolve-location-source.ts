@@ -1,6 +1,7 @@
-// import { Client } from "@googlemaps/google-maps-services-js";
+// import { Client } from "@googlemaps/google-ma{ lat, lng}-services-js";
 import {
   Bounds,
+  LatLng,
   LocationResolution,
   LocationSource,
   NlLocationSource
@@ -26,7 +27,7 @@ type ResolveLocationSourceReturn =
 
 const adjustBoundsToMinimumArea = (
   viewport: Bounds,
-  minAreaKm2: number = 40
+  minAreaKm2: number = 80
 ) => {
   const EARTH_CIRCUMFERENCE = 40075;
   const KM_PER_DEGREE_LAT = EARTH_CIRCUMFERENCE / 360;
@@ -69,6 +70,26 @@ const adjustBoundsToMinimumArea = (
   return viewport;
 };
 
+const boundsFromPointAndRadius = ({ lat, lng }: LatLng, radiusKm: number) => {
+  const EARTH_CIRCUMFERENCE = 40075;
+  const KM_PER_DEGREE_LAT = EARTH_CIRCUMFERENCE / 360;
+
+  const radiusLat = radiusKm / KM_PER_DEGREE_LAT;
+  const radiusLng =
+    radiusKm / (KM_PER_DEGREE_LAT * Math.cos((lat * Math.PI) / 180));
+
+  return {
+    sw: {
+      lat: lat - radiusLat,
+      lng: lng - radiusLng
+    },
+    ne: {
+      lat: lat + radiusLat,
+      lng: lng + radiusLng
+    }
+  };
+};
+
 const areas = [
   "locality",
   "administrative_area_level_1",
@@ -98,69 +119,75 @@ const typesToType = (
   return "POINT";
 };
 
-const resolveNlLocationSource = memoize(
-  async (source: NlLocationSource): Promise<ResolveLocationSourceReturn> => {
-    const r = await places.searchText({
-      requestBody: { textQuery: source.description },
-      fields: [
-        "displayName",
-        "editorialSummary",
-        "location",
-        "viewport",
-        "id",
-        "types"
-      ]
-        .map((l) => `places.${l}`)
-        .join(",")
-    });
+const resolveNlLocationSource = async (
+  source: NlLocationSource
+): Promise<ResolveLocationSourceReturn> => {
+  const r = await places.searchText({
+    requestBody: { textQuery: source.description },
+    fields: [
+      "displayName",
+      "editorialSummary",
+      "location",
+      "viewport",
+      "id",
+      "types"
+    ]
+      .map((l) => `places.${l}`)
+      .join(",")
+  });
 
-    if (!r.data.places) {
-      return { ok: false };
-    }
+  if (!r.data.places) {
+    return { ok: false };
+  }
 
-    const { id, location, viewport, displayName, editorialSummary, types } =
-      r.data.places[0];
+  const { id, location, viewport, displayName, editorialSummary, types } =
+    r.data.places[0];
 
-    if (
-      !id ||
-      !location ||
-      !location.latitude ||
-      !location.longitude ||
-      !viewport ||
-      !viewport.low ||
-      !viewport.high ||
-      !viewport.low.longitude ||
-      !viewport.low.latitude ||
-      !viewport.high.latitude ||
-      !viewport.high.longitude
-    ) {
-      return { ok: false };
-    }
+  if (
+    !id ||
+    !location ||
+    !location.latitude ||
+    !location.longitude ||
+    !viewport ||
+    !viewport.low ||
+    !viewport.high ||
+    !viewport.low.longitude ||
+    !viewport.low.latitude ||
+    !viewport.high.latitude ||
+    !viewport.high.longitude
+  ) {
+    return { ok: false };
+  }
 
-    const bounds: Bounds = {
-      sw: { lat: viewport.low.latitude, lng: viewport.low.longitude },
-      ne: { lat: viewport.high.latitude, lng: viewport.high.longitude }
-    };
+  const type = typesToType(types);
 
-    const adjusted = adjustBoundsToMinimumArea(bounds);
+  const bounds: Bounds = {
+    sw: { lat: viewport.low.latitude, lng: viewport.low.longitude },
+    ne: { lat: viewport.high.latitude, lng: viewport.high.longitude }
+  };
 
-    const resolution: LocationResolution = {
-      id,
-      lat: location.latitude,
-      lng: location.longitude,
-      bounds: adjusted,
-      ...(displayName?.text ? { displayName: displayName.text } : {}),
-      ...(editorialSummary?.text
-        ? { editorialSummary: editorialSummary?.text }
-        : {}),
-      type: typesToType(types)
-    };
+  const adjusted =
+    type === "POINT"
+      ? boundsFromPointAndRadius(
+          { lat: location.latitude, lng: location.longitude },
+          (source.radius + 8000) / 1000
+        )
+      : adjustBoundsToMinimumArea(bounds);
 
-    return { ok: true, resolution };
-  },
-  { normalizer: ([source]) => `${source.description}` }
-);
+  const resolution: LocationResolution = {
+    id,
+    lat: location.latitude,
+    lng: location.longitude,
+    bounds: adjusted,
+    ...(displayName?.text ? { displayName: displayName.text } : {}),
+    ...(editorialSummary?.text
+      ? { editorialSummary: editorialSummary?.text }
+      : {}),
+    type
+  };
 
+  return { ok: true, resolution };
+};
 const resolveLocationSource = async (
   ls: LocationSource
 ): Promise<ResolveLocationSourceReturn> => {

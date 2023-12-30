@@ -49,14 +49,14 @@ const intents: Intent[] = [
     examples: []
   },
 
-  {
-    id: 80,
-    code: "REFINE_BUDGET_AVAILABILITY",
-    description: md(
-      <>Sets the users budget and whether they are interested in sale or rent</>
-    ),
-    examples: []
-  },
+  // {
+  //   id: 80,
+  //   code: "REFINE_BUDGET_AVAILABILITY",
+  //   description: md(
+  //     <>Sets the users budget and whether they are interested in sale or rent</>
+  //   ),
+  //   examples: []
+  // },
 
   {
     id: 90,

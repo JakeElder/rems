@@ -105,6 +105,7 @@ const identifyIntents = async ({
               Make sure END_ASSISTANT_SESSION is used when it sounds as though
               the user has come to a resting point
             </li>
+            <li>Pay attention to property types</li>
           </ul>
         </>
       ),

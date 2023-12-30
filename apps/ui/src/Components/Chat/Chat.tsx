@@ -178,19 +178,123 @@ export const Input = ({ children }: { children: React.ReactNode }) => {
   return <div className={css["input"]}>{children}</div>;
 };
 
+const BrandingLogo = ({ mode }: { mode: AssistantMode }) => {
+  const { opacity } = useSpring({
+    opacity: mode === "SLEEPING" ? 0 : 1
+  });
+
+  return (
+    <svg width={24.945} height={9.36}>
+      <defs>
+        <filter
+          id="a"
+          width="338.1%"
+          height="260.3%"
+          x="-119%"
+          y="-80.1%"
+          filterUnits="objectBoundingBox"
+        >
+          <feOffset in="SourceAlpha" result="shadowOffsetOuter1" />
+          <feGaussianBlur
+            in="shadowOffsetOuter1"
+            result="shadowBlurOuter1"
+            stdDeviation={2.5}
+          />
+          <feColorMatrix
+            in="shadowBlurOuter1"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"
+          />
+        </filter>
+        <filter
+          id="c"
+          width="314.6%"
+          height="262.9%"
+          x="-107.3%"
+          y="-81.4%"
+          filterUnits="objectBoundingBox"
+        >
+          <feOffset in="SourceAlpha" result="shadowOffsetOuter1" />
+          <feGaussianBlur
+            in="shadowOffsetOuter1"
+            result="shadowBlurOuter1"
+            stdDeviation={2.5}
+          />
+          <feColorMatrix
+            in="shadowBlurOuter1"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"
+          />
+        </filter>
+        <filter
+          id="e"
+          width="264.7%"
+          height="262.9%"
+          x="-82.4%"
+          y="-81.4%"
+          filterUnits="objectBoundingBox"
+        >
+          <feOffset in="SourceAlpha" result="shadowOffsetOuter1" />
+          <feGaussianBlur
+            in="shadowOffsetOuter1"
+            result="shadowBlurOuter1"
+            stdDeviation={2.5}
+          />
+          <feColorMatrix
+            in="shadowBlurOuter1"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"
+          />
+        </filter>
+        <path
+          id="b"
+          d="m3.3 7.695 1.125-1.47C5.31 5.04 6.09 3.945 6.09 2.73 6.09 1.065 4.95 0 3.165 0 1.98 0 .9.48.24 1.095V2.97c.615-.57 1.575-1.2 2.58-1.2.87 0 1.335.48 1.335 1.2 0 .96-.615 1.71-1.47 2.82L0 9.3v.06h6.3V7.695h-3Z"
+        />
+        <path
+          id="d"
+          d="M11.31 6.165c1.95 0 3.24-1.05 3.24-3C14.55 1.2 13.26.15 11.31.15H7.56v9.21h1.905V6.165h1.845Zm1.35-3c0 .795-.48 1.365-1.47 1.365H9.465V1.785h1.725c.99 0 1.47.555 1.47 1.38Z"
+        />
+        <path
+          id="f"
+          d="m20.43 7.38 2.625-3.96v5.94h1.89V.15H23.19L20.415 4.5 17.625.15H15.84v9.21h1.875V3.42l2.655 3.96z"
+        />
+      </defs>
+      <g fillRule="nonzero">
+        <g>
+          <animated.g style={{ opacity }}>
+            <use xlinkHref="#b" filter="url(#a)" />
+          </animated.g>
+          <use xlinkHref="#b" />
+        </g>
+        <g>
+          <animated.g style={{ opacity }}>
+            <use xlinkHref="#d" filter="url(#c)" />
+          </animated.g>
+          <use xlinkHref="#d" />
+        </g>
+        <g>
+          <animated.g style={{ opacity }}>
+            <use xlinkHref="#f" filter="url(#e)" />
+          </animated.g>
+          <use xlinkHref="#f" />
+        </g>
+      </g>
+    </svg>
+  );
+};
+
 export const Branding = ({ mode }: { mode: AssistantMode }) => {
   const style = useSpring({
     fill: mode === "SLEEPING" ? "#000" : "#fff",
-    color: mode === "SLEEPING" ? "#444" : "#fff"
+    color: mode === "SLEEPING" ? "#444" : "#fff",
+    textShadow:
+      mode === "SLEEPING"
+        ? "0 0 5px rgba(0, 0, 0, 0)"
+        : "0 0 5px rgba(0, 0, 0, 0.2)"
   });
 
   return (
     <animated.div className={css["branding"]} style={style}>
       <span className={css["powered-by"]}>powered by</span>
       <div className={css["logo"]}>
-        <svg width={24.945} height={9.36}>
-          <path d="m3.3 7.695 1.125-1.47C5.31 5.04 6.09 3.945 6.09 2.73 6.09 1.065 4.95 0 3.165 0 1.98 0 .9.48.24 1.095V2.97c.615-.57 1.575-1.2 2.58-1.2.87 0 1.335.48 1.335 1.2 0 .96-.615 1.71-1.47 2.82L0 9.3v.06h6.3V7.695h-3ZM11.31 6.165c1.95 0 3.24-1.05 3.24-3C14.55 1.2 13.26.15 11.31.15H7.56v9.21h1.905V6.165h1.845Zm1.35-3c0 .795-.48 1.365-1.47 1.365H9.465V1.785h1.725c.99 0 1.47.555 1.47 1.38ZM20.43 7.38l2.625-3.96v5.94h1.89V.15H23.19L20.415 4.5 17.625.15H15.84v9.21h1.875V3.42l2.655 3.96z" />
-        </svg>
+        <BrandingLogo mode={mode} />
       </div>
     </animated.div>
   );

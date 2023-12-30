@@ -19,9 +19,6 @@ export default new Sequelize(
     dialectModule: pg,
     dialectOptions,
     logging: false,
-    pool: {
-      max: 14,
-      min: 0
-    }
+    pool: { max: 14, min: 0 }
   }
 );

@@ -170,22 +170,25 @@ const order = (query: Query) => {
   return orders[query.pageAndSort.sort];
 };
 
-const radius = (query: Query) => {
-  // if (query["radius-enabled"] === "false") {
-  return [];
-  // }
+const radius = (query: Query, location: Location) => {
+  if (location.resolution.type === "AREA") {
+    return [];
+  }
 
-  // return [
-  //   Sequelize.literal(`ST_DWithin(
-  //     ST_MakePoint((location->>'lng')::double precision, (location->>'lat')::double precision)::geography,
-  //     ST_MakePoint(${query["origin-lng"]}, ${query["origin-lat"]})::geography,
-  //     ${query["radius"]}
-  //   )`)
-  // ];
+  return [
+    literal(`ST_DWithin(
+      ST_MakePoint((location->>'lng')::double precision, (location->>'lat')::double precision)::geography,
+      ST_MakePoint(${location.resolution.lng}, ${location.resolution.lat})::geography,
+      ${query.locationSource.radius}
+    )`)
+  ];
 };
 
-const bounds = async (query: Query) => {
-  const location = await queryToLocation(query);
+const bounds = async (location: Location) => {
+  if (location.resolution.type === "POINT") {
+    return [];
+  }
+
   const { bounds } = location.resolution;
 
   return [
@@ -264,8 +267,8 @@ export default async function resolve(
         ...indoorFeatures(query),
         ...outdoorFeatures(query),
         ...lotFeatures(query),
-        ...radius(query),
-        ...(await bounds(query)),
+        ...radius(query, location),
+        ...(await bounds(location)),
         ...validLngLat()
       ]
     },

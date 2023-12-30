@@ -11,8 +11,8 @@ type ViewportHeight = number;
 type XDivide = number;
 
 const HEADER_HEIGHT = 60;
-const DEFAULT_WIDTH = 480;
-const DEFAULT_HEIGHT = 570;
+const DEFAULT_WIDTH = 540;
+const DEFAULT_HEIGHT = 670;
 const FRAME_PAD = 26;
 
 const calc = {
@@ -117,7 +117,11 @@ const calc = {
       return -(DEFAULT_HEIGHT - (HEADER_HEIGHT + padding));
     }
 
-    if (placement === "DOCKED" || placement === "WINDOWED") {
+    if (placement === "DOCKED") {
+      return 30;
+    }
+
+    if (placement === "WINDOWED") {
       return 0;
     }
 

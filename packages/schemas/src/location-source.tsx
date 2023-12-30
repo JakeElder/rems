@@ -5,14 +5,14 @@ export const LatLngLocationSourceSchema = z.object({
   type: z.literal("LL"),
   lat: LatLngSchema.shape["lat"],
   lng: LatLngSchema.shape["lng"],
-  radius: z.number().nullable()
+  radius: z.number()
 });
 
 export const NlLocationSourceSchema = z.object({
   type: z.literal("NL"),
   description: z.string(),
   geospatialOperator: z.string(),
-  radius: z.number().nullable()
+  radius: z.number()
 });
 
 export const LocationSourceSchema = z.discriminatedUnion("type", [

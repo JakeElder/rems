@@ -65,10 +65,6 @@ const budgetAndAvailability = async ({
               If the user sets a monthly range, assume they are looking to rent
             </li>
             <li>Leave unchanged values undefined</li>
-            <li>
-              Extrapolate min and max values from ballpark figures. Ie a 10%
-              range
-            </li>
           </ul>
         </>
       ),

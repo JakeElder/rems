@@ -11,7 +11,7 @@ const defaultRealEstateQuery = (): RealEstateQuery => ({
     type: "NL",
     description: "Chiang Mai",
     geospatialOperator: "in",
-    radius: 10000
+    radius: 5000
   },
   pageAndSort: {
     page: 1,
@@ -39,7 +39,7 @@ const defaults = (): AppState => ({
     stagedRealEstateQuery: defaultRealEstateQuery(),
     assistant: {
       mode: "SLEEPING",
-      placement: "DOCKED",
+      placement: "MINIMISED",
       sessions: [{ id: nanoid(), value: "", state: "INACTIVE" }],
       language: "EN"
     },

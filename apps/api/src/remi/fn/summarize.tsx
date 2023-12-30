@@ -54,9 +54,9 @@ const summarize = async ({
           <p>Some notes to take in consideration;</p>
           <ul>
             <li>
-              Be terse but cute/witty in your response. We want the response to
-              be useful but not fatigue the user. You can use emojis (where
-              appropriate).
+              Be *VERY* terse but witty/cute in your response. We want the
+              response to be useful but not fatigue the user. You can use emojis
+              (where approriate).
             </li>
             <li>
               If the interaction is a query refinement, you can be specific
@@ -97,12 +97,16 @@ const summarize = async ({
             </li>
             <li>
               There are *{result.pagination.total}* properties that match this
-              search. It's important to mention this when the query has changed.
+              search. It's important to *mention this* when the query has
+              changed.
             </li>
             <li>
-              Keep your response *short* where possible. Condense information as
-              best you can.
+              Keep your response *SHORT* where possible. Condense information as
+              best you can while retaining character.
             </li>
+            <li>Make sure to say goodbye if the user ends the session</li>
+            <li>Do not include JSON in your response</li>
+            <li>Don't talk about parsing</li>
           </ul>
         </>
       ),

@@ -69,6 +69,10 @@ const stream: Stream = (payload) => async (c) => {
     return param;
   };
 
+  if (store.getState().slices.assistant.placement === "MINIMISED") {
+    act(setAssistantPlacement("DOCKED"));
+  }
+
   const { locationSource } = query;
   const locationResolution = await resolveLocationSourceOrFail(locationSource);
 
@@ -172,7 +176,9 @@ const stream: Stream = (payload) => async (c) => {
         const source: NlLocationSource = {
           type: "NL",
           description: parsed.data.description,
-          radius: radius || null,
+          radius:
+            radius ||
+            app.defaults().slices.realEstateQuery.locationSource.radius,
           geospatialOperator: parsed.data.geospatialOperator
         };
 

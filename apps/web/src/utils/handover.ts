@@ -3,7 +3,8 @@ import {
   AppAction,
   returnControl,
   setAssistantChatting,
-  setAssistantPlacement
+  setAssistantPlacement,
+  setShowDistance
 } from "@rems/state/app/actions";
 import { Analysis, AssistantPayload } from "@rems/types";
 import { Observable, Subscriber } from "rxjs";
@@ -26,7 +27,17 @@ const handover = (payload: AssistantPayload, dispatch: AppDispatch) => {
       if (action.type !== "NOOP") {
         console.log(action);
       }
+
       dispatch(action);
+
+      if (action.type === "SET_PAGE_AND_SORT") {
+        const { sort } = action.payload.data;
+        if (sort === "FURTHEST_FIRST" || sort === "CLOSEST_FIRST") {
+          setTimeout(() => {
+            dispatch(setShowDistance({ role: "ASSISTANT", show: true }));
+          }, 1000);
+        }
+      }
 
       if (action.type === "REGISTER_ANALYSIS") {
         analysis = action.payload;

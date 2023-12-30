@@ -8,8 +8,8 @@ import { useIndexConnector } from "../IndexConnector/IndexConnector";
 import Link from "next/link";
 import { Bounds, Property, RealEstateQuery } from "@rems/types";
 import React from "react";
-// import circle from "@turf/circle";
-// import { lineString } from "@turf/helpers";
+import circle from "@turf/circle";
+import { lineString } from "@turf/helpers";
 
 const TOKEN =
   "pk.eyJ1IjoiamFrZS1lbGRlciIsImEiOiJjbGZtbm12d28wZGp3M3JyemlrNnp1cmRvIn0.ovmQBkbXdCh-w_rUJ82GZA";
@@ -32,34 +32,34 @@ type RadiusProps = {
   show: boolean;
 };
 
-// const Radius = ({ lat, lng, radius, show }: RadiusProps) => {
-//   if (!show) {
-//     return null;
-//   }
+const Radius = ({ lat, lng, radius, show }: RadiusProps) => {
+  if (!show || !radius) {
+    return null;
+  }
 
-//   const c = circle([lng, lat], radius, { units: "meters" });
-//   const line = lineString(c.geometry.coordinates[0]);
+  const c = circle([lng, lat] as any, radius, { units: "meters" } as any);
+  const line = lineString(c.geometry.coordinates[0]);
 
-//   return (
-//     <>
-//       <Source type="geojson" data={c}>
-//         <Layer
-//           type="fill"
-//           paint={{ "fill-color": "red", "fill-opacity": 0.25 }}
-//         />
-//       </Source>
-//       <Source type="geojson" data={line}>
-//         <Layer
-//           type="line"
-//           paint={{
-//             "line-color": "#000",
-//             "line-opacity": 0.6
-//           }}
-//         />
-//       </Source>
-//     </>
-//   );
-// };
+  return (
+    <>
+      <Source type="geojson" data={c}>
+        <Layer
+          type="fill"
+          paint={{ "fill-color": "#b248e3", "fill-opacity": 0.14 }}
+        />
+      </Source>
+      <Source type="geojson" data={line}>
+        <Layer
+          type="line"
+          paint={{
+            "line-color": "#9b20d4",
+            "line-opacity": 0.6
+          }}
+        />
+      </Source>
+    </>
+  );
+};
 
 const ListingMap = React.forwardRef<MapRef, Props>(
   (
@@ -84,7 +84,7 @@ const ListingMap = React.forwardRef<MapRef, Props>(
               }}
               {...rest}
             >
-              {/*<Radius lat={lat} lng={lng} radius={radius} show={showRadius} /> */}
+              {<Radius lat={lat} lng={lng} radius={radius} show={showRadius} />}
               {withGeo.map((p) => (
                 <Link
                   key={p.id}

@@ -72,7 +72,7 @@ export const UrlRealEstateQuerySchema = z.object({
     .nullable()
     .catch("in")
     .default("in"),
-  radius: z.coerce.number().min(1000).max(100_000).default(10_000).catch(10_000)
+  radius: z.coerce.number().min(1000).max(100_000).default(5_000).catch(5_000)
   // "radius-enabled": z.enum(["true", "false"]).default("false").catch("false")
 });
 

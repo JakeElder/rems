@@ -24,15 +24,17 @@ const ListingMapViewContainer = ({}: Props) => {
     return null;
   }
 
+  const { location } = properties.data;
+
   return (
     <ListingMap
       ref={$map}
       properties={properties.data.data}
-      lat={properties.data.location.resolution.lat}
-      lng={properties.data.location.resolution.lng}
-      bounds={properties.data.location.resolution.bounds}
-      radius={10000}
-      showRadius={false}
+      lat={location.resolution.lat}
+      lng={location.resolution.lng}
+      bounds={location.resolution.bounds}
+      radius={location.source.radius}
+      showRadius={location.resolution.type === "POINT"}
     />
   );
 };
