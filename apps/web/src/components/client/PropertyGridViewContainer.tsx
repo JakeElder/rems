@@ -8,6 +8,7 @@ import {
   useDispatch,
   useShowDistance,
   useSort,
+  useTimeline,
   useUserSelectedProperty
 } from "@/state";
 import {
@@ -38,6 +39,19 @@ const PropertyGridViewContainer = ({}: Props) => {
     })
   );
   const showDistance = useShowDistance();
+  const timeline = useTimeline();
+
+  useEffect(() => {
+    const e = timeline[timeline.length - 1];
+    if (
+      e &&
+      e.event.type === "ANALYSIS_PERFORMED" &&
+      e.event.analysis.intents.includes("CLEAR_QUERY_COMPLETELY")
+    ) {
+      console.log("scrolling");
+      $controller.current.start({ scroll: 1 });
+    }
+  }, [timeline]);
 
   useEffect(() => {
     if (!$container.current || !$rows.current || !assistantSelectedPropertyId) {

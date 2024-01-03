@@ -49,14 +49,14 @@ const intents: Intent[] = [
     examples: []
   },
 
-  // {
-  //   id: 80,
-  //   code: "REFINE_BUDGET_AVAILABILITY",
-  //   description: md(
-  //     <>Sets the users budget and whether they are interested in sale or rent</>
-  //   ),
-  //   examples: []
-  // },
+  {
+    id: 80,
+    code: "REFINE_BUDGET_AVAILABILITY",
+    description: md(
+      <>Sets the users budget and whether they are interested in sale or rent</>
+    ),
+    examples: []
+  },
 
   {
     id: 90,
@@ -214,12 +214,32 @@ const intents: Intent[] = [
     code: "GET_NEARBY_PLACES",
     description: md(
       <>
-        Gets info about places near a search origin. Only invoked when the user
-        asks a question in the format "what x are near x". Not to be used when
-        the command starts with "show me"
+        *NOT FOR PROPERTIES. REFINE_LOCATION should be used for finding
+        properties*. Gets info about places near a search origin. Only invoked
+        when the user asks a question in the format "what x are near x". Not to
+        be used when the command starts with "show me"
       </>
     ),
     examples: ["What coffee shops are there near this property"]
+  },
+
+  {
+    id: 250,
+    code: "COMPARE_PROPERTIES",
+    description: md(<>Compares two properties</>),
+    examples: ["What do you think of this one, how is it different?"]
+  },
+
+  {
+    id: 260,
+    code: "FOCUS_SINGLE_PROPERTY",
+    description: md(
+      <>
+        Focuses a single property, for when a user referernces a single property
+        in the results list
+      </>
+    ),
+    examples: ["What do you think of that one that is 70m away"]
   }
 ];
 

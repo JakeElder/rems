@@ -170,9 +170,6 @@ const PropertyRow = forwardRef<HTMLDivElement, Props>(
                 </span>
                 <Distance show={showDistance}>{property.distance}</Distance>
               </div>
-              <span style={{ color: "#f5f5f5", fontSize: 10 }}>
-                {property.id}
-              </span>
               <Price property={property} type={type} />
             </div>
           </div>

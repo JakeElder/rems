@@ -5,6 +5,7 @@ export const IntentCodeSchema = z
   .enum([
     "GET_ASSISTANTS_ATTENTION",
     "CHOOSE_ONE_PROPERTY",
+    "COMPARE_PROPERTIES",
     "CHAT",
     "REFINE_LOCATION",
     "OBTAIN_GENERAL_INFORMATION",
@@ -25,7 +26,8 @@ export const IntentCodeSchema = z
     "CHANGE_ASSISTANT_LANGUAGE",
     "QUERY_SELECTED_PROPERTIES",
     "GET_TRAVEL_DETAILS",
-    "GET_NEARBY_PLACES"
+    "GET_NEARBY_PLACES",
+    "FOCUS_SINGLE_PROPERTY"
   ])
   .describe(md(<>A unique identifier for the intent</>));
 

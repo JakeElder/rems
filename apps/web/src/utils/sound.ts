@@ -28,14 +28,17 @@ const numbersToWords = (input: string): string => {
   });
 };
 
-const tidy = (input: string): string => input.replace(/[^\w\s.,;!?()-]/g, "");
+const tidy = (input: string): string => {
+  return input.replace(
+    /[*#\u{1F300}-\u{1F5FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu,
+    ""
+  );
+};
 
 export const speak = async (text: string): Promise<void> => {
   const key = "AIzaSyDNhScVj-L5p-BWTtp1mMtnBLLn5mN1cGw";
   const q = qs.stringify({ alt: "json", key });
   const url = `https://texttospeech.googleapis.com/v1/text:synthesize?${q}`;
-
-  console.log(tidy(numbersToWords(text)));
 
   const res = await fetch(url, {
     method: "POST",
@@ -45,7 +48,7 @@ export const speak = async (text: string): Promise<void> => {
         audioEncoding: "MP3",
         effectsProfileId: ["small-bluetooth-speaker-class-device"],
         pitch: 0,
-        speakingRate: 1.2
+        speakingRate: 1.15
       },
       voice: { languageCode: "th-TH" }
     })

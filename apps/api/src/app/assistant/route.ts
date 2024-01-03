@@ -109,6 +109,8 @@ const stream: Stream = (payload) => async (c) => {
 
     if (intents.includes("CLEAR_QUERY_COMPLETELY")) {
       act(replaceRealEstateQuery(app.defaults().slices.realEstateQuery));
+      act(setSelectedProperty({ role: "ASSISTANT", id: null }));
+      act(setSelectedProperty({ role: "USER", id: null }));
     }
 
     return analysis;
@@ -376,6 +378,24 @@ const stream: Stream = (payload) => async (c) => {
      * Choose One Property
      */
     resolve(
+      "FOCUS_SINGLE_PROPERTY",
+      () => fn.focusOneProperty({ timeline, properties }),
+      async (id) => {
+        if (id) {
+          const property = await resolvePropertyOrFail(id);
+          return [
+            setSelectedProperty({ role: "ASSISTANT", id: id }),
+            registerSelectedProperty({ role: "ASSISTANT", property })
+          ];
+        }
+        return noop();
+      }
+    ),
+
+    /**
+     * Choose One Property
+     */
+    resolve(
       "CHOOSE_ONE_PROPERTY",
       () => fn.chooseOneProperty({ timeline, properties }),
       async (res) => {
@@ -489,12 +509,12 @@ const stream: Stream = (payload) => async (c) => {
 
   act(commitRealEstateQuery());
 
-  const [result] = await Promise.all([
+  const [intents, result] = await Promise.all([
+    analyze(),
     resolveProperties({
       ...store.getState().slices.realEstateQuery,
       target: "LISTINGS"
-    }),
-    analyze()
+    })
   ]);
 
   const summary = await fn.summarize({
