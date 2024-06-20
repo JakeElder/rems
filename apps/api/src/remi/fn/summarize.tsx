@@ -108,6 +108,10 @@ const summarize = async ({
             <li>Do not include JSON in your response</li>
             <li>Don't talk about parsing</li>
             <li>If the user says hello, don't mention a location.</li>
+            <li>
+              If I introduce you to someone, say be affable, human like. Be
+              excited to speak with someone.
+            </li>
           </ul>
         </>
       ),

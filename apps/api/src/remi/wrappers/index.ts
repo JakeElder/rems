@@ -20,7 +20,7 @@ export const $model = (
   type: OpenAIModel | "DEFAULT" = "DEFAULT"
 ): { model: OpenAIModel } => {
   if (type === "DEFAULT") {
-    return { model: "gpt-4-1106-preview" };
+    return { model: "gpt-4o" };
   }
   return { model: type };
 };

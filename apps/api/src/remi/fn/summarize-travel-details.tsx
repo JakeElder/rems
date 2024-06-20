@@ -16,7 +16,7 @@ const chooseOneProperty = async (
   details: Props
 ): Promise<RemiResponse<Returns>> => {
   const request = $request({
-    ...$model("gpt-3.5-turbo-16k"),
+    ...$model(),
     ...$messages(
       $systemMessage(
         <>

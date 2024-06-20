@@ -48,9 +48,9 @@ const adjustBoundsToMinimumArea = (
   if (area < minAreaKm2) {
     const requiredLatDiff = Math.sqrt(
       minAreaKm2 /
-        (KM_PER_DEGREE_LAT *
-          KM_PER_DEGREE_LAT *
-          Math.cos((avgLat * Math.PI) / 180))
+      (KM_PER_DEGREE_LAT *
+        KM_PER_DEGREE_LAT *
+        Math.cos((avgLat * Math.PI) / 180))
     );
     const requiredLngDiff =
       requiredLatDiff / Math.cos((avgLat * Math.PI) / 180);
@@ -169,9 +169,9 @@ const resolveNlLocationSource = async (
   const adjusted =
     type === "POINT"
       ? boundsFromPointAndRadius(
-          { lat: location.latitude, lng: location.longitude },
-          (source.radius + 8000) / 1000
-        )
+        { lat: location.latitude, lng: location.longitude },
+        (source.radius + 8000) / 1000
+      )
       : adjustBoundsToMinimumArea(bounds);
 
   const resolution: LocationResolution = {
@@ -188,6 +188,7 @@ const resolveNlLocationSource = async (
 
   return { ok: true, resolution };
 };
+
 const resolveLocationSource = async (
   ls: LocationSource
 ): Promise<ResolveLocationSourceReturn> => {
